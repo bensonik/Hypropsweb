@@ -1,0 +1,48 @@
+    /*STYLE FOR DROPDOWN SEARCH*/
+    .myUL {
+        display:none;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        height:150px;
+        overflow-y:scroll;
+        z-index: 1000px;
+    }
+
+
+    .myUL li a {
+        border: 1px solid #ddd;
+        margin-top: -1px; /* Prevent double borders */
+        background-color: #f6f6f6;
+        padding: 8px;
+        text-decoration: none;
+        font-size: 10px;
+        color: black;
+        display: block
+    }
+
+
+
+    .myUL li a:hover:not(.header) {
+        background-color: black;
+        color:white;
+    }
+
+    .myUL::-webkit-scrollbar {
+        width:  4%;
+        height: 5%;
+    }
+
+    .myUL::-webkit-scrollbar-thumb {
+        background: black;
+    }
+
+    .myUL::-webkit-scrollbar-track {
+        background: lightslategray;
+    }
+
+    .myUL::-webkit-scrollbar-button {
+        background: grey;
+    }
+
+    /*END STYLE FOR DROPDOWN SEARCH*/
