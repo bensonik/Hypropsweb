@@ -158,7 +158,7 @@
                        name="check_all" class="" />
 
             </th>
-            <th>Employee Name ABCDEF</th>
+            <th>Employee Name </th>
             <th>Department</th>
             <th>Position</th>
             <th>Competency Type</th>
