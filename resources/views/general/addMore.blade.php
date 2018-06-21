@@ -820,4 +820,73 @@
 
 @endif
 
+<!-- COMP ASSESS -->
+@if($type == 'idp_comp_assess')
+
+    <tr class="row clearfix remove_comp_assess{{$more}} new_comp_assess">
+
+        <td>
+            <div class="col-md-10">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class=" core_comp core_comp_edit" name="core_comp" id="core_comp{{$num2}}" onchange="fillNextInput('core_comp{{$num2}}','capable{{$num2}}','<?php echo url('default_select'); ?>','core_tech_comp')">
+                            <option value="">Core Technical Competency</option>
+                            @foreach($techComp as $ap)
+                                <option value="{{$ap->id}}">{{$ap->category_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-md-10">
+                <div class="form-group">
+                    <div class="form-line capable capable_edit" id="capable{{$num2}}" >
+                        <select  class="form-control" name="capable"  >
+                            <option value="">Capabilities</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select  class="form-control comp_level comp_level_edit" name="comp_level" >
+                            <option value="" selected>Level</option>
+                            @foreach(APP\Helpers\Utility::REVIEW_LEVEL as $key => $val)
+                                <option value="{{$val}}">{{$val}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+
+        <td class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','comp_assess','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+        <td class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_comp_assess{{$more}}','{{url('add_more')}}','comp_assess','new_comp_assess','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+
+@endif
+
+
 

@@ -237,6 +237,16 @@ class GeneralController extends Controller
 
         //END OF INDIVIDUAL GOAL
 
+        //START OF IDP
+        if($type == 'idp_comp_assess'){
+
+            $techComp = SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('type',$type)
+                ->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)->with('techComp',$techComp);
+
+        }
+
 
     }
     /**
