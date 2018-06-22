@@ -278,7 +278,7 @@
                                             <option value="">Select User</option>
                                             @if($coachData->count() > 0)
                                             @foreach($coachData as $ap)
-                                                <option value="{{$ap->user_id}}">{{$ap->user_detail->firstname}} {{$ap->user_detail->surname}}</option>
+                                                <option value="{{$ap->user_id}}">{{$ap->user_detail->firstname}} {{$ap->user_detail->lastname}}</option>
                                             @endforeach
                                             @endif
                                         </select>
