@@ -7,10 +7,10 @@ use App\Helpers\Utility;
 class IdpCompetency extends Model
 {
     //
-    protected  $table = 'idpCompetency';
+    protected  $table = 'idp_competency';
 
     private static function table(){
-        return 'idpCompetency';
+        return 'idp_competency';
     }
     /**
      * The attributes that are mass assignable.

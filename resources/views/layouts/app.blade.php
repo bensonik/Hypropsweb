@@ -428,6 +428,12 @@
                     </a>
                     <ul class="ml-menu">
                             <li>
+                                <a href="{{url('idp')}}">Individual Development Plan</a>
+                            </li>
+                            <li>
+                                <a href="{{url('salary_advance_requests')}}">Salary Advance Requests</a>
+                            </li>
+                            <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
                                     <span>Payroll System</span>
                                 </a>
@@ -447,9 +453,7 @@
 
                                 </ul>
                             </li>
-                        <li>
-                            <a href="{{url('salary_advance_requests')}}">Salary Advance Requests</a>
-                        </li>
+
                         <li>
                             <a href="{{url('loan_requests')}}">Loan Requests</a>
                         </li>

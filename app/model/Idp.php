@@ -21,7 +21,8 @@ class Idp extends Model
 
     public static $mainRules = [
         'long_term' => 'required',
-        'short_term' => 'required'
+        'short_term' => 'required',
+        'user' => 'required'
     ];
 
     public static $searchRules = [
@@ -43,8 +44,8 @@ class Idp extends Model
 
     }
 
-    public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
+    public function user_detail(){
+        return $this->belongsTo('App\User','user_id','id');
 
     }
 

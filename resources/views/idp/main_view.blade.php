@@ -12,19 +12,26 @@
                 <div class="modal-body" style="overflow:scroll; height:500px;">
 
                     <!-- Tabs With Icon Title -->
-                    <div class="row clearfix">
-
-                        <div class="body">
 
                                     <form name="import_excel" id="createMainForm2" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-                                        <div class="body">
 
+                                        <div class="container body">
                                             <div class="row clearfix">
+                                                <div class="row clearfix">
+                                                    <div class="col-sm-4">
+                                                        <div class="form-group">
+                                                            <div class="form-line">
+                                                                <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
 
+                                                                <input type="hidden" class="user_class" name="user" id="user" />
+                                                            </div>
+                                                        </div>
+                                                        <ul id="myUL1" class="myUL"></ul>
+                                                    </div>
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <textarea rows="6" cols="50" class="" name="short_term" placeholder="Short Term Goals"></textarea>
+                                                            <textarea rows="6" cols="30" class="" name="short_term" placeholder="Short Term Goals"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -32,7 +39,7 @@
                                                 <div class="col-sm-4">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <textarea rows="6" cols="50" class="" name="long_term" placeholder="Long Term Goals"></textarea>
+                                                            <textarea rows="6" cols="30" class="" name="long_term" placeholder="Long Term Goals"></textarea>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -139,11 +146,10 @@
                                             {{-- </div>--}}
                                             <div class="row clearfix">
 
-
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <div class="form-line">
-                                                                <textarea rows="6" cols="50" disabled class="" name="remarks" placeholder="Remarks"></textarea>
+                                                                <textarea rows="6" cols="30" disabled class="" name="remarks" placeholder="Remarks"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,14 +157,16 @@
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <div class="form-line">
-                                                                <textarea rows="6" cols="50" disabled class="" name="formal_training" placeholder="Formal Training"></textarea>
+                                                                <textarea rows="6" cols="30" disabled class="" name="formal_training" placeholder="Formal Training"></textarea>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
+                                                <div class="row clearfix">
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <div class="form-line">
-                                                                <textarea rows="6" cols="50" disabled class="datepicker" name="target_completed_date" placeholder="Target Completed Date"></textarea>
+                                                                <input type="text" disabled class="datepicker" name="target_completed_date" placeholder="Target Completed Date">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -166,7 +174,7 @@
                                                     <div class="col-sm-4">
                                                         <div class="form-group">
                                                             <div class="form-line">
-                                                                <textarea rows="6" cols="50" disabled class="" name="actual_completed_date" placeholder="Actual Completed Date"></textarea>
+                                                                <input class="datepicker" disabled name="actual_completed_date" placeholder="Actual Completed Date">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -176,9 +184,10 @@
 
 
                                         </div>
-
+                                     </div>
 
                                     </form>
+
                                     <br><br>
                                     <button onclick="save2('createModal','createMainForm2','<?php echo url('create_idp'); ?>','reload_data',
                                             '<?php echo url('idp'); ?>','<?php echo csrf_token(); ?>','core_comp','capable','comp_level')" type="button" class="pull-right btn btn-info waves-effect">
@@ -187,8 +196,6 @@
                                     <button type="button" class="pull-right btn btn-danger waves-effect" data-dismiss="modal">CLOSE</button>
 
 
-                            </div>
-                        </div>
                     </div>
                     <!-- #END# Tabs With Icon Title -->
 
@@ -267,11 +274,13 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <select  class="form-control " name="goal_set" >
-                                            <option value="">Goal Set</option>
-                                            @foreach($indiGoalSeries as $ap)
-                                                <option value="{{$ap->id}}">{{$ap->goal_name}}</option>
+                                        <select  class="form-control " name="user" >
+                                            <option value="">Select User</option>
+                                            @if($coachData->count() > 0)
+                                            @foreach($coachData as $ap)
+                                                <option value="{{$ap->user_id}}">{{$ap->user_detail->firstname}} {{$ap->user_detail->surname}}</option>
                                             @endforeach
+                                            @endif
                                         </select>
                                     </div>
                                 </div>
@@ -300,7 +309,6 @@
 
                             <th>Full name</th>
                             <th>Coach Name</th>
-                            <th>Department</th>
                             <th>Created by</th>
                             <th>Updated by</th>
                             <th>Created at</th>
@@ -316,9 +324,8 @@
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>{{$data->goal_set->goal_name}}</td>
+                            <td>{{$data->user_detail->firstname}} {{$data->user_detail->lastname}}</td>
                             <td>{{$data->coach->firstname}} {{$data->coach->lastname}}</td>
-                            <td>{{$data->department->dept_name}}</td>
 
                             <td>
                                 @if($data->created_by != '0')
@@ -334,18 +341,8 @@
                             <td>{{$data->updated_at}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                @if ($hodId == Auth::user()->id)
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i>|Mark Appraisal</a>
-                                @endif
-                                @if($lowerHodId == Auth::user()->id)
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                @endif
-                                @if($lowerHodId != Auth::user()->id)
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                @endif
-                                @if($lowerHod == \App\Helpers\Utility::HOD_DETECTOR && Auth::user()->id != $data->user_id)
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i>|Mark Appraisal</a>
-                                @endif
+                               <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_idp_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+
                             </td>
                         </tr>
                         @endforeach

@@ -254,3 +254,12 @@ Route::any('/payslip_item', 'PayrollController@payslipItem')->name('payslip_item
 Route::post('/approve_payroll', 'PayrollController@approve')->name('approve_payroll');
 Route::any('/search_payroll_user', 'PayrollController@searchUser')->name('search_payroll_user');
 Route::post('/delete_payroll', 'PayrollController@destroy')->name('delete_payroll');
+
+// -------------INDIVIDUAL DEVELOPMENT PLAN MODULE-----------
+Route::any('/idp', 'IdpController@index')->name('idp')->middleware('auth');
+Route::post('/create_idp', 'IdpController@create')->name('create_idp');
+Route::post('/edit_idp_form', 'IdpController@editForm')->name('edit_idp_form');
+Route::post('/edit_idp', 'IdpController@edit')->name('edit_idp');
+Route::post('/search_idp', 'IdpController@searchIndiGoal')->name('search_idp');
+Route::post('/delete_idp', 'IdpController@destroy')->name('delete_idp');
+Route::post('/status_idp', 'IdpController@statusChange')->name('status_idp');

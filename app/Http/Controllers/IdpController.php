@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helpers\Notify;
 use App\model\IdpCompetency;
 use App\model\Idp;
+use App\model\SkillCompCat;
 use App\Helpers\Utility;
 use App\User;
 use Auth;
@@ -28,11 +29,15 @@ class IdpController extends Controller
         //$req = new Request();
         $mainData = (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ? Idp::paginateAllData() : Idp::specialColumnsPage('user_id',Auth::user()->id);
         $coachData = Idp::specialColumns('coach_id',Auth::user()->id);
+        $techComp = SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
+
         if ($request->ajax()) {
-            return \Response::json(view::make('idp.reload',array('mainData' => $mainData,'coachData' => $coachData))->render());
+            return \Response::json(view::make('idp.reload',array('mainData' => $mainData,'coachData' => $coachData
+            ,'techComp' => $techComp))->render());
 
         }else{
-            return view::make('idp.main_view')->with('mainData',$mainData)->with('coachData',$coachData);
+            return view::make('idp.main_view')->with('mainData',$mainData)->with('coachData',$coachData)
+                ->with('techComp',$techComp);
         }
 
     }
@@ -70,11 +75,11 @@ class IdpController extends Controller
                             'user_competency' => Auth::user()->dept_id,
                             'dev_obj' => $request->input('dev_obj'),
                             'dev_assign' => $request->input('dev_assign'),
-                            'other_acts' => $request->input('other_acts'),
+                            'other_act' => $request->input('other_acts'),
                             'remarks' => $request->input('remarks'),
                             'formal_training' => $request->input('short_term'),
-                            'target_comp_date' => Utility::standardDate($request->input('target_comp_date')),
-                            'actual_comp_date' => Utility::standardDate($request->input('actual_comp_date')),
+                            'target_comp_date' => Utility::standardDate($request->input('target_completed_date')),
+                            'actual_comp_date' => Utility::standardDate($request->input('actual_completed_date')),
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
@@ -173,6 +178,7 @@ class IdpController extends Controller
                         if (count($coreComp) == count($capable) || count($coreComp) == count($compLevel)) {
 
                             $dbDATA = [
+                                'coach_id' => $request->input('user'),
                                 'short_term' => $request->input('short_term'),
                                 'long_term' => $request->input('long_term'),
                                 'dev_obj' => $request->input('dev_obj'),
@@ -180,8 +186,8 @@ class IdpController extends Controller
                                 'other_act' => $request->input('other_activities'),
                                 'remarks' => $request->input('remarks'),
                                 'formal_training' => $request->input('formal_training'),
-                                'target_comp_date' => Utility::standardDate($request->input('target_comp_date')),
-                                'actual_comp_date' => Utility::standardDate($request->input('actual_comp_date')),
+                                'target_comp_date' => Utility::standardDate($request->input('target_completed_date')),
+                                'actual_comp_date' => Utility::standardDate($request->input('actual_completed_date')),
                                 'created_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
@@ -235,6 +241,7 @@ class IdpController extends Controller
                 } else {  //END OF IF $stratObj IS GREATER THAN 0
 
                     $dbDATA = [
+                        'coach_id' => $request->input('user'),
                         'short_term' => $request->input('short_term'),
                         'long_term' => $request->input('long_term'),
                         'dev_obj' => $request->input('dev_obj'),
@@ -242,8 +249,8 @@ class IdpController extends Controller
                         'other_act' => $request->input('other_activities'),
                         'remarks' => $request->input('remarks'),
                         'formal_training' => $request->input('formal_training'),
-                        'target_comp_date' => Utility::standardDate($request->input('target_comp_date')),
-                        'actual_comp_date' => Utility::standardDate($request->input('actual_comp_date')),
+                        'target_comp_date' => Utility::standardDate($request->input('target_completed_date')),
+                        'actual_comp_date' => Utility::standardDate($request->input('actual_completed_date')),
                         'updated_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
@@ -325,7 +332,7 @@ class IdpController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = IndiGoal::massUpdate('id',$idArray,$dbData);
+        $delete = Idp::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',

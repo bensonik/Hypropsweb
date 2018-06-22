@@ -7,10 +7,8 @@
 
         </th>
 
-        <th>Goal Set</th>
-        <th>Department</th>
-        <th>Individual Goal Category</th>
-        <th>Appraisal Status</th>
+        <th>Full name</th>
+        <th>Coach Name</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -26,16 +24,9 @@
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->goal_set->goal_name}}</td>
-            <td>{{$data->department->dept_name}}</td>
-            <td>{{$data->i_goal_cat->goal_name}}</td>
-            <td>
-                @if($data->appraisal_status != '0')
-                    {{\App\Helpers\Utility::APPRAISAL_STATUS[1]}}
-                @else
-                    {{\App\Helpers\Utility::APPRAISAL_STATUS[0]}}
-                @endif
-            </td>
+            <td>{{$data->user_detail->firstname}} {{$data->user_detail->lastname}}</td>
+            <td>{{$data->coach->firstname}} {{$data->coach->lastname}}</td>
+
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -50,18 +41,8 @@
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                    @if ($hodId == Auth::user()->id)
-                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i>|Mark Appraisal</a>
-                    @endif
-                    @if($lowerHodId == Auth::user()->id)
-                            <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                    @endif
-                    @if($lowerHodId != Auth::user()->id)
-                            <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                    @endif
-                    @if($lowerHod == \App\Helpers\Utility::HOD_DETECTOR && Auth::user()->id != $data->user_id)
-                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_indi_goal_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i>|Mark Appraisal</a>
-                    @endif
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_idp_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+
             </td>
         </tr>
     @endforeach

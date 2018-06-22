@@ -870,7 +870,7 @@
 
         <td class=" addButtons" id="{{$hide_id}}{{$more}}">
             <div class="form-group">
-                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','comp_assess','{{$hide_id}}');">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','idp_comp_assess','{{$hide_id}}');">
                     <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                 </div>
             </div>
@@ -878,7 +878,7 @@
 
         <td class="" id="">
             <div class="form-group">
-                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_comp_assess{{$more}}','{{url('add_more')}}','comp_assess','new_comp_assess','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_comp_assess{{$more}}','{{url('add_more')}}','idp_comp_assess','new_comp_assess','{{$more}}','{{$add_id}}','{{$hide_id}}');">
                     <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                 </div>
             </div>
