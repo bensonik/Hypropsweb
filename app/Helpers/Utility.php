@@ -47,6 +47,7 @@ class Utility
         14 => 'Week2', 15 => 'Week3', 16 => 'Week4'];
 
     const COMPONENT_TYPE = [1 => 'Earnings',2 => 'Deduction'];
+    const TRAINING_TYPE = [1 => 'Internal',2 => 'External'];
 
     public static function IMG_URL(){
         return public_path() . '/images/';

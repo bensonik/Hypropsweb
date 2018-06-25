@@ -263,3 +263,10 @@ Route::post('/edit_idp', 'IdpController@edit')->name('edit_idp');
 Route::post('/search_idp', 'IdpController@searchIndiGoal')->name('search_idp');
 Route::post('/delete_idp', 'IdpController@destroy')->name('delete_idp');
 Route::post('/status_idp', 'IdpController@statusChange')->name('status_idp');
+
+// -------------Training Schedule MODULE-----------
+Route::any('/training', 'TrainingController@index')->name('training')->middleware('auth');
+Route::post('/create_training', 'TrainingController@create')->name('create_training');
+Route::post('/edit_training_form', 'TrainingController@editForm')->name('edit_training_form');
+Route::post('/edit_training', 'TrainingController@edit')->name('edit_training');
+Route::post('/delete_training', 'TrainingController@destroy')->name('delete_training');

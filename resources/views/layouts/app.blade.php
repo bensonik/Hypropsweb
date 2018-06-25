@@ -434,6 +434,9 @@
                                 <a href="{{url('salary_advance_requests')}}">Salary Advance Requests</a>
                             </li>
                             <li>
+                                <a href="{{url('training')}}">Training Schedule</a>
+                            </li>
+                            <li>
                                 <a href="javascript:void(0);" class="menu-toggle">
                                     <span>Payroll System</span>
                                 </a>
@@ -1112,6 +1115,15 @@
 <script src="{{ asset('export/jspdf/jspdf.js') }}"></script>
 <script src="{{ asset('export/jspdf/libs/base64.js') }}"></script>
 
+<script>
+    var li_class = document.getElementsByClassName("myUL");
+    $(window).click(function() {
+        for (var i = 0; i < li_class.length; i++){
+            li_class[i].style.display = 'none';
+        }
+
+    });
+</script>
 <script>
     /*$(function() {
         $( ".datepicker" ).datepicker();
