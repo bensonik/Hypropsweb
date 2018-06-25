@@ -30,7 +30,9 @@
 
             </td>
             <td>
+                @if(in_array(Auth::user()->role,Utility::HR_MANAGEMENT))
                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_training_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                @endif
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->user_detail->firstname}} &nbsp; {{$data->user_detail->lastname}}</td>
