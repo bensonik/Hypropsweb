@@ -106,6 +106,12 @@ class Payroll extends Model
 
     }
 
+    public static function countData3($column, $post,$column2, $post2,$column3, $post3)
+    {
+        return Utility::countData3(self::table(),$column, $post,$column2, $post2,$column3, $post3);
+
+    }
+
     public static function specialColumns($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);

@@ -78,16 +78,17 @@ class PayrollController extends Controller
         $month = Utility::getMonthFromDate($payslip->month);
         $loan = Utility::checkForDeductions(Auth::user()->id,$month,Utility::EMPLOYEE_LOAN_ID);
         $advance = Utility::checkForDeductions(Auth::user()->id,$month,Utility::SALARY_ADVANCE_ID);
-        $taxAmount = ($tax->sum_percentage/100)*$user->salary->gross_pay;
+        //$taxAmount = ($tax->sum_percentage/100)*$user->salary->gross_pay;
+        $taxAmount = $payslip->tax_amount;
         $payrollDeduct = ($payslip->bonus_deduc_type == Utility::PAYROLL_DEDUCTION) ? $payslip->bonus_deduc : 0;
-        $totalSalaryDeduction = $this->primarySalaryDeduction($payslip->salary->component,$loan,$advance,$taxAmount,$payrollDeduct);
+        $totalSalaryDeduction = $this->primarySalaryDeduction($payslip->component,$loan,$advance,$payrollDeduct);
         //print_r($tax); exit();
         return view::make('payroll.edit_form')->with('edit',$payslip)->with('companyInfo',$companyInfo)
             ->with('user',$user)->with('tax',$tax)->with('taxAmount',$taxAmount)->with('totalDeduction',$totalSalaryDeduction);
 
     }
 
-    public function primarySalaryDeduction($jsonData,$loan,$salAdv,$tax,$payrollDeduct){
+    public function primarySalaryDeduction($jsonData,$loan,$salAdv,$payrollDeduct){
         $array = json_decode($jsonData,true);
         $holdArray = [];
         foreach($array as $data){
@@ -97,7 +98,7 @@ class PayrollController extends Controller
 
         }
         $sum = array_sum($holdArray);
-        $totalDeduct = $sum+$loan+$salAdv+$tax+$payrollDeduct;
+        $totalDeduct = $sum+$loan+$salAdv+$payrollDeduct;
         return $totalDeduct;
 
     }
@@ -123,20 +124,22 @@ class PayrollController extends Controller
             $month = $request->input('month');
 
             $in_use = [];;
-            $monthInt = date('m',$oldDateUnix);
+            $monthInt = date('n',$oldDateUnix);
             $unused = [];
+            $dataExist = [];
 
             for($i=0;$i<count($all_id);$i++){
                 $rowDataSalary = Payroll::countData2('user_id',$all_id[$i],'month',$month);
-                if($rowDataSalary>0){
+                $rowDataSalary1 = Payroll::countData('id',$all_id[$i]);
+                if($rowDataSalary>0 || $rowDataSalary1>0){
                     $unused[$i] = $all_id[$i];
                 }else{
                     $in_use[$i] = $all_id[$i];
                 }
             }
+
             $message = (count($unused) > 0) ? ' and '.count($unused).
                 ' user(s) already exist in payroll for the selected period' : '';
-
 
             if(count($in_use) > 0){
 
@@ -144,17 +147,25 @@ class PayrollController extends Controller
                 for($i=0;$i<count($in_use);$i++){
                     $user =  User::firstRow('id',$in_use[$i]);
                     $salaryId = SalaryStructure::firstRow('id',$user->salary_id);
+                    $tax = Tax::firstRow('id',$salaryId->id);
+                    $taxAmount = ($tax->sum_percentage/100)*$salaryId->gross_pay;
                     $totalAmount = Utility::calculateSalary($in_use[$i],$extraAmount,$bonusDeduc);
 
+                    /*return response()->json([
+                        'message2' => $totalAmount,
+                        'message' => 'warning'
+                    ]);*/
                     $dbData = [
                         'user_id' => $in_use[$i],
                         'bonus_deduc' => $extraAmount,
                         'bonus_deduc_type' => $bonusDeduc,
                         'bonus_deduc_desc' => $request->input('amount_desc'),
                         'salary_id' => $salaryId->id,
-                        'dept_id' => $user->id,
-                        'position_id' => $user->id,
+                        'component' => $salaryId->component,
+                        'dept_id' => $user->dept_id,
+                        'position_id' => $user->position_id,
                         'total_amount' => $totalAmount,
+                        'tax_amount' => $taxAmount,
                         'curr_id' => $defaultCurr,
                         'process_date' => Utility::standardDate($processDate),
                         'payroll_status' => Utility::PROCESSING,
@@ -178,7 +189,7 @@ class PayrollController extends Controller
                     $accountants = User::specialColumns('role',Utility::ACCOUNTANTS);
                     if(count($accountants) >0){ //SEND MAIL TO ALL IN ACCOUNTS DEPARTMENT ABOUT THIS APPROVAL
                         foreach($accountants as $data) {
-                            Notify::sendMail('mail_views.payroll', $mailContentApproved, $data->email, Auth::user()->firstname, 'Process Request');
+                            Notify::payrollMail('mail_views.payroll', $mailContentApproved, $data->email, Auth::user()->firstname, 'Process Request');
                         }
                     }
 
@@ -188,13 +199,65 @@ class PayrollController extends Controller
                     'message' => count($in_use).' data(s) has been sent to accounts for processing '.$message
                 ]);
 
-            }else{
-                return  response()->json([
-                    'message2' => 'warning',
-                    'message' => 'The '.count($unused).' user(s) already exist in payroll for the selected period'
+            }
+            /////////////////////////////////////////////////
+
+            if(count($unused) > 0){
+
+                $defaultCurr = session('currency')['id'];
+                for($i=0;$i<count($unused);$i++){
+                    $user =  User::firstRow('id',$unused[$i]);
+                    $salaryId = SalaryStructure::firstRow('id',$user->salary_id);
+                    $paid = Payroll::firstRow('id',$unused[$i]);
+                    $tax = Tax::firstRow('id',$salaryId->id);
+                    $taxAmount = ($tax->sum_percentage/100)*$salaryId->gross_pay;
+                    $totalAmount = ($bonusDeduc == Utility::PAYROLL_DEDUCTION) ?$paid->total_amount-$extraAmount : $paid->total_amount+$extraAmount;
+                    
+                    $dbData = [
+                        'bonus_deduc' => $extraAmount,
+                        'bonus_deduc_type' => $bonusDeduc,
+                        'bonus_deduc_desc' => $request->input('amount_desc'),
+                        'salary_id' => $salaryId->id,
+                        'component' => $salaryId->component,
+                        'dept_id' => $user->dept_id,
+                        'total_amount' => $totalAmount,
+                        'tax_amount' => $taxAmount,
+                        'curr_id' => $defaultCurr,
+                        'process_date' => Utility::standardDate($processDate),
+                        'payroll_status' => Utility::PROCESSING,
+                        'month' => $monthInt,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    $update = Payroll::defaultUpdate('id',$unused[$i],$dbData);
+
+                }
+
+                return response()->json([
+                    'message2' => 'saved',
+                    'message' => 'saved successfully'
+                ]);
+                $mailContentApproved = new \stdClass();
+                $mailContentApproved->type = 'update_request';
+                $mailContentApproved->desc = 'Payroll for '.$month.' '.$year;
+                $mailContentApproved->sender = Auth::user()->firstname . ' ' . Auth::user()->lastname;
+
+                $accountants = User::specialColumns('role',Utility::ACCOUNTANTS);
+                if(count($accountants) >0){ //SEND MAIL TO ALL IN ACCOUNTS DEPARTMENT ABOUT THIS APPROVAL
+                    foreach($accountants as $data) {
+                        Notify::payrollMail('mail_views.payroll', $mailContentApproved, $data->email, Auth::user()->firstname, 'Process Request');
+                    }
+                }
+
+
+                return response()->json([
+                    'message2' => 'saved',
+                    'message' => count($in_use).' data(s) has been sent to accounts for processing '.$message
                 ]);
 
             }
+
+            ///////////////////////////////////////////////////
 
         }
         $errors = $validator->errors();
@@ -223,7 +286,8 @@ class PayrollController extends Controller
 
         $dbData = [
             'payroll_status' => Utility::APPROVED,
-            'pay_date' => Utility::standardDate($payDate)
+            'pay_date' => Utility::standardDate($payDate),
+            'updated_by' => Auth::user()->id
         ];
 
         $in_use = [];
@@ -263,7 +327,7 @@ class PayrollController extends Controller
             $hr = User::specialColumns('role', Utility::HR);
             if (count($hr) > 0) { //SEND MAIL TO ALL IN ACCOUNTS DEPARTMENT ABOUT THIS APPROVAL
                 foreach ($hr as $data) {
-                    Notify::sendMail('mail_views.payroll', $mailContentApproved, $data->email, Auth::user()->firstname, 'Request Approval');
+                    Notify::payrollMail('mail_views.payroll', $mailContentApproved, $data->email, Auth::user()->firstname, 'Request Approval');
                 }
             }
         }

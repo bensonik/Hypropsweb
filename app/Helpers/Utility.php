@@ -319,6 +319,17 @@ class Utility
 
     }
 
+    public static function countData3($table,$column1, $post1,$column2, $post2,$column3, $post3)
+    {
+        return DB::table($table)
+            ->where($column1, $post1)
+            ->where($column2, $post2)
+            ->where($column3, $post3)
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->count();
+
+    }
+
     public static function specialColumns($table,$column, $post)
     {
         return DB::table($table)
@@ -618,35 +629,39 @@ class Utility
             $salAdvData = DB::table('requisition')
                 ->where('request_user', $userId)
                 ->where('req_cat', self::SALARY_ADVANCE_ID)
-                ->where('hr_accessible', self::COMPLETED)
+                ->where('accessible_status', self::ZERO)
                 ->where('status', self::STATUS_ACTIVE)->get();
 
             $loanData = DB::table('requisition')
                 ->where('request_user', $userId)
                 ->where('req_cat', self::EMPLOYEE_LOAN_ID)
-                ->where('hr_accessible', self::COMPLETED)
+                ->where('accessible_status', self::ZERO)
                 ->where('status', self::STATUS_ACTIVE)->get();
 
             $loan = 0;
             $salAdv = 0;
+            $dbData = ['accessible_status' => self::STATUS_ACTIVE];
             if (count($loanData) > 0 || count($salAdvData) > 0) {
 
                 if (count($loanData) > 0) {
                     $loan = $loanData[0]->loan_monthly_deduc;
+                    self::defaultUpdate('requisition','id',$loanData[0]->id,$dbData);
                 }
                 if (count($salAdvData) > 0) {
                     $salAdv = $salAdvData[0]->amount;
+                    self::defaultUpdate('requisition','id',$salAdvData[0]->id,$dbData);
                 }
 
                 $extraDeduc = $salAdv + $loan;
                 $salaryDeduc = $salaryData->net_pay - $extraDeduc;
                 $newAmount = ($bonusDeduc == self::PAYROLL_BONUS) ? $salaryDeduc + $extraAmount : $salaryDeduc - $extraAmount;
 
-
             } else {
                 $newAmount = ($bonusDeduc == self::PAYROLL_BONUS) ? $salaryData->net_pay + $extraAmount : $salaryData->net_pay - $extraAmount;
 
             }
+
+
         }
 
 

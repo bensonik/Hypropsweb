@@ -1,9 +1,9 @@
 @if($data->type == 'update_request')
-Hello, {{$data->sender}} sent {{$data->comp_type}}, please action this task
+Hello, {{$data->sender}} updated the payroll, please action this task. {{$data->desc}}
 @endif
 
 @if($data->type == 'process_request')
-    Hello, {{$data->sender}} sent {{$data->comp_type}}, please action this task
+    Hello, {{$data->sender}} sent a request, please action this. {{$data->desc}}
 @endif
 
 @if($data->type == 'request_approval')
