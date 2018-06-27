@@ -212,7 +212,7 @@ class PayrollController extends Controller
                     $tax = Tax::firstRow('id',$salaryId->id);
                     $taxAmount = ($tax->sum_percentage/100)*$salaryId->gross_pay;
                     $totalAmount = ($bonusDeduc == Utility::PAYROLL_DEDUCTION) ?$paid->total_amount-$extraAmount : $paid->total_amount+$extraAmount;
-                    
+
                     $dbData = [
                         'bonus_deduc' => $extraAmount,
                         'bonus_deduc_type' => $bonusDeduc,

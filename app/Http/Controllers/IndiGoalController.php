@@ -367,8 +367,10 @@ class IndiGoalController extends Controller
         $lowerHodId = Utility::detectHODId(Auth::user()->dept_id);
         $lowerHodDetail = User::firstRow('id',$lowerHodId);
         $hodDetail = User::firstRow('id',$hodId);
-        $compFrame = SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::BEHAV_COMP);
-        $techComp = SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
+        $compFrame = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::BEHAV_COMP):
+            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::BEHAV_COMP);
+        $techComp = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS):
+            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
 
         return view::make('indi_goals.edit_form')->with('edit',$indiGoal)->with('$IndiGoalCat',$indiGoalCat)
             ->with('hod',$hod)->with('indiGoalSeries',$indiGoalSeries)->with('lowerHod',$lowerHod)
