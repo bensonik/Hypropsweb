@@ -506,7 +506,6 @@
                             </td>
                             <td>{{$data->dob}}</td>
                             <td>{{$data->job_role}}</td>
-                            <td>{{$data->dob}}</td>
                             <td>{{$data->address}}</td>
                             <td>{{$data->state}}</td>
                             <td>{{$data->nationality}}</td>
