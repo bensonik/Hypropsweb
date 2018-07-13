@@ -268,11 +268,13 @@
                    var successMessage = swalSuccess('Data saved successfully');
                     swal("Success!", "Data saved successfully!", "success");
 
-                }else{
+                }else if(message2 == 'token_mismatch'){
 
+                    location.reload();
+
+                }else {
                     var infoMessage = swalWarningError(message2);
                     swal("Warning!", infoMessage, "warning");
-
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
@@ -309,11 +311,13 @@
                     var successMessage = swalSuccess('Data saved successfully');
                     swal("Success!", successMessage, "success");
 
-                }else{
+                }else if(message2 == 'token_mismatch'){
 
+                    location.reload();
+
+                }else {
                     var infoMessage = swalWarningError(message2);
                     swal("Warning!", infoMessage, "warning");
-
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS

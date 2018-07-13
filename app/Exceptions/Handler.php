@@ -54,6 +54,15 @@ class Handler extends ExceptionHandler
         /*if(!Auth::check()){
             return redirect('/logout');
         }*/
+		
+		if ($exception instanceof \Illuminate\Session\TokenMismatchException) {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'token_mismatch'
+            ], $exception->getStatusCode());
+        };
+    }
+
 
         return parent::render($request, $exception);
     }
