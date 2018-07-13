@@ -99,9 +99,7 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="strat_obj_edit{{$num}}" placeholder="Strategic Objective">
-                                    {{$data->strat_obj}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="strat_obj_edit{{$num}}" placeholder="Strategic Objective">{{$data->strat_obj}}</textarea>
 
                                     </div>
                                 </div>
@@ -112,9 +110,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="measure_edit{{$num}}" placeholder="Measurement">
-                                    {{$data->measurement}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="measure_edit{{$num}}" placeholder="Measurement">{{$data->measurement}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -124,9 +120,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="q1_edit{{$num}}" placeholder="Target Q1">
-                                    {{$data->q1}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="q1_edit{{$num}}" placeholder="Target Q1">{{$data->q1}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -136,9 +130,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="q2_edit{{$num}}" placeholder="Target Q2">
-                                     {{$data->q2}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="q2_edit{{$num}}" placeholder="Target Q2">{{$data->q2}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -148,9 +140,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="q3_edit{{$num}}" placeholder="Target Q3">
-                                    {{$data->q3}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="q3_edit{{$num}}" placeholder="Target Q3">{{$data->q3}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -160,9 +150,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " disabled name="q4_edit{{$num}}" placeholder="Target Q4">
-                                    {{$data->q4}}
-                                </textarea>
+                                <textarea rows="6" class=" " disabled name="q4_edit{{$num}}" placeholder="Target Q4">{{$data->q4}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -172,9 +160,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <textarea rows="6" class=" " name="ops_edit{{$num}}" placeholder="over_perf_score">
-                                            {{$data->over_perf_score}}
-                                        </textarea>
+                                        <textarea rows="6" class=" " name="ops_edit{{$num}}" placeholder="over_perf_score">{{$data->over_perf_score}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -184,9 +170,7 @@
                             <div class="col-md-10">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" "  name="strat_obj_edit{{$num}}" placeholder="Strategic Objective">
-                                    {{$data->strat_obj}}
-                                </textarea>
+                                <textarea rows="6" class=" "  name="strat_obj_edit{{$num}}" placeholder="Strategic Objective">{{$data->strat_obj}}</textarea>
 
                                     </div>
                                 </div>
@@ -197,9 +181,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" "  name="measure_edit{{$num}}" placeholder="Measurement">
-                                    {{$data->measurement}}
-                                </textarea>
+                                <textarea rows="6" class=" "  name="measure_edit{{$num}}" placeholder="Measurement">{{$data->measurement}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -209,9 +191,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " name="q1_edit{{$num}}" placeholder="Target Q1">
-                                    {{$data->q1}}
-                                </textarea>
+                                <textarea rows="6" class=" " name="q1_edit{{$num}}" placeholder="Target Q1">{{$data->q1}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -221,9 +201,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " name="q2_edit{{$num}}" placeholder="Target Q2">
-                                     {{$data->q2}}
-                                </textarea>
+                                <textarea rows="6" class=" " name="q2_edit{{$num}}" placeholder="Target Q2">{{$data->q2}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -233,9 +211,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " name="q3_edit{{$num}}" placeholder="Target Q3">
-                                    {{$data->q3}}
-                                </textarea>
+                                <textarea rows="6" class=" " name="q3_edit{{$num}}" placeholder="Target Q3">{{$data->q3}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -245,9 +221,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                <textarea rows="6" class=" " name="q4_edit{{$num}}" placeholder="Target Q4">
-                                    {{$data->q4}}
-                                </textarea>
+                                <textarea rows="6" class=" " name="q4_edit{{$num}}" placeholder="Target Q4">{{$data->q4}}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -257,9 +231,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <textarea rows="6" class=" " disabled name="ops_edit{{$num}}" placeholder="over_perf_score">
-                                            {{$data->over_perf_score}}
-                                        </textarea>
+                                        <textarea rows="6" class=" " disabled name="ops_edit{{$num}}" placeholder="over_perf_score">{{$data->over_perf_score}}</textarea>
                                     </div>
                                 </div>
                             </div>
