@@ -95,7 +95,7 @@
 @if($edit->comp_category == App\Helpers\Utility::TECH_COMP)
     <form name="" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
 
-        <div class="body">
+        <div class=" body">
             <div class="row clearfix">
                 <div class="col-sm-4">
                     <div class="form-group">
@@ -147,8 +147,8 @@
 
                 <div class="">
                     <div class="form-group">
-                        <div class="form-line">
-                            <textarea class="form-control " name="cat_desc" placeholder="Item Description">{{$edit->item_desc}}</textarea>
+                        <div class="">
+                            <textarea class="form-control "  name="cat_desc" placeholder="Item Description">{{$edit->item_desc}}</textarea>
                         </div>
                     </div>
                 </div>
