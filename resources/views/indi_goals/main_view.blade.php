@@ -983,10 +983,10 @@
         var capable1 = classToArray2(capable);
         var level1 = classToArray2(level);
         var review1 = classToArray2(review);
-        var jcore_comp = JSON.stringify(core_comp1);
-        var jcapable = JSON.stringify(capable1);
-        var jlevel = JSON.stringify(level1);
-        var jreview = JSON.stringify(review1);
+        var jcore_comp = sanitizeData(core_comp);
+        var jcapable = sanitizeData(capable);
+        var jlevel = sanitizeData(level);
+        var jreview = sanitizeData(review);
 
         if(arrayItemEmpty(core_comp1) == false && arrayItemEmpty(level1) == false){
             var postVars = inputVars + '&editor_input=' + summerNote+'&core_comp='+jcore_comp+'&capable='+jcapable+'&level='+jlevel+'&review='+jreview;
@@ -1045,10 +1045,10 @@
         var element1 = classToArray2(element);
         var level1 = classToArray2(level);
         var review1 = classToArray2(review);
-        var jcore_comp = JSON.stringify(core_comp1);
-        var jelement = JSON.stringify(element1);
-        var jlevel = JSON.stringify(level1);
-        var jreview = JSON.stringify(review1);
+        var jcore_comp = sanitizeData(core_comp);
+        var jelement = sanitizeData(element);
+        var jlevel = sanitizeData(level);
+        var jreview = sanitizeData(review);
 
         if(arrayItemEmpty(core_comp1) == false && arrayItemEmpty(level1) == false){
             var postVars = inputVars + '&editor_input=' + summerNote+'&core_comp='+jcore_comp+'&element='+jelement+'&level='+jlevel+'&review='+jreview;
