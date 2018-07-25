@@ -196,7 +196,8 @@ class UsersController extends Controller
                 Image::make($image->getRealPath())->resize(72,72)->save($path);
                 $photo = $filename;
                 if($request->get('prev_photo') != 'user.png'){
-                    unlink($request->get('prev_photo'));
+                    if(file_exists(Utility::IMG_URL().$request->get('prev_photo')))
+                    unlink(Utility::IMG_URL().$request->get('prev_photo'));
                 }
 
             }
