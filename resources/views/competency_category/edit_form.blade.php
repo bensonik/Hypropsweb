@@ -39,7 +39,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control category" value="{{$edit->cat_desc}}" name="category_name" placeholder="Category Name">
+                        <input type="text" class="form-control category" value="{{$edit->category_name}}" name="category_name" placeholder="Category Name">
                     </div>
                 </div>
             </div>
