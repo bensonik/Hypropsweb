@@ -124,8 +124,8 @@ Route::post('/remove_attachment', 'RequisitionController@removeAttachment')->nam
 Route::any('/download_attachment', 'RequisitionController@downloadAttachment')->name('download_attachment');
 Route::post('/delete_requisition', 'RequisitionController@destroy')->name('delete_requisition');
 
-// -------------DEPARTMENT MODULE-----------
-Route::any('/project', 'ProjectController@index')->name('project')->middleware('auth.admin');
+// -------------PROJECT MODULE-----------
+Route::any('/project', 'ProjectController@index')->name('project')->middleware('auth');
 Route::post('/create_project', 'ProjectController@create')->name('create_project');
 Route::post('/edit_project_form', 'ProjectController@editForm')->name('edit_project_form');
 Route::post('/edit_project', 'ProjectController@edit')->name('edit_project');
@@ -270,3 +270,11 @@ Route::post('/create_training', 'TrainingController@create')->name('create_train
 Route::post('/edit_training_form', 'TrainingController@editForm')->name('edit_training_form');
 Route::post('/edit_training', 'TrainingController@edit')->name('edit_training');
 Route::post('/delete_training', 'TrainingController@destroy')->name('delete_training');
+
+
+// -------------BIN TYPE MODULE-----------
+Route::any('/bin_type', 'BinTypeController@index')->name('bin_type')->middleware('auth');
+Route::post('/create_bin_type', 'BinTypeController@create')->name('create_bin_type');
+Route::post('/edit_bin_type_form', 'BinTypeController@editForm')->name('edit_bin_type_form');
+Route::post('/edit_bin_type', 'BinTypeController@edit')->name('edit_bin_type');
+Route::post('/delete_bin_type', 'BinTypeController@destroy')->name('delete_bin_type');

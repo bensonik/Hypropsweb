@@ -387,6 +387,26 @@
                 </li>
                 @endif
 
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <span>Warehouse Management</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('bin_type')}}">Bin Type</a>
+                        </li>
+                        <li>
+                            <a href="{{url('bin')}}">Bin</a>
+                        </li>
+                        <li>
+                            <a href="{{url('zones')}}">Zones</a>
+                        </li>
+                        <li>
+                            <a href="{{url('warehouse')}}">Warehousing</a>
+                        </li>
+                    </ul>
+                </li>
+
                 @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
                 <li>
                     <a href="{{url('user')}}">
