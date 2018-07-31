@@ -19,7 +19,6 @@
                 <button type="button" onclick="edit_assessment('student_edit_form','<?php echo URL::to('edit_staff'); ?>','{{ csrf_token() }}');" class="btn btn-primary">Save</button>
             </div>
 
-
         </div>
     </div>
 </div>
