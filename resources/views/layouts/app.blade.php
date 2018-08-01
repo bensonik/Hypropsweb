@@ -399,7 +399,7 @@
                             <a href="{{url('bin')}}">Bin</a>
                         </li>
                         <li>
-                            <a href="{{url('zones')}}">Zones</a>
+                            <a href="{{url('zone')}}">Zones</a>
                         </li>
                         <li>
                             <a href="{{url('warehouse')}}">Warehousing</a>

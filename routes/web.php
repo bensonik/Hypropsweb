@@ -285,3 +285,10 @@ Route::post('/create_bin', 'BinController@create')->name('create_bin');
 Route::post('/edit_bin_form', 'BinController@editForm')->name('edit_bin_form');
 Route::post('/edit_bin', 'BinController@edit')->name('edit_bin');
 Route::post('/delete_bin', 'BinController@destroy')->name('delete_bin');
+
+// -------------ZONE MODULE-----------
+Route::any('/zone', 'ZoneController@index')->name('zone')->middleware('auth');
+Route::post('/create_zone', 'ZoneController@create')->name('create_zone');
+Route::post('/edit_zone_form', 'ZoneController@editForm')->name('edit_zone_form');
+Route::post('/edit_zone', 'ZoneController@edit')->name('edit_zone');
+Route::post('/delete_zone', 'ZoneController@destroy')->name('delete_zone');

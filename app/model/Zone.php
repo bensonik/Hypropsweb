@@ -20,8 +20,8 @@ class Zone extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'department' => 'required',
-        'approval_system' => 'required'
+        'name' => 'required',
+        'bin_type' => 'required'
     ];
 
     public function user_c(){
@@ -43,8 +43,8 @@ class Zone extends Model
 
     }
 
-    public function approval(){
-        return $this->belongsTo('App\model\HrisApprovalSys','approval_id','id');
+    public function bin(){
+        return $this->belongsTo('App\model\BinType','bin_id','id');
 
     }
 
