@@ -21,8 +21,7 @@ class Bin extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'department' => 'required',
-        'approval_system' => 'required'
+        'code_name' => 'required'
     ];
 
     public function user_c(){

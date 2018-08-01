@@ -278,3 +278,10 @@ Route::post('/create_bin_type', 'BinTypeController@create')->name('create_bin_ty
 Route::post('/edit_bin_type_form', 'BinTypeController@editForm')->name('edit_bin_type_form');
 Route::post('/edit_bin_type', 'BinTypeController@edit')->name('edit_bin_type');
 Route::post('/delete_bin_type', 'BinTypeController@destroy')->name('delete_bin_type');
+
+// -------------BIN MODULE-----------
+Route::any('/bin', 'BinController@index')->name('bin_type')->middleware('auth');
+Route::post('/create_bin', 'BinController@create')->name('create_bin');
+Route::post('/edit_bin_form', 'BinController@editForm')->name('edit_bin_form');
+Route::post('/edit_bin', 'BinController@edit')->name('edit_bin');
+Route::post('/delete_bin', 'BinController@destroy')->name('delete_bin');
