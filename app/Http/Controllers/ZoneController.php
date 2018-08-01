@@ -57,7 +57,7 @@ class ZoneController extends Controller
 
                 return response()->json([
                     'message' => 'good',
-                    'message2' => 'Entry already exist, please try another entry'
+                    'message2' => 'Entry already exist, please try another entry '
                 ]);
 
             }else{
