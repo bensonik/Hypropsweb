@@ -1,5 +1,5 @@
 <form name="editMainForm" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-    <div class="body">
+    <div class="container body">
         <div class="row clearfix">
             <div class="row clearfix">
                 <div class="col-sm-4">
@@ -22,10 +22,10 @@
                     <b>Bin Type</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <select class="form-control" name="bin_type" placeholder="Bin Type" required>
-                                <option value="{{$edit->bin->code}}" selected>Select</option>
+                            <select class="form-control" name="bin_type"  required>
+                                <option value="{{$edit->bin->id}}" selected>{{$edit->bin->type}} ({{$edit->bin->code}})</option>
                                 @foreach($binType as $type)
-                                    <option value="{{$type->id}}">{{$type->code}}</option>
+                                    <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                                 @endforeach
                             </select>
                         </div>

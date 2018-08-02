@@ -37,7 +37,7 @@
                                             <select class="form-control" name="bin_type" placeholder="Bin Type" required>
                                                     <option value="">Select</option>
                                                 @foreach($binType as $type)
-                                                    <option value="{{$type->id}}">{{$type->code}}</option>
+                                                    <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -86,7 +86,7 @@
     <!-- Default Size -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+            <div class=" modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                 </div>
@@ -113,20 +113,20 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Company Info
+                        Zone
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
 
-                        <!--<li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('user'); ?>',
-                                    '<?php echo url('delete_user'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                        <li>
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('zone'); ?>',
+                                    '<?php echo url('delete_zone'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
-                        <li>
+                    <!--<li>
                             <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('user'); ?>',
                                     '<?php echo url('change_user_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
                                 <i class="fa fa-check-square-o"></i>Enable User
@@ -168,7 +168,6 @@
                             </th>
                             <th>Manage</th>
                             <th>Name</th>
-
                             <th>Bin Type</th>
                             <th>Zone Description</th>
                             <th>Special Equipment</th>
@@ -195,9 +194,16 @@
                             <td>{{$data->bin->type}}</td>
                             <td>{{$data->zone_desc}}</td>
                             <td>{{$data->special_equip}}</td>
-                            <td>{{$data->zone_ranking}}</td>
-                            <td>{{$data->created_by}}</td>
-                            <td>{{$data->updated_by}}</td>
+                            <td>{{$data->zone_ranking}}</td><td>
+                                @if($data->created_by != '0')
+                                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
+                                @endif
+                            </td>
+                            <td>
+                                @if($data->updated_by != '0')
+                                    {{$data->user_u->firstname}} {{$data->user_u->lastname}}
+                                @endif
+                            </td>
                             <td>{{$data->created_at}}</td>
                             <td>{{$data->updated_at}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -275,7 +281,7 @@
 
                         var successMessage = swalSuccess('Data saved successfully');
                         swal("Success!", successMessage, "success");
-                        location.reload();
+                        //location.reload();
 
                     }else{
 

@@ -389,6 +389,7 @@
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">view_quilt</i>
                         <span>Warehouse Management</span>
                     </a>
                     <ul class="ml-menu">

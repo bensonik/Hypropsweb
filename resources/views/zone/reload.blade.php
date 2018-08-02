@@ -10,7 +10,7 @@
         <th>Name</th>
 
         <th>Bin Type</th>
-        <th>Zone Description </th>
+        <th>Zone Description</th>
         <th>Special Equipment</th>
         <th>Zone Ranking</th>
         <th>Created by</th>
@@ -32,16 +32,14 @@
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
             <td>{{$data->name}}</td>
-            <td>{{$data->address}}</td>
-            <td>{{$data->phone1}}</td>
-            <td>{{$data->phone2}}</td>
-            <td>{{$data->email}}</td>
+            <td>{{$data->bin->type}}</td>
+            <td>{{$data->zone_desc}}</td>
+            <td>{{$data->special_equip}}</td>
+            <td>{{$data->zone_ranking}}</td>
             <td>{{$data->created_by}}</td>
             <td>{{$data->updated_by}}</td>
             <td>{{$data->created_at}}</td>
             <td>{{$data->updated_at}}</td>
-            <td><img src="{{ asset('images/'.$data->logo) }}" width="160" height="75" alt="User" /></td>
-
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
         </tr>

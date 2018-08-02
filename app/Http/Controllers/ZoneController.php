@@ -62,9 +62,11 @@ class ZoneController extends Controller
 
             }else{
                 $dbDATA = [
-                    'code' => $request->input('code'),
-                    'type' => ucfirst($request->input('name')),
-                    'bin_desc' => ucfirst($request->input('description')),
+                    'name' => $request->input('name'),
+                    'bin_id' => ucfirst($request->input('bin_type')),
+                    'special_equip' => ucfirst($request->input('special_equip')),
+                    'zone_ranking' => ucfirst($request->input('zone_rank')),
+                    'zone_desc' => ucfirst($request->input('zone_desc')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -97,8 +99,10 @@ class ZoneController extends Controller
     public function editForm(Request $request)
     {
         //
+
+        $binType = BinType::getAllData();
         $dept = Zone::firstRow('id',$request->input('dataId'));
-        return view::make('zone.edit_form')->with('edit',$dept);
+        return view::make('zone.edit_form')->with('edit',$dept)->with('binType',$binType);
 
     }
 
@@ -115,9 +119,11 @@ class ZoneController extends Controller
         if($validator->passes()) {
 
             $dbDATA = [
-                'code' => $request->input('code'),
-                'type' => ucfirst($request->input('name')),
-                'bin_desc' => $request->input('description'),
+                'name' => $request->input('name'),
+                'bin_id' => ucfirst($request->input('bin_type')),
+                'special_equip' => ucfirst($request->input('special_equip')),
+                'zone_ranking' => ucfirst($request->input('zone_rank')),
+                'zone_desc' => ucfirst($request->input('zone_desc')),
                 'updated_by' => Auth::user()->id
             ];
             $rowData = Zone::specialColumns('name', $request->input('name'));
