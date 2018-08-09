@@ -49,6 +49,9 @@ class Utility
     const COMPONENT_TYPE = [1 => 'Earnings',2 => 'Deduction'];
     const TRAINING_TYPE = [1 => 'Internal',2 => 'External'];
 
+    const SPECIAL_EQUIP = ['According to bin','According to SKU/Item'];
+    const CAPACITY_POLICY = ['Never check capacity','Allow more than max capacity','Prohibit more than max capacity'];
+
     public static function IMG_URL(){
         return public_path() . '/images/';
     }

@@ -20,22 +20,85 @@ class Warehouse extends Model
     protected $guarded = [];
 
     public static $mainRules = [
+        'code' => 'required',
         'name' => 'required',
-        'email' => 'required|email',
         'address' => 'required',
-        'phone1' => 'sometimes|nullable|numeric',
-        'phone2' => 'sometimes|nullable|numeric',
-        'photo' => 'required|image',
+        'shipment_bin' => 'required',
+        'receipt_bin' => 'required',
     ];
 
     public static $mainRulesEdit = [
+        'code' => 'required',
         'name' => 'required',
-        'email' => 'required|email',
         'address' => 'required',
-        'phone1' => 'sometimes|nullable|numeric',
-        'phone2' => 'sometimes|nullable|numeric',
+        'shipment_bin' => 'required',
+        'receipt_bin' => 'required',
     ];
 
+    public function user_c(){
+        return $this->belongsTo('App\User','created_by','id');
+
+    }
+
+    public function user_u(){
+        return $this->belongsTo('App\User','updated_by','id');
+
+    }
+
+    public function def_bin(){
+        return $this->belongsTo('App\model\Bin','default_bin_select','id');
+
+    }
+
+    public function receipt_bin(){
+        return $this->belongsTo('App\model\Bin','receipt_bin_code','id');
+
+    }
+
+    public function adjust_bin(){
+        return $this->belongsTo('App\model\Bin','adjust_bin_code','id');
+
+    }
+
+    public function ship_bin(){
+        return $this->belongsTo('App\model\Bin','ship_bin_code','id');
+
+    }
+
+    public function open_shop_floor(){
+        return $this->belongsTo('App\model\Bin','open_shop_floor_bin_code','id');
+
+    }
+
+    public function to_prod_bin(){
+        return $this->belongsTo('App\model\Bin','to_prod_bin_code','id');
+
+    }
+
+    public function from_prod_bin(){
+        return $this->belongsTo('App\model\Bin','from_prod_bin_code','id');
+
+    }
+
+    public function cross_dock(){
+        return $this->belongsTo('App\model\Bin','cross_dock_bin_code','id');
+
+    }
+
+    public function to_assembly(){
+        return $this->belongsTo('App\model\Bin','to_assembly_bin_code','id');
+
+    }
+
+    public function from_assembly(){
+        return $this->belongsTo('App\model\Bin','from_assembly_bin_code','id');
+
+    }
+
+    public function assembly_to_order(){
+        return $this->belongsTo('App\model\Bin','assembly_to_order_ship_bin_code','id');
+
+    }
 
     public static function paginateAllData()
     {

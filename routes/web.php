@@ -292,3 +292,10 @@ Route::post('/create_zone', 'ZoneController@create')->name('create_zone');
 Route::post('/edit_zone_form', 'ZoneController@editForm')->name('edit_zone_form');
 Route::post('/edit_zone', 'ZoneController@edit')->name('edit_zone');
 Route::post('/delete_zone', 'ZoneController@destroy')->name('delete_zone');
+
+// -------------WAREHOUSE MODULE-----------
+Route::any('/warehouse', 'WarehouseController@index')->name('warehouse')->middleware('auth');
+Route::post('/create_warehouse', 'WarehouseController@create')->name('create_warehouse');
+Route::post('/edit_warehouse_form', 'WarehouseController@editForm')->name('edit_warehouse_form');
+Route::post('/edit_warehouse', 'WarehouseController@edit')->name('edit_zone');
+Route::post('/delete_warehouse', 'WarehouseController@destroy')->name('delete_warehouse');

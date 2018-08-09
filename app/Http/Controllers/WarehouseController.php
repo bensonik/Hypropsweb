@@ -31,13 +31,17 @@ class WarehouseController extends Controller
     public function index(Request $request)
     {
         //
-        $mainData = Company::paginateAllData();
+        $mainData = Warehouse::paginateAllData();
+        $bin = Bin::getAllData();
+        $putAwayTemp = PutAwayTemplate::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('company_info.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('warehouse.reload',array('mainData' => $mainData,'binType' => $bin
+            ,'$putAwayTemp' => $bin))->render());
 
         }else{
-            return view::make('company_info.main_view')->with('mainData',$mainData);
+            return view::make('warehouse.main_view')->with('mainData',$mainData)->with('binType',$bin)
+                ->with('putAwayTemp',$putAwayTemp);
         }
 
 
@@ -51,10 +55,14 @@ class WarehouseController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Company::$mainRules);
+        $validator = Validator::make($request->all(),Warehouse::$mainRules);
         if($validator->passes()){
 
-            $countData = User::countData('email',$request->input('email'));
+            $putAwayPickLine = ($request->input('put_away_pick_line') == '') ? '' : $request->input('put_away_pick_line');
+            $pickLine = ($request->input('pick_line') == '') ? '' : $request->input('pick_line');
+            $pickFeffo = ($request->input('pick_feffo') == '') ? '' : $request->input('pick_feffo');
+            $breakBulk = ($request->input('break_bulk') == '') ? '' : $request->input('break_bulk');
+            $countData = Warehouse::countData('name',$request->input('name'));
             if($countData > 0){
 
                 return response()->json([
@@ -64,30 +72,39 @@ class WarehouseController extends Controller
 
             }else{
 
-                $photo = 'logo.jpg';
-                if($request->hasFile('photo')){
-
-                    $image = $request->file('photo');
-                    $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
-                    $path = Utility::IMG_URL().$filename;
-
-                    Image::make($image->getRealPath())->resize(160,75)->save($path);
-                    $photo = $filename;
-
-                }
-
 
                 $dbDATA = [
+                    'code' => ucfirst($request->input('code')),
                     'name' => ucfirst($request->input('name')),
                     'address' => ucfirst($request->input('address')),
+                    'address2' => ucfirst($request->input('address2')),
+                    'country' => ucfirst($request->input('country')),
+                    'post_code' => $request->input('post_code'),
+                    'contact' => ucfirst($request->input('contact')),
+                    'phone' => ucfirst($request->input('phone')),
                     'email' => ucfirst($request->input('email')),
-                    'phone1' => ucfirst($request->input('phone1')),
-                    'phone2' => ucfirst($request->input('phone2')),
-                    'logo' => $photo,
-                    'created_by' => Auth::user()->firstname.' '.Auth::user()->lastname,
+                    'fax' => $request->input('fax'),
+                    'receipt_bin_code' => $request->input('receipt_bin'),
+                    'ship_bin_code' => $request->input('shipment_bin'),
+                    'open_shop_floor_bin_code' => $request->input('open_shop_floor_bin'),
+                    'to_prod_bin_code' => $request->input('to_prod_bin'),
+                    'from_prod_bin_code' => $request->input('from_prod_bin'),
+                    'adjust_bin_code' => $request->input('adjust_code'),
+                    'cross_dock_bin_code' => $request->input('cross_dock_bin'),
+                    'to_assembly_bin_code' => $request->input('to_assemb_bin'),
+                    'from_assembly_bin_code' => $request->input('from_assemb_bin'),
+                    'assembly_to_order_ship_bin_code' => $request->input('ass_to_order_ship_bin'),
+                    'special_equip' => ucfirst($request->input('special_equip')),
+                    'put_away_template_code' => ucfirst($request->input('put_away_temp_code')),
+                    'bin_capacity_policy' => ucfirst($request->input('bin_cap_policy')),
+                    'put_away_line' => $putAwayPickLine,
+                    'pick_line' => $pickLine,
+                    'pick_feffo' => $pickFeffo,
+                    'allow_break_bulk' => $breakBulk,
+                    'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                Company::create($dbDATA);
+                Warehouse::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -116,8 +133,11 @@ class WarehouseController extends Controller
     {
         //
 
-        $company = Company::firstRow('id',$request->input('dataId'));
-        return view::make('company_info.edit_form')->with('edit',$company);
+        $warehouse = Warehouse::firstRow('id',$request->input('dataId'));
+        $bin = Bin::getAllData();
+        $putAwayTemp = PutAwayTemplate::getAllData();
+        return view::make('warehouse.edit_form')->with('edit',$warehouse)->with('binType',$bin)
+            ->with('putAwayTemp',$putAwayTemp);
 
     }
 
@@ -130,39 +150,49 @@ class WarehouseController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Company::$mainRulesEdit);
+        $validator = Validator::make($request->all(),Warehouse::$mainRulesEdit);
         if($validator->passes()) {
 
-            $photo = $request->get('prev_photo');
-
-            if($request->hasFile('photo')){
-
-                $image = $request->file('photo');
-                $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
-                $path = Utility::IMG_URL().$filename;
-
-                Image::make($image->getRealPath())->resize(72,72)->save($path);
-                $photo = $filename;
-                if($request->get('prev_photo') != 'logo.jpg'){
-                    unlink($request->get('prev_photo'));
-                }
-
-            }
+            $putAwayPickLine = ($request->input('put_away_pick_line') == '') ? '' : $request->input('put_away_pick_line');
+            $pickLine = ($request->input('pick_line') == '') ? '' : $request->input('pick_line');
+            $pickFeffo = ($request->input('pick_feffo') == '') ? '' : $request->input('pick_feffo');
+            $breakBulk = ($request->input('break_bulk') == '') ? '' : $request->input('break_bulk');
 
             $dbDATA = [
+                'code' => ucfirst($request->input('code')),
                 'name' => ucfirst($request->input('name')),
                 'address' => ucfirst($request->input('address')),
+                'address2' => ucfirst($request->input('address2')),
+                'country' => ucfirst($request->input('country')),
+                'post_code' => $request->input('post_code'),
+                'contact' => ucfirst($request->input('contact')),
+                'phone' => ucfirst($request->input('phone')),
                 'email' => ucfirst($request->input('email')),
-                'phone1' => ucfirst($request->input('phone1')),
-                'phone2' => ucfirst($request->input('phone2')),
-                'logo' => $photo,
-                'updated_by' => Auth::user()->firstname.' '.Auth::user()->lastname
+                'fax' => $request->input('fax'),
+                'receipt_bin_code' => $request->input('receipt_bin'),
+                'ship_bin_code' => $request->input('shipment_bin'),
+                'open_shop_floor_bin_code' => $request->input('open_shop_floor_bin'),
+                'to_prod_bin_code' => $request->input('to_prod_bin'),
+                'from_prod_bin_code' => $request->input('from_prod_bin'),
+                'adjust_bin_code' => $request->input('adjust_code'),
+                'cross_dock_bin_code' => $request->input('cross_dock_bin'),
+                'to_assembly_bin_code' => $request->input('to_assemb_bin'),
+                'from_assembly_bin_code' => $request->input('from_assemb_bin'),
+                'assembly_to_order_ship_bin_code' => $request->input('ass_to_order_ship_bin'),
+                'special_equip' => ucfirst($request->input('special_equip')),
+                'put_away_template_code' => ucfirst($request->input('put_away_temp_code')),
+                'bin_capacity_policy' => ucfirst($request->input('bin_cap_policy')),
+                'put_away_line' => $putAwayPickLine,
+                'pick_line' => $pickLine,
+                'pick_feffo' => $pickFeffo,
+                'allow_break_bulk' => $breakBulk,
+                'updated_by' => Auth::user()->id
             ];
-            $rowData = Company::specialColumns('email', $request->input('name'));
+            $rowData = Warehouse::specialColumns('name', $request->input('name'));
             if(count($rowData) > 2){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    Company::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    Warehouse::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -178,7 +208,7 @@ class WarehouseController extends Controller
                 }
 
             } else{
-                Company::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                Warehouse::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -208,7 +238,7 @@ class WarehouseController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = Company::massUpdate('id',$idArray,$dbData);
+        $delete = Warehouse::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',
