@@ -4,6 +4,8 @@ namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
+use Monolog\Handler\Curl\Util;
+
 class Warehouse extends Model
 {
     //
@@ -213,5 +215,11 @@ class Warehouse extends Model
 
     }
 
+    public static function tenColumnSingleValue($post)
+    {
+        return Utility::tenColumnSingleValue(self::table(),'receipt_bin_code','adjust_bin_code','ship_bin_code',
+            'open_shop_floor_bin_code','to_prod_bin_code','from_prod_bin_code','cross_dock_bin_code',
+            'to_assembly_bin_code','from_assembly_bin_code','assembly_to_order_ship_bin_code',$post);
+    }
 
 }

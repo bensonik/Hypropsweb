@@ -180,7 +180,7 @@ class WarehouseController extends Controller
                 'from_assembly_bin_code' => $request->input('from_assemb_bin'),
                 'assembly_to_order_ship_bin_code' => $request->input('ass_to_order_ship_bin'),
                 'special_equip' => ucfirst($request->input('special_equip')),
-                'put_away_template_code' => ucfirst($request->input('put_away_temp_code')),
+                'put_away_template_code' => $request->input('put_away_temp_code'),
                 'bin_capacity_policy' => ucfirst($request->input('bin_cap_policy')),
                 'put_away_line' => $putAwayPickLine,
                 'pick_line' => $pickLine,

@@ -4,13 +4,14 @@ namespace App\model;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
-class PutAwayTemplate extends Model
+
+class PhysicalInvCount extends Model
 {
     //
-    protected  $table = 'put_away_template';
+    protected  $table = 'physical_inv_count';
 
     private static function table(){
-        return 'put_away_template';
+        return 'physical_inv_count';
     }
     /**
      * The attributes that are mass assignable.
@@ -20,8 +21,8 @@ class PutAwayTemplate extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'put_away_description' => 'required',
-        'name' => 'required'
+        'code' => 'required',
+        'value' => 'required'
     ];
 
     public function user_c(){
@@ -98,6 +99,14 @@ class PutAwayTemplate extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsOr2($column, $post, $column2, $post2)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orWhere($column, '=',$post)
+            ->orWhere($column2, '=',$post2)->orderBy('id','DESC')->get();
 
     }
 

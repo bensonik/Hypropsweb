@@ -5,7 +5,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->code}}" name="code_name" placeholder="Code Name">
+                        <input type="text" class="form-control" value="{{$edit->name}}" name="name" placeholder="Code Name">
                     </div>
                 </div>
             </div>
@@ -13,7 +13,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea class="form-control" name="bin_description" placeholder="Description">{{$edit->bin_desc}}</textarea>
+                        <textarea class="form-control" name="put_away_description" placeholder="Description">{{$edit->put_away_desc}}</textarea>
                     </div>
                 </div>
             </div>

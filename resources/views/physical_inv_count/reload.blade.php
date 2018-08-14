@@ -6,9 +6,9 @@
                    name="check_all" class="" />
 
         </th>
-
         <th>Code</th>
-        <th>Code Description</th>
+        <th>Value</th>
+        <th>Description</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -25,6 +25,7 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->code}}</td>
+            <td>{{$data->value}}</td>
             <td>{{$data->code_desc}}</td>
             <td>
                 @if($data->created_by != '0')
@@ -40,7 +41,7 @@
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_put_away_template_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_physical_inv_count_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
         </tr>
     @endforeach

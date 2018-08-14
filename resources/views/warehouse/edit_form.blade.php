@@ -115,8 +115,7 @@
                             @foreach($binType as $type)
                                 @if($edit->receipt_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -132,8 +131,7 @@
                             @foreach($binType as $type)
                                 @if($edit->ship_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -149,8 +147,7 @@
                             @foreach($binType as $type)
                                 @if($edit->open_shop_floor_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -170,8 +167,7 @@
                             @foreach($binType as $type)
                                 @if($edit->to_prod_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -188,8 +184,7 @@
                                 @foreach($binType as $type)
                                 @if($edit->from_prod_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -206,8 +201,7 @@
                             @foreach($binType as $type)
                                 @if($edit->adjust_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -227,8 +221,7 @@
                                 @foreach($binType as $type)
                                 @if($edit->cross_dock_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -245,8 +238,7 @@
                             @foreach($binType as $type)
                                 @if($edit->to_assembly_bin_code == $type->id)
                                     <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -263,8 +255,7 @@
                             @foreach($binType as $type)
                                 @if($edit->from_assembly_bin_code == $type->id)
                                 <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -285,8 +276,7 @@
                             @foreach($binType as $type)
                                 @if($edit->assembly_to_order_ship_bin_code == $type->id)
                                  <option value="{{$type->id}}" selected>{{$type->type}} ({{$type->code}})</option>
-                                @else
-                                    <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$type->id}}">{{$type->type}} ({{$type->code}})</option>
                             @endforeach
@@ -347,10 +337,9 @@
                     <div class="form-line">
                         <select type="text" class="form-control" name="put_away_temp_code" >
                             @foreach($putAwayTemp as $temp)
-                                @if($edit->special_equip == $temp->id)
+                                @if($edit->put_away_template_code == $temp->id)
                                 <option value="{{$temp->id}}" selected>{{$temp->name}}</option>
-                                @else
-                                <option value="" selected>Select</option>
+
                                 @endif
                                 <option value="{{$temp->id}}">{{$temp->name}}</option>
                             @endforeach

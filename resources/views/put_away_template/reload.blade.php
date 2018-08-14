@@ -24,8 +24,8 @@
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->code}}</td>
-            <td>{{$data->code_desc}}</td>
+            <td>{{$data->name}}</td>
+            <td>{{$data->put_away_desc}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

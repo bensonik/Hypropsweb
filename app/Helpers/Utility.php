@@ -440,6 +440,24 @@ class Utility
 
     }
 
+    public static function tenColumnSingleValue($table,$column1,$column2,$column3,$column4
+        ,$column5,$column6,$column7,$column8,$column9,$column10, $post)
+    {
+            return DB::table($table)
+                ->where($column1, $post)
+                ->orWhere($column2, $post)
+                ->orWhere($column3, $post)
+                ->orWhere($column4, $post)
+                ->orWhere($column5, $post)
+                ->orWhere($column6, $post)
+                ->orWhere($column7, $post)
+                ->orWhere($column8, $post)
+                ->orWhere($column9, $post)
+                ->orWhere($column10, $post)
+                ->where('status', self::STATUS_ACTIVE)->get();
+
+    }
+
     public static function detectHOD($id)
     {
         $data = DB::table('dept_approvals')

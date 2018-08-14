@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\model\BinType;
+use App\model\Zone;
 use App\Helpers\Utility;
 use App\User;
 use Auth;
@@ -176,16 +177,38 @@ class BinTypeController extends Controller
     public function destroy(Request $request)
     {
         //
-        $idArray = json_decode($request->input('all_data'));
+        $all_id = json_decode($request->input('all_data'));
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = BinType::massUpdate('id',$idArray,$dbData);
 
-        return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
-        ]);
+        $in_use = [];
+        $unused = [];
+        for($i=0;$i<count($all_id);$i++){
+            $rowDataSalary = Zone::specialColumns('bin_id', $all_id[$i]);
+            if(count($rowDataSalary)>0){
+                $unused[$i] = $all_id[$i];
+            }else{
+                $in_use[$i] = $all_id[$i];
+            }
+        }
+        $message = (count($unused) > 0) ? ' and '.count($unused).
+            ' bin type has been used in another module and cannot be deleted' : '';
+        if(count($in_use) > 0){
+            $delete = BinType::massUpdate('id',$in_use,$dbData);
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($in_use).' data(s) has been deleted'.$message
+            ]);
+
+        }else{
+            return  response()->json([
+                'message2' => count($unused).' bin type has been used in another module and cannot be deleted',
+                'message' => 'warning'
+            ]);
+
+        }
 
     }
 

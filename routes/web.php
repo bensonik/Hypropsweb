@@ -299,3 +299,17 @@ Route::post('/create_warehouse', 'WarehouseController@create')->name('create_war
 Route::post('/edit_warehouse_form', 'WarehouseController@editForm')->name('edit_warehouse_form');
 Route::post('/edit_warehouse', 'WarehouseController@edit')->name('edit_zone');
 Route::post('/delete_warehouse', 'WarehouseController@destroy')->name('delete_warehouse');
+
+// -------------BIN MODULE-----------
+Route::any('/put_away_template', 'PutAwayTemplateController@index')->name('bin_type')->middleware('auth');
+Route::post('/create_put_away_template', 'PutAwayTemplateController@create')->name('create_put_away_template');
+Route::post('/edit_put_away_template_form', 'PutAwayTemplateController@editForm')->name('edit_put_away_template_form');
+Route::post('/edit_put_away_template', 'PutAwayTemplateController@edit')->name('edit_put_away_template');
+Route::post('/delete_put_away_template', 'PutAwayTemplateController@destroy')->name('delete_put_away_template');
+
+// -------------PHYSICAL INVENTORY COUNT MODULE-----------
+Route::any('/physical_inv_count', 'PhysicalInvCountController@index')->name('physical_inv_count')->middleware('auth');
+Route::post('/create_physical_inv_count', 'PhysicalInvCountController@create')->name('create_physical_inv_count');
+Route::post('/edit_physical_inv_count_form', 'PhysicalInvCountController@editForm')->name('edit_physical_inv_count_form');
+Route::post('/edit_physical_inv_count', 'PhysicalInvCountController@edit')->name('edit_physical_inv_count');
+Route::post('/delete_physical_inv_count', 'PhysicalInvCountController@destroy')->name('delete_physical_inv_count');

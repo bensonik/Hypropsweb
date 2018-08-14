@@ -403,7 +403,28 @@
                             <a href="{{url('zone')}}">Zones</a>
                         </li>
                         <li>
-                            <a href="{{url('warehouse')}}">Warehousing</a>
+                            <a href="{{url('put_away_template')}}">Put-Away Templates</a>
+                        </li>
+                        <li>
+                            <a href="{{url('warehouse')}}">Warehouse Locations</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">view_quilt</i>
+                        <span>Inventory </span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('physical_inv_count')}}">Physical Inventory Count Setup</a>
+                        </li>
+                        <li>
+                            <a href="{{url('unit_measure')}}">Unit of Measure Setup</a>
+                        </li>
+                        <li>
+                            <a href="{{url('inventory')}}">Inventory</a>
                         </li>
                     </ul>
                 </li>

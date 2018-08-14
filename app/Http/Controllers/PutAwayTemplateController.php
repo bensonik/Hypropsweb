@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\model\UnitGoalSeries;
-use App\model\UnitGoal;
+use App\model\Bin;
 use App\Helpers\Utility;
+use App\model\PutAwayTemplate;
 use App\User;
 use Auth;
 use View;
@@ -18,20 +18,24 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class UnitGoalSeriesController extends Controller
+class PutAwayTemplateController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         //
         //$req = new Request();
-        $mainData = UnitGoalSeries::paginateAllData();
+        $mainData = PutAwayTemplate::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('unit_goal_series.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('put_away_template.reload',array('mainData' => $mainData))->render());
 
         }else{
-            return view::make('unit_goal_series.main_view')->with('mainData',$mainData);
+            return view::make('put_away_template.main_view')->with('mainData',$mainData);
         }
 
     }
@@ -44,10 +48,10 @@ class UnitGoalSeriesController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),UnitGoalSeries::$mainRules);
+        $validator = Validator::make($request->all(),PutAwayTemplate::$mainRules);
         if($validator->passes()){
 
-            $countData = UnitGoalSeries::countData('goal_name',$request->input('goal_set'));
+            $countData = PutAwayTemplate::countData('name',$request->input('name'));
             if($countData > 0){
 
                 return response()->json([
@@ -57,13 +61,13 @@ class UnitGoalSeriesController extends Controller
 
             }else{
                 $dbDATA = [
-                    'goal_name' => ucfirst($request->input('goal_set')),
-                    'start_date' => ucfirst($request->input('start_date')),
-                    'end_date' => ucfirst($request->input('end_date')),
+                    'name' => ucfirst($request->input('name')),
+                    'put_away_desc' => ucfirst($request->input('put_away_description')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                UnitGoalSeries::create($dbDATA);
+
+                $pro = PutAwayTemplate::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -91,8 +95,8 @@ class UnitGoalSeriesController extends Controller
     public function editForm(Request $request)
     {
         //
-        $position = UnitGoalSeries::firstRow('id',$request->input('dataId'));
-        return view::make('unit_goal_series.edit_form')->with('edit',$position);
+        $dept = PutAwayTemplate::firstRow('id',$request->input('dataId'));
+        return view::make('put_away_template.edit_form')->with('edit',$dept);
 
     }
 
@@ -105,20 +109,19 @@ class UnitGoalSeriesController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),UnitGoalSeries::$mainRules);
+        $validator = Validator::make($request->all(),PutAwayTemplate::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'goal_name' => ucfirst($request->input('goal_set')),
-                'start_date' => ucfirst($request->input('start_date')),
-                'end_date' => ucfirst($request->input('end_date')),
+                'name' => ucfirst($request->input('name')),
+                'put_away_desc' => $request->input('put_away_description'),
                 'updated_by' => Auth::user()->id
             ];
-            $rowData = UnitGoalSeries::specialColumns('goal_name', $request->input('goal_set'));
+            $rowData = PutAwayTemplate::specialColumns('name', $request->input('name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    UnitGoalSeries::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    PutAwayTemplate::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -134,7 +137,7 @@ class UnitGoalSeriesController extends Controller
                 }
 
             } else{
-                UnitGoalSeries::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                PutAwayTemplate::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -180,7 +183,7 @@ class UnitGoalSeriesController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = UnitGoal::specialColumns('goal_set_id', $all_id[$i]);
+            $rowDataSalary = Warehouse::specialColumns('put_away_template_code', $all_id[$i]);
             if(count($rowDataSalary)>0){
                 $unused[$i] = $all_id[$i];
             }else{
@@ -188,9 +191,9 @@ class UnitGoalSeriesController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' goal set has been used in another module and cannot be deleted' : '';
+            ' put-away template has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
-            $delete = UnitGoalSeries::massUpdate('id',$in_use,$dbData);
+            $delete = PutAwayTemplate::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -199,8 +202,8 @@ class UnitGoalSeriesController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' goal set has been used in another module and cannot be deleted'
+                'message2' => count($unused).' put-away template has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

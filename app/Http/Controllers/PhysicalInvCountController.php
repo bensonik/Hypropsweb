@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\model\UnitGoalSeries;
-use App\model\UnitGoal;
+use App\model\PhysicalInvCount;
+use App\model\Inventory;
 use App\Helpers\Utility;
 use App\User;
 use Auth;
@@ -18,20 +18,24 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class UnitGoalSeriesController extends Controller
+class PhysicalInvCountController extends Controller
 {
-    //
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index(Request $request)
     {
         //
         //$req = new Request();
-        $mainData = UnitGoalSeries::paginateAllData();
+        $mainData = PhysicalInvCount::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('unit_goal_series.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('physical_inv_count.reload',array('mainData' => $mainData))->render());
 
         }else{
-            return view::make('unit_goal_series.main_view')->with('mainData',$mainData);
+            return view::make('physical_inv_count.main_view')->with('mainData',$mainData);
         }
 
     }
@@ -44,11 +48,11 @@ class UnitGoalSeriesController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),UnitGoalSeries::$mainRules);
+        $validator = Validator::make($request->all(),PhysicalInvCount::$mainRules);
         if($validator->passes()){
 
-            $countData = UnitGoalSeries::countData('goal_name',$request->input('goal_set'));
-            if($countData > 0){
+            $countData = PhysicalInvCount::specialColumns('code',$request->input('code'));
+            if($countData->count() > 0){
 
                 return response()->json([
                     'message' => 'good',
@@ -57,13 +61,14 @@ class UnitGoalSeriesController extends Controller
 
             }else{
                 $dbDATA = [
-                    'goal_name' => ucfirst($request->input('goal_set')),
-                    'start_date' => ucfirst($request->input('start_date')),
-                    'end_date' => ucfirst($request->input('end_date')),
+                    'code' => $request->input('code'),
+                    'value' => ucfirst($request->input('value')),
+                    'code_desc' => ucfirst($request->input('description')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                UnitGoalSeries::create($dbDATA);
+
+                $pro = PhysicalInvCount::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -91,8 +96,8 @@ class UnitGoalSeriesController extends Controller
     public function editForm(Request $request)
     {
         //
-        $position = UnitGoalSeries::firstRow('id',$request->input('dataId'));
-        return view::make('unit_goal_series.edit_form')->with('edit',$position);
+        $dept = PhysicalInvCount::firstRow('id',$request->input('dataId'));
+        return view::make('physical_inv_count.edit_form')->with('edit',$dept);
 
     }
 
@@ -105,20 +110,20 @@ class UnitGoalSeriesController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),UnitGoalSeries::$mainRules);
+        $validator = Validator::make($request->all(),PhysicalInvCount::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'goal_name' => ucfirst($request->input('goal_set')),
-                'start_date' => ucfirst($request->input('start_date')),
-                'end_date' => ucfirst($request->input('end_date')),
+                'code' => $request->input('code'),
+                'value' => ucfirst($request->input('value')),
+                'code_desc' => $request->input('description'),
                 'updated_by' => Auth::user()->id
             ];
-            $rowData = UnitGoalSeries::specialColumns('goal_name', $request->input('goal_set'));
+            $rowData = PhysicalInvCount::specialColumns('code',$request->input('code'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    UnitGoalSeries::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    PhysicalInvCount::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -134,7 +139,7 @@ class UnitGoalSeriesController extends Controller
                 }
 
             } else{
-                UnitGoalSeries::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                PhysicalInvCount::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -180,7 +185,7 @@ class UnitGoalSeriesController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = UnitGoal::specialColumns('goal_set_id', $all_id[$i]);
+            $rowDataSalary = Inventory::specialColumns('bin_id', $all_id[$i]);
             if(count($rowDataSalary)>0){
                 $unused[$i] = $all_id[$i];
             }else{
@@ -188,9 +193,9 @@ class UnitGoalSeriesController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' goal set has been used in another module and cannot be deleted' : '';
+            ' bin type has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
-            $delete = UnitGoalSeries::massUpdate('id',$in_use,$dbData);
+            $delete = PhysicalInvCount::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -199,8 +204,8 @@ class UnitGoalSeriesController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' goal set has been used in another module and cannot be deleted'
+                'message2' => count($unused).' bin type has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }
