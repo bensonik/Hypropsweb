@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\model\PhysicalInvCount;
-use App\model\Inventory;
+use App\model\UnitMeasure;
 use App\Helpers\Utility;
+use App\model\Inventory;
 use App\User;
 use Auth;
 use View;
@@ -18,7 +18,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class PhysicalInvCountController extends Controller
+class UnitMeasureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,13 +29,13 @@ class PhysicalInvCountController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = PhysicalInvCount::paginateAllData();
+        $mainData = UnitMeasure::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('physical_inv_count.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('inv_unit_measure.reload',array('mainData' => $mainData))->render());
 
         }else{
-            return view::make('physical_inv_count.main_view')->with('mainData',$mainData);
+            return view::make('inv_unit_measure.main_view')->with('mainData',$mainData);
         }
 
     }
@@ -48,11 +48,11 @@ class PhysicalInvCountController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),PhysicalInvCount::$mainRules);
+        $validator = Validator::make($request->all(),UnitMeasure::$mainRules);
         if($validator->passes()){
 
-            $countData = PhysicalInvCount::specialColumns('code',$request->input('code'));
-            if($countData->count() > 0){
+            $countData = UnitMeasure::countData('unit_name',$request->input('unit_name'));
+            if($countData > 0){
 
                 return response()->json([
                     'message' => 'good',
@@ -61,14 +61,12 @@ class PhysicalInvCountController extends Controller
 
             }else{
                 $dbDATA = [
-                    'code' => $request->input('code'),
-                    'value' => ucfirst($request->input('value')),
-                    'code_desc' => ucfirst($request->input('description')),
+                    'unit_name' => ucfirst($request->input('unit_name')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
-                $pro = PhysicalInvCount::create($dbDATA);
+                $pro = UnitMeasure::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -96,8 +94,8 @@ class PhysicalInvCountController extends Controller
     public function editForm(Request $request)
     {
         //
-        $dept = PhysicalInvCount::firstRow('id',$request->input('dataId'));
-        return view::make('physical_inv_count.edit_form')->with('edit',$dept);
+        $dept = UnitMeasure::firstRow('id',$request->input('dataId'));
+        return view::make('inv_unit_measure.edit_form')->with('edit',$dept);
 
     }
 
@@ -110,20 +108,18 @@ class PhysicalInvCountController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),PhysicalInvCount::$mainRules);
+        $validator = Validator::make($request->all(),UnitMeasure::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'code' => $request->input('code'),
-                'value' => ucfirst($request->input('value')),
-                'code_desc' => $request->input('description'),
+                'unit_name' => ucfirst($request->input('unit_name')),
                 'updated_by' => Auth::user()->id
             ];
-            $rowData = PhysicalInvCount::specialColumns('code',$request->input('code'));
+            $rowData = UnitMeasure::specialColumns('unit_name', $request->input('code_name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    PhysicalInvCount::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    UnitMeasure::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -139,7 +135,7 @@ class PhysicalInvCountController extends Controller
                 }
 
             } else{
-                PhysicalInvCount::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                UnitMeasure::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -185,7 +181,7 @@ class PhysicalInvCountController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = Inventory::specialColumns('inventory_count', $all_id[$i]);
+            $rowDataSalary = Inventory::specialColumns('unit_measure',$all_id[$i]);
             if(count($rowDataSalary)>0){
                 $unused[$i] = $all_id[$i];
             }else{
@@ -193,9 +189,9 @@ class PhysicalInvCountController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' bin type has been used in another module and cannot be deleted' : '';
+            ' unit measure has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
-            $delete = PhysicalInvCount::massUpdate('id',$in_use,$dbData);
+            $delete = UnitMeasure::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -204,11 +200,12 @@ class PhysicalInvCountController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => count($unused).' bin type has been used in another module and cannot be deleted',
+                'message2' => count($unused).' unit measure has been used in another module and cannot be deleted',
                 'message' => 'warning'
             ]);
 
         }
+
 
     }
 

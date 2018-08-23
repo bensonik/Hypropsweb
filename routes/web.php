@@ -297,10 +297,22 @@ Route::post('/delete_zone', 'ZoneController@destroy')->name('delete_zone');
 Route::any('/warehouse', 'WarehouseController@index')->name('warehouse')->middleware('auth');
 Route::post('/create_warehouse', 'WarehouseController@create')->name('create_warehouse');
 Route::post('/edit_warehouse_form', 'WarehouseController@editForm')->name('edit_warehouse_form');
-Route::post('/edit_warehouse', 'WarehouseController@edit')->name('edit_zone');
+Route::post('/edit_warehouse', 'WarehouseController@edit')->name('edit_warehouse');
 Route::post('/delete_warehouse', 'WarehouseController@destroy')->name('delete_warehouse');
 
-// -------------BIN MODULE-----------
+// -------------WAREHOUSE BIN MODULE-----------
+Route::any('/warehouse_bin', 'ZoneBinController@Index')->name('warehouse')->middleware('auth');
+Route::post('/create_warehouse_bin', 'ZoneBinController@Create')->name('create_warehouse');
+Route::post('/add_warehouse_bin_form', 'ZoneBinController@addForm')->name('add_warehouse_bin_form');
+Route::post('/delete_warehouse_bin', 'ZoneBinController@Destroy')->name('delete_warehouse_bin');
+
+// -------------WAREHOUSE ZONE MODULE-----------
+Route::any('/warehouse_zone', 'WarehouseZoneController@Index')->name('warehouse')->middleware('auth');
+Route::post('/create_warehouse_zone', 'WarehouseZoneController@Create')->name('create_warehouse');
+Route::post('/add_warehouse_zone_form', 'WarehouseZoneController@addForm')->name('add_warehouse_zone_form');
+Route::post('/delete_warehouse_zone', 'WarehouseZoneController@Destroy')->name('delete_warehouse_zone');
+
+// -------------PUT-AWAY TEMPLATE MODULE-----------
 Route::any('/put_away_template', 'PutAwayTemplateController@index')->name('bin_type')->middleware('auth');
 Route::post('/create_put_away_template', 'PutAwayTemplateController@create')->name('create_put_away_template');
 Route::post('/edit_put_away_template_form', 'PutAwayTemplateController@editForm')->name('edit_put_away_template_form');
@@ -313,3 +325,10 @@ Route::post('/create_physical_inv_count', 'PhysicalInvCountController@create')->
 Route::post('/edit_physical_inv_count_form', 'PhysicalInvCountController@editForm')->name('edit_physical_inv_count_form');
 Route::post('/edit_physical_inv_count', 'PhysicalInvCountController@edit')->name('edit_physical_inv_count');
 Route::post('/delete_physical_inv_count', 'PhysicalInvCountController@destroy')->name('delete_physical_inv_count');
+
+// -------------Unit of Measure-----------
+Route::any('/unit_measure', 'UnitMeasureController@index')->name('unit_measure')->middleware('auth');
+Route::post('/create_unit_measure', 'UnitMeasureController@create')->name('create_unit_measure');
+Route::post('/edit_unit_measure_form', 'UnitMeasureController@editForm')->name('edit_unit_measure_form');
+Route::post('/edit_unit_measure', 'UnitMeasureController@edit')->name('edit_unit_measure');
+Route::post('/delete_unit_measure', 'UnitMeasureController@destroy')->name('delete_unit_measure');

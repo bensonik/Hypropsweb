@@ -13,6 +13,8 @@ use DB;
 use App\User;
 use App\model\ExchangeRate;
 use App\model\Department;
+use App\model\Zone;
+use App\model\Bin;
 use App\model\Position;
 use App\model\SkillCompFrame;
 use Auth;
@@ -246,6 +248,23 @@ class GeneralController extends Controller
                 ->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)->with('techComp',$techComp);
 
         }
+        //END OF IDP
+
+        //START OF ADDING ZONE TO WAREHOUSE
+        if($type == 'warehouse_zone'){
+            $zone = Zone::getAllData();
+            return view::make('general.addMore')->with('zone',$zone)->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING ZONE TO WAREHOUSE
+
+        //START OF ADDING BIN TO WAREHOUSE ZONES
+        if($type == 'zone_bin'){
+            $bin = Bin::getAllData();
+            return view::make('general.addMore')->with('bin',$bin)->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING BIN TO WAREHOUSE ZONES
 
 
     }

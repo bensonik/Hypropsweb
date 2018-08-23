@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class Inventory extends Model
+class ZoneBin extends Model
 {
     //
-    protected  $table = 'inventory';
+    protected  $table = 'zone_bin';
 
     private static function table(){
-        return 'inventory';
+        return 'zone_bin';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,10 +21,7 @@ class Inventory extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'request_category' => 'required',
-        'request_type' => 'required',
-        'request_description' => 'required',
-        'amount' => 'required',
+        'bin' => 'required',
     ];
 
     public function user_c(){
@@ -38,56 +35,16 @@ class Inventory extends Model
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+        return $this->belongsTo('App\model\Department','dept','id');
 
     }
-    public function currency(){
-        return $this->belongsTo('App\model\Currency','curr_id','id');
-
-    }
-
-    public function defCurrency(){
-        return $this->belongsTo('App\model\Currency','default_curr','id');
+    public function zone(){
+        return $this->belongsTo('App\model\Zone','zone_id','id');
 
     }
 
-    public function approval(){
-        return $this->belongsTo('App\model\ApprovalSys','approval_id','id');
-
-    }
-
-    public function requestType(){
-        return $this->belongsTo('App\model\RequestType','req_type','id');
-
-    }
-
-    public function requestCat(){
-        return $this->belongsTo('App\model\RequestCategory','req_cat','id');
-
-    }
-
-    public function project(){
-        return $this->belongsTo('App\model\Project','proj_id','id');
-
-    }
-
-    public function requestUser(){
-        return $this->belongsTo('App\user','request_user','id');
-
-    }
-
-    public function denyUser(){
-        return $this->belongsTo('App\user','deny_user','id');
-
-    }
-
-    public function accountCat(){
-        return $this->belongsTo('App\model\AccountCategory','acct_id','id');
-
-    }
-
-    public function loanRate(){
-        return $this->belongsTo('App\model\LoanRates','loan_id','id');
+    public function bin(){
+        return $this->belongsTo('App\model\Bin','bin_id','id');
 
     }
 
@@ -152,14 +109,6 @@ class Inventory extends Model
 
     }
 
-    public static function specialColumnsPageOr2($column, $post, $column2, $post2)
-    {
-        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->orWhere($column2, '=',$post2)->orderBy('id','DESC')->paginate(Utility::P35);
-
-    }
-
     public static function specialColumns3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
@@ -211,6 +160,7 @@ class Inventory extends Model
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
 
     }
+
 
 
 }

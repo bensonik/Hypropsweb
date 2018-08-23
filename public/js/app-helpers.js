@@ -237,6 +237,17 @@
 
     }
 
+    function reloadContentId(id,page,dataId){
+
+
+        $.ajax({
+            url: page+'?dataId='+dataId
+        }).done(function(data){
+            $('#'+id).html(data);
+        });
+
+    }
+
     function submitDefault(formModal,formId,submitUrl,reload_id,reloadUrl,token){
         var inputVars = $('#'+formId).serialize();
         var summerNote = '';
@@ -516,6 +527,45 @@
 
     }
 
+    function deleteEntryFetchId(klass,reloadId,reloadUrl,submitUrl,token,dataId){
+        var data_string = group_val(klass);
+        var all_data = JSON.stringify(data_string);
+        var postVars = "all_data="+all_data;
+        $('#loading_modal').modal('show');
+        sendRequestForm(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                $('#loading_modal').modal('hide');
+                var rollback = JSON.parse(ajax.responseText);
+                var message2 = rollback.message2;
+                if(message2 == 'fail'){
+
+                    //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                    var serverError = phpValidationError(rollback.message);
+
+                    var messageError = swalDefaultError(serverError);
+                    swal("Error",messageError, "error");
+
+                }else if(message2 == 'deleted'){
+
+                    var successMessage = swalSuccess(rollback.message);
+                    swal("Success!", successMessage, "success");
+
+                }else{
+
+                    var infoMessage = swalWarningError(message2);
+                    swal("Success!", infoMessage, "warning");
+
+                }
+
+                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                reloadContentId(reloadId,reloadUrl,dataId);
+            }
+        }
+
+
+    }
+
     function changeStatusMethod(klass,reloadId,reloadUrl,submitUrl,token,status){
         var data_string = group_val(klass);
         var all_data = JSON.stringify(data_string);
@@ -662,6 +712,35 @@
 
             }else{
                 alert('Please select an entry to continue');
+        }
+
+    }
+
+    function deleteItemsFetchId(klass,reloadId,reloadUrl,submitUrl,token,dataId) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to delete?",
+                    text: "You will not be able to recover this data entry!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel delete!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        deleteEntryFetchId(klass, reloadId, reloadUrl, submitUrl, token,dataId);
+                        swal("Deleted!", "Your item(s) has been deleted.", "success");
+                    } else {
+                        swal("Delete Cancelled", "Your data is safe :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
         }
 
     }

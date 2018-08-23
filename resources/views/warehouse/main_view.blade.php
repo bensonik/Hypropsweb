@@ -373,7 +373,7 @@
         </div>
     </div>
 
-    <!-- Default Size -->
+    <!-- Edit Warehouse Content -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -390,6 +390,108 @@
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
                     </button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Warehouse Zones Content -->
+    <div class="modal fade" id="manageZoneModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header header">
+                    <h4 class="modal-title" id="defaultModalLabel">Manage Warehouse Zone(s)</h4>
+                    <ul class="header-dropdown m-r--5 pull-right" style="display:inline;">
+
+                    <li class="dropdown">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>Export
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table_zone');" ><i class="fa fa-print"></i>Print</a></li>
+                            <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table_zone');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                            <li><a class="btn btn-warning" onClick ="$('#main_table_zone').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
+                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table_zone').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
+                            <li><a class="btn btn-info" onClick ="$('#main_table_zone').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
+
+                        </ul>
+                    </li>
+                    </ul>
+                </div>
+                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageZone">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Warehouse Zones Content -->
+    <div class="modal fade" id="addZoneModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Add Zone to Warehouse</h4>
+                </div>
+                <div class="modal-body" style="height:500px; overflow:scroll;" id="addZone">
+
+                </div>
+                <div class="modal-footer">
+
+
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manage Warehouse Bin Content -->
+    <div class="modal fade" id="manageBinModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Manage Bin</h4>
+
+                    <li class="dropdown pull-right">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>Export
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table_bin');" ><i class="fa fa-print"></i>Print</a></li>
+                            <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table_bin');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                            <li><a class="btn btn-warning" onClick ="$('#main_table_bin').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
+                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table_bin').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
+                            <li><a class="btn btn-info" onClick ="$('#main_table_bin').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
+
+                        </ul>
+                    </li>
+
+                </div>
+                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageBin">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add Warehouse Bin Content -->
+    <div class="modal fade" id="addBinModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Add Bin to Zone</h4>
+                </div>
+                <div class="modal-body" style="height:500px; overflow:scroll;" id="addBin">
+
+                </div>
+                <div class="modal-footer">
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
@@ -456,6 +558,7 @@
 
                             </th>
                             <th>Manage</th>
+                            <th>Manage Zones</th>
                             <th>Name</th>
 
                             <th>Code</th>
@@ -478,6 +581,9 @@
                             </td>
                             <td>
                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageZone','<?php echo url('warehouse_zone') ?>','<?php echo csrf_token(); ?>','manageZoneModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
@@ -586,6 +692,95 @@
                     reloadContent(reload_id,reloadUrl);
                 }
             }
+
+        }
+
+    </script>
+
+    <script>
+
+        function saveMethod(formModal,formId,submitUrl,reload_id,reloadUrl,token,inputClass,dataId) {
+            var inputVars = $('#' + formId).serialize();
+            var summerNote = '';
+            var htmlClass = document.getElementsByClassName('t-editor');
+            if (htmlClass.length > 0) {
+                summerNote = $('.summernote').eq(0).summernote('code');
+
+            }
+
+            var inputClass1 = classToArray2(inputClass);
+            var jinputClass = JSON.stringify(inputClass1);
+            //alert(jinputClass);
+            if(arrayItemEmpty(inputClass1) == false){
+                var postVars = inputVars + '&editor_input=' + summerNote+'&input_class='+jinputClass;
+                //alert(postVars);
+                $('#loading_modal').modal('show');
+                $('#' + formModal).modal('hide');
+                sendRequestForm(submitUrl, token, postVars)
+                ajax.onreadystatechange = function () {
+                    if (ajax.readyState == 4 && ajax.status == 200) {
+
+                        $('#loading_modal').modal('hide');
+                        var rollback = JSON.parse(ajax.responseText);
+                        var message2 = rollback.message2;
+                        if (message2 == 'fail') {
+
+                            //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                            var serverError = phpValidationError(rollback.message);
+
+                            var messageError = swalFormError(serverError);
+                            swal("Error", messageError, "error");
+
+                        } else if (message2 == 'saved') {
+
+                            var successMessage = swalSuccess('Data saved successfully');
+                            swal("Success!", "Data saved successfully!", "success");
+                            //location.reload();
+
+                        } else {
+
+                            var infoMessage = swalWarningError(message2);
+                            swal("Warning!", infoMessage, "warning");
+
+                        }
+
+                        //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                        reloadContentId(reload_id,dataId,reloadUrl);
+                    }
+                }
+                //END OF OTHER VALIDATION CONTINUES HERE
+            }else{
+                swal("Warning!","Please, fill in all required fields to continue","warning");
+            }
+
+        }
+
+
+        function newWindow(dataId,displayId,submitUrl,token,modalId){
+            //alert(dataId);
+            var postVars = "dataId="+dataId;
+            $('#'+modalId).modal('show');
+            sendRequest(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    var ajaxData = ajax.responseText;
+                    $('#'+displayId).html(ajaxData);
+
+                }
+            }
+            $('#'+displayId).html('LOADING DATA');
+
+        }
+
+        function reloadContentId(id,intId,page){
+
+
+            $.ajax({
+                url: page+'?dataId='+intId
+            }).done(function(data){
+                $('#'+id).html(data);
+            });
 
         }
 

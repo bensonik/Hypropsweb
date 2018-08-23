@@ -820,7 +820,7 @@
 
 @endif
 
-<!-- COMP ASSESS -->
+<!-- IDP COMP ASSESS -->
 @if($type == 'idp_comp_assess')
 
     <tr class="row clearfix remove_comp_assess{{$more}} new_comp_assess">
@@ -887,6 +887,81 @@
     </tr>
 
 @endif
+
+<!-- START OF ADDING ZONES TO WAREHOUSE -->
+@if($type == 'warehouse_zone')
+    <div class="row clearfix new_warehouse_zone remove_warehouse_zone{{$more}}"  >
+        <div class="col-sm-4">
+            <b>Zone</b>
+            <div class="form-group">
+                <div class="form-line">
+                    <select class="form-control warehouse_zone" name="zone{{$num2}}" >
+                        <option value="">Select</option>
+                        @foreach($zone as $type)
+                            <option value="{{$type->id}}">{{$type->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','warehouse_zone','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_warehouse_zone{{$more}}','{{url('add_more')}}','warehouse_zone','new_warehouse_zone','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endif
+<!-- END OF ADDING END OF ADDING ZONES TO WAREHOUSE -->
+
+<!-- START OF ADDING BIN TO WAREHOUSE ZONES -->
+@if($type == 'zone_bin')
+    <div class="row clearfix new_zone_bin remove_zone_bin{{$more}}"  >
+        <div class="col-sm-4">
+            <b>Zone</b>
+            <div class="form-group">
+                <div class="form-line">
+                    <select class="form-control zone_bin" name="bin{{$num2}}" >
+                        <option value="">Select</option>
+                        @foreach($bin as $type)
+                            <option value="{{$type->id}}">{{$type->code}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','zone_bin','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_zone_bin{{$more}}','{{url('add_more')}}','zone_bin','new_zone_bin','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+@endif
+<!-- END OF ADDING BIN TO WAREHOUSE ZONES -->
+
 
 
 
