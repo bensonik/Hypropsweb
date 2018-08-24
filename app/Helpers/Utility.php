@@ -52,6 +52,10 @@ class Utility
     const SPECIAL_EQUIP = ['According to bin','According to SKU/Item'];
     const CAPACITY_POLICY = ['Never check capacity','Allow more than max capacity','Prohibit more than max capacity'];
 
+    const SCM_MANAGEMENT = [1,2,3,9,10];
+    const VENDOR = 1, CUSTOMER = 2;
+
+
     public static function IMG_URL(){
         return public_path() . '/images/';
     }

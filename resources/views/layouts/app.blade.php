@@ -387,6 +387,31 @@
                 </li>
                 @endif
 
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+                    <li>
+                        <a href="{{url('user')}}">
+                            <i class="material-icons">account_box</i>
+                            <span class="icon-name">Manage Users</span>
+                        </a>
+                    </li>
+                @endif
+
+                    <li>
+                        <a href="{{url('vendor')}}">
+                            <i class="material-icons">people</i>
+                            <span class="icon-name">Manage Vendors</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="{{url('customer')}}">
+                            <i class="material-icons">people</i>
+                            <span class="icon-name">Manage Customers</span>
+                        </a>
+                    </li>
+
+
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">view_quilt</i>
@@ -410,6 +435,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
@@ -428,15 +454,6 @@
                         </li>
                     </ul>
                 </li>
-
-                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
-                <li>
-                    <a href="{{url('user')}}">
-                        <i class="material-icons">account_box</i>
-                        <span class="icon-name">Manage Users</span>
-                    </a>
-                </li>
-                @endif
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">

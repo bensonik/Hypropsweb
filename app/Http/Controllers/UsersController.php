@@ -31,8 +31,8 @@ class UsersController extends Controller
         //$req = new Request();
         $roles = Roles::getAllData();
         $mainData =  (Auth::user()->id == 3 || Auth::user()->id == 6) ? User::massData('role', Utility::USER_ROLES_ARRAY) :User::paginateAllData();
-        $position = Position::paginateAllData();
-        $salary = SalaryStructure::paginateAllData();
+        $position = Position::getAllData();
+        $salary = SalaryStructure::getAllData();
         $department = Department::getAllData();
 
 

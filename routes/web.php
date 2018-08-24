@@ -332,3 +332,14 @@ Route::post('/create_unit_measure', 'UnitMeasureController@create')->name('creat
 Route::post('/edit_unit_measure_form', 'UnitMeasureController@editForm')->name('edit_unit_measure_form');
 Route::post('/edit_unit_measure', 'UnitMeasureController@edit')->name('edit_unit_measure');
 Route::post('/delete_unit_measure', 'UnitMeasureController@destroy')->name('delete_unit_measure');
+
+// -------------VENDOR MODULE-----------
+Route::any('/vendor', 'VendorCustomerController@indexVendor')->name('vendor_customer')->middleware('auth');
+Route::any('/customer', 'VendorCustomerController@indexCustomer')->name('vendor_customer')->middleware('auth');
+Route::post('/create_vendor_customer', 'VendorCustomerController@create')->name('create_vendor_customer');
+Route::post('/edit_vendor_customer_form', 'VendorCustomerController@editForm')->name('edit_vendor_customer_form');
+Route::post('/edit_vendor_customer', 'VendorCustomerController@edit')->name('edit_vendor_customer');
+Route::any('/search_vendor', 'VendorCustomerController@searchVendor')->name('vendor_search');
+Route::any('/search_customer', 'VendorCustomerController@searchCustomer')->name('customer_search');
+Route::post('/delete_vendor_customer', 'VendorCustomerController@destroy')->name('delete_vendor_customer');
+Route::post('/change_vendor_customer_status', 'VendorCustomerController@changeStatus')->name('change_vendor_customer_status');
