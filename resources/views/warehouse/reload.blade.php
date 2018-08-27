@@ -7,6 +7,7 @@
 
         </th>
         <th>Manage</th>
+        <th>Manage Zones</th>
         <th>Name</th>
 
         <th>Code</th>
@@ -29,6 +30,9 @@
             </td>
             <td>
                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+            </td>
+            <td>
+                <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageZone','<?php echo url('warehouse_zone') ?>','<?php echo csrf_token(); ?>','manageZoneModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 

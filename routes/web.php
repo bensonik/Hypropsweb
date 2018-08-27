@@ -343,3 +343,10 @@ Route::any('/search_vendor', 'VendorCustomerController@searchVendor')->name('ven
 Route::any('/search_customer', 'VendorCustomerController@searchCustomer')->name('customer_search');
 Route::post('/delete_vendor_customer', 'VendorCustomerController@destroy')->name('delete_vendor_customer');
 Route::post('/change_vendor_customer_status', 'VendorCustomerController@changeStatus')->name('change_vendor_customer_status');
+
+// -------------INVENTORY CATEGORY MODULE-----------
+Route::any('/inventory_category', 'InventoryCategoryController@index')->name('inventory_category')->middleware('auth');
+Route::post('/create_inventory_cat', 'InventoryCategoryController@create')->name('create_inventory_cat');
+Route::post('/edit_inventory_cat_form', 'InventoryCategoryController@editForm')->name('edit_inventory_cat_form');
+Route::post('/edit_inventory_cat', 'InventoryCategoryController@edit')->name('edit_inventory_cat');
+Route::post('/delete_inventory_cat', 'InventoryCategoryController@destroy')->name('delete_inventory_cat');

@@ -450,6 +450,9 @@
                             <a href="{{url('unit_measure')}}">Unit of Measure Setup</a>
                         </li>
                         <li>
+                            <a href="{{url('inventory_category')}}">Inventory Category</a>
+                        </li>
+                        <li>
                             <a href="{{url('inventory')}}">Inventory</a>
                         </li>
                     </ul>

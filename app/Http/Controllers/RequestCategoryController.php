@@ -202,7 +202,7 @@ class RequestCategoryController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' tax(es) has been used in another module and cannot be deleted' : '';
+            ' category(ies) has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
             $delete = RequestCategory::massUpdate('id',$in_use,$dbData);
 
@@ -214,7 +214,7 @@ class RequestCategoryController extends Controller
         }else{
             return  response()->json([
                 'message2' => 'warning',
-                'message' => 'The '.count($unused).' tax(es) has been used in another module and cannot be deleted'
+                'message' => 'The '.count($unused).' category(ies) has been used in another module and cannot be deleted'
             ]);
 
         }
