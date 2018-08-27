@@ -444,7 +444,7 @@
                     </a>
                     <ul class="ml-menu">
                         <li>
-                            <a href="{{url('physical_inv_count')}}">Physical Inventory Count Setup</a>
+                            <a href="{{url('physical_inv_count')}}">Physical Inventory Count Setup </a>
                         </li>
                         <li>
                             <a href="{{url('unit_measure')}}">Unit of Measure Setup</a>
