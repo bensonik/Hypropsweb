@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\model\BinType;
 use App\model\PutAwayTemplate;
 use App\model\Bin;
+use App\model\WhseShipReceipt;
 use App\model\Zone;
 use App\model\Warehouse;
 use App\Helpers\Utility;
@@ -189,7 +190,7 @@ class WarehouseController extends Controller
                 'updated_by' => Auth::user()->id
             ];
             $rowData = Warehouse::specialColumns('name', $request->input('name'));
-            if(count($rowData) > 2){
+            if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
                     Warehouse::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -234,16 +235,39 @@ class WarehouseController extends Controller
     public function destroy(Request $request)
     {
         //
-        $idArray = json_decode($request->input('all_data'));
+        $all_id = json_decode($request->input('all_data'));
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = Warehouse::massUpdate('id',$idArray,$dbData);
 
-        return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
-        ]);
+        $in_use = [];
+        $unused = [];
+        for($i=0;$i<count($all_id);$i++){
+            $rowDataSalary = WhseShipReceipt::specialColumns('item_id', $all_id[$i]);
+            if(count($rowDataSalary)>0){
+                $unused[$i] = $all_id[$i];
+            }else{
+                $in_use[$i] = $all_id[$i];
+            }
+        }
+        $message = (count($unused) > 0) ? ' and '.count($unused).
+            ' warehouse has been used in another module and cannot be deleted' : '';
+        if(count($in_use) > 0){
+            $delete = Warehouse::massUpdate('id',$in_use,$dbData);
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($in_use).' data(s) has been deleted'.$message
+            ]);
+
+        }else{
+            return  response()->json([
+                'message2' => 'warning',
+                'message' => 'The '.count($unused).' warehouse has been used in another module and cannot be deleted'
+            ]);
+
+        }
+
 
     }
 

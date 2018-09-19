@@ -54,6 +54,8 @@ class Utility
 
     const SCM_MANAGEMENT = [1,2,3,9,10];
     const VENDOR = 1, CUSTOMER = 2;
+    const COST_METHOD = ['FIFO','LIFO','Specific','Average','Standard'];
+    const INVENTORY_TYPE = [1 => 'Inventory', 2 => 'Non-Inventory', 3 => 'Service'];
 
 
     public static function IMG_URL(){
@@ -441,6 +443,14 @@ class Utility
         return DB::table($table)
             ->where($column , $postId
             )->update($arrayDataUpdate);
+
+    }
+
+    public static function deleteItem($table,$postId)
+    {
+        return DB::table($table)
+            ->where('id' , $postId
+            )->delete();
 
     }
 

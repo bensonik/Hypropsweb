@@ -350,3 +350,23 @@ Route::post('/create_inventory_cat', 'InventoryCategoryController@create')->name
 Route::post('/edit_inventory_cat_form', 'InventoryCategoryController@editForm')->name('edit_inventory_cat_form');
 Route::post('/edit_inventory_cat', 'InventoryCategoryController@edit')->name('edit_inventory_cat');
 Route::post('/delete_inventory_cat', 'InventoryCategoryController@destroy')->name('delete_inventory_cat');
+
+// -------------INVENOTRY MODULE-----------
+Route::any('/inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
+Route::any('/ext_amount', 'InventoryController@extendedAmount')->name('ext_amount');
+Route::post('/edit_inventory_form', 'InventoryController@editForm')->name('edit_inventory_form');
+Route::any('/warehouse_inventory', 'InventoryController@warehouseInventory')->name('warehouse_inventory');
+Route::any('/stock_inventory', 'InventoryController@stockInventory')->name('stock_inventory');
+Route::post('/create_inventory', 'InventoryController@create')->name('create_inventory');
+Route::post('/edit_inventory', 'InventoryController@edit')->name('edit_inventory');
+Route::any('/search_inventory', 'InventoryController@searchInventory')->name('search_inventory');
+Route::post('/delete_inventory', 'InventoryController@destroy')->name('delete_inventory');
+Route::any('/delete_bom_item', 'InventoryController@permDelete')->name('delete_bom_item');
+Route::post('/change_inventory_status', 'InventoryController@changeStatus')->name('change_inventory_status');
+
+// -------------INVENTORY ACCESS MODULE-----------
+Route::any('/inventory_access', 'InventoryAccessController@index')->name('inventory_access')->middleware('auth.admin');
+Route::post('/create_inventory_access', 'InventoryAccessController@create')->name('create_inventory_access');
+Route::post('/edit_inventory_access_form', 'InventoryAccessController@editForm')->name('edit_inventory_access_form');
+Route::post('/edit_inventory_access', 'InventoryAccessController@edit')->name('edit_inventory_access');
+Route::post('/delete_inventory_access', 'InventoryAccessController@destroy')->name('delete_inventory_access');

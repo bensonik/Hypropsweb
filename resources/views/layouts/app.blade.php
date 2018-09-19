@@ -349,9 +349,6 @@
                             <a href="{{url('currencies')}}">Set Currency</a>
                         </li>
                         <li>
-                            <a href="{{url('request_access')}}">Config Request Access</a>
-                        </li>
-                        <li>
                             <a href="{{url('salary_component')}}">Salary Components</a>
                         </li>
                         <li>
@@ -362,6 +359,20 @@
                         </li>
                         <li>
                             <a href="{{url('loan_interest_rate')}}">Loan Interest Rate Config</a>
+                        </li>
+
+                        <li>
+                            <a href="javascript:void(0);" class="menu-toggle">
+                                <span>Module Access Grant</span>
+                            </a>
+                            <ul class="ml-menu">
+                                <li>
+                                    <a href="{{url('request_access')}}">Config Individual Request Access</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('inventory_access')}}">Config Inventory System Access</a>
+                                </li>
+                            </ul>
                         </li>
 
                         <li>

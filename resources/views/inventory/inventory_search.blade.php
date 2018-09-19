@@ -56,11 +56,11 @@
                     <span class="alert-warning">{{$data->item_name}}</span>
                 @endif
             </td>
-            <td>{{$data->currency->symbol}} {{$data->unit_cost}}</td>
-            <td>{{$data->currency->symbol}} {{$data->unit_price}}</td>
+            <td>{{$data->unit_cost}}</td>
+            <td>{{$data->unit_price}}</td>
             <td>{{$data->category->category_name}}</td>
             <td>{{$data->inv_type->name}}</td>
-            <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="photo" /></td>
+            <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="Logo" /></td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

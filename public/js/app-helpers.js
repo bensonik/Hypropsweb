@@ -1093,6 +1093,37 @@
 
     }
 
+    function sumArray(input){
+
+        if (toString.call(input) !== "[object Array]")
+            return false;
+
+        var total =  0;
+        for(var i=0;i<input.length;i++)
+        {
+            if(isNaN(input[i])){
+                continue;
+            }
+            total += Number(input[i]);
+        }
+        return total;
+    }
+
+
+    function permDelete(bomId,page,bomIdVal){
+            var bomVal = $('#'+bomIdVal).val();
+
+                $.ajax({
+                    url: page+'?dataId='+bomVal
+                }).done(function(data){
+                    $('#'+bomId).hide();
+                    swal("Warning!", 'Item removed successfully', "success");
+
+                });
+
+
+        }
+
     function numONLY (e) {
         // Allow: backspace, delete, tab, escape, enter and .
         if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||

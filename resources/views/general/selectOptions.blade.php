@@ -9,6 +9,26 @@
 @endforeach
 @endif
 
+@if($type == 'search_vendor' || $type == 'search_customer')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->name}} ({{$data->email1}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'search_inventory')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->item_name}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->item_name}}</a>
+        </li>
+
+    @endforeach
+@endif
+
 @if($type == 'search_comp_cat')
 
         <select name="competency_category"  class="form-control" id="ccompetency_cat"  >

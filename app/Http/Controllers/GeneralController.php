@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\model\CompetencyFramework;
 use App\model\SalaryComponent;
 use App\model\SkillCompCat;
+use App\model\Inventory;
 use View;
 use Validator;
 use Input;
 use Hash;
 use DB;
 use App\User;
+use App\model\VendorCustomer;
 use App\model\ExchangeRate;
 use App\model\Department;
 use App\model\Zone;
@@ -66,6 +68,90 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
+        //SEARCH CUSTOMER
+        if($type == 'search_customer'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = VendorCustomer::searchCustomer($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $user_ids);
+            }else{
+
+                $fetchData = VendorCustomer::specialColumns('company_type', Utility::CUSTOMER);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH VENDOR
+        if($type == 'search_vendor'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = VendorCustomer::searchVendor($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $user_ids);
+            }else{
+
+                $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH INVENTORY
+        if($type == 'search_inventory'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = Inventory::searchInventory($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = Inventory::massData('id', $user_ids);
+            }else{
+
+                $fetchData = Inventory::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
         //FOR COMPETENCY CATEGORY
         if($type == 'search_comp_cat'){
             $pro_qual = [];
@@ -74,6 +160,35 @@ class GeneralController extends Controller
             //print_r($category.'adsofaijofera');exit();
             return view::make('general.selectOptions')->with('optionArray',$category)->with('type',$type);
 
+        }
+
+        //SEARCH_CUSTOMER
+        if($type == 'search_customer'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = User::searchUser($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = (Auth::user()->id == 3) ? User::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
+                    : User::massData('uid', $user_ids);
+            }else{
+
+                $fetchData = User::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
         //FOR COMPETENCY FRAMEWORK
@@ -265,6 +380,19 @@ class GeneralController extends Controller
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
         //END OF ADDING BIN TO WAREHOUSE ZONES
+
+        //START OF ADDING BILL OF MATERIALS
+        if($type == 'bom_inv'){
+            $currSymbol = session('currency')['symbol'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        if($type == 'bom_inv_edit'){
+            $currSymbol = session('currency')['symbol'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING BILL OF MATERIALS
 
 
     }

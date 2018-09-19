@@ -2,16 +2,16 @@
 
 namespace App\model;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
+use Illuminate\Database\Eloquent\Model;
 
-class Inventory extends Model
+class Stock extends Model
 {
     //
-    protected  $table = 'inventory';
+    protected  $table = 'stock';
 
     private static function table(){
-        return 'inventory';
+        return 'stock';
     }
     /**
      * The attributes that are mass assignable.
@@ -20,86 +20,18 @@ class Inventory extends Model
      */
     protected $guarded = [];
 
+    /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
     public static $mainRules = [
+        'email1' => 'email',
+        'logo' => 'sometimes|image|mimes:jpeg,jpg,png,bmp,gif',
         'name' => 'required',
-        'unit_measure' => 'required',
-        'item_category' => 'required',
-        'pref_vendor' => 'required',
-        'income_account' => 'required',
-        'expense_account' => 'required',
-        'inventory_account' => 'required',
-        'unit_cost' => 'required',
-        'inventory_type' => 'required',
-        'storage_type' => 'required',
+        'address' => 'required',
+
     ];
-
-    public static $mainRulesEdit = [
-        'name' => 'required',
-        'unit_measure' => 'required',
-        'item_category' => 'required',
-        'pref_vendor' => 'required',
-        'income_account' => 'required',
-        'expense_account' => 'required',
-        'inventory_account' => 'required',
-        'unit_cost' => 'required',
-        'inventory_type' => 'required',
-        'storage_type' => 'required',
-    ];
-
-    public function category(){
-        return $this->belongsTo('App\model\InventoryCategory','category_id','id')->withDefault();
-
-    }
-
-    public function inv_type(){
-        return $this->belongsTo('App\model\InventoryType','inventory_type','id')->withDefault();
-
-    }
-
-    public function expense(){
-        return $this->belongsTo('App\model\AccountChart','expense_account','id')->withDefault();
-
-    }
-
-    public function income(){
-        return $this->belongsTo('App\model\AccountChart','income_account','id')->withDefault();
-
-    }
-
-    public function inventory(){
-        return $this->belongsTo('App\model\AccountChart','inventory_account','id')->withDefault();
-
-    }
-
-    public function bomItem(){
-        return $this->belongsTo('App\model\Inventory','inventory_id','id')->withDefault();
-
-    }
-
-    public function vendor(){
-        return $this->belongsTo('App\model\VendorCustomer','pref_vendor','id')->withDefault();
-
-    }
-
-    public function unitMeasure(){
-        return $this->belongsTo('App\model\UnitMeasure','unit_measure','id')->withDefault();
-
-    }
-
-    public function putAwayTemp(){
-        return $this->belongsTo('App\model\PutAwayTemplate','put_away_template','id')->withDefault();
-
-    }
-
-    public function invCount(){
-        return $this->belongsTo('App\model\PhysicalInvCount','invt_count_period','id')->withDefault();
-
-    }
-
-    public function currency(){
-        return $this->belongsTo('App\model\Currency','curr_id','id')->withDefault();
-
-    }
 
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id');
@@ -111,9 +43,20 @@ class Inventory extends Model
 
     }
 
-    public function bomData(){
-        return $this->hasMany('App\model\InventoryBom','inventory_id','id');
+    public function currency(){
+        return $this->belongsTo('App\model\Currency','currency_id','id');
+    }
 
+    public function position(){
+        return $this->belongsTo('App\model\Position','position_id','id');
+    }
+
+    public function inventory(){
+        return $this->belongsTo('App\model\Inventory','item_id','id');
+    }
+
+    public function roles(){
+        return $this->belongsTo('App\model\Roles','role','id');
     }
 
     public static function paginateAllData()
@@ -128,10 +71,10 @@ class Inventory extends Model
         return static::where('status', '=','1')->orderBy('id','DESC')->get();
 
     }
-
     public static function paginateData($column, $post)
     {
-        return Utility::paginateData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->paginate('15');
+        //return Utility::paginateData(self::table(),$column, $post);
 
     }
 
@@ -193,16 +136,26 @@ class Inventory extends Model
 
     }
 
-    public static function massData($column, $post)
+    public static function massData($column, $post = [])
     {
-
+        //return Utility::massData(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function massDataMassCondition($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 
@@ -231,18 +184,30 @@ class Inventory extends Model
 
     }
 
-    public static function tenColumnSingleValue($post)
-    {
-        return Utility::tenColumnSingleValue(self::table(),'receipt_bin_code','adjust_bin_code','ship_bin_code',
-            'open_shop_floor_bin_code','to_prod_bin_code','from_prod_bin_code','cross_dock_bin_code',
-            'to_assembly_bin_code','from_assembly_bin_code','assembly_to_order_ship_bin_code',$post);
+    public static function searchCustomer($value){
+        return static::where('vendor_customer.status', '=','1')
+            ->where(function ($query) use($value){
+                $query->where('vendor_customer.name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.address','LIKE','%'.$value.'%') ->orWhere('vendor_customer.phone','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.contact_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.contact_name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.search_key','LIKE','%'.$value.'%')->orWhere('vendor_customer.email1','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.email2','LIKE','%'.$value.'%')->orWhere('vendor_customer.company_no','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.tax_id_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.bank_name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.account_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.account_name','LIKE','%'.$value.'%');
+            })->get();
     }
 
-    public static function searchInventory($value){
-        return static::where('inventory.status', '=','1')
+    public static function searchVendor($value){
+        return static::where('vendor_customer.company_type', '=',Utility::VENDOR)
+            ->where('vendor_customer.status', '=',Utility::STATUS_ACTIVE)
             ->where(function ($query) use($value){
-                $query->where('inventory.item_name','LIKE','%'.$value.'%')
-                    ->orWhere('inventory.search_key','LIKE','%'.$value.'%') ->orWhere('inventory.item_no','LIKE','%'.$value.'%');
+                $query->where('vendor_customer.name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.address','LIKE','%'.$value.'%') ->orWhere('vendor_customer.phone','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.contact_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.contact_name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.search_key','LIKE','%'.$value.'%')->orWhere('vendor_customer.email1','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.email2','LIKE','%'.$value.'%')->orWhere('vendor_customer.company_no','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.tax_id_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.bank_name','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.account_no','LIKE','%'.$value.'%')->orWhere('vendor_customer.account_name','LIKE','%'.$value.'%');
             })->get();
     }
 

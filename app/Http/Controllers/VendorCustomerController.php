@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\model\AccountJournal;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use App\model\Currency;
 use App\model\VendorCustomer;
@@ -262,9 +263,6 @@ class VendorCustomerController extends Controller
 
             $obtain_array[] = $data->id;
         }
-        /*for($i=0;$i<count($search);$i++){
-            $obtain_array[] = $search[$i]->id;
-        }*/
 
         $user_ids = array_unique($obtain_array);
         $mainData =  VendorCustomer::massData('id', $user_ids);
@@ -317,16 +315,38 @@ class VendorCustomerController extends Controller
     public function destroy(Request $request)
     {
         //
-        $idArray = json_decode($request->input('all_data'));
+        $all_id = json_decode($request->input('all_data'));
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = VendorCustomer::massUpdate('id',$idArray,$dbData);
 
-        return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
-        ]);
+        $in_use = [];
+        $unused = [];
+        for($i=0;$i<count($all_id);$i++){
+            $rowDataSalary = AccountJournal::specialColumns('vendor_customer', $all_id[$i]);
+            if(count($rowDataSalary)>0){
+                $unused[$i] = $all_id[$i];
+            }else{
+                $in_use[$i] = $all_id[$i];
+            }
+        }
+        $message = (count($unused) > 0) ? ' and '.count($unused).
+            ' contact has been used in another module and cannot be deleted' : '';
+        if(count($in_use) > 0){
+            $delete = VendorCustomer::massUpdate('id',$in_use,$dbData);
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($in_use).' data(s) has been deleted'.$message
+            ]);
+
+        }else{
+            return  response()->json([
+                'message2' => 'warning',
+                'message' => 'The '.count($unused).' contact has been used in another module and cannot be deleted'
+            ]);
+
+        }
 
     }
 
