@@ -370,3 +370,19 @@ Route::post('/create_inventory_access', 'InventoryAccessController@create')->nam
 Route::post('/edit_inventory_access_form', 'InventoryAccessController@editForm')->name('edit_inventory_access_form');
 Route::post('/edit_inventory_access', 'InventoryAccessController@edit')->name('edit_inventory_access');
 Route::post('/delete_inventory_access', 'InventoryAccessController@destroy')->name('delete_inventory_access');
+
+// -------------INVENTORY ASSIGN MODULE-----------
+Route::any('/inventory_assign', 'InventoryAssignController@index')->name('inventory_assign')->middleware('auth');
+Route::post('/create_inv_assign', 'InventoryAssignController@create')->name('create_inv_assign');
+Route::post('/edit_inv_assign_form', 'InventoryAssignController@editForm')->name('edit_inv_assign_form');
+Route::post('/edit_inv_assign', 'InventoryAssignController@edit')->name('edit_inv_assign');
+Route::post('/delete_inv_assign', 'InventoryAssignController@destroy')->name('delete_inv_assign');
+
+// -------------INVENTORY RECORD MODULE-----------
+Route::any('/inventory_record', 'InventoryRecordController@index')->name('inventory_record')->middleware('auth');
+Route::post('/create_inv_record', 'InventoryRecordController@create')->name('create_inv_record');
+Route::post('/edit_inv_record_form', 'InventoryRecordController@editForm')->name('edit_inv_record_form');
+Route::post('/edit_inv_record', 'InventoryRecordController@edit')->name('edit_inv_record');
+Route::any('/search_inventory_record', 'InventoryController@searchInventoryRecord')->name('search_inventory_record');
+Route::post('/delete_inv_record', 'InventoryRecordController@destroy')->name('delete_inv_record');
+

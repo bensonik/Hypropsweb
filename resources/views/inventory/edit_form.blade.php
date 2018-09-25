@@ -38,7 +38,7 @@
                 <b>As of Date*</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" value="{{$edit->as_of_date}}" name="date" placeholder="As of Date" required>
+                        <input type="text" class="form-control datepicker2" value="{{$edit->as_of_date}}" name="date" placeholder="As of Date" required>
                     </div>
                 </div>
             </div>
@@ -456,3 +456,12 @@
     </div>
 
 </form>
+
+<script>
+    $(function() {
+        $( ".datepicker2" ).datepicker({
+            /*changeMonth: true,
+             changeYear: true*/
+        });
+    });
+</script>

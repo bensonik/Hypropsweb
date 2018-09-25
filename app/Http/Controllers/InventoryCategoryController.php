@@ -38,7 +38,10 @@ class InventoryCategoryController extends Controller
                 'hod' => $hod))->render());
 
         }else{
+            if(Utility::detectSelected('inventory_access',Auth::user()->id))
             return view::make('inventory_category.main_view')->with('mainData',$mainData)->with('hod',$hod);
+            else
+                return view::make('errors.403');
         }
 
     }

@@ -23,8 +23,8 @@
 
 <body class="four-zero-four">
 <div class="four-zero-four-container">
-    <div class="error-code">503</div>
-    <div class="error-message">Inernal Server Error</div>
+    <div class="error-code">403</div>
+    <div class="error-message">Hello User! you do not have access to this page</div>
     <div class="button-place">
         <a href="{{URL::route('dashboard')}}" class="btn btn-default btn-lg waves-effect">GO TO HOMEPAGE</a>
     </div>

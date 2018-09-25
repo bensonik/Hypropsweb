@@ -35,7 +35,10 @@ class PhysicalInvCountController extends Controller
             return \Response::json(view::make('physical_inv_count.reload',array('mainData' => $mainData))->render());
 
         }else{
+            if(Utility::detectSelected('inventory_access',Auth::user()->id))
             return view::make('physical_inv_count.main_view')->with('mainData',$mainData);
+            else
+                return view::make('errors.403');
         }
 
     }

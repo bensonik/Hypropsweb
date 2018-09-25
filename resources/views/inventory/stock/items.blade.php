@@ -13,7 +13,7 @@
             </th>
             <th>Item Name</th>
             <th>Quantity Received</th>
-            <th>Quantity Remaining</th>
+            <th>Purchased at</th>
             <th>Created by</th>
             <th>Updated by</th>
             <th>Created at</th>
@@ -32,7 +32,7 @@
 
                 <td>{{$data->inventory->item_name}} </td>
                 <td>{{$data->qty}}</td>
-                <td>{{$data->qty_remain}}</td>
+                <td>{{$data->purchase_date}}</td>
                 <td>
                     @if($data->created_by != '0')
                         {{$data->user_c->firstname}} {{$data->user_c->lastname}}

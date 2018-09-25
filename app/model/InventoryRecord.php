@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class InventoryAssign extends Model
+class InventoryRecord extends Model
 {
     //
-    protected  $table = 'inventory_assign';
+    protected  $table = 'inventory_record';
 
     private static function table(){
-        return 'inventory_assign';
+        return 'inventory_record';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,7 @@ class InventoryAssign extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'quantity' => 'required',
+        'item' => 'required',
 
     ];
 
@@ -40,17 +40,13 @@ class InventoryAssign extends Model
 
     }
 
-    public function assignee(){
-        return $this->belongsTo('App\User','user_id','id')->withDefault();
-
-    }
     public function inventory(){
         return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
 
     }
 
-    public function project_team(){
-        return $this->belongsTo('App\model\ProjectTeam','project_id','id');
+    public function department(){
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
 
@@ -167,6 +163,15 @@ class InventoryAssign extends Model
 
     }
 
-
+    public static function searchInventoryRecord($value){
+        return static::join('department', 'department.id', '=', 'inventory_record.dept_id')
+            ->join('inventory', 'inventory.id', '=', 'inventory_record.item_id')
+            ->where('inventory_record.status', '=','1')
+            ->where(function ($query) use($value){
+                $query->where('inventory_record.serial_no','LIKE','%'.$value.'%')->orWhere('inventory.item_name','LIKE','%'.$value.'%')
+                    ->orWhere('department.dept_name','LIKE','%'.$value.'%')
+                    ->orWhere('inventory_record.item_desc','LIKE','%'.$value.'%')->orWhere('inventory_record.item_condition','LIKE','%'.$value.'%');
+            })->get();
+    }
 
 }

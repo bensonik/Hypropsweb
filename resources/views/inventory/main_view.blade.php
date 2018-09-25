@@ -842,9 +842,16 @@
         });
 
         function getData(page){
+           var searchVal = $('#search_inventory').val();
+            var pageData = '';
+            if(searchVal == ''){
+                pageData = '?page=' + page;
+            }else{
+                pageData = '<?php echo url('search_inventory') ?>?page=' + page+'&searchVar='+searchVal;
+            }
 
             $.ajax({
-                url: '?page=' + page
+                url: pageData
             }).done(function(data){
                 $('#reload_data').html(data);
             });

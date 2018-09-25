@@ -54,9 +54,12 @@ class InventoryController extends Controller
             'currSymbol' => $currSymbol))->render());
 
         }else{
+            if(Utility::detectSelected('inventory_access',Auth::user()->id))
             return view::make('inventory.main_view')->with('mainData',$mainData)->with('inventoryType',$inventoryType)
                 ->with('putAwayTemp',$putAwayTemp)->with('itemCategory',$itemCategory)->with('unitMeasure',$unitMeasure)
                 ->with('invCount',$invCount)->with('accountChart',$accountChart)->with('currSymbol',$currSymbol);
+            else
+                return view::make('errors.403');
         }
 
 
@@ -99,7 +102,7 @@ class InventoryController extends Controller
                 $dbDATA = [
                     'item_no' => ucfirst($request->input('item_no')),
                     'item_name' => ucfirst($request->input('name')),
-                    'as_of_date' => ucfirst($request->input('date')),
+                    'as_of_date' => Utility::standardDate($request->input('date')),
                     'sales_desc' => ucfirst($request->input('sales_desc')),
                     'purchase_desc' => ucfirst($request->input('purchase_desc')),
                     'unit_measure' => ucfirst($request->input('unit_measure')),
@@ -258,7 +261,7 @@ class InventoryController extends Controller
             $editId = $request->input('edit_id');
             $currId = session('currency')['id'];
             $countBom = intval($request->input('count_bom'));
-            $photo = 'default_image.png';
+            $photo = $request->input('prev_photo');
             if($request->hasFile('photo')){
 
                 $image = $request->file('photo');
@@ -273,7 +276,7 @@ class InventoryController extends Controller
             $dbDATA = [
                 'item_no' => ucfirst($request->input('item_no')),
                 'item_name' => ucfirst($request->input('name')),
-                'as_of_date' => ucfirst($request->input('date')),
+                'as_of_date' => Utility::standardDate($request->input('date')),
                 'sales_desc' => ucfirst($request->input('sales_desc')),
                 'purchase_desc' => ucfirst($request->input('purchase_desc')),
                 'unit_measure' => ucfirst($request->input('unit_measure')),
@@ -485,7 +488,7 @@ class InventoryController extends Controller
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 
-            return view::make('inventory.inventory_search')->with('mainData',$mainData);
+            return view::make('inventory_record.inventory_search')->with('mainData',$mainData);
         }else{
             return 'No match found, please search again with sensitive words';
         }

@@ -387,9 +387,9 @@ class GeneralController extends Controller
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
-        if($type == 'bom_inv_edit'){
-            $currSymbol = session('currency')['symbol'];
-            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+        if($type == 'assign_inv'){
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
         //END OF ADDING BILL OF MATERIALS

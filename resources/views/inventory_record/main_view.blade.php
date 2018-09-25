@@ -7,9 +7,9 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Competency Category</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Record Inventory Item</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="height:400px; overflow:scroll;">
 
                     <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
@@ -18,10 +18,21 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select  class="form-control department" name="department1" >
-                                                <option value="">Department</option>
-                                                @foreach($dept as $ap)
-                                                    <option value="{{$ap->id}}">{{$ap->dept_name}}</option>
+                                            <input type="text" class="form-control" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Inventory Item">
+
+                                            <input type="hidden" class="inv_class" value="" name="item" id="inv500" />
+                                        </div>
+                                    </div>
+                                    <ul id="myUL500" class="myUL"></ul>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="department" >
+                                                <option value="">Select Department</option>
+                                                @foreach($dept as $d)
+                                                    <option value="{{$d->id}}">{{$d->dept_name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -31,43 +42,43 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select  class="form-control competency" name="competency_type1" >
-                                                <option value="">Competency Type</option>
-                                                @foreach($compType as $ap)
-                                                    <option value="{{$ap->id}}">{{$ap->skill_comp}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input type="text" class="form-control category" name="category_name1" placeholder="Category Name">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input type="text" class="form-control desc" name="description1" placeholder="Description">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4" id="hide_button">
-                                    <div class="form-group">
-                                        <div onclick="addMore('add_more','hide_button','1','<?php echo URL::to('add_more'); ?>','competency_cat','hide_button');">
-                                            <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                                            <input type="text" class="form-control" name="item_description" placeholder="Item Description">
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
 
-                            <div id="add_more"></div>
+                            <div class="row clearfix">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="serial_no" placeholder="Serial Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" name="warranty_expiry_date" placeholder="Warranty/Expiry Date">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="item_condition" >
+                                                <option value="Brand New">Brand New</option>
+                                                <option value="Fairly Used">Fairly Used</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
 
                         </div>
 
@@ -76,8 +87,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="saveCompetencyCat('createModal','createMainForm','<?php echo url('create_comp_cat'); ?>','reload_data',
-                            '<?php echo url('competency_category'); ?>','<?php echo csrf_token(); ?>','department','competency','category','desc')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaForm('createModal','createMainForm','<?php echo url('create_inv_record'); ?>','reload_data',
+                            '<?php echo url('inventory_record'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -97,8 +108,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_comp_cat'); ?>','reload_data',
-                            '<?php echo url('competency_category'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_inv_record'); ?>','reload_data',
+                            '<?php echo url('inventory_record'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -114,15 +125,15 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Competency Category
+                        Record of Inventory Items
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('competency_category'); ?>',
-                                    '<?php echo url('delete_comp_cat'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('inventory_record'); ?>',
+                                    '<?php echo url('delete_inv_record'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
@@ -143,6 +154,18 @@
                     </ul>
                 </div>
                 <div class="body table-responsive" id="reload_data">
+                    <div class="row">
+                        <div class="col-sm-12 pull-right">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" id="search_inventory" class="form-control"
+                                           onkeyup="searchItem('search_inventory','reload_data','<?php echo url('search_inventory_record') ?>','{{url('inventory_record')}}','<?php echo csrf_token(); ?>')"
+                                           name="search_inventory" placeholder="Search Inventory" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>
@@ -152,10 +175,12 @@
 
                             </th>
 
+                            <th>Inventory Item</th>
+                            <th>Item Desc</th>
                             <th>Department</th>
-                            <th>Competency Type</th>
-                            <th>Competency Category</th>
-                            <th>Description</th>
+                            <th>Serial No</th>
+                            <th>Warranty/Expiry Date</th>
+                            <th>Item Condition</th>
                             <th>Created by</th>
                             <th>Created at</th>
                             <th>Updated by</th>
@@ -171,10 +196,12 @@
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <td>{{$data->inventory->item_name}}</td>
+                            <td>{{$data->item_desc}}</td>
                             <td>{{$data->department->dept_name}}</td>
-                            <td>{{$data->competency_type->skill_comp}}</td>
-                            <td>{{$data->category_name}}</td>
-                            <td>{{$data->cat_desc}}</td>
+                            <td>{{$data->serial_no}}</td>
+                            <td>{{$data->warranty_expiry_date}}</td>
+                            <td>{{$data->item_condition}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -191,7 +218,7 @@
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_comp_cat_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_inv_record_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -213,7 +240,7 @@
 
 <script>
 
-    function saveCompetencyCat(formModal,formId,submitUrl,reload_id,reloadUrl,token,dept,compType,category,desc) {
+    function saveInventoryAssign(formModal,formId,submitUrl,reload_id,reloadUrl,token,item,user,qty,location,desc) {
         var inputVars = $('#' + formId).serialize();
         var summerNote = '';
         var htmlClass = document.getElementsByClassName('t-editor');
@@ -222,19 +249,22 @@
             ;
         }
 
-        var dept = classToArray(dept);
-        var compType = classToArray(compType);
-        var category = classToArray(category);
-        var desc = classToArray(desc);
-        var jdept = JSON.stringify(dept);
-        var jcompType = JSON.stringify(compType);
-        var jcategory = JSON.stringify(category);
-        var jdesc = JSON.stringify(desc);
+        var itemId = classToArray(item);
+        var username = classToArray(user);
+        var quantity = classToArray(qty);
+        var loc = classToArray(location);
+        var description = classToArray(desc)
+        var jUsername = JSON.stringify(username);
+        var jItemId = JSON.stringify(itemId);
+        var jQuantity = JSON.stringify(quantity);
+        var jDesc = JSON.stringify(description);
+        var jLoc = JSON.stringify(loc);
         //alert(jdesc);
 
-        if(arrayItemEmpty(dept) == false && arrayItemEmpty(compType) == false && arrayItemEmpty(category) == false && arrayItemEmpty(desc) == false){
-        var postVars = inputVars + '&editor_input=' + summerNote+'&department='+jdept+'&competency_type='+jcompType+'&category_name='+jcategory+'&desc='+jdesc;
-        $('#loading_modal').modal('show');
+        if(arrayItemEmpty(itemId) == false){
+        var postVars = inputVars + '&editor_input=' + summerNote+'&item='+jItemId+'&user='+jUsername+'&location='+jLoc+'&qty='+jQuantity;
+
+            $('#loading_modal').modal('show');
         $('#' + formModal).modal('hide');
         sendRequestForm(submitUrl, token, postVars)
         ajax.onreadystatechange = function () {
@@ -265,6 +295,7 @@
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
                 reloadContent(reload_id, reloadUrl);
+                location.reload();
             }
         }
         //END OF OTHER VALIDATION CONTINUES HERE
@@ -293,11 +324,20 @@
 
     function getProducts(page){
 
+        var searchVal = $('#search_inventory').val();
+        var pageData = '';
+        if(searchVal == ''){
+            pageData = '?page=' + page;
+        }else{
+            pageData = '<?php echo url('search_inventory_record') ?>?page=' + page+'&searchVar='+searchVal;
+        }
+
         $.ajax({
-            url: '?page=' + page
+            url: pageData
         }).done(function(data){
             $('#reload_data').html(data);
         });
+
     }
 
 </script>

@@ -1016,6 +1016,7 @@
 </div>
 @endif
 
+<!-- ADD MORE BOM IN EDIT FORM -->
 @if($type == 'bom_inv_edit')
     <div class="row clearfix new_inv_bom remove_inv_bom{{$more}}"  >
 
@@ -1069,6 +1070,82 @@
     </div>
 @endif
 <!-- END OF ADDING BILL OF MATERIALS -->
+
+@if($type == 'assign_inv')
+
+    <div class="row clearfix new_inv_assign remove_inv_assign{{$more}}">
+    <div class="row clearfix ">
+        <div class="col-sm-4">
+            Inventory Item
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory','inv500{{$num2}}');" name="select_user" placeholder="Inventory Item">
+
+                    <input type="hidden" class="inv_class" value="" name="user" id="inv500{{$num2}}" />
+                </div>
+            </div>
+            <ul id="myUL500{{$num2}}" class="myUL"></ul>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionList('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search','user{{$num2}}');" name="select_user" placeholder="Select User">
+
+                    <input type="hidden" class="user_class" name="user" id="user{{$num2}}" />
+                </div>
+            </div>
+            <ul id="myUL1{{$num2}}" class="myUL"></ul>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control qty" name="quantity" placeholder="Quantity">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row clearfix">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control location" name="location" placeholder="Location">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control assign_desc" name="assign_desc" placeholder="Description">
+                </div>
+            </div>
+        </div>
+
+        <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','assign_inv','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_inv_assign{{$more}}','{{url('add_more')}}','assign_inv','new_inv_assign','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <hr/>
+</div>
+
+@endif
 
 
 

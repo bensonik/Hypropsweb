@@ -464,7 +464,13 @@
                             <a href="{{url('inventory_category')}}">Inventory Category</a>
                         </li>
                         <li>
-                            <a href="{{url('inventory')}}">Inventory</a>
+                            <a href="{{url('inventory')}}">Inventory System</a>
+                        </li>
+                        <li>
+                            <a href="{{url('inventory_assign')}}">Inventory Assignment</a>
+                        </li>
+                        <li>
+                            <a href="{{url('inventory_record')}}">Record Inventory Items</a>
                         </li>
                     </ul>
                 </li>

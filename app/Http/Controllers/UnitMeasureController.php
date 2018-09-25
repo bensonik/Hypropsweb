@@ -35,7 +35,10 @@ class UnitMeasureController extends Controller
             return \Response::json(view::make('inv_unit_measure.reload',array('mainData' => $mainData))->render());
 
         }else{
+            if(Utility::detectSelected('inventory_access',Auth::user()->id))
             return view::make('inv_unit_measure.main_view')->with('mainData',$mainData);
+            else
+                return view::make('errors.403');
         }
 
     }
