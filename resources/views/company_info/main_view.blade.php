@@ -120,29 +120,27 @@
                         Company Info
                     </h2>
                     <ul class="header-dropdown m-r--5">
-                        @if($mainData->count() < 1)
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
-                        @endif
-                        <!--<li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('user'); ?>',
-                                    '<?php echo url('delete_user'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                        <li>
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('company'); ?>',
+                                    '<?php echo url('delete_company'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('user'); ?>',
-                                    '<?php echo url('change_user_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i>Enable User
+                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
+                                    '<?php echo url('change_company_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i>Activate
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('user'); ?>',
-                                    '<?php echo url('change_user_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
-                                <i class="fa fa-close"></i>Disable User
+                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
+                                    '<?php echo url('change_company_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
+                                <i class="fa fa-close"></i>Deactivate
                             </button>
-                        </li>-->
+                        </li>
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
@@ -197,7 +195,13 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
-                            <td>{{$data->name}}</td>
+                            <td>
+                                @if($data->active_status == \App\Helpers\Utility::STATUS_ACTIVE)
+                                    <span class="alert-success" style="color:white">{{$data->name}}</span>
+                                @else
+                                    {{$data->name}}
+                                @endif
+                            </td>
                             <td>{{$data->address}}</td>
                             <td>{{$data->phone1}}</td>
                             <td>{{$data->phone2}}</td>

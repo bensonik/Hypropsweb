@@ -14,6 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
+        'App\Console\Commands\InventoryReorderLevel',
+
     ];
 
     /**
@@ -26,6 +28,11 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        $schedule->command('Inventory:reorder')
+            ->everyMinute();
+
+
     }
 
     /**

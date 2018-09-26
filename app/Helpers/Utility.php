@@ -746,5 +746,15 @@ class Utility
 
     }
 
+    public static function companyInfo(){
+
+        $data = DB::table('company_info')
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('active_status', self::STATUS_ACTIVE)->first();
+
+        return $data;
+
+    }
+
 
 }

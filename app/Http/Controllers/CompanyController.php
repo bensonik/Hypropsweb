@@ -219,5 +219,31 @@ class CompanyController extends Controller
 
     }
 
+    public function changeStatus(Request $request)
+    {
+        //
+        $idArray = json_decode($request->input('all_data'));
+        $status = $request->input('status');
+        $checkActive = Company::firstRow('active_status',Utility::STATUS_ACTIVE);
+
+        $dbData = [
+            'active_status' => $status
+        ];
+        if($status == Utility::STATUS_ACTIVE) {
+            if (!empty($checkActive)) {
+                Company::defaultUpdate('id', $checkActive->id, ['active_status' => Utility::STATUS_DELETED]);
+            }
+            $changeStatus = Company::defaultUpdate('id',$idArray[0],$dbData);
+        }else{
+            $changeStatus = Company::massUpdate('id',$idArray,$dbData);
+        }
+
+
+        return response()->json([
+            'message2' => 'changed successfully',
+            'message' => 'Status change'
+        ]);
+
+    }
 
 }

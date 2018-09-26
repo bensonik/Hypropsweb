@@ -7,7 +7,6 @@
  */
 
 namespace App\Helpers;
-//namespace App\Mail;
 use Illuminate\Http\Request;
 use DB;
 use Auth;

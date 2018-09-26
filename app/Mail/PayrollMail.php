@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Helpers\Utility;
 
 class PayrollMail extends Mailable
 {
@@ -25,9 +26,16 @@ class PayrollMail extends Mailable
 
     public function build()
     {
-        $address = 'info@hyprops.com';
-        $subject = 'Hyprops Info!';
-        $name = 'Hyprops';
+        $address = 'info@company.com';
+        $subject = 'Company Info!';
+        $name = 'Company Name';
+        $company = Utility::companyInfo();
+        if(!empty($company)){
+
+            $address = $company->email;
+            $subject = $company->name.' Info';
+            $name = $company->name;
+        }
 
         return $this->view('Mail_views.payroll_mail')
             ->from($address, $name)/*

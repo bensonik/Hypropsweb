@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Helpers\Utility;
 
 class DemoMail extends Mailable
 {
@@ -25,10 +26,16 @@ class DemoMail extends Mailable
 
     public function build()
     {
-        $address = 'info@hyprops.com';
-        $subject = 'Hyprops Info!';
-        $name = 'Hyprops';
+        $address = 'info@company.com';
+        $subject = 'Company Info!';
+        $name = 'Company Name';
+        $company = Utility::companyInfo();
+        if(!empty($company)){
 
+            $address = $company->email;
+            $subject = $company->name.' Info';
+            $name = $company->name;
+        }
         return $this->view('requisition.send_request')
             ->from($address, $name)/*
             ->cc($address, $name)

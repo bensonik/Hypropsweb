@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Helpers\Utility;
 
 class AppraisalMail extends Mailable
 {
@@ -30,9 +31,16 @@ class AppraisalMail extends Mailable
      */
     public function build()
     {
-        $address = 'info@hyprops.com';
-        $subject = 'Appraisal Info!';
-        $name = 'Hyprops';
+        $address = 'info@company.com';
+        $subject = 'Company Info!';
+        $name = 'Company Name';
+        $company = Utility::companyInfo();
+        if(!empty($company)){
+
+            $address = $company->email;
+            $subject = $company->name.' Info';
+            $name = $company->name;
+        }
 
         return $this->view('mail.appraisal')
             ->from($address, $name)/*

@@ -101,6 +101,7 @@ Route::post('/create_company', 'CompanyController@create')->name('create_company
 Route::post('/edit_company_form', 'CompanyController@editForm')->name('edit_company_form');
 Route::post('/edit_company', 'CompanyController@edit')->name('edit_company');
 Route::post('/delete_company', 'CompanyController@destroy')->name('delete_company');
+Route::post('/change_company_status', 'CompanyController@changeStatus')->name('change_company_status');
 
 // -------------DEPARTMENTAL HEAD MODULE-----------
 Route::any('/dept_approval', 'ApprovalDeptController@index')->name('dept_approval')->middleware('auth.admin');

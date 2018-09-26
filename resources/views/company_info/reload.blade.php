@@ -32,7 +32,13 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
-            <td>{{$data->name}}</td>
+            <td>
+                @if($data->active_status == \App\Helpers\Utility::STATUS_ACTIVE)
+                    <span class="alert-success" style="color:white">{{$data->name}}</span>
+                @else
+                    {{$data->name}}
+                @endif
+            </td>
             <td>{{$data->address}}</td>
             <td>{{$data->phone1}}</td>
             <td>{{$data->phone2}}</td>

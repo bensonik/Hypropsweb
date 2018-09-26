@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Helpers\Utility;
 
-class LeaveRequestMail extends Mailable
+class ReorderMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -24,6 +24,11 @@ class LeaveRequestMail extends Mailable
         $this->data = $data;
     }
 
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
     public function build()
     {
         $address = 'info@company.com';
@@ -37,7 +42,7 @@ class LeaveRequestMail extends Mailable
             $name = $company->name;
         }
 
-        return $this->view('leave_log.send_request')
+        return $this->view('mail_views.reorder')
             ->from($address, $name)/*
             ->cc($address, $name)
             ->bcc($address, $name)
@@ -45,5 +50,4 @@ class LeaveRequestMail extends Mailable
             ->subject($subject)
             ->with([ 'message' => $this->data ]);
     }
-
 }

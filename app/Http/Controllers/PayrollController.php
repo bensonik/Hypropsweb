@@ -71,7 +71,7 @@ class PayrollController extends Controller
     public function payslipItem(Request $request)
     {
         //
-        $companyInfo = Company::getAllData();
+        $companyInfo = Company::firstRow('active_status',Utility::STATUS_ACTIVE);
         $payslip = Payroll::firstRow('id',$request->input('dataId'));
         $user = User::firstRow('id',Auth::user()->id);
         $tax = Tax::firstRow('id',$user->salary->tax_id);
