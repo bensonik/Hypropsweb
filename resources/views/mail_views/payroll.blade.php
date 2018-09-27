@@ -1,3 +1,7 @@
+@extends('mail_views.mail_layout')
+
+@section('content')
+
 @if($data->type == 'update_request')
 Hello, {{$data->sender}} updated the payroll, please action this task. {{$data->desc}}
 @endif
@@ -10,3 +14,5 @@ Hello, {{$data->sender}} updated the payroll, please action this task. {{$data->
     Hello, {{$data->sender}} from Accounts/Finance department made some payments as briefed below
     {{$data->desc}}
 @endif
+
+@endsection

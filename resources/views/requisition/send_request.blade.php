@@ -1,3 +1,7 @@
+@extends('mail_views.mail_layout')
+
+@section('content')
+
 
 @if($data->type == 'next_approval')
     @if(Auth::user()->id == $data->user_id)
@@ -28,3 +32,5 @@
     {{$data->desc}}, Total Amount = {{$data->amount}}
 
 @endif
+
+@endsection
