@@ -5,9 +5,10 @@ namespace App\Http\Controllers;
 use App\model\AccountChart;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\model\Position;
-use App\model\Department;
-use App\model\SalaryStructure;
+use App\model\AccountCategory;
+use App\model\AccountJournal;
+use App\model\Currency;
+use App\model\AccountDetailType;
 use App\Helpers\Utility;
 use App\User;
 use App\model\Roles;
@@ -30,9 +31,21 @@ class AccountChartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        $mainData = AccountChart::paginateAllData();
+        $currency = Currency::getAllData();
+        $accountCat = AccountCategory::getAllData();
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('account_chart.reload',array('mainData' => $mainData,
+                'currency' => $currency,'accountCat' => $accountCat))->render());
+
+        }
+            return view::make('account_chart.main_view')->with('mainData',$mainData)->with('currency',$currency)
+                ->with('accountCat',$accountCat);
+
     }
 
     /**
@@ -40,52 +53,134 @@ class AccountChartController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
         //
+        $item = json_decode($request->input('item'));
+        $user= json_decode($request->input('user'));
+        $location = json_decode($request->input('location'));
+        $qty = json_decode($request->input('qty'));
+        $desc = json_decode($request->input('desc'));
+
+        $rule = [];
+
+        $validator = Validator::make($request->all(),$rule);
+        if(count($item) == count($qty)){
+
+            for($i=0;$i<count($item);$i++) {
+                if(empty($user[$i])) {
+                    $user[$i] = '';
+                }
+                if(empty($location[$i])) {
+                    $location[$i] = '';
+                }
+                if(empty($desc[$i])) {
+                    $desc[$i] = '';
+                }
+                $dbDATA = [
+                    'item_id' => $item[$i],
+                    'user_id' => $user[$i],
+                    'qty' => $qty[$i],
+                    'location' => $location[$i],
+                    'item_desc' => $desc[$i],
+                    'created_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+
+                InventoryAssign::create($dbDATA);
+                /*$itemData = Inventory::firstRow('id',$item[$i]);
+                $newQty = $itemData->qty - $qty[$i];
+                $dataUpdate = ['qty' => $newQty];
+                $itemUpdate = Inventory::defaultUpdate('id',$item[$i],$dataUpdate);*/
+
+            }
+
+            return response()->json([
+                'message' => 'good',
+                'message2' => 'saved'
+            ]);
+
+
+        }
+
+        return response()->json([
+            'message' => 'warning',
+            'message2' => 'Please fill in all required fields'
+        ]);
+        /* $errors = $validator->errors();
+         return response()->json([
+             'message2' => 'fail',
+             'message' => $errors
+         ]);*/
+
+
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\model\AccountChart  $accountChart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(AccountChart $accountChart)
+    public function editForm(Request $request)
     {
         //
+        $mainData = AccountChart::paginateAllData();
+        $currency = Currency::getAllData();
+        $accountCat = AccountCategory::getAllData();
+        return view::make('account_chart.edit_form')->with('edit',$mainData)->with('currency',$currency)
+            ->with('accountCat',$accountCat);
+
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\model\AccountChart  $accountChart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(AccountChart $accountChart)
+    public function edit(Request $request)
     {
         //
+
+        $validator = Validator::make($request->all(),InventoryAssign::$mainRules);
+        if($validator->passes()) {
+
+
+            $dbDATA = [
+                'qty' => $request->input('quantity'),
+                'location' => $request->input('location'),
+                'item_desc' => $request->input('description'),
+                'updated_by' => Auth::user()->id
+            ];
+
+            InventoryAssign::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+            return response()->json([
+                'message' => 'good',
+                'message2' => 'saved'
+            ]);
+
+
+        }
+        $errors = $validator->errors();
+        return response()->json([
+            'message2' => 'fail',
+            'message' => $errors
+        ]);
+
+
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\model\AccountChart  $accountChart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, AccountChart $accountChart)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -93,11 +188,21 @@ class AccountChartController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\model\AccountChart  $accountChart
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(AccountChart $accountChart)
+    public function destroy(Request $request)
     {
         //
+        $idArray = json_decode($request->input('all_data'));
+        $dbData = [
+            'status' => Utility::STATUS_DELETED
+        ];
+        $delete = InventoryAssign::massUpdate('id',$idArray,$dbData);
+
+        return response()->json([
+            'message2' => 'deleted',
+            'message' => 'Data deleted successfully'
+        ]);
     }
 }

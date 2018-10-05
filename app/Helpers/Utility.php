@@ -756,5 +756,19 @@ class Utility
 
     }
 
+    public static function convertAmount($currCurrencyCode,$newCurrencyCode,$amount){
+        $curr = 'USD'.$currCurrencyCode;
+        $data = DB::table('exchange_rate')
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->first();
+        $rates = json_decode($data->rates);
+        $currRate = $rates['quotes'][$curr];
+        $dollarAmt = $amount/$currRate;
+        $new = 'USD'.$newCurrencyCode;
+        $newRate = $rates['quotes'][$new];
+        $converted = $dollarAmt/$newRate;
+        return round($converted,2);
+    }
+
 
 }

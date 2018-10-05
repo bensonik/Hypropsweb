@@ -57,8 +57,8 @@ class AccountDetailType extends Model
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->get();
 
     }
-	
-	public static function specialColumnsPage($column, $post)
+
+    public static function specialColumnsPage($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->paginate(Utility::P35);
@@ -68,32 +68,32 @@ class AccountDetailType extends Model
     public static function specialColumns2($column, $post, $column2, $post2)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-		return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-		->where($column2, '=',$post2)->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->orderBy('id','DESC')->get();
 
     }
-	
-	public static function specialColumnsPage2($column, $post, $column2, $post2)
+
+    public static function specialColumnsPage2($column, $post, $column2, $post2)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-		return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-		->where($column2, '=',$post2)->orderBy('id','DESC')->paginate(Utility::P35);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
-	
-	public static function specialColumns3($column, $post, $column2, $post2, $column3, $post3)
+
+    public static function specialColumns3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-		return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-		->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->get();
 
     }
-	
-	public static function specialColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
+
+    public static function specialColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-		return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-		->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->paginate(Utility::P35);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 
