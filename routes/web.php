@@ -387,3 +387,41 @@ Route::post('/edit_inv_record', 'InventoryRecordController@edit')->name('edit_in
 Route::any('/search_inventory_record', 'InventoryController@searchInventoryRecord')->name('search_inventory_record');
 Route::post('/delete_inv_record', 'InventoryRecordController@destroy')->name('delete_inv_record');
 
+
+// -------------FINANCIAL YEAR MODULE-----------
+Route::any('/financial_year', 'FinancialYearController@index')->name('financial_year')->middleware('auth');
+Route::post('/create_financial_year', 'FinancialYearController@create')->name('create_financial_year');
+Route::post('/edit_financial_year_form', 'FinancialYearController@editForm')->name('edit_financial_year_form');
+Route::post('/edit_financial_year', 'FinancialYearController@edit')->name('edit_financial_year');
+Route::post('/financial_year_status', 'FinancialYearController@finYearStatus')->name('financial_year_status');
+Route::post('/delete_financial_year', 'FinancialYearController@destroy')->name('delete_financial_year');
+
+// -------------CLOSING BOOK MODULE-----------
+Route::any('/closing_books', 'ClosingBooksController@index')->name('closing_books')->middleware('auth');
+Route::post('/create_closing_books', 'ClosingBooksController@create')->name('create_closing_books');
+Route::post('/edit_closing_books_form', 'ClosingBooksController@editForm')->name('edit_closing_books_form');
+Route::post('/edit_closing_books', 'ClosingBooksController@edit')->name('edit_closing_books');
+Route::post('/closing_books_status', 'ClosingBooksController@finYearStatus')->name('closing_books_status');
+Route::post('/delete_closing_books', 'ClosingBooksController@destroy')->name('delete_closing_books');
+
+// -------------TRANS LOCATION MODULE-----------
+Route::any('/trans_location', 'TransLocationController@index')->name('trans_location')->middleware('auth');
+Route::post('/create_trans_location', 'TransLocationController@create')->name('create_trans_location');
+Route::post('/edit_trans_location_form', 'TransLocationController@editForm')->name('edit_trans_location_form');
+Route::post('/edit_trans_location', 'TransLocationController@edit')->name('edit_trans_location');
+Route::post('/delete_trans_location', 'TransLocationController@destroy')->name('delete_trans_location');
+
+// -------------TRANS CLASS MODULE-----------
+Route::any('/trans_class', 'TransClassController@index')->name('trans_class')->middleware('auth');
+Route::post('/create_trans_class', 'TransClassController@create')->name('create_trans_class');
+Route::post('/edit_trans_class_form', 'TransClassController@editForm')->name('edit_trans_class_form');
+Route::post('/edit_trans_class', 'TransClassController@edit')->name('edit_trans_class');
+Route::post('/delete_trans_class', 'TransClassController@destroy')->name('delete_trans_class');
+
+// -------------CHART OF ACCOUNTS MODULE-----------
+Route::any('/account_chart', 'AccountChartController@index')->name('account_chart')->middleware('auth');
+Route::post('/create_account_chart', 'AccountChartController@create')->name('create_account_chart');
+Route::post('/edit_account_chart_form', 'AccountChartController@editForm')->name('edit_account_chart_form');
+Route::post('/edit_account_chart', 'AccountChartController@edit')->name('edit_account_chart');
+Route::post('/delete_account_chart', 'AccountChartController@destroy')->name('delete_account_chart');
+Route::post('/change_account_chart_status', 'AccountChartController@changeStatus')->name('change_account_chart_status');

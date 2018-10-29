@@ -112,3 +112,17 @@
         @endif
     </select>
 @endif
+
+@if($type == 'account_chart')
+
+    <select name="detail_type"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->detail_type}}</option>
+            @endforeach
+
+        @else
+            <option value="">Detail Type</option>
+        @endif
+    </select>
+@endif

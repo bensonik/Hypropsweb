@@ -37,7 +37,7 @@ class PayrollController extends Controller
         //
         //$req = new Request();
         $mainData = (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ? Payroll::paginateAllData() :Payroll::specialColumnsPage('payroll_status',Utility::APPROVED) ;
-        $salarySum = Payroll::sumData();
+        $salarySum = Utility::sumColumnDataCondition('payroll','payroll_status',Utility::PROCESSING,'total_amount');
 
         if ($request->ajax()) {
             return \Response::json(view::make('payroll.reload',array('mainData' => $mainData,'salarySum' => $salarySum))->render());
@@ -72,6 +72,7 @@ class PayrollController extends Controller
     {
         //
         $companyInfo = Company::firstRow('active_status',Utility::STATUS_ACTIVE);
+        //print_r($companyInfo); exit();
         $payslip = Payroll::firstRow('id',$request->input('dataId'));
         $user = User::firstRow('id',Auth::user()->id);
         $tax = Tax::firstRow('id',$user->salary->tax_id);
@@ -127,6 +128,7 @@ class PayrollController extends Controller
             $monthInt = date('n',$oldDateUnix);
             $unused = [];
             $dataExist = [];
+            Utility::checkCurrencyActiveStatus();
 
             for($i=0;$i<count($all_id);$i++){
                 $rowDataSalary = Payroll::countData2('user_id',$all_id[$i],'month',$month);

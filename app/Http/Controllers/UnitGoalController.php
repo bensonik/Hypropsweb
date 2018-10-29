@@ -68,6 +68,12 @@ class UnitGoalController extends Controller
         $hodMail = User::firstRow('id',$hodId);
 
         $mainUser = ($lowerHod == Utility::HOD_DETECTOR) ? $hodMail : $lowerHodMail;
+        if($hodId == 0){
+            return response()->json([
+                'message' => 'warning',
+                'message2' => 'Please, select an appraisal supervisor for this department in the HR section'
+            ]);
+        }
 
         $objContent = new \stdClass();
         $objContent->sender_name = Auth::user()->firstname.'&nbsp;'.Auth::user()->lastname;

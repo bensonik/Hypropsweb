@@ -7,11 +7,12 @@
 
         </th>
 
-        <th>Inventory Item</th>
-        <th>Assigned To</th>
-        <th>Quantity Assigned</th>
-        <th>location</th>
-        <th>Description</th>
+        <th>Account Number</th>
+        <th>Account Name</th>
+        <th>Account Category</th>
+        <th>Detail Type</th>
+        <th>Default Account Balance {{\App\Helpers\Utility::defaultCurrency()}}</th>
+        <th>Foreign Account Balance </th>
         <th>Created by</th>
         <th>Created at</th>
         <th>Updated by</th>
@@ -27,11 +28,12 @@
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->inventory->item_name}}</td>
-            <td>{{$data->assignee->firstname}}&nbsp;{{$data->assignee->lastname}}</td>
-            <td>{{$data->qty}}</td>
-            <td>{{$data->location}}</td>
-            <td>{{$data->item_desc}}</td>
+            <td>{{$data->acct_no}}</td>
+            <td>{{$data->acct_name}}</td>
+            <td>{{$data->category->category_name}}</td>
+            <td>{{$data->detail->detail_type}}</td>
+            <td>{{$data->normal_balance}}</td>
+            <td>({{$data->chartCurr->code}}){{$data->chartCurr->symbol}}{{$data->foreign_balance}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -48,7 +50,7 @@
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_inv_assign_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_account_chart_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
         </tr>
     @endforeach

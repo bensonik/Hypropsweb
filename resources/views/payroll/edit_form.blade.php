@@ -4,27 +4,27 @@
     </thead>
     <tbody>
     <tr>
-        @if(count($companyInfo) >0)
+        @if(!empty($companyInfo))
         <td>
             <table>
                 <tbody>
                 <tr>
-                    <td>{{$companyInfo[0]->name}}</td>
+                    <td>{{$companyInfo->name}}</td>
                 </tr>
                 <tr>
-                    <td>{{$companyInfo[0]->address}}</td>
+                    <td>{{$companyInfo->address}}</td>
                 </tr>
                 <tr>
-                    <td>{{$companyInfo[0]->phone1}}&nbsp; {{$companyInfo[0]->phone2}}</td>
+                    <td>{{$companyInfo->phone1}}&nbsp; {{$companyInfo->phone2}}</td>
                 </tr>
                 <tr>
-                    <td>{{$companyInfo[0]->email}}</td>
+                    <td>{{$companyInfo->email}}</td>
                 </tr>
                 </tbody>
             </table>
         </td>
             <?php $imgUrl = \App\Helpers\Utility::IMG_URL(); ?>
-        <td><img class="pull-right" src="{{ asset('images/'.$companyInfo[0]->logo)}}"> </td>
+        <td><img class="pull-right" src="{{ asset('images/'.$companyInfo->logo)}}"> </td>
         @else
             <td>
                 <table>
@@ -87,14 +87,14 @@
                       @if($comp['component_type'] == \App\Helpers\Utility::COMPONENT_TYPE[1])
                       <tr>
                           <td>{{$comp['component']}}</td>
-                          <td>{{$edit->currency->symbol}} {{number_format($comp['amount'])}}</td>
+                          <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($comp['amount'])}}</td>
                       </tr>
                       @endif
                   @endforeach
                         @if($edit->bonus_deduc_type == \App\Helpers\Utility::PAYROLL_BONUS)
                             <tr>
                                 <td>{{$edit->bonus_deduc_desc}}</td>
-                                <td>{{$edit->currency->symbol}} {{number_format($edit->bonus_deduc)}}</td>
+                                <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->bonus_deduc)}}</td>
                             </tr>
                         @endif
 
@@ -117,14 +117,14 @@
                         @if($comp['component_type'] == \App\Helpers\Utility::COMPONENT_TYPE[2])
                             <tr>
                                 <td>{{$comp['component']}}</td>
-                                <td>{{$edit->currency->symbol}} {{number_format($comp['amount'])}}</td>
+                                <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($comp['amount'])}}</td>
                             </tr>
                         @endif
                     @endforeach
                     @if($edit->bonus_deduc_type == \App\Helpers\Utility::PAYROLL_DEDUCTION)
                         <tr>
                             <td>{{$edit->bonus_deduc_desc}}</td>
-                            <td>{{$edit->currency->symbol}} {{number_format($edit->bonus_deduc)}}</td>
+                            <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->bonus_deduc)}}</td>
                         </tr>
                     @endif
                     {{--<tr>
@@ -144,15 +144,15 @@
     <tbody>
     <tr>
         <td>Gross Salary</td>
-        <td style="font-size:15px;">{{$edit->currency->symbol}} {{number_format($edit->salary->gross_pay)}}</td>
+        <td style="font-size:15px;">{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->salary->gross_pay)}}</td>
     </tr>
     <tr>
         <td>Total Deductions</td>
-        <td style="font-size:15px;">{{$edit->currency->symbol}} {{number_format($totalDeduction)}}</td>
+        <td style="font-size:15px;">{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($totalDeduction)}}</td>
     </tr>
     <tr>
         <td>Net Salary</td>
-        <td style="font-size:15px;">{{$edit->currency->symbol}} {{number_format($edit->total_amount)}}</td>
+        <td style="font-size:15px;">{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->total_amount)}}</td>
     </tr>
     </tbody>
 </table>

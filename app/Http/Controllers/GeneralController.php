@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\model\AccountCategory;
+use App\model\AccountDetailType;
+use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\SalaryComponent;
 use App\model\SkillCompCat;
@@ -229,6 +232,16 @@ class GeneralController extends Controller
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
 
         }
+        //END OF INDIVIDUAL GOALS
+
+        //BEGIN OF ACCOUNT CHART
+        if($type == 'account_chart'){
+            //print_r($pickedVal);exit();
+            $optionArray = AccountDetailType::specialColumns('acct_cat_id',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+
+        }
+        //END OF ACCOUNT CHART
 
 
     }

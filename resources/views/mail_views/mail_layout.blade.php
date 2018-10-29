@@ -30,26 +30,26 @@
         <tr>
             <?php $companyInfo = \App\Helpers\Utility::companyInfo(); ?>
             @if(count($companyInfo) >0)
-                <td>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>{{$companyInfo[0]->name}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{$companyInfo[0]->address}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{$companyInfo[0]->phone1}}&nbsp; {{$companyInfo[0]->phone2}}</td>
-                        </tr>
-                        <tr>
-                            <td>{{$companyInfo[0]->email}}</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </td>
-                <?php $imgUrl = \App\Helpers\Utility::IMG_URL(); ?>
-                <td><img class="pull-right" src="{{ asset('images/'.$companyInfo[0]->logo)}}"> </td>
+                    <td>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td>{{$companyInfo->name}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{$companyInfo->address}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{$companyInfo->phone1}}&nbsp; {{$companyInfo->phone2}}</td>
+                            </tr>
+                            <tr>
+                                <td>{{$companyInfo->email}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <?php $imgUrl = \App\Helpers\Utility::IMG_URL(); ?>
+                    <td><img class="pull-right" src="{{ asset('images/'.$companyInfo->logo)}}"> </td>
             @else
                 <td>
                     <table>

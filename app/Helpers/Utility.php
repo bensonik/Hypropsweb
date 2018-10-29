@@ -56,6 +56,13 @@ class Utility
     const VENDOR = 1, CUSTOMER = 2;
     const COST_METHOD = ['FIFO','LIFO','Specific','Average','Standard'];
     const INVENTORY_TYPE = [1 => 'Inventory', 2 => 'Non-Inventory', 3 => 'Service'];
+    const DEFAULT_ACCOUNT_CHART = [1,2,3,4,5,6];
+    const NO_DEPRECIATION_ACCOUNT_CAT_DB_ID = [2,3,7,8,9,5], FIXED_ASSET_DB_ID = 4;
+    const CREDIT_TABLE_ID = 1, DEBIT_TABLE_ID = 2;
+    const CREDIT_OPENING_BALANCE_EQUITY = [3,4,2,5], DEBIT_OPENING_BALANCE_EQUITY = [7,8,9], OPENING_BALANCE_EQUITY_CHART_ID = 1, OPENING_BALANCE_DETAIL_ID = 51,
+            OPENING_BALANCE_ACCOUNT_CATEGORY_ID =10;
+
+
 
 
     public static function IMG_URL(){
@@ -292,20 +299,33 @@ class Utility
 
     }
 
-    public static function sumData($table)
-    {
-        return DB::table($table)
-            ->where('status', self::STATUS_ACTIVE)
-            ->sum('total_amount');
-
-    }
-
-    public static function sumData1($table,$column, $post)
+    public static function sumColumnDataCondition($table,$column, $post,$sumColumn)
     {
         return DB::table($table)
             ->where($column, $post)
             ->where('status', self::STATUS_ACTIVE)
-            ->sum('total_amount');
+            ->sum($sumColumn);
+
+    }
+
+    public static function sumColumnDataCondition2($table,$column, $post,$column2, $post2,$sumColumn)
+    {
+        return DB::table($table)
+            ->where($column, $post)
+            ->where($column2, $post2)
+            ->where('status', self::STATUS_ACTIVE)
+            ->sum($sumColumn);
+
+    }
+
+    public static function sumColumnDataCondition3($table,$column, $post,$column2, $post2,$column3, $post3,$sumColumn)
+    {
+        return DB::table($table)
+            ->where($column, $post)
+            ->where($column2, $post2)
+            ->where($column3, $post3)
+            ->where('status', self::STATUS_ACTIVE)
+            ->sum($sumColumn);
 
     }
 
@@ -761,14 +781,149 @@ class Utility
         $data = DB::table('exchange_rate')
             ->where('status', self::STATUS_ACTIVE)
             ->orderBy('id','DESC')->first();
-        $rates = json_decode($data->rates);
+
+        $rates = json_decode($data->rates,true);
         $currRate = $rates['quotes'][$curr];
         $dollarAmt = $amount/$currRate;
         $new = 'USD'.$newCurrencyCode;
         $newRate = $rates['quotes'][$new];
-        $converted = $dollarAmt/$newRate;
+        $converted = $dollarAmt*$newRate;
         return round($converted,2);
     }
 
+    public static function chartBalance($accCat,$debit,$credit){
+
+        $debitAccounts = [1,2,3,4,5,13,14,15];
+        $creditAccounts = [6,7,8,9,10,11,12];
+        $value = '0.00';
+        if(in_array($accCat,$debitAccounts)){
+
+            $result = $debit - $credit;
+            $value = round($result,2);
+        }
+        if(in_array($accCat,$creditAccounts)){
+            $result = $credit - $debit;
+            $value =  round($result,2);
+        }
+        return $value;
+
+    }
+
+    public static function openingBalanceCreditDebit($accountCategoryId){
+        $transaction = 0;
+        if(in_array($accountCategoryId,self::CREDIT_OPENING_BALANCE_EQUITY)){
+            $transaction = self::DEBIT_TABLE_ID;    //RETURN DEBIT TO THIS ACCOUNT CATEGORY AND CREDIT OPENING BALANCE EQUITY
+        }
+        if(in_array($accountCategoryId,self::DEBIT_OPENING_BALANCE_EQUITY)){
+            $transaction = self::CREDIT_TABLE_ID;   //RETURN CREDIT TO THIS ACCOUNT CATEGORY AND DEBIT OPENING BALANCE EQUITY
+        }
+        return $transaction;
+
+    }
+
+    public static function detectClosingBookStatus(){
+        $data = self::firstRow('closing_books','active_status',Utility::STATUS_ACTIVE);
+        $detect = 0;
+        if(!empty($data)){
+            $detect = 1;
+        }
+        return $detect;
+    }
+
+    public static function checkClosingBook($transactionDate,$password){
+        $detect = 0;
+        if(empty($transactionDate)){
+            $detect = 1;
+            return $detect;
+        }
+        $closing = self::firstRow('closing_books','active_status',Utility::STATUS_ACTIVE);
+        if(self::detectClosingBookStatus() != self::STATUS_ACTIVE){
+            if(self::standardDate($closing->closing_date) <= $transactionDate){
+                if(md5($closing->password) == md5($password)){
+                    $detect = 1;
+                }else{
+                    $detect = 0;
+                }
+            }else{
+                $detect = 1;
+            }
+        }else{
+            $detect = 1;
+        }
+        return $detect;
+
+
+    }
+
+    public static function checkCurrencyActiveStatus(){
+        $data = self::firstRow('currency','active_status',Utility::STATUS_ACTIVE);
+        if(empty($data)){
+            return response()->json([
+                'message2' => 'Please, navigate to the configuration to activate system default currency',
+                'message' => 'currency inactive'
+            ]);
+        }
+    }
+
+    public static function checkDefaultAccountChartCurrency($chart_id){
+        $data = self::firstRow('account_chart','id',$chart_id);
+        $currency = $data->curr_id;
+        if($data->curr_id == ''){
+            $currency = self::currencyArrayItem('id');
+        }
+        return $currency;
+    }
+
+    public static function checkFinYearActiveStatus(){
+        $checkFinYear = self::firstRow('financial_year','active_status',Utility::STATUS_ACTIVE);
+        if(empty($checkFinYear)){
+            return response()->json([
+                'message2' => 'Please,create and activate a financial year to continue this process',
+                'message' => 'warning'
+            ]);
+        }
+    }
+
+    public static function checkExistingLedgerTrans(){
+        $checkLedgerTrans = DB::table('company_info')
+            ->where('debit_credit', self::DEBIT_TABLE_ID)
+            ->orWhere('debit_credit', self::CREDIT_TABLE_ID)
+            ->where('status', self::STATUS_ACTIVE)->first();
+
+        if(!empty($checkLedgerTrans)) {
+            return response()->json([
+                'message2' => 'Currency cannot be changed, the general ledger already has existing transaction linked to this data',
+                'message' => 'rejected'
+            ]);
+        }
+    }
+
+    public static function currencyArrayItem($arrayItem){
+        if(session('currency')){
+            return session('currency')[$arrayItem];
+        }else{
+            return 'None';
+        }
+    }
+
+    public static function defaultCurrency(){
+        if(session('currency')){
+            return '('.session('currency')['code'].')'.session('currency')['symbol'];
+        }else{
+            return 'None';
+        }
+    }
+
+    public static function checkArraySimilarity($childArray,$houseArray){
+        $detect = false;
+        foreach($houseArray as $house){
+            foreach($childArray as $child){
+                if($house == $child){
+                   $detect = true;
+                }
+            }
+        }
+        return $detect;
+    }
 
 }

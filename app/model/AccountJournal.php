@@ -128,9 +128,9 @@ class AccountJournal extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return Utility::firstRow2(self::table(),$column, $post2,$column2, $post);
 
     }
 
@@ -143,6 +143,12 @@ class AccountJournal extends Model
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+    }
+
+    public static function sumColumnDataCondition3($column, $post,$column2, $post2, $column3, $post3, $sumColumn)
+    {
+        return Utility::sumColumnDataCondition3(self::table(),$column, $post,$column2, $post2,$column3, $post3,$sumColumn);
 
     }
 

@@ -213,10 +213,10 @@
                             <th>Request Category</th>
                             <th>Request Type</th>
                             <th>Project Category</th>
-                            <th>Amount</th>
+                            <th>Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Status</th>
-                            <th>Loan Balance</th>
-                            <th>Loan Monthly Deduction</th>
+                            <th>Loan Balance {{\App\Helpers\Utility::defaultCurrency()}}</th>
+                            <th>Loan Monthly Deduction {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Loan Interest Rate</th>
                             <th>Requested by</th>
                             <th>Department</th>
@@ -250,7 +250,7 @@
                                 {{$data->project->project_name}}
                                 @endif
                             </td>
-                            <td>{{$data->currency->symbol}}{{$data->amount}}</td>
+                            <td>{{number_format($data->amount)}}</td>
                             <td>
                                 @if($data->accessible_status == '0')
                                     Cleared
@@ -258,8 +258,8 @@
                                     Outstanding
                                 @endif
                             </td>
-                            <td>{{$data->currency->symbol}}{{$data->loan_balance}}</td>
-                            <td>{{$data->currency->symbol}}{{$data->loan_monthly_deduc}}</td>
+                            <td>{{number_format($data->loan_balance)}}</td>
+                            <td>{{number_format($data->loan_monthly_deduc)}}</td>
                             <td>{{$data->loanRate->interest_rate}}%</td>
 
                             <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>

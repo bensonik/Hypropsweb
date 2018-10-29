@@ -13,7 +13,7 @@
         <th>Request Category</th>
         <th>Request Type</th>
         <th>Project Category</th>
-        <th>Amount</th>
+        <th>Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>Status</th>
         <th>Requested by</th>
         <th>Department</th>
@@ -47,7 +47,7 @@
                     {{$data->project->project_name}}
                 @endif
             </td>
-            <td>{{$data->currency->symbol}}{{$data->amount}}</td>
+            <td>{{number_format($data->amount)}}</td>
             <td>
                 @if($data->accessible_status == '0')
                     Cleared

@@ -173,6 +173,8 @@ class VendorCustomerController extends Controller
 
             $photo = $request->get('prev_photo');
 
+            Utility::checkExistingLedgerTrans();
+
             if($request->hasFile('photo')){
 
                 $image = $request->file('photo');
@@ -342,8 +344,8 @@ class VendorCustomerController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' contact has been used in another module and cannot be deleted'
+                'message2' => 'The '.count($unused).' contact has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

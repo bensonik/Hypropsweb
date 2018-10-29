@@ -88,12 +88,6 @@ class Payroll extends Model
 
     }
 
-    public static function sumData()
-    {
-        return Utility::sumData(self::table());
-
-    }
-
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);
@@ -192,6 +186,10 @@ class Payroll extends Model
     {
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
 
+    }
+
+    public static  function sumColumnDataCondition($column, $post,$sumColumn){
+        Utility::sumColumnDataCondition(self::table(),$column, $post,$sumColumn);
     }
 
 }

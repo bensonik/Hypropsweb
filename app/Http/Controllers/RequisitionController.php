@@ -176,6 +176,7 @@ class RequisitionController extends Controller
             $attachment = [];
             //print_r($files);
 
+            Utility::checkCurrencyActiveStatus();
             //PROCESS LOAN REQUEST
             $hrAccessible = Utility::ZERO;
             $accessibleStatus = Utility::ZERO;
@@ -829,8 +830,8 @@ class RequisitionController extends Controller
         $delete = Requisition::massUpdate('id', $idArray, $dbData);
 
         return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
+            'message' => 'deleted',
+            'message2' => 'Data deleted successfully'
         ]);
 
         }else{  //END OF REMOVAL FOR THE TOP USERS
@@ -851,14 +852,14 @@ class RequisitionController extends Controller
                 $delete = Requisition::massUpdate('id',$in_use,$dbData);
 
                 return response()->json([
-                    'message2' => 'deleted',
-                    'message' => count($in_use).' data(s) has been deleted '.$message
+                    'message' => 'deleted',
+                    'message2' => count($in_use).' data(s) has been deleted '.$message
                 ]);
 
             }else{
                 return  response()->json([
-                    'message2' => 'warning',
-                    'message' => 'The '.count($unused).' has been approved/denied and cannot be deleted'
+                    'message2' => 'The '.count($unused).' has been approved/denied and cannot be deleted',
+                    'message' => 'warning'
                 ]);
 
             }

@@ -241,7 +241,7 @@ class HrisApprovalSysController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' salary structure(s) has been used in another module and cannot be deleted' : '';
+            ' approval system(s) has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
             $delete = HrisApprovalSys::massUpdate('id',$in_use,$dbData);
 
@@ -252,8 +252,8 @@ class HrisApprovalSysController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' salary structure(s) has been used in another module and cannot be deleted'
+                'message2' => 'The '.count($unused).' approval system(s) has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

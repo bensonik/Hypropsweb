@@ -763,8 +763,8 @@ class LeaveLogController extends Controller
 
             }else{
                 return  response()->json([
-                    'message2' => 'warning',
-                    'message' => 'The '.count($unused).' has been approved/denied and cannot be deleted'
+                    'message2' => 'The '.count($unused).' has been approved/denied and cannot be deleted',
+                    'message' => 'warning'
                 ]);
 
             }

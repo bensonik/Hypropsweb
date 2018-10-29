@@ -199,8 +199,8 @@ class UnitGoalSeriesController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' goal set has been used in another module and cannot be deleted'
+                'message2' => 'The '.count($unused).' goal set has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

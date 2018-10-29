@@ -42,36 +42,41 @@ class CurrencyController extends Controller
         $idArray = json_decode($request->input('all_data'));
         $id = $idArray[0];
         $check = Currency::countData2('id', $id, 'active_status', '0');
-        if ($check > 0) {
-        $activeCurr = Currency::firstRow('active_status','1');
-            $dbData1 = [
-                'active_status' => '0'
-            ];
-        $dbData = [
-            'active_status' => Utility::STATUS_ACTIVE,
-        ];
-        $cancelActive = Currency::defaultUpdate('id', $activeCurr->id, $dbData1);
-        $update = Currency::defaultUpdate('id', $idArray, $dbData);
-            $newCurr = Currency::firstRow('active_status','1');
-            $holdArr = [];
-            $holdArr['id'] = $newCurr->id;
-            $holdArr['code'] = $newCurr->code;
-            $holdArr['currency'] = $newCurr->currency;
-            $holdArr['symbol'] = $newCurr->symbol;
-            $holdArr['active_status'] = $newCurr->active_status;
-            $holdArr['status'] = $newCurr->status;
-            session(['currency' => $holdArr]);
 
-        return response()->json([
-            'message2' => 'changed successfully',
-            'message' => 'Status change'
-        ]);
-        }else{
-            return response()->json([
-                'message2' => 'rejected',
-                'message' => 'Currency already active'
+        Utility::checkExistingLedgerTrans();    //CHECK IF ANY TRANSACTION EXISTS IN THE LEDGER, IF NONE USER CAN CHANGE CURRENCY ELSE THEY CANNOT
+
+            if ($check > 0) {
+                $activeCurr = Currency::firstRow('active_status', '1');
+                $dbData1 = [
+                    'active_status' => '0'
+                ];
+                $dbData = [
+                    'active_status' => Utility::STATUS_ACTIVE,
+                ];
+                $cancelActive = Currency::defaultUpdate('id', $activeCurr->id, $dbData1);
+                $update = Currency::defaultUpdate('id', $idArray, $dbData);
+                $newCurr = Currency::firstRow('active_status', '1');
+                $holdArr = [];
+                $holdArr['id'] = $newCurr->id;
+                $holdArr['code'] = $newCurr->code;
+                $holdArr['currency'] = $newCurr->currency;
+                $holdArr['symbol'] = $newCurr->symbol;
+                $holdArr['active_status'] = $newCurr->active_status;
+                $holdArr['status'] = $newCurr->status;
+                session(['currency' => $holdArr]);
+
+                return response()->json([
+                    'message2' => 'changed successfully',
+                    'message' => 'Status change'
                 ]);
-        }
+            } else {
+                return response()->json([
+                    'message2' => 'Currency already active',
+                    'message' => 'rejected'
+                ]);
+            }
+
+
 
     }
 

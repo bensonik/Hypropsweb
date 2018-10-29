@@ -18,7 +18,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select  class="form-control" id="account_cat" name="account_category" >
+                                            <select  class="form-control" id="account_cat" onchange="displayOpeningBalance({{json_encode(\App\Helpers\Utility::NO_DEPRECIATION_ACCOUNT_CAT_DB_ID)}},'{{\App\Helpers\Utility::FIXED_ASSET_DB_ID}}','open_balance','depreciation_checkbox','account_cat');" name="account_category" >
                                                 <option value="">Account Category</option>
                                                 @foreach($accountCat as $ap)
                                                     <option value="{{$ap->id}}">{{$ap->category_name}}</option>
@@ -30,8 +30,8 @@
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <div class="form-line">
-                                            <select  class="form-control"  id="detail_type" name="detail_type" >
+                                        <div class="form-line" id="detail_type">
+                                            <select  class="form-control" name="detail_type" >
                                                 <option value="">Detail Type</option>
 
                                             </select>
@@ -42,7 +42,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select  class="form-control" id="account_cat" name="account_category" >
+                                            <select  class="form-control" id="" name="currency" >
                                                 <option value="">Currency</option>
                                                 @foreach($currency as $ap)
                                                     <option value="{{$ap->id}}">{{$ap->currency}}({{$ap->code}})</option>
@@ -53,14 +53,14 @@
                                 </div>
 
                             </div>
-
+                            <hr/>
                             <div class="row clear-fix">
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <b>Name</b>
+                                        <b>Account Name</b>
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="name" placeholder="Name">
+                                            <input type="text" class="form-control" name="account_name" placeholder="Name">
                                         </div>
                                     </div>
                                 </div>
@@ -78,18 +78,18 @@
                                     <div class="form-group">
                                         <b>Account Number</b>
                                         <div class="form-line">
-                                            <input type="number" class="form-control" name="acct_number" placeholder="Account Number">
+                                            <input type="number" class="form-control" name="account_number" placeholder="Account Number">
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-
-                            <div class="row clear-fix">
+                            <hr/>
+                            <div class="row clear-fix" id="open_balance" style="display:none;">
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <b>Original Cost</b>
+                                        <b>Original Cost ({{\App\Helpers\Utility::defaultCurrency()}})</b>
                                         <div class="form-line">
                                             <input type="number" class="form-control" name="original_cost" placeholder="Original Cost">
                                         </div>
@@ -100,27 +100,27 @@
                                     <div class="form-group">
                                         <b>as of</b>
                                         <div class="form-line">
-                                            <textarea type="text" class="form-control datepicker" name="cost_date" placeholder="Date"></textarea>
+                                            <textarea type="text" class="form-control datepicker" name="cost_date" placeholder="Cost Date"></textarea>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-4" id="depreciation_checkbox" style="display:none;">
                                     <div class="form-group">
                                         <b>Track depreciation of this asset</b>
                                         <div class="form-line">
-                                            <input type="checkbox" id="dep_check" onchange="checkDepreciation('dep_check','depreciation');" class="form-control" name="track_dep" >
+                                            <input type="checkbox" id="dep_check" onchange="checkDepreciation('dep_check','depreciation');" value="checked" class="form-control" name="track_depreciation" >
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-
+                            <hr/>
                             <div class="row clear-fix" style="display:none" id="depreciation">
 
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        <b>Depreciation Cost</b>
+                                        <b>Depreciation Cost ({{\App\Helpers\Utility::defaultCurrency()}})</b>
                                         <div class="form-line">
                                             <input type="number" class="form-control" name="depreciation" placeholder="Depreciation">
                                         </div>
@@ -131,12 +131,15 @@
                                     <div class="form-group">
                                         <b>as of</b>
                                         <div class="form-line">
-                                            <textarea type="text" class="form-control datepicker" name="cost_date" placeholder="Date"></textarea>
+                                            <input type="text" class="form-control datepicker" name="depreciation_date" placeholder="Depreciation Date">
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
+
+                            @include('includes.closing_books_password')
+
 
                         </div>
 
@@ -190,9 +193,21 @@
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('account_chart'); ?>',
-                                    '<?php echo url('delete_account_chart'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
-                                <i class="fa fa-trash-o"></i>Delete
+                            <button type="button" onclick="deleteChartAccount('kid_checkbox','reload_data','<?php echo url('account_chart'); ?>',
+                                    '<?php echo url('delete_account_chart'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
+                                <i class="fa fa-close"></i>Delete
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('account_chart'); ?>',
+                                    '<?php echo url('change_account_chart_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i>Enable Account
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('account_chart'); ?>',
+                                    '<?php echo url('change_account_chart_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
+                                <i class="fa fa-close"></i>Disable Account
                             </button>
                         </li>
                         <li class="dropdown">
@@ -225,7 +240,8 @@
                             <th>Account Name</th>
                             <th>Account Category</th>
                             <th>Detail Type</th>
-                            <th>Account Balance</th>
+                            <th>Default Account Balance {{\App\Helpers\Utility::defaultCurrency()}}</th>
+                            <th>Foreign Account Balance </th>
                             <th>Created by</th>
                             <th>Created at</th>
                             <th>Updated by</th>
@@ -245,7 +261,8 @@
                             <td>{{$data->acct_name}}</td>
                             <td>{{$data->category->category_name}}</td>
                             <td>{{$data->detail->detail_type}}</td>
-                            <td>{{$data->journal->trans_curr}}{{$data->journal->trans_amount}}</td>
+                            <td>{{$data->normal_balance}}</td>
+                            <td>({{$data->chartCurr->code}}){{$data->chartCurr->symbol}}{{$data->foreign_balance}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -287,79 +304,42 @@
     function checkDepreciation(reqType_id,project_id){
         var projId = $('#'+project_id);
         var reqValue = $('#'+reqType_id).val();
-        if(reqValue == 1){
+        var reqValue = $('#'+reqType_id).is(':checked');
+        if(reqValue){
             projId.show();
-        }
-        if(reqValue == ''){
+        }else{
             projId.hide();
         }
 
     }
 
-    function saveInventoryAssign(formModal,formId,submitUrl,reload_id,reloadUrl,token,item,user,qty,location,desc) {
-        var inputVars = $('#' + formId).serialize();
-        var summerNote = '';
-        var htmlClass = document.getElementsByClassName('t-editor');
-        if (htmlClass.length > 0) {
-            summerNote = $('.summernote').eq(0).summernote('code');
-            ;
+    function displayOpeningBalance(jsonArr,numb,open_bal_id,dep_checkbox_id,select_val_id){
+        var openBal = $('#'+open_bal_id);
+        var depId = $('#'+dep_checkbox_id);
+        var selVal = $('#'+select_val_id).val();
+        //alert(selVal+'okay'+'loopjsonval='+checkArrItem(jsonArr,selVal)+'json='+jsonArr);
+        if(checkArrItem(jsonArr,selVal) != ''){
+            $('#depreciation_checkbox').hide();
+            openBal.show();
         }
 
-        var itemId = classToArray(item);
-        var username = classToArray(user);
-        var quantity = classToArray(qty);
-        var loc = classToArray(location);
-        var description = classToArray(desc)
-        var jUsername = JSON.stringify(username);
-        var jItemId = JSON.stringify(itemId);
-        var jQuantity = JSON.stringify(quantity);
-        var jDesc = JSON.stringify(description);
-        var jLoc = JSON.stringify(loc);
-        //alert(jdesc);
-
-        if(arrayItemEmpty(itemId) == false){
-        var postVars = inputVars + '&editor_input=' + summerNote+'&item='+jItemId+'&user='+jUsername+'&location='+jLoc+'&qty='+jQuantity;
-
-            $('#loading_modal').modal('show');
-        $('#' + formModal).modal('hide');
-        sendRequestForm(submitUrl, token, postVars)
-        ajax.onreadystatechange = function () {
-            if (ajax.readyState == 4 && ajax.status == 200) {
-
-                $('#loading_modal').modal('hide');
-                var rollback = JSON.parse(ajax.responseText);
-                var message2 = rollback.message2;
-                if (message2 == 'fail') {
-
-                    //OBTAIN ALL ERRORS FROM PHP WITH LOOP
-                    var serverError = phpValidationError(rollback.message);
-
-                    var messageError = swalFormError(serverError);
-                    swal("Error", messageError, "error");
-
-                } else if (message2 == 'saved') {
-
-                    var successMessage = swalSuccess('Data saved successfully');
-                    swal("Success!", "Data saved successfully!", "success");
-
-                } else {
-
-                    var infoMessage = swalWarningError(message2);
-                    swal("Warning!", infoMessage, "warning");
-
-                }
-
-                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                reloadContent(reload_id, reloadUrl);
-                location.reload();
-            }
+        if(selVal == numb){
+            openBal.show();
+            depId.show();
+            $('#depreciation_checkbox').show();
         }
-        //END OF OTHER VALIDATION CONTINUES HERE
-        }else{
-            swal("Warning!","Please, fill in all required fields to continue","warning");
+
+        if(selVal != numb && checkArrItem(jsonArr,selVal) == ''){
+            $('#depreciation_checkbox').hide();
+            openBal.hide();
+            depId.hide();
         }
+
+        fillNextInput(select_val_id,'detail_type','<?php echo url('default_select'); ?>','account_chart')
 
     }
+
+
 
 </script>
 

@@ -262,8 +262,8 @@ class WarehouseController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' warehouse has been used in another module and cannot be deleted'
+                'message2' => 'The '.count($unused).' warehouse has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

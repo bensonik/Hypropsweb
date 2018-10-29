@@ -237,7 +237,7 @@
 
                     <div class="row clear-fix">
                         @if(count($mainData) >0)
-                            Sum of Salary under process : {{number_format($salarySum)}}
+                            Sum of Net Salary Under Process : {{\App\Helpers\Utility::defaultCurrency()}} {{number_format($salarySum)}}
                         @endif
                     </div>
 
@@ -252,8 +252,8 @@
 
                             <th>User</th>
                             <th>Salary</th>
-                            <th>Total/Net Amount</th>
-                            <th>Bonus/Deduction</th>
+                            <th>Total/Net Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
+                            <th>Bonus/Deduction {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Bonus/Deduction Desc</th>
                             <th>Payroll Status</th>
                             <th>Pay Date</th>
@@ -274,8 +274,8 @@
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->userDetail->firstname}}&nbsp;{{$data->userDetail->lastname}} </td>
                             <td>{{$data->salary->salary_name}}</td>
-                            <td>{{$data->currency->symbol}}&nbsp;{{number_format($data->total_amount)}}</td>
-                            <td>{{$data->currency->symbol}} {{number_format($data->bonus_deduc)}}</td>
+                            <td>{{number_format($data->total_amount)}}</td>
+                            <td>{{number_format($data->bonus_deduc)}}</td>
                             <td>{{$data->bonus_deduc_desc}}</td>
                             <td>
                                 @if($data->payroll_status == \App\Helpers\Utility::PROCESSING)

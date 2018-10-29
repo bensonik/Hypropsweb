@@ -213,7 +213,7 @@
                             <th>Request Category</th>
                             <th>Request Type</th>
                             <th>Project Category</th>
-                            <th>Amount</th>
+                            <th>Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Requested by</th>
                             <th>Department</th>
                             <th>Approval Status</th>
@@ -246,7 +246,7 @@
                                 {{$data->project->project_name}}
                                 @endif
                             </td>
-                            <td>{{$data->currency->symbol}}{{number_format($data->amount)}}</td>
+                            <td>{{number_format($data->amount)}}</td>
                             <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>
                             <td>{{$data->department->dept_name}}</td>
                             <td>

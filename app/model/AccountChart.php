@@ -21,36 +21,67 @@ class AccountChart extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'salary_name' => 'required',
-        'salary_desc' => 'required',
-        'tax_system' => 'required',
-        'net_pay' => 'required',
-        'gross_pay' => 'required',
+        'account_category' => 'required',
+        'detail_type' => 'required',
+        'currency' => 'required',
+        'account_name' => 'required',
+        'account_number' => 'sometimes|nullable|numeric',
+        'depreciation_date' => 'sometimes|nullable',
+        'cost_date' => 'sometimes|nullable',
+        'original_cost' => 'sometimes|nullable',
+        'depreciation' => 'sometimes|nullable',
     ];
 
+    public static $mainRulesEdit = [
+
+        'currency' => 'required',
+        'account_name' => 'required',
+        'account_no' => 'sometimes|numeric',
+    ];
+
+    public function user_c(){
+        return $this->belongsTo('App\User','created_by','id');
+
+    }
+
+    public function user_u(){
+        return $this->belongsTo('App\User','updated_by','id');
+
+    }
+
     public function category(){
-        return $this->belongsTo('App\model\AccountCategory','acct_cat_id','id');
+        return $this->belongsTo('App\model\AccountCategory','acct_cat_id','id')->withDefault();
 
     }
 
     public function detail(){
-        return $this->belongsTo('App\model\AccountDetailType','detail_id','id');
+        return $this->belongsTo('App\model\AccountDetailType','detail_id','id')->withDefault();
 
     }
 
     public function transCurr(){
-        return $this->belongsTo('App\model\Currency','trans_curr','id');
+        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+
+    }
+
+    public function chartCurr(){
+        return $this->belongsTo('App\model\Currency','curr_id','id')->withDefault();
+
+    }
+
+    public function journalMany(){
+        return $this->hasMany('App\model\AccountJournal','chart_id','id');
 
     }
 
     public function journal(){
-        return $this->hasMany('App\model\AccountJournal','chart_id','id');
+        return $this->belongsTo('App\model\AccountJournal','chart_id','id');
 
     }
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P50);
         //return Utility::paginateAllData(self::table());
 
     }
@@ -158,6 +189,12 @@ class AccountChart extends Model
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+    }
+
+    public static function sumColumnDataCondition3($column, $post,$column2, $post2, $column3, $post3, $sumColumn)
+    {
+        return Utility::sumColumnDataCondition3(self::table(),$column, $post,$column2, $post2,$column3, $post3,$sumColumn);
 
     }
 

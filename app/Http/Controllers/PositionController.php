@@ -197,8 +197,8 @@ class PositionController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'warning',
-                'message' => 'The '.count($unused).' position(s) has been used in another module and cannot be deleted'
+                'message2' => 'The '.count($unused).' position(s) has been used in another module and cannot be deleted',
+                'message' => 'warning'
             ]);
 
         }

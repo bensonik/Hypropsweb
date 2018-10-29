@@ -94,6 +94,30 @@
         return validationErrors;
     }
 
+    function loopJson(jsonObject,val){
+        var data = "";
+        for(var k in jsonObject) {
+            if(jsonObject.hasOwnProperty(k)) {
+                //data += jsonObject[k];
+                if (jsonObject[k] == val) {
+                    data = val;
+                }
+            }
+        }
+        return data;
+    }
+
+    function checkArrItem(arr,val){
+        var data = "";
+        for(var i=0; i < arr.length; i++){
+            if(arr[i] == val){
+                data = val;
+            }
+        }
+
+        return data;
+    }
+
     //ADD GROUP OF CHECKED INPUT CHECKBOX INTO AN ARRAY
     function group_val(klass){
 
@@ -774,6 +798,35 @@
 
     }
 
+    function changeItemStatus(klass,reloadId,reloadUrl,submitUrl,token,status) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to change status ?",
+                    text: "This will enable/disable item!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
+                        swal("Deleted!", "Status of selected item(s) have been changed.", "success");
+                    } else {
+                        swal("Status change Cancelled", "Status remains the same :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
 
 
     function changeCurrencyStatus(klass,reloadId,reloadUrl,submitUrl,token,status) {
@@ -1092,6 +1145,62 @@
         }
 
     }
+
+    function deleteChartAccount(klass,reloadId,reloadUrl,submitUrl,token,status) {
+    var items = group_val(klass);
+    if (items.length > 0) {
+        if(status == 1){
+            swal({
+                    title: "Are you sure you want to delete this account(s) ?",
+                    text: "You won't be able to retrieve after approval!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token, status);
+                        swal("Deleted!", "Selected account(s) have been deleted.", "success");
+                    } else {
+                        swal("Delete Cancelled", "Account remains unchanged :)", "error");
+                    }
+                });
+        } else{ //END OF IF STATUS IS FOR APPROVAL AND NOT DENIAL
+
+            swal({
+                    title: "PLEASE IGNORE PASSWORD IF ACCOUNTS LAST TRANSACTION DATE IS AFTER THAT OF THE CLOSING BOOKS",
+                    text: "Password (Enter Password)",
+                    type: "input",
+                    inputPlaceholder: "Enter Password",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, remove!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function (denyReason) {
+                    if (denyReason === false) return false;
+                    if (denyReason  != '') {
+                        changeStatusMethodInput(klass, reloadId, reloadUrl, submitUrl, token, status, denyReason);
+                        swal("Deleted!", "Selected account(s) have been deleted.", "success");
+                    } else {
+                        changeStatusMethodInput(klass, reloadId, reloadUrl, submitUrl, token, status, denyReason);
+                        swal("Deleted!", "Selected account(s) have been deleted.", "success");
+                    }
+                });
+
+        }  //END OF IF STATUS IS FOR DENIAL AND NOT APPROVAL
+
+    }else{
+        alert('Please select an entry to continue');
+    }
+
+}
 
     function sumArray(input){
 

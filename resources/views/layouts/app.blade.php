@@ -475,6 +475,221 @@
                     </ul>
                 </li>
 
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">view_quilt</i>
+                            <span>PO/RFQ/Estimates</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="{{url('bin_type')}}">Request for Quote (RFQ)</a>
+                            </li>
+                            <li>
+                                <a href="{{url('bin')}}">Purchase Order</a>
+                            </li>
+                            <li>
+                                <a href="{{url('zone')}}">Create Estimate for Customer</a>
+                            </li>
+                        </ul>
+                    </li>
+                @endif
+
+
+            @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">domain</i>
+                            <span>Accounting Module </span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="{{url('financial_year')}}">Financial Year </a>
+                            </li>
+                            <li>
+                                <a href="{{url('closing_books')}}">Closing The Books</a>
+                            </li>
+                            <li>
+                                <a href="{{url('trans_class')}}">Create Transaction Class </a>
+                            </li>
+                            <li>
+                                <a href="{{url('trans_location')}}">Create Transaction Location</a>
+                            </li>
+                            <li>
+                                <a href="{{url('account_chart')}}">Chart of Accounts</a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Customer Transactions</span>
+                                </a>
+                                <ul class="ml-menu">
+
+                                    <li>
+                                        <a href="{{url('payroll')}}">
+                                            <span>Invoice</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Receive Payment</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Credit Memo</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Refund Receipt</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="{{url('closing_books')}}">Manage Payroll Tax</a>
+                            </li>
+                            <li>
+                                <a href="{{url('closing_books')}}">Manage Sales Tax</a>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Vendor Transactions</span>
+                                </a>
+                                <ul class="ml-menu">
+
+                                    <li>
+                                        <a href="{{url('payroll')}}">
+                                            <span>Create Expense</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Bills</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Pay Bills</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Vendor Credit</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Other</span>
+                                </a>
+                                <ul class="ml-menu">
+
+                                    <li>
+                                        <a href="{{url('payroll')}}">
+                                            <span>Bank Deposit</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Transfer</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Journal Entry</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Bank Reconciliation</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Reporting</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="javascript:void(0);" class="menu-toggle">
+                                            <span>Accountant Report</span>
+                                        </a>
+                                        <ul class="ml-menu">
+
+                                            <li>
+                                                <a href="{{url('payroll')}}">
+                                                    <span>Trial Balance</span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Balance Sheet</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url('payroll')}}">
+                                                    <span>General Ledger</span>
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Journal Entries</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Profit and Loss</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Transaction List by Date/Class</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Manage Account Payable</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url('payslip')}}">
+                                                    <span>Manage Account Receivable</span>
+                                                </a>
+                                            </li>
+
+
+                                        </ul>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url('payslip')}}">
+                                            <span>Payroll Slip</span>
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endif
+
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">next_week</i>
