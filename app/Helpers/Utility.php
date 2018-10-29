@@ -527,7 +527,6 @@ class Utility
     {
         $data = DB::table($table)
             ->where('status', self::STATUS_ACTIVE)
-            ->where('dept_id', $dept)
             ->orderBy('id','DESC')->get();
         $determiner = 0;
         if(count($data) >0) {
