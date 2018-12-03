@@ -75,12 +75,12 @@
                         <!--<li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>-->
-                        <li>
+                        {{--<li>
                             <button type="button" onclick="processPayroll('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
                                     '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','1','payrollForm');" class="btn btn-success">
                                 <i class="fa fa-check-square-o"></i>Process Payment
                             </button>
-                        </li>
+                        </li>--}}
                         <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
                                     '<?php echo url('delete_payroll'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">

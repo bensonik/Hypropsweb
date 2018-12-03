@@ -62,7 +62,12 @@ class Utility
     const CREDIT_OPENING_BALANCE_EQUITY = [3,4,2,5], DEBIT_OPENING_BALANCE_EQUITY = [7,8,9], OPENING_BALANCE_EQUITY_CHART_ID = 1, OPENING_BALANCE_DETAIL_ID = 51,
             OPENING_BALANCE_ACCOUNT_CATEGORY_ID =10;
 
+    const LINE_ITEM_DISCOUNT = 1, ONE_TIME_DISCOUNT = 0;
+    const SHIP_STATUS = [1 => 'PO sent to supplier', 2 => 'Actioned payment to supplier',
+        3 => 'Item Delivered to designated forwarder', 4 => 'Delivered to port', 5 =>'Custom clearing',
+        6 => 'Item Delivered to Client', 7 => 'Invoice Submitted to client', 8 => 'Close PO'];
 
+    const SALES_DESC = 2, PURCHASE_DESC = 1;
 
 
     public static function IMG_URL(){
@@ -586,7 +591,16 @@ class Utility
 
         if($startDate <= $endDate){
             $datediff = $endDate - $startDate;
-            return floor($datediff / (60 * 60 * 24));
+            //return floor($datediff / (60 * 60 * 24));
+            $count = 0;
+
+            while(date('Y-m-d', $startDate) < date('Y-m-d', $endDate)){
+                $count += date('N', $startDate) < 6 ? 1 : 0;
+                $startDate = strtotime("+1 day", $startDate);
+            }
+            return $count;
+
+
         }
         return 0;
     }
@@ -776,6 +790,12 @@ class Utility
     }
 
     public static function convertAmount($currCurrencyCode,$newCurrencyCode,$amount){
+        $defaultCurrStatus = self::firstRow2('currency','default_curr_status',self::STATUS_ACTIVE,'code',$newCurrencyCode);
+        if(!empty($defaultCurrStatus)){
+            $defaultCurr = $defaultCurrStatus->default_curr;
+            $converted = ($currCurrencyCode == $newCurrencyCode) ? $amount : $defaultCurr*$amount;
+            return round($converted,2);
+        }
         $curr = 'USD'.$currCurrencyCode;
         $data = DB::table('exchange_rate')
             ->where('status', self::STATUS_ACTIVE)
@@ -821,7 +841,7 @@ class Utility
     }
 
     public static function detectClosingBookStatus(){
-        $data = self::firstRow('closing_books','active_status',Utility::STATUS_ACTIVE);
+        $data = self::firstRow('closing_books','active_status',self::STATUS_ACTIVE);
         $detect = 0;
         if(!empty($data)){
             $detect = 1;
@@ -835,7 +855,7 @@ class Utility
             $detect = 1;
             return $detect;
         }
-        $closing = self::firstRow('closing_books','active_status',Utility::STATUS_ACTIVE);
+        $closing = self::firstRow('closing_books','active_status',self::STATUS_ACTIVE);
         if(self::detectClosingBookStatus() != self::STATUS_ACTIVE){
             if(self::standardDate($closing->closing_date) <= $transactionDate){
                 if(md5($closing->password) == md5($password)){
@@ -855,7 +875,7 @@ class Utility
     }
 
     public static function checkCurrencyActiveStatus(){
-        $data = self::firstRow('currency','active_status',Utility::STATUS_ACTIVE);
+        $data = self::firstRow('currency','active_status',self::STATUS_ACTIVE);
         if(empty($data)){
             return response()->json([
                 'message2' => 'Please, navigate to the configuration to activate system default currency',
@@ -874,7 +894,7 @@ class Utility
     }
 
     public static function checkFinYearActiveStatus(){
-        $checkFinYear = self::firstRow('financial_year','active_status',Utility::STATUS_ACTIVE);
+        $checkFinYear = self::firstRow('financial_year','active_status',self::STATUS_ACTIVE);
         if(empty($checkFinYear)){
             return response()->json([
                 'message2' => 'Please,create and activate a financial year to continue this process',
@@ -884,7 +904,22 @@ class Utility
     }
 
     public static function checkExistingLedgerTrans(){
-        $checkLedgerTrans = DB::table('company_info')
+        $checkLedgerTrans = DB::table('account_journal')
+            ->where('debit_credit', self::DEBIT_TABLE_ID)
+            ->orWhere('debit_credit', self::CREDIT_TABLE_ID)
+            ->where('status', self::STATUS_ACTIVE)->first();
+
+        if(!empty($checkLedgerTrans)) {
+            return response()->json([
+                'message2' => 'Currency cannot be changed, the general ledger already has existing transaction linked to this data',
+                'message' => 'rejected'
+            ]);
+        }
+    }
+
+    public static function checkVendorCustomerExistingLedgerTrans($id){
+        $checkLedgerTrans = DB::table('account_journal')
+            ->where('vendor_customer', $id)
             ->where('debit_credit', self::DEBIT_TABLE_ID)
             ->orWhere('debit_credit', self::CREDIT_TABLE_ID)
             ->where('status', self::STATUS_ACTIVE)->first();
@@ -923,6 +958,88 @@ class Utility
             }
         }
         return $detect;
+    }
+
+    public static function currencyExists($currencyDate){
+        $exRate = '';
+        $data =  DB::table('exchange_rate')->whereDate('created_at', self::standardDate($currencyDate))->first();
+        return empty($data) ? true : false;
+    }
+
+    public static function ratesBasedOnDate($currencyDate) {
+        $uid = "";
+        $data =  DB::table('exchange_rate')->whereDate('created_at', self::standardDate($currencyDate))->first();
+        if(!empty($data)){
+            return $data->rates;
+        }
+        else{
+
+            $newDate = date("Y-m-d");
+
+            $data = DB::table('exchange_rate')
+                ->where('status', self::STATUS_ACTIVE)
+                ->orderBy('id','DESC')->first();
+
+            return $data->rates;
+
+        }
+
+    }
+
+    public static function convertAmountToDate($currCurrencyCode,$newCurrencyCode,$amount,$postDate){
+
+        $defaultCurrStatus = self::firstRow2('currency','default_curr_status',self::STATUS_ACTIVE,'code',$newCurrencyCode);
+        if(!empty($defaultCurrStatus)){
+            $defaultCurr = $defaultCurrStatus->default_curr;
+            $converted = ($currCurrencyCode == $newCurrencyCode) ? $amount : $defaultCurr*$amount;
+            return round($converted,2);
+        }
+        $dateRates = self::ratesBasedOnDate($postDate);
+
+        $curr = 'USD'.$currCurrencyCode;
+        $rates = json_decode($dateRates,true);
+        $currRate = $rates['quotes'][$curr];
+        $dollarAmt = $amount/$currRate;
+        $new = 'USD'.$newCurrencyCode;
+        $newRate = $rates['quotes'][$new];
+        $converted = $dollarAmt*$newRate;
+        return round($converted,2);
+
+    }
+
+    public static function currencyRates($currCurrencyCode,$newCurrencyCode,$postDate){
+        $amount = 1;
+        $defaultCurrStatus = self::firstRow2('currency','default_curr_status',self::STATUS_ACTIVE,'code',$newCurrencyCode);
+        if(!empty($defaultCurrStatus)){
+            $defaultCurr = $defaultCurrStatus->default_curr;
+            $converted = ($currCurrencyCode == $newCurrencyCode) ? $amount : $defaultCurr*$amount;
+            return $converted;
+        }
+
+        $dateRates = self::ratesBasedOnDate($postDate);
+
+        $curr = 'USD'.$currCurrencyCode;
+
+        $rates = json_decode($dateRates,true);
+        $currRate = $rates['quotes'][$curr];
+        $dollarAmt = $amount/$currRate;
+        $new = 'USD'.$newCurrencyCode;
+        $newRate = $rates['quotes'][$new];
+        $converted = $dollarAmt*$newRate;
+        return $converted;
+
+
+
+    }
+
+    public static function warehouseData(){
+        $data =  DB::table('warehouse')->where('status', self::STATUS_ACTIVE)->get(['id','name','code']);
+        return $data;
+    }
+
+    public static function taxData(){
+        $data =  DB::table('tax')->where('status', self::STATUS_ACTIVE)->get();
+        return $data;
     }
 
 }

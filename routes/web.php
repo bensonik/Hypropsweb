@@ -94,6 +94,10 @@ Route::any('/currency_status', 'CurrencyController@currencyStatus')->name('curre
 Route::any('/add_more', 'GeneralController@addMore')->name('add_more');
 Route::any('/default_select', 'GeneralController@selectOptions')->name('select_options');
 Route::any('/get_currency', 'GeneralController@get_currency')->name('get_currency');
+Route::any('/exchange_rate', 'GeneralController@exchangeRate')->name('exchange_rate');
+Route::any('/vendor_customer_currency', 'GeneralController@vendorCustomerCurrency')->name('vendor_customer_currency');
+Route::any('/inventory_details', 'GeneralController@inventoryDetails')->name('inventory_details');
+Route::any('/amount_to_default_curr', 'GeneralController@convertToDefault')->name('amount_to_default_curr');
 
 // -------------COMPANY INFO MODULE-----------
 Route::any('/company', 'CompanyController@index')->name('user')->middleware('auth.admin');
@@ -425,3 +429,13 @@ Route::post('/edit_account_chart_form', 'AccountChartController@editForm')->name
 Route::post('/edit_account_chart', 'AccountChartController@edit')->name('edit_account_chart');
 Route::post('/delete_account_chart', 'AccountChartController@destroy')->name('delete_account_chart');
 Route::post('/change_account_chart_status', 'AccountChartController@changeStatus')->name('change_account_chart_status');
+
+// -------------PURCHASE ORDER MODULE-----------
+Route::any('/purchase_order', 'PurchaseOrderController@index')->name('inventory')->middleware('auth');
+Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_form');
+Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
+Route::post('/edit_po', 'PurchaseOrderController@edit')->name('edit_po');
+Route::any('/search_po', 'PurchaseOrderController@searchInventory')->name('search_po');
+Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
+Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delete_po_item');
+Route::post('/change_po_status', 'PurchaseOrderController@changeStatus')->name('change_po_status');

@@ -50,6 +50,7 @@
 
     <!-- Jquery Core Js -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
 
 </head>
 
@@ -486,7 +487,7 @@
                                 <a href="{{url('bin_type')}}">Request for Quote (RFQ)</a>
                             </li>
                             <li>
-                                <a href="{{url('bin')}}">Purchase Order</a>
+                                <a href="{{url('purchase_order')}}">Purchase Order</a>
                             </li>
                             <li>
                                 <a href="{{url('zone')}}">Create Estimate for Customer</a>
@@ -1424,6 +1425,7 @@
     });*/
 
     getCurrency('{{url('get_currency')}}','{{csrf_token()}}');
+    exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
 </script>
 
 </body>

@@ -167,6 +167,14 @@ class AccountChart extends Model
 
     }
 
+    public static function massDataMassCondition($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
     public static function firstRow($column, $post)
     {
         //return Utility::firstRow(self::table(),$column, $post);
@@ -196,6 +204,13 @@ class AccountChart extends Model
     {
         return Utility::sumColumnDataCondition3(self::table(),$column, $post,$column2, $post2,$column3, $post3,$sumColumn);
 
+    }
+
+    public static function searchAccount($value){
+        return static::where('account_chart.status', '=','1')
+            ->where(function ($query) use($value){
+                $query->where('account_chart.acct_name','LIKE','%'.$value.'%')->orWhere('account_chart.acct_no','LIKE','%'.$value.'%');
+            })->get();
     }
 
 

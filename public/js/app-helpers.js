@@ -1218,6 +1218,22 @@
         return total;
     }
 
+    function sumArrayItems(input){
+
+        if (toString.call(input) !== "[object Array]")
+            return false;
+
+        var total =  0;
+        for(var i=0;i<input.length;i++)
+        {
+            if(isNaN(input[i])){
+                continue;
+            }
+            total += Number(input[i]);
+        }
+        return total;
+    }
+
 
     function permDelete(bomId,page,bomIdVal){
             var bomVal = $('#'+bomIdVal).val();
@@ -1232,6 +1248,276 @@
 
 
         }
+
+        //////////////////////////// ITEM AND ACCOUNT METHODS INVOLVED IN CALCULATION OF VARIOUS INPUT AMOUNT FIELDS ////////////////
+
+//SHOW EXCHANGE RATE EQUIVALENT TO DEFAULT CURRENCY AT A PARTICULAR DATE
+    function exchangeRate(vendorId,exRateId,postDateId,page){
+
+        setInterval(function(){
+            var vendorVal = $('#'+vendorId).val();
+            var postDate = $('#'+postDateId).val();
+            //alert(vendorVal);
+            if(vendorVal != ''){
+                $.ajax({
+                    url: page+'?post_date=' + postDate+'&search_id='+vendorVal
+                }).done(function(data){
+                    $('#'+exRateId).val(data.rate);
+                });
+            }
+        },100000)
+
+    }
+
+    function searchOptionListVenCust(searchId,listId,page,moduleType,hiddenId,currencyClass,currPage){
+        var pickedVal = $('#'+searchId).val();
+        $('#'+listId).show();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId
+        }).done(function(data){
+            $('#'+listId).html(data);
+            //fetchVendCustCurr(pickedVal,currencyClass,currPage);
+
+        });
+    }
+
+    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId){
+        var pickedVal = $('#'+searchId).val();
+        $('#'+listId).show();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId
+        }).done(function(data){
+            $('#'+listId).html(data);
+
+        });
+    }
+
+    function fetchVendCustCurr(searchId,currencyClass,page) {
+        var pickedVal = $('#'+searchId).val();
+        $.ajax({
+            url:  page+'?search_id='+pickedVal
+        }).done(function(data){
+            var all = document.getElementsByClassName(currencyClass);
+            for(var i=0; i < all.length; i++){
+                var column = all[i];
+                column.innerHTML +=data.currency;
+            }
+            $('#billing_address').val(data.billing_address);
+            $('#curr_rate').val(data.rate);
+
+        });
+
+    }
+
+    function fetchInventory(searchId,bill_invoice,page,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage) {
+        var pickedVal = $('#'+searchId).val();
+        $.ajax({
+            url:  page+'?search_id='+pickedVal+'&bill_invoice'+bill_invoice
+        }).done(function(data){
+            //console.log(data);
+            $('#'+descId).val(data.item_desc);
+            $('#'+rateId).val(data.rate);
+            $('#'+unitMId).val(data.unit_measure);
+            $('#'+subTotalId).val(data.rate);
+
+            var sumToArray = classToArray2(sharedSumClass);
+            var sumArray = sumArrayItems(sumToArray);
+
+            $('#'+overallSumId).val(sumArray);
+
+            convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+
+        });
+
+
+
+    }
+
+    function itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
+        var amount = $('#'+amountId);
+        var rate = $('#'+rateId).val();
+        var item = $('#'+itemId).val();
+        var discount = $('#'+discountAmountId);
+        var tax = $('#'+taxAmountId);
+        var qty = (('#'+qtyId).val() != '') ? $('#'+qtyId).val() : 0;
+        var discountA = (discount != '') ? discount.val() : 0;
+        var taxA = (tax.val() != '') ? tax.val() : 0;
+        if(rate != '' && item != ''){
+            var real_amount = qty*rate;
+            var new_amount = (real_amount-discountA) - taxA;
+            amount.val(new_amount);
+            var sumToArray = classToArray(sharedSumClass);
+            var sumArray = sumArrayItems(sumToArray);
+            $('#'+overallSumId).val(sumArray);
+            convertToDefaultCurr(foreignCurrId,sumArray,defaultCurrPage)
+
+        }else{
+            alert('Please select an item and enter quantity');
+        }
+    }
+
+    function accountSum(amountId,accountId,rateId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
+        var amount = $('#'+amountId);
+        var rate = $('#'+rateId).val();
+        var account = $('#'+accountId);
+        var discount = $('#'+discountAmountId);
+        var tax = $('#'+taxAmountId);
+        var discountA = (discount != '') ? discount.val() : 0;
+        var taxA = (tax.val() != '') ? tax.val() : 0;
+        if(account.val() != ''){
+            var new_amount = (rate-discountA) - taxA;
+            amount.val(new_amount);
+            var sumToArray = classToArray(sharedSumClass);
+            var sumArray = sumArrayItems(sumToArray);
+            $('#'+overallSumId).val(sumArray);
+            convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+
+        }else{
+            alert('Please select an account and enter rate/amount');
+        }
+    }
+
+    function percentToAmount(percentId,perctAmountId,amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
+        var percent = $('#'+percentId).val();
+        var perctAmount = $('#'+perctAmountId);
+        var amount = $('#'+amountId);
+        var rate = $('#'+rateId).val();
+        var item = $('#'+itemId).val();
+        var discount = $('#'+discountAmountId);
+        var tax = $('#'+taxAmountId);
+        var qty = '';
+        if(qtyId != ''){
+             qty = (('#'+qtyId).val() != '') ? $('#'+qtyId).val() : 0;
+        }
+
+        if(rate != '' && item != ''){
+            var real_amount = (qtyId == '') ? rate : qty*rate;
+            var percentage = (percent/100)*real_amount;
+            perctAmount.val(percentage);
+            var discountA = (discount.val() != '') ? discount.val() : 0;
+            var taxA = (tax.val() != '') ? tax.val() : 0;
+            var new_amount = (real_amount-discountA) - taxA;
+
+            amount.val(new_amount);
+
+            var sumToArray = classToArray(sharedSumClass);
+            var sumArray = sumArrayItems(sumToArray);
+            $('#'+overallSumId).val(sumArray);
+            console.log(new_amount+'disc'+discountA+'sumarray='+sumArray);
+            convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+        }else{
+            alert('Please select an item/account and enter quantity if necessary');
+        }
+
+    }
+
+    function fillNextInputTax(value_id,displayId,page,moduleType,amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
+        var pickedVal = $('#'+value_id).val();
+
+        if(pickedVal != ''){
+            $.ajax({
+                url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
+            }).done(function(data){
+                $('#'+displayId).html(data);
+
+                itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage)
+            });
+        }
+
+    }
+
+    function fillNextInputTaxAcc(value_id,displayId,page,moduleType,amountId,rateId,accountId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
+        var pickedVal = $('#'+value_id).val();
+
+        if(pickedVal != ''){
+            $.ajax({
+                url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
+            }).done(function(data){
+                $('#'+displayId).html(data);
+
+                accountSum(amountId,accountId,rateId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage);
+            });
+        }
+
+    }
+
+    function convertToDefaultCurr(repId,amountId,page){
+        var amount = $('#'+amountId).val();
+        var vendorCust = $('#vendorCust').val();
+        var postDate = $('#posting_date').val();
+        $.ajax({
+            url: page+'?amount=' + amount+'&vendorCust='+vendorCust+'&postDate='+postDate
+        }).done(function(data){
+            $('#'+repId).val(data.overall_sum);
+        });
+    }
+
+    function dropdownItemTransact(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,amountId,currPage,currencyClass) {
+        $("#"+valDisplayId).val(val);
+        $("#"+hiddenValId).val(hiddenVal);
+        $("#"+dropdownId).hide();
+
+        var amount = $("#"+amountId).val();
+        fetchVendCustCurr(hiddenValId,currencyClass,currPage);
+
+        //CONVERT SELECTED VENDOR CURRENCY TO DEFAULT CURRENCY IN CASE THERE IS EXISTING TOTAL SUM
+        if(amount != 0 && amount != ''){
+            convertToDefaultCurr(hiddenValId,amountId,currPage)
+        }
+
+    }
+
+    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage) {
+        $("#"+valDisplayId).val(val);
+        $("#"+hiddenValId).val(hiddenVal);
+        $("#"+dropdownId).hide();
+
+        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage);
+
+    }
+
+    function removeInputCalc(show_id,ghost_class,addUrl,type,all_new_fields_class,unique_num,addButtonId,hideButtonId,amtId,sumTotalId,currRep,currPage) {
+
+        var amt = $('#'+amtId).val();
+
+        //MINUS SINGLE LINE AMOUNT FROM SUM TOTAL AMOUNT TO BE REMOVED
+        if(amt != ''){
+            var newAmt = $('#'+sumTotalId).val() - amt;
+
+            $('#'+sumTotalId).val(newAmt);
+        }else{
+            $('#'+sumTotalId).val(0);
+        }
+
+        var get_class = document.getElementsByClassName(all_new_fields_class);
+        var addButtons = document.getElementsByClassName('addButtons');
+        if(addButtons.length < 1 ) {
+
+            if (addButtons.length < 1) {
+                prevAddId.style.display = 'block';
+            }
+        }
+        $('.' + ghost_class).remove();
+        var show_all = document.getElementById(hideButtonId);
+        var show_button = '';
+
+        show_button += '<tr><td></td><td></td><td></td><td>';
+        show_button += '<div style="cursor: pointer;" onclick="addMore(';
+
+        show_button += "'"+addButtonId+"','"+hideButtonId+"','1','" + addUrl + "','"+type+"','"+hideButtonId+"');";
+        show_button += '">';
+        show_button += '<i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></div>';
+        show_button += '</tr>';
+        if (get_class.length === 0) {
+
+            show_all.innerHTML =show_button;
+            show_all.style.display = 'block';
+        }
+        convertToDefaultCurr(currRep,sumTotalId,currPage);
+
+    }
+
+        ///////////////////////////  END OF ITEM AND ACCOUNT METHODS CALCULATION METHODS  //////////////////////
 
     function numONLY (e) {
         // Allow: backspace, delete, tab, escape, enter and .

@@ -3,12 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\model\AccountCategory;
+use App\model\AccountChart;
 use App\model\AccountDetailType;
 use App\model\AccountJournal;
 use App\model\CompetencyFramework;
+use App\model\Currency;
 use App\model\SalaryComponent;
 use App\model\SkillCompCat;
 use App\model\Inventory;
+use App\model\UnitMeasure;
+use App\model\Warehouse;
+use App\model\Tax;
 use View;
 use Validator;
 use Input;
@@ -127,6 +132,34 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
+        //SEARCH VENDOR FOR TRANSACTIONS
+        if($type == 'search_vendor_transact'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = VendorCustomer::searchVendor($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $user_ids);
+            }else{
+
+                $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
         //SEARCH INVENTORY
         if($type == 'search_inventory'){
 
@@ -155,6 +188,47 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
+        //SEARCH INVENTORY TRANSACT
+        if($type == 'search_inventory_transact'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            $descId = $_GET['descId'];
+            $rateId = $_GET['rateId'];
+            $unitMId = $_GET['unitMId'];
+            $subTotalId = $_GET['subTotalId'];
+
+            $sharedSubTotal = $_GET['sharedSubTotal'];
+            $overallSum = $_GET['overallSum'];
+            $foreignOverallSum = $_GET['foreignOverallSum'];
+
+            if($pickedVal != '') {
+                $search = Inventory::searchInventory($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = Inventory::massData('id', $user_ids);
+            }else{
+
+                $fetchData = Inventory::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                    ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
+                    ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
+                ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum);
+        }
+
         //FOR COMPETENCY CATEGORY
         if($type == 'search_comp_cat'){
             $pro_qual = [];
@@ -165,34 +239,6 @@ class GeneralController extends Controller
 
         }
 
-        //SEARCH_CUSTOMER
-        if($type == 'search_customer'){
-
-            $searchId = $_GET['searchId'];
-            $hiddenId = $_GET['hiddenId'];
-            $listId = $_GET['listId'];
-
-            if($pickedVal != '') {
-                $search = User::searchUser($pickedVal);
-                $obtain_array = [];
-
-                foreach ($search as $data) {
-
-                    $obtain_array[] = $data->uid;
-                }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = (Auth::user()->id == 3) ? User::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
-                    : User::massData('uid', $user_ids);
-            }else{
-
-                $fetchData = User::getAllData();
-                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
-            }
-
-            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
-        }
 
         //FOR COMPETENCY FRAMEWORK
         if($type == 'dept_frame_tech'){
@@ -242,6 +288,47 @@ class GeneralController extends Controller
 
         }
         //END OF ACCOUNT CHART
+
+        //SEARCH ACCOUNT CHART
+        if($type == 'search_accounts'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = AccountChart::searchAccount($pickedVal);
+
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+
+                $account_ids = array_unique($obtain_array);
+                //print_r($account_ids); exit();
+                $fetchData =  AccountChart::massDataCondition('id', $account_ids, 'active_status', Utility::STATUS_ACTIVE);
+            }else{
+
+                $fetchData = AccountChart::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+        //END OF SEARCH ACCOUNT CHART
+
+        //BEGIN OF GET TAX PERCENTAGE
+        if($type == 'get_tax'){
+            //print_r($pickedVal);exit();
+            $optionArray = Tax::firstRow('id',$pickedVal);
+            return $optionArray->sum_percentage;
+
+        }
+        //END OF GET TAX PERCENTAGE
 
 
     }
@@ -407,6 +494,25 @@ class GeneralController extends Controller
         }
         //END OF ADDING BILL OF MATERIALS
 
+        //START OF ADDING PURCHASE ORDER
+        if($type == 'po'){
+            $warehouse = Warehouse::getAllData();
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('warehouse',$warehouse)->with('tax',$tax);
+        }
+        //END OF ADDING PURCHASE ORDER
+
+        //START OF ADDING ACCOUNTS
+        if($type == 'acc'){
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('tax',$tax);
+        }
+        //END OF ADDING ACCOUNTS
+
 
     }
     /**
@@ -444,47 +550,102 @@ class GeneralController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Get equivalent exchange rate of default currency
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function exchangeRate(Request $request)
     {
-        //
+        //post_date=' + postDate+'&vendor_id='+vendorVal
+        $postDate = $request->input('post_date');
+        $searchId = $request->input('search_id');
+        $searchData = VendorCustomer::firstRow('id',$searchId);
+        $searchCurrency = Currency::firstRow('id',$searchData->currency_id);
+        $currency = '('.$searchCurrency->code.')'.$searchCurrency->symbol;
+        $exRate = Utility::currencyRates(Utility::currencyArrayItem('code'),$searchCurrency->code,$postDate);
+
+        return response()->json([
+
+            'rate' => $currency.$exRate
+        ]);
+
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * GET CURRENCY OF CUSTOMER/VENDOR WHEN THEY ARE SELECTED FROM A DROP DOWN
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function vendorCustomerCurrency(Request $request)
     {
         //
+        $searchId = $request->input('search_id');
+        $searchData = VendorCustomer::firstRow('id',$searchId);
+        $searchCurrency = Currency::firstRow('id',$searchData->currency_id);
+        $currency = '('.$searchCurrency->code.')'.$searchCurrency->symbol;
+        $amount = 1;
+        $postDate = date('Y-m-d');
+        $currAmount = Utility::convertAmountToDate(Utility::currencyArrayItem('code'),$searchCurrency->code,$amount,$postDate);
+
+        return response()->json([
+            'billing_address' => $searchData->address,
+            'currency' => $currency,
+            'rate' => $currency.$currAmount
+        ]);
+
     }
 
     /**
-     * Update the specified resource in storage.
+     * FETCH INVENTORY DETAILS WHEN AN INVENTORY ITEM IS SELECTED.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function inventoryDetails(Request $request)
     {
         //
+        $searchId = $request->input('search_id');
+        $searchData = Inventory::firstRow('id',$searchId);
+        $unitMeasure = UnitMeasure::firstRow('id',$searchData->unit_measure);
+
+        $item_desc = ($request->input('bill_invoice_type') == Utility::PURCHASE_DESC) ? $searchData->purchase_desc : $searchData->sales_desc ;
+        return response()->json([
+            'rate' => $searchData->unit_cost,
+            'unit_measure' => $unitMeasure->unit_name,
+            'item_desc' => $item_desc
+        ]);
+
     }
 
     /**
-     * Remove the specified resource from storage.
+     * CONVERT AMOUNT TO DEFAULT.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function convertToDefault(Request $request)
     {
         //
+
+        $amount = $request->input('amount');
+        $vendorCust = $request->input('vendorCust');
+        if($vendorCust == ''){
+            return $amount;
+        }
+        $postDate = ($request->input('postDate') == '') ? date("Y-m-d") : $request->input('postDate');
+        $data = VendorCustomer::firstRow('id',$vendorCust);
+        $dataCurr = $data->currency_id;
+        $curr = Currency::firstRow('id',$dataCurr);
+        $currAmount = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$amount,$postDate);
+        //print_r($curr); exit();
+        return response()->json([
+            'overall_sum' => $currAmount,
+        ]);
+
     }
+
+
 }

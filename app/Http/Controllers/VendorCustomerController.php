@@ -173,7 +173,7 @@ class VendorCustomerController extends Controller
 
             $photo = $request->get('prev_photo');
 
-            Utility::checkExistingLedgerTrans();
+            Utility::checkVendorCustomerExistingLedgerTrans($request->input('edit_id'));
 
             if($request->hasFile('photo')){
 

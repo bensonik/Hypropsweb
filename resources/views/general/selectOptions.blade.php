@@ -19,6 +19,16 @@
     @endforeach
 @endif
 
+@if($type == 'search_vendor_transact' || $type == 'search_customer_transact')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','overall_sum','<?php echo url('vendor_customer_currency') ?>','foreign_amount');">{{$data->name}} ({{$data->email1}})</a>
+        </li>
+
+    @endforeach
+@endif
+
 @if($type == 'search_inventory')
     @foreach($optionArray as $data)
 
@@ -28,6 +38,28 @@
 
     @endforeach
 @endif
+
+@if($type == 'search_inventory_transact')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItemInv('{{$searchId}}','{{$data->item_name}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{\App\Helpers\Utility::PURCHASE_DESC}}','<?php echo url('inventory_details') ?>','{{$descId}}','{{$rateId}}','{{$unitMId}}','{{$subTotalId}}','{{$sharedSubTotal}}','{{$overallSum}}','{{$foreignOverallSum}}','<?php echo url('amount_to_default_curr') ?>');">{{$data->item_name}}</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'search_accounts')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{ $data->acct_name.' ('.$data->acct_no.')' }}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{ $data->acct_name.' ('.$data->acct_no.')' }}</a>
+        </li>
+
+    @endforeach
+@endif
+
+
 
 @if($type == 'search_comp_cat')
 

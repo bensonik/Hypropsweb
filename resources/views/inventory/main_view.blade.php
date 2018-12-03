@@ -225,7 +225,7 @@
                                     <div class="col-sm-4">
                                         <b>Amount</b>
                                         <div class="input-group">
-                                            <span class="input-group-addon">{{$currSymbol}}</span>
+                                            <span class="input-group-addon">{{\App\Helpers\Utility::defaultCurrency()}}</span>
                                             <div class="form-line">
                                                 <input type="text"  class="form-control bom_amount bom_amt" id="ext_amount"  name="bom_amount" placeholder="Amount" >
                                             </div>
@@ -294,7 +294,7 @@
                                 <div class="col-md-4">
                                     <b>Unit Price</b>
                                     <div class="input-group">
-                                        <span class="input-group-addon">{{$currSymbol}}</span>
+                                        <span class="input-group-addon">{{\App\Helpers\Utility::defaultCurrency()}}</span>
                                         <div class="form-line">
                                             <input type="number" class="form-control " name="unit_price" placeholder="Unit Price" >
                                         </div>
@@ -766,20 +766,13 @@
 
             if(amt != ''){
                 var newAmt = $('#'+unitCostId).val() - amt;
-                //var newAmtEdit = $('#'+unitCostIdEdit).val() - amt;
 
                 $('#'+unitCostId).val(newAmt);
-                //$('#'+unitCostIdEdit).val(newAmtEdit);
-                //console.log(newAmtEdit);
             }else{
                 $('#'+unitCostId).val(0);
-               // $('#'+unitCostIdEdit).val(0);
             }
 
             var get_class = document.getElementsByClassName(all_new_fields_class);
-            //var currAddId = _('hide_button'+unique_num);
-            //var prevNum = unique_num - 1;
-            //var prevAddId = _('hide_button'+prevNum);
             var addButtons = document.getElementsByClassName('addButtons');
             if(addButtons.length < 1 ) {
 
@@ -788,10 +781,6 @@
                 }
             }
             $('.' + ghost_class).remove();
-            /*for (var i = 0; i < get_class.length; i++) {
-             //get_class[i].parentNode.removeChild(get_class[i]);
-             }*/
-            //var show_all = document.getElementById(show_id);
             var show_all = document.getElementById(hideButtonId);
             var show_button = '';
 
