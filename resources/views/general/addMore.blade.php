@@ -1453,7 +1453,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" acc_tax shared_tax acc_tax_edit" name="tax" id="tax_acc{{$num2}}"
-                                onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sum','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                                onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                             @foreach($tax as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach
@@ -1469,7 +1469,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" acc_tax_perct shared_tax_perct acc_tax_perct_edit" name="tax_perct" id="tax_perct_acc{{$num2}}" placeholder="Tax Percentage"
-                               onkeyup="percentToAmount('tax_perct_acc{{$num2}}','tax_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                               onkeyup="percentToAmount('tax_perct_acc{{$num2}}','tax_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                     </div>
                 </div>
             </div>
