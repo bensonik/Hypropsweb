@@ -203,6 +203,7 @@ class GeneralController extends Controller
             $sharedSubTotal = $_GET['sharedSubTotal'];
             $overallSum = $_GET['overallSum'];
             $foreignOverallSum = $_GET['foreignOverallSum'];
+            $qtyId = $_GET['qtyId'];
 
             if($pickedVal != '') {
                 $search = Inventory::searchInventory($pickedVal);
@@ -220,13 +221,15 @@ class GeneralController extends Controller
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                     ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
-                    ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum);
+                    ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
+                    ->with('qtyId',$qtyId);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                 ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
-                ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum);
+                ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
+                ->with('qtyId',$qtyId);
         }
 
         //FOR COMPETENCY CATEGORY
@@ -646,6 +649,20 @@ class GeneralController extends Controller
         ]);
 
     }
+
+    //GET ITEM RATES
+    public function getRate(Request $request)
+    {
+        //
+        $searchId = $request->input('itemId');
+        $searchData = Inventory::firstRow('id',$searchId);
+        return response()->json([
+            'rate' => $searchData->unit_cost,
+            'itemId' => $searchData->id,
+        ]);
+
+    }
+
 
 
 }

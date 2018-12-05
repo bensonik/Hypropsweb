@@ -1265,7 +1265,25 @@
                     $('#'+exRateId).val(data.rate);
                 });
             }
-        },100000)
+        },2000)
+
+    }
+
+    function searchOptionListAcc(searchId,listId,page,moduleType,hiddenId,vendCustId){
+        var pickedVal = $('#'+searchId).val();
+        var vendCustVal = $('#'+vendCustId).val();
+        if(vendCustVal != ''){
+
+            $('#'+listId).show();
+            $.ajax({
+                url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId
+            }).done(function(data){
+                $('#'+listId).html(data);
+            });
+
+        }else{
+            swal("Warning!", 'Please Select Vendor/Customer to continue', "warning");
+        }
 
     }
 
@@ -1276,20 +1294,24 @@
             url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId
         }).done(function(data){
             $('#'+listId).html(data);
-            //fetchVendCustCurr(pickedVal,currencyClass,currPage);
-
         });
     }
 
-    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId){
+    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
+        var vendCustVal = $('#'+vendCustId).val();
+        if(vendCustVal != ''){
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId
         }).done(function(data){
             $('#'+listId).html(data);
 
         });
+
+        }else{
+            swal("Warning!", 'Please Select Vendor/Customer to continue', "warning");
+        }
     }
 
     function fetchVendCustCurr(searchId,currencyClass,page) {
@@ -1309,51 +1331,123 @@
 
     }
 
-    function fetchInventory(searchId,bill_invoice,page,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage) {
+    function fetchInventory(searchId,bill_invoice,page,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId) {
         var pickedVal = $('#'+searchId).val();
-        $.ajax({
-            url:  page+'?search_id='+pickedVal+'&bill_invoice'+bill_invoice
-        }).done(function(data){
-            //console.log(data);
-            $('#'+descId).val(data.item_desc);
-            $('#'+rateId).val(data.rate);
-            $('#'+unitMId).val(data.unit_measure);
-            $('#'+subTotalId).val(data.rate);
-
-            var sumToArray = classToArray2(sharedSumClass);
-            var sumArray = sumArrayItems(sumToArray);
-
-            $('#'+overallSumId).val(sumArray);
-
-            convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
-
-        });
 
 
+            $.ajax({
+                url:  page+'?search_id='+pickedVal+'&bill_invoice'+bill_invoice
+            }).done(function(data){
+                //console.log(data);
+                $('#'+descId).val(data.item_desc);
+                $('#'+rateId).val(data.rate);
+                $('#'+unitMId).val(data.unit_measure);
+                $('#'+subTotalId).val(data.rate);
+                $('#'+qtyId).val('1');
+
+                var sumToArray = classToArray2(sharedSumClass);
+                var sumArray = sumArrayItems(sumToArray);
+
+                $('#'+overallSumId).val(sumArray);
+
+                convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+
+            });
 
     }
 
-    function itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
-        var amount = $('#'+amountId);
-        var rate = $('#'+rateId).val();
-        var item = $('#'+itemId).val();
-        var discount = $('#'+discountAmountId);
-        var tax = $('#'+taxAmountId);
-        var qty = (('#'+qtyId).val() != '') ? $('#'+qtyId).val() : 0;
-        var discountA = (discount != '') ? discount.val() : 0;
-        var taxA = (tax.val() != '') ? tax.val() : 0;
-        if(rate != '' && item != ''){
-            var real_amount = qty*rate;
-            var new_amount = (real_amount-discountA) - taxA;
-            amount.val(new_amount);
-            var sumToArray = classToArray(sharedSumClass);
-            var sumArray = sumArrayItems(sumToArray);
-            $('#'+overallSumId).val(sumArray);
-            convertToDefaultCurr(foreignCurrId,sumArray,defaultCurrPage)
+    function getItemRate(itemId,page,qtyId,rateId){
+        var pickedVal = $('#'+itemId).val();
+        var qtyVal = $('#'+qtyId).val();
+        var rate = $('#'+rateId);
+        if(pickedVal != ''){
+            $.ajax({
+                url:  page+'?itemId='+pickedVal
+            }).done(function(data){
+                var result = data.rate;
+                rate.val(result*qtyVal);
+            });
+        }
+    }
+
+    function itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,ratePage){
+
+        if(event.target.id == qtyId){
+
+            //BEGINING
+            var pickedVal = $('#'+itemId).val();
+
+
+            if(pickedVal != ''){
+                $.ajax({
+                    url:  ratePage+'?itemId='+pickedVal
+                }).done(function(data){
+                    var result = data.rate;
+                    var qty = $('#'+qtyId);
+                    var qtyVal = qty.val();
+                    var rateGet = $('#'+rateId);
+
+                    rateGet.val(result*qtyVal);
+
+                    var amount = $('#'+amountId);
+                    var rate = data.rate;
+                    console.log(rate);
+                    var item = $('#'+itemId).val();
+                    var discount = $('#'+discountAmountId);
+                    var tax = $('#'+taxAmountId);
+
+
+                    var qtyVal = (qty.val() != '') ? qty.val() : 0;
+                    var discountA = (discount != '') ? discount.val() : 0;
+                    var taxA = (tax.val() != '') ? tax.val() : 0;
+
+                    var real_amount = qtyVal*rate;
+                    var new_amount = (real_amount-discountA) - taxA;
+                    amount.val(new_amount);
+                    var sumToArray = classToArray(sharedSumClass);
+                    var sumArray = sumArrayItems(sumToArray);
+                    $('#'+overallSumId).val(sumArray);
+                    convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+
+                });
+            }else{
+                alert('Please select an item and enter quantity');
+            }
+            //getItemRate(itemId,ratePage,qtyId,rateId);
+
+            //END
 
         }else{
-            alert('Please select an item and enter quantity');
+
+            //BEGINING
+            var amount = $('#'+amountId);
+            var rateGet = $('#'+rateId);
+            var rate = rateGet.val();
+            var item = $('#'+itemId).val();
+            var discount = $('#'+discountAmountId);
+            var tax = $('#'+taxAmountId);
+            var qty = $('#'+qtyId);
+            console.log(rate);
+
+            var qtyVal = (qty.val() != '') ? qty.val() : 0;
+            var discountA = (discount != '') ? discount.val() : 0;
+            var taxA = (tax.val() != '') ? tax.val() : 0;
+            if(rate != '' && item != ''){
+                var real_amount = qtyVal*rate;
+                var new_amount = (real_amount-discountA) - taxA;
+                amount.val(new_amount);
+                var sumToArray = classToArray(sharedSumClass);
+                var sumArray = sumArrayItems(sumToArray);
+                $('#'+overallSumId).val(sumArray);
+                convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
+
+            }else{
+                alert('Please select an item and enter quantity');
+            }
+            // END
+
         }
+
     }
 
     function accountSum(amountId,accountId,rateId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage){
@@ -1361,6 +1455,7 @@
         var rate = $('#'+rateId).val();
         var account = $('#'+accountId);
         var discount = $('#'+discountAmountId);
+
         var tax = $('#'+taxAmountId);
         var discountA = (discount != '') ? discount.val() : 0;
         var taxA = (tax.val() != '') ? tax.val() : 0;
@@ -1385,13 +1480,14 @@
         var item = $('#'+itemId).val();
         var discount = $('#'+discountAmountId);
         var tax = $('#'+taxAmountId);
-        var qty = '';
+        var qtyVal = '';
         if(qtyId != ''){
-             qty = (('#'+qtyId).val() != '') ? $('#'+qtyId).val() : 0;
+            var qty = $('#'+qtyId);
+             qtyVal = (qty.val() != '') ? qty.val() : 0;
         }
 
         if(rate != '' && item != ''){
-            var real_amount = (qtyId == '') ? rate : qty*rate;
+            var real_amount = (qtyId == '') ? rate : qtyVal*rate;
             var percentage = (percent/100)*real_amount;
             perctAmount.val(percentage);
             var discountA = (discount.val() != '') ? discount.val() : 0;
@@ -1403,7 +1499,7 @@
             var sumToArray = classToArray(sharedSumClass);
             var sumArray = sumArrayItems(sumToArray);
             $('#'+overallSumId).val(sumArray);
-            console.log(new_amount+'disc'+discountA+'sumarray='+sumArray);
+            //console.log(new_amount+'disc'+discountA+'sumarray='+sumArray);
             convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage)
         }else{
             alert('Please select an item/account and enter quantity if necessary');
@@ -1418,8 +1514,9 @@
             $.ajax({
                 url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
             }).done(function(data){
-                $('#'+displayId).html(data);
-
+                $('#'+displayId).val(data);
+                var rate = $('#'+rateId);
+                $('#'+taxAmountId).val((data*rate.val())/100);
                 itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage)
             });
         }
@@ -1433,9 +1530,11 @@
             $.ajax({
                 url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
             }).done(function(data){
-                $('#'+displayId).html(data);
-
+                $('#'+displayId).val(data);
+                var rate = $('#'+rateId);
+                $('#'+taxAmountId).val((data*rate.val())/100);
                 accountSum(amountId,accountId,rateId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage);
+
             });
         }
 
@@ -1467,12 +1566,12 @@
 
     }
 
-    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage) {
+    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
         $("#"+dropdownId).hide();
 
-        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage);
+        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId);
 
     }
 
@@ -1514,6 +1613,25 @@
             show_all.style.display = 'block';
         }
         convertToDefaultCurr(currRep,sumTotalId,currPage);
+
+    }
+
+    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId){
+        var perct = $('#'+perctId);
+        var overallSum = $('#'+overallSumId);
+        var perctAmount = $('#'+perctAmountId);
+        var vendCustVal = $('#'+vendCustId).val();
+        if(vendCustVal != '' && overallSum.val() != ''){
+            var sumToArray = classToArray(sharedSumClass);
+            var sumArray = sumArrayItems(sumToArray);
+            var percentage = (perct.val()*sumArray)/100;
+            perctAmount.val(percentage);
+            overallSum.val((sumArray)-percentage)
+
+
+        }else{
+            swal("Warning!", 'Please Select Vendor/Customer and ensure there is existing amount', "warning");
+        }
 
     }
 

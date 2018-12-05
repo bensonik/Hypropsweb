@@ -1157,7 +1157,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum');" name="select_user" placeholder="Inventory Item">
+                    <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','qty{{$num2}}','vendorCust');" name="select_user" placeholder="Inventory Item">
 
                     <input type="hidden" class="inv_class inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
                 </div>
@@ -1196,7 +1196,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <input type="text" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
-                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}')">
                 </div>
             </div>
         </div>
@@ -1206,7 +1206,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" unit_cost unit_cost_edit" name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
+                    <input type="text" class=" unit_cost unit_cost_edit" readonly name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
                            onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                 </div>
             </div>
@@ -1418,7 +1418,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionList('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}');" name="select_user" placeholder="Select Account">
+                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust');" name="select_user" placeholder="Select Account">
 
                         <input type="hidden" class="acc_class acc_class_edit" value="" name="user" id="acc500{{$num2}}" />
                     </div>

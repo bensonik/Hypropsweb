@@ -46,7 +46,7 @@
           <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionListInventory('select_inv','myUL500','{{url('default_select')}}','search_inventory_transact','inv500','item_desc','unit_cost','unit_measure','sub_total','shared_sub_total','overall_sum','foreign_overall_sum');" name="select_user" placeholder="Inventory Item">
+                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionListInventory('select_inv','myUL500','{{url('default_select')}}','search_inventory_transact','inv500','item_desc','unit_cost','unit_measure','sub_total','shared_sub_total','overall_sum','foreign_overall_sum','qty','vendorCust');" name="select_user" placeholder="Inventory Item">
 
                         <input type="hidden" class="inv_class" value="" name="inventory" id="inv500" />
                     </div>
@@ -85,7 +85,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" quantity" name="quantity" id="qty" placeholder="Quantity"
-                               onkeyup="itemSum('sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum')">
+                               onkeyup="itemSum('sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}')">
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" unit_cost shared_rate" name="unit_cost" id="unit_cost" placeholder="Unit Cost/Rate" >
+                        <input type="text" class=" unit_cost shared_rate" readonly name="unit_cost" id="unit_cost" placeholder="Unit Cost/Rate" >
                     </div>
                 </div>
             </div>
@@ -212,7 +212,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" tax shared_tax" name="tax" id="tax"
-                        onchange="fillNextInputTax('tax','tax_perct','{{url('default_select')}}','get_tax','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum')">
+                        onchange="fillNextInputTax('tax','tax_perct','{{url('default_select')}}','get_tax','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                                 <option value="">Select Tax</option>
                             @foreach(\App\Helpers\Utility::taxData() as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
@@ -229,7 +229,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" tax_perct shared_tax_perct" name="tax_perct" id="tax_perct" placeholder="Tax Percentage"
-                        onkeyup="percentToAmount('tax_perct','tax_amount','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum')">
+                        onkeyup="percentToAmount('tax_perct','tax_amount','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                     </div>
                 </div>
             </div>
@@ -251,7 +251,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" discount_perct shared_discount_perct" name="discount_perct" id="discount_perct" placeholder="Discount Percentage"
-                               onkeyup="percentToAmount('discount_perct','discount_amount','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum')">
+                               onkeyup="percentToAmount('discount_perct','discount_amount','sub_total','unit_cost','inv500','qty','discount_amount','tax_amount','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                     </div>
                 </div>
             </div>

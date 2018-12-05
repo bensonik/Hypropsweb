@@ -98,6 +98,7 @@ Route::any('/exchange_rate', 'GeneralController@exchangeRate')->name('exchange_r
 Route::any('/vendor_customer_currency', 'GeneralController@vendorCustomerCurrency')->name('vendor_customer_currency');
 Route::any('/inventory_details', 'GeneralController@inventoryDetails')->name('inventory_details');
 Route::any('/amount_to_default_curr', 'GeneralController@convertToDefault')->name('amount_to_default_curr');
+Route::any('/get_rate', 'GeneralController@getRate')->name('get_rate');
 
 // -------------COMPANY INFO MODULE-----------
 Route::any('/company', 'CompanyController@index')->name('user')->middleware('auth.admin');

@@ -32,7 +32,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_acc" onkeyup="searchOptionList('select_acc','myUL500_acc','{{url('default_select')}}','search_accounts','acc500');" name="select_user" placeholder="Select Account">
+                        <input type="text" class="" autocomplete="off" id="select_acc" onkeyup="searchOptionListAcc('select_acc','myUL500_acc','{{url('default_select')}}','search_accounts','acc500','vendorCust');" name="select_user" placeholder="Select Account">
 
                         <input type="hidden" class="acc_class" value="" name="user" id="acc500" />
                     </div>
@@ -67,7 +67,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" acc_tax shared_tax" name="tax" id="tax_acc"
-                        onchange="fillNextInputTaxAcc('tax_acc','tax_perct_acc','{{url('default_select')}}','get_tax','sub_total_acc','unit_cost_acc','acc500','discount_amount_acc','tax_amount_acc','shared_sum','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                        onchange="fillNextInputTaxAcc('tax_acc','tax_perct_acc','{{url('default_select')}}','get_tax','sub_total_acc','unit_cost_acc','acc500','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
                             @foreach(\App\Helpers\Utility::taxData() as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach

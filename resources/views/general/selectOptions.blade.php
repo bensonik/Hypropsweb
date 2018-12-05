@@ -43,7 +43,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItemInv('{{$searchId}}','{{$data->item_name}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{\App\Helpers\Utility::PURCHASE_DESC}}','<?php echo url('inventory_details') ?>','{{$descId}}','{{$rateId}}','{{$unitMId}}','{{$subTotalId}}','{{$sharedSubTotal}}','{{$overallSum}}','{{$foreignOverallSum}}','<?php echo url('amount_to_default_curr') ?>');">{{$data->item_name}}</a>
+            <a href="#" onclick="dropdownItemInv('{{$searchId}}','{{$data->item_name}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{\App\Helpers\Utility::PURCHASE_DESC}}','<?php echo url('inventory_details') ?>','{{$descId}}','{{$rateId}}','{{$unitMId}}','{{$subTotalId}}','{{$sharedSubTotal}}','{{$overallSum}}','{{$foreignOverallSum}}','<?php echo url('amount_to_default_curr') ?>','{{$qtyId}}');">{{$data->item_name}}</a>
         </li>
 
     @endforeach
