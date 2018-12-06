@@ -62,7 +62,8 @@ class Utility
     const CREDIT_OPENING_BALANCE_EQUITY = [3,4,2,5], DEBIT_OPENING_BALANCE_EQUITY = [7,8,9], OPENING_BALANCE_EQUITY_CHART_ID = 1, OPENING_BALANCE_DETAIL_ID = 51,
             OPENING_BALANCE_ACCOUNT_CATEGORY_ID =10;
 
-    const LINE_ITEM_DISCOUNT = 1, ONE_TIME_DISCOUNT = 0;
+    const LINE_ITEM_DISCOUNT = 1, ONE_TIME_DISCOUNT = 2;
+    const LINE_ITEM_TAX = 1, ONE_TIME_TAX = 2;
     const SHIP_STATUS = [1 => 'PO sent to supplier', 2 => 'Actioned payment to supplier',
         3 => 'Item Delivered to designated forwarder', 4 => 'Delivered to port', 5 =>'Custom clearing',
         6 => 'Item Delivered to Client', 7 => 'Invoice Submitted to client', 8 => 'Close PO'];

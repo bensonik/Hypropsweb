@@ -188,6 +188,10 @@
                             </div>
                             <hr/>
                             <div class="row clearfix">
+                                @include('includes.tax_part')
+                            </div>
+                            <hr/>
+                            <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         Total Sum {{\App\Helpers\Utility::defaultCurrency()}}

@@ -1196,7 +1196,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <input type="text" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
-                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}')">
+                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1207,7 +1207,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <input type="text" class=" unit_cost unit_cost_edit" readonly name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
-                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1323,7 +1323,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <select class=" tax tax_edit" name="tax" id="tax{{$num2}}"
-                            onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                            onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                         <option value="">Select</option>
                         @foreach($tax as $inv)
                             <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
@@ -1339,7 +1339,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <input type="text" class=" tax_perct tax_perct_edit" name="tax_perct" id="tax_perct{{$num2}}" placeholder="Tax Percentage"
-                           onkeyup="percentToAmount('tax_perct{{$num2}}','tax_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                           onkeyup="percentToAmount('tax_perct{{$num2}}','tax_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1349,8 +1349,8 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" tax_amount_edit" name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
-                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                    <input type="text" class="tax_amount tax_amount_edit shared_tax_amount shared_tax_amount_edit" name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
+                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1361,7 +1361,7 @@
             <div class="form-group">
                 <div class="form-line">
                     <input type="text" class=" discount_perct discount_perct_edit" name="discount_perct" id="discount_perct{{$num2}}" placeholder="Discount Percentage"
-                           onkeyup="percentToAmount('discount_perct{{$num2}}','discount_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                           onkeyup="percentToAmount('discount_perct{{$num2}}','discount_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1371,8 +1371,8 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" discount_amount discount_amount_edit" name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
-                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                    <input type="text" class=" discount_amount discount_amount_edit shared_discount_amount shared_discount_amount_edit" name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
+                           onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                 </div>
             </div>
         </div>
@@ -1400,7 +1400,7 @@
 
     <td class="center-align" id="">
         <div class="form-group">
-            <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_po{{$more}}','{{url('add_more')}}','po','new_po','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>');">
+            <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_po{{$more}}','{{url('add_more')}}','po','new_po','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount');">
                 <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
             </div>
         </div>
@@ -1442,7 +1442,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" shared_rate acct_rate acc_rate_edit" name="unit_cost" id="unit_cost_acc{{$num2}}" placeholder="Rate/Cost Amount"
-                               onkeyup="accountSum('sub_total_acc{{$num2}}','acc500{{$num2}}','unit_cost_acc{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                               onkeyup="accountSum('sub_total_acc{{$num2}}','acc500{{$num2}}','unit_cost_acc{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                     </div>
                 </div>
             </div>
@@ -1453,7 +1453,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" acc_tax shared_tax acc_tax_edit" name="tax" id="tax_acc{{$num2}}"
-                                onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                                onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                             @foreach($tax as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach
@@ -1469,7 +1469,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" acc_tax_perct shared_tax_perct acc_tax_perct_edit" name="tax_perct" id="tax_perct_acc{{$num2}}" placeholder="Tax Percentage"
-                               onkeyup="percentToAmount('tax_perct_acc{{$num2}}','tax_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                               onkeyup="percentToAmount('tax_perct_acc{{$num2}}','tax_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                     </div>
                 </div>
             </div>
@@ -1479,8 +1479,8 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_tax_amount shared_tax_amount acc_tax_amount_edit" name="tax_amount" id="tax_amount_acc{{$num2}}" placeholder="Tax Amount"
-                               onkeyup="accountSum('sub_total_acc{{$num2}}','acc500{{$num2}}','unit_cost_acc{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                        <input type="text" class=" acc_tax_amount shared_tax_amount shared_tax_amount_edit acc_tax_amount_edit" name="tax_amount" id="tax_amount_acc{{$num2}}" placeholder="Tax Amount"
+                               onkeyup="accountSum('sub_total_acc{{$num2}}','acc500{{$num2}}','unit_cost_acc{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                     </div>
                 </div>
             </div>
@@ -1491,7 +1491,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class=" acc_discount_perct shared_discount_perct acc_discount_perct_edit" name="discount_perct" id="discount_perct_acc{{$num2}}" placeholder="Discount Percentage"
-                               onkeyup="percentToAmount('discount_perct_acc{{$num2}}','discount_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                               onkeyup="percentToAmount('discount_perct_acc{{$num2}}','discount_amount_acc{{$num2}}','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                     </div>
                 </div>
             </div>
@@ -1501,8 +1501,8 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_discount_amount shared_discount_amount acc_discount_amount_edit" name="discount_amount" id="discount_amount_acc{{$num2}}" placeholder="Discount Amount"
-                               onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')">
+                        <input type="text" class=" acc_discount_amount shared_discount_amount shared_discount_amount_edit acc_discount_amount_edit" name="discount_amount" id="discount_amount_acc{{$num2}}" placeholder="Discount Amount"
+                               onkeyup="accountSum('sub_total_acc{{$num2}}','acc500{{$num2}}','unit_cost_acc{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount')">
                     </div>
                 </div>
             </div>
@@ -1529,7 +1529,7 @@
 
         <td class="center-align" id="">
             <div class="form-group">
-                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_acc{{$more}}','{{url('add_more')}}','acc','new_acc','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total_acc{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>');">
+                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_acc{{$more}}','{{url('add_more')}}','acc','new_acc','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total_acc{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount');">
                     <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                 </div>
             </div>
