@@ -124,7 +124,7 @@
 
         <td>
             <div class="col-sm-4">
-                <div class="form-group">
+                <div class="form-group"> 
                     <div class="form-line">
                         <input type="text" class=" acc_sub_total shared_sub_total" readonly name="sub_total" id="sub_total_acc" placeholder="Sub Total" >
                     </div>
