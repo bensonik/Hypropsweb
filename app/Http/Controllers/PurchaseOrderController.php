@@ -52,18 +52,42 @@ class PurchaseOrderController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Department::$mainRules);
+        $validator = Validator::make($request->all(),PurchaseOrder::$mainRules);
         if($validator->passes()){
 
-            $countData = Department::countData('dept_name',$request->input('department_name'));
+            $countData = PoExtension::countData('po_number',$request->input('po_number'));
             if($countData > 0){
 
                 return response()->json([
                     'message' => 'good',
-                    'message2' => 'Entry already exist, please try another entry'
+                    'message2' => 'Entry(PO number) already exist, please try another entry'
                 ]);
 
             }else{
+
+                //ITEM VARIABLES
+                $invClass = json_decode($request->input('inv_class')); $itemDesc = json_decode($request->input('item_desc'));
+                $warehouse = json_decode($request->input('warehouse')); $quantity = json_decode($request->input('quantity'));
+                $unitCost = json_decode($request->input('unit_cost')); $unitMeasure = json_decode($request->input('unit_measure'));
+                $quantityReserved = json_decode($request->input('quantity_reserved')); $quantityReceived = json_decode($request->input('quantity_received'));
+                $planned = json_decode($request->input('planned')); $expected = json_decode($request->input('expected'));
+                $promised = json_decode($request->input('promised')); $bOrderNo = json_decode($request->input('b_order_no'));
+                $bOrderLineNo = json_decode($request->input('b_order_line_no')); $shipStatus = json_decode($request->input('ship_status'));
+                $statusComment = json_decode($request->input('status_comment')); $tax = json_decode($request->input('tax'));
+                $taxPerct = json_decode($request->input('tax_perct')); $taxAmount = json_decode($request->input('tax_amount'));
+                $discountPerct = json_decode($request->input('discount_perct')); $discountAmount = json_decode($request->input('discount_amount'));
+                $subTotal = json_decode($request->input('sub_total'));
+
+                //ACCOUNT VARIABLES
+                $accClass = json_decode($request->input('acc_class')); $accDesc = json_decode($request->input('acc_desc'));
+                $accRate = json_decode($request->input('acc_rate')); $accTax = json_decode($request->input('acc_tax'));
+                $accTaxPerct = json_decode($request->input('acc_tax_perct')); $accTaxAmount = json_decode($request->input('acc_tax_amount'));
+                $accDiscountPerct = json_decode($request->input('acc_discount_perct')); $accDiscountAmount = json_decode($request->input('acc_discount_amount'));
+                $accSubTotal = json_decode($request->input('acc_sub_total'));
+
+                //GENERAL VARIABLES
+
+
                 $dbDATA = [
                     'dept_name' => ucfirst($request->input('department_name')),
                     'status' => Utility::STATUS_ACTIVE

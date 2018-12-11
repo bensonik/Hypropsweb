@@ -194,17 +194,17 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        Total Sum {{\App\Helpers\Utility::defaultCurrency()}}
+                                        Grand Total {{\App\Helpers\Utility::defaultCurrency()}}
                                         <div class="form-line">
-                                            <input type="text" class="form-control" id="overall_sum" name="total_sum" placeholder="Total Sum">
+                                            <input type="text" class="form-control" readonly id="overall_sum" name="grand_total" placeholder="Grand Total Default Currency">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group foreign_amount">
-                                        Total Sum
+                                        Grand Total
                                         <div class="form-line">
-                                            <input type="text" class="form-control" id="foreign_overall_sum" readonly name="vendor_curr" placeholder="Vendor Currency">
+                                            <input type="text" class="form-control" id="foreign_overall_sum" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
                                         </div>
                                     </div>
                                 </div>
@@ -242,8 +242,15 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_dept'); ?>','reload_data',
-                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>')"
+                    <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_dept'); ?>','reload_data',
+                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>',[
+                                    'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
+                            'quantity_reserved','quantity_received','planned','expected','promised','b_order_no',
+                            'b_order_line_no','ship_status','status_comment','tax','tax_perct','tax_amount',
+                            'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
+                            'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
+                            'acc_sub_total'
+                            ])"
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
                     </button>
@@ -376,6 +383,58 @@
 
     <!-- #END# Bordered Table -->
 
+    <script>
+        //SUBMIT FORM WITH A FILE
+        function submitMediaFormClass(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList){
+            var form_get = $('#'+formId);
+            var form = document.forms.namedItem(formId);
+            var postVars = new FormData(form);
+            postVars.append('token',token);
+            appendClassToPost(classList,postVars);
+            $('#loading_modal').modal('show');
+            $('#'+formModal).modal('hide');
+            sendRequestMediaForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+                    $('#loading_modal').modal('hide');
+                    var rollback = JSON.parse(ajax.responseText);
+                    var message2 = rollback.message2;
+                    if(message2 == 'fail'){
+
+                        //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                        var serverError = phpValidationError(rollback.message);
+
+                        var messageError = swalFormError(serverError);
+                        swal("Error",messageError, "error");
+
+                    }else if(message2 == 'saved'){
+
+                        var successMessage = swalSuccess('Data saved successfully');
+                        swal("Success!", successMessage, "success");
+                        location.reload();
+
+                    }else{
+
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
+
+                    }
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                    //reloadContent(reload_id,reloadUrl);
+                }
+            }
+
+        }
+
+        function appendClassToPost(classList,PostVars){
+            for(var i=0; i<classList.length;i++){
+                var classValue = sanitizeData(classList[i]);
+                PostVars(classList[i],classValue);
+            }
+        }
+
+    </script>
 
 <script>
 

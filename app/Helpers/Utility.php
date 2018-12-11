@@ -8,11 +8,12 @@
 
 namespace App\Helpers;
 
-use Illuminate\Http\Request;
 use DB;
 use Auth;
 use view;
 use mail;
+use Illuminate\Http\Request;
+use App\Http\Requests;
 use Illuminate\Support\Facades\Session;
 use Psy\Exception\ErrorException;
 use Illuminate\Support\Facades\Storage;
@@ -1042,5 +1043,15 @@ class Utility
         $data =  DB::table('tax')->where('status', self::STATUS_ACTIVE)->get();
         return $data;
     }
+
+    public static function checkEmptyArrayItem($item,$replaceItem){
+        if(empty($item)){
+            $item = $replaceItem;
+            return $item;
+        }
+        return $item;
+    }
+
+
 
 }

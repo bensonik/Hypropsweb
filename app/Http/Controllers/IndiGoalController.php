@@ -426,7 +426,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -449,7 +449,7 @@ class IndiGoalController extends Controller
                                     'objectives' => $obj[$i],
                                     'obj_level' => $level[$i],
                                     'indi_goal_id' => $request->input('edit_id'),
-                                    'created_by' => Auth::user()->id,
+                                    'updated_by' => Auth::user()->id,
                                     'status' => Utility::STATUS_ACTIVE
                                 ];
 
@@ -479,7 +479,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -500,7 +500,7 @@ class IndiGoalController extends Controller
                                 $dbDATA2 = [
                                     'reviewer_rating' => $rev_rate[$i],
                                     'indi_goal_id' => $request->input('edit_id'),
-                                    'created_by' => Auth::user()->id,
+                                    'updated_by' => Auth::user()->id,
                                     'status' => Utility::STATUS_ACTIVE
                                 ];
 
@@ -531,7 +531,7 @@ class IndiGoalController extends Controller
                     'goal_set_id' => $goalSet,
                     'indi_comment' => $indiComment,
                     'reviewer_comment' => $reviewerComment,
-                    'created_by' => Auth::user()->id,
+                    'updated_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
@@ -598,7 +598,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -622,7 +622,7 @@ class IndiGoalController extends Controller
                                 'capability' => $capable[$i],
                                 'level' => $compLevel[$i],
                                 'indi_goal_id' => $request->input('edit_id'),
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
 
@@ -654,7 +654,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -674,7 +674,7 @@ class IndiGoalController extends Controller
                             $dbDATA2 = [
                                 'reviewer_rating' => $compRevRate[$i],
                                 'indi_goal_id' => $request->input('edit_id'),
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
 
@@ -704,7 +704,7 @@ class IndiGoalController extends Controller
                     'goal_set_id' => $goalSet,
                     'indi_comment' => $indiComment,
                     'reviewer_comment' => $reviewerComment,
-                    'created_by' => Auth::user()->id,
+                    'updated_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
@@ -772,7 +772,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -796,7 +796,7 @@ class IndiGoalController extends Controller
                                 'element_behav_comp' => $element[$i],
                                 'level' => $compLevel[$i],
                                 'indi_goal_id' => $request->input('edit_id'),
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
 
@@ -828,7 +828,7 @@ class IndiGoalController extends Controller
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -848,7 +848,7 @@ class IndiGoalController extends Controller
                             $dbDATA2 = [
                                 'reviewer_rating' => $revRate[$i],
                                 'indi_goal_id' => $request->input('edit_id'),
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
 
@@ -878,7 +878,7 @@ class IndiGoalController extends Controller
                     'goal_set_id' => $goalSet,
                     'indi_comment' => $indiComment,
                     'reviewer_comment' => $reviewerComment,
-                    'created_by' => Auth::user()->id,
+                    'updated_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
