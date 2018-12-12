@@ -425,7 +425,6 @@ class IndiGoalController extends Controller
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
-                                'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
@@ -477,7 +476,6 @@ class IndiGoalController extends Controller
                             if (count($rev_rate) > 0){
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
-                                'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
@@ -527,19 +525,19 @@ class IndiGoalController extends Controller
 
             } else {  //END OF IF $stratObj IS GREATER THAN 0
 
-                $dbDATA = [
-                    'goal_set_id' => $goalSet,
-                    'indi_comment' => $indiComment,
-                    'reviewer_comment' => $reviewerComment,
-                    'updated_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
 
-
-                IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
 
                     if(Auth::user()->id == $editUserId) {
+
+                        $dbDATA = [
+                            'goal_set_id' => $goalSet,
+                            'indi_comment' => $indiComment,
+                            'updated_by' => Auth::user()->id,
+                            'status' => Utility::STATUS_ACTIVE
+                        ];
+                        IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
                         for ($i = 1; $i <= $countExt; $i++) {
                             $dbDATA2 = [
                                 'objectives' => $request->input('obj_edit' . $i),
@@ -552,6 +550,15 @@ class IndiGoalController extends Controller
                     }
 
                     if(Auth::user()->id != $editUserId) {
+
+                        $dbDATA = [
+                            'goal_set_id' => $goalSet,
+                            'reviewer_comment' => $reviewerComment,
+                            'updated_by' => Auth::user()->id,
+                            'status' => Utility::STATUS_ACTIVE
+                        ];
+                        IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
                         for ($i = 1; $i <= $countExt; $i++) {
                             $dbDATA2 = [
                                 'reviewer_rating' => $request->input('rev_rate_edit' . $i),
@@ -597,7 +604,6 @@ class IndiGoalController extends Controller
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
-                                'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
@@ -652,7 +658,6 @@ class IndiGoalController extends Controller
                         if (count($compRevRate) >0){
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
-                                'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
@@ -700,20 +705,19 @@ class IndiGoalController extends Controller
 
             } else {  //END OF IF $stratObj IS GREATER THAN 0
 
-                $dbDATA = [
-                    'goal_set_id' => $goalSet,
-                    'indi_comment' => $indiComment,
-                    'reviewer_comment' => $reviewerComment,
-                    'updated_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
-
-
-                IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
-
                 //UPDATE EXISTING DATA
 
                 if(Auth::user()->id == $editUserId) {
+
+                    $dbDATA = [
+                        'goal_set_id' => $goalSet,
+                        'indi_comment' => $indiComment,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+
+                    IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
                     for ($i = 1; $i <= $countExt; $i++) {
                         $dbDATA2 = [
                             'core_comp' => $request->input('core_comp_edit' . $i),
@@ -727,6 +731,16 @@ class IndiGoalController extends Controller
                 }
 
                 if(Auth::user()->id != $editUserId) {
+
+                    $dbDATA = [
+                        'goal_set_id' => $goalSet,
+                        'reviewer_comment' => $reviewerComment,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+
+                    IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
                     for ($i = 1; $i <= $countExt; $i++) {
                         $dbDATA2 = [
                             'reviewer_rating' => $request->input('rev_rate_edit' . $i),
@@ -771,7 +785,6 @@ class IndiGoalController extends Controller
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
                                 'indi_comment' => $indiComment,
-                                'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
@@ -826,7 +839,6 @@ class IndiGoalController extends Controller
                         if (count($revRate) >0){
                             $dbDATA = [
                                 'goal_set_id' => $goalSet,
-                                'indi_comment' => $indiComment,
                                 'reviewer_comment' => $reviewerComment,
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
@@ -834,6 +846,7 @@ class IndiGoalController extends Controller
                             IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                         for ($i = 1; $i <= $countExt; $i++) {
+
                             $dbDATA2 = [
                                 'reviewer_rating' => $request->input('behav_rev_rate_edit' . $i),
                                 'updated_by' => Auth::user()->id,
@@ -872,22 +885,23 @@ class IndiGoalController extends Controller
                 }
 
 
-            } else {  //END OF IF $stratObj IS GREATER THAN 0
+            } else {  //END OF IF $BEHAVCOMP IS GREATER THAN 0
 
-                $dbDATA = [
-                    'goal_set_id' => $goalSet,
-                    'indi_comment' => $indiComment,
-                    'reviewer_comment' => $reviewerComment,
-                    'updated_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
-
-
-                IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 //UPDATE EXISTING DATA
 
                 if(Auth::user()->id == $editUserId) {
+
+                    $dbDATA = [
+                        'goal_set_id' => $goalSet,
+                        'indi_comment' => $indiComment,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+
+                    IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+
                     for ($i = 0; $i < $countExt; $i++) {
                         $dbDATA2 = [
                             'core_behav_comp' => $request->input('core_behav_comp_edit' . $i),
@@ -901,7 +915,19 @@ class IndiGoalController extends Controller
                 }
 
                 if(Auth::user()->id != $editUserId) {
-                    for ($i = 0; $i < $countExt; $i++) {
+
+                    $dbDATA = [
+                        'goal_set_id' => $goalSet,
+                        'reviewer_comment' => $reviewerComment,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+
+                    IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+
+                    for ($i = 1; $i <= $countExt; $i++) {
+
                         $dbDATA2 = [
                             'reviewer_rating' => $request->input('behav_rev_rate_edit' . $i),
                             'updated_by' => Auth::user()->id,
@@ -913,7 +939,7 @@ class IndiGoalController extends Controller
                   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
 
                 return response()->json([
-                    'message' => 'good',
+                    'message' => 'good2',
                     'message2' => 'saved'
                 ]);
 
@@ -928,17 +954,21 @@ class IndiGoalController extends Controller
             $sugPpDev = $request->input('sug_pp_dev');
             $overRate = $request->input('over_rate');
 
-            $dbDATA = [
-                'goal_set_id' => $indiGoalSet,
-                'overview_str' => $overviewStr,
-                'area_improv' => $areaImprove,
-                'sug_pp_dev' => $sugPpDev,
-                'final_review' => $overRate,
-                'updated_by' => Auth::user()->id,
-                'status' => Utility::STATUS_ACTIVE
-            ];
+            if($editUserId != Auth::user()->id){
+                $dbDATA = [
+                    'goal_set_id' => $indiGoalSet,
+                    'overview_str' => $overviewStr,
+                    'area_improv' => $areaImprove,
+                    'sug_pp_dev' => $sugPpDev,
+                    'final_review' => $overRate,
+                    'updated_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
 
-            $updateIndiGoal = IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                $updateIndiGoal = IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+            }
+
+
 
             return response()->json([
                 'message' => 'good',
@@ -958,16 +988,31 @@ class IndiGoalController extends Controller
             $superId = (Auth::user()->id == $lowerHod) ? $hodId : $lowerHodId;
             $supId = ($revSign == '') ? 0 : $superId ;
 
-                $dbDATA = [
-                'goal_set_id' => $indiGoalSet,
-                'emp_comment' => $empComment,
-                'rev_sign' => $revSign,
-                'emp_sign' => $empSign,
-                'supervisor_id' => $supId,
-                'updated_by' => Auth::user()->id
-            ];
 
-            $updateIndiGoal = IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+            if($editUserId == Auth::user()->id){
+                $dbDATA = [
+                    'goal_set_id' => $indiGoalSet,
+                    'emp_comment' => $empComment,
+                    'emp_sign' => $empSign,
+                    'supervisor_id' => $supId,
+                    'updated_by' => Auth::user()->id
+                ];
+                $updateIndiGoal = IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+            }
+
+            if($editUserId != Auth::user()->id){
+                $dbDATA = [
+                    'goal_set_id' => $indiGoalSet,
+                    'rev_sign' => $revSign,
+                    'supervisor_id' => $supId,
+                    'updated_by' => Auth::user()->id
+                ];
+                $updateIndiGoal = IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+            }
+
+
 
             return response()->json([
                 'message' => 'good',

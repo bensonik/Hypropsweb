@@ -86,7 +86,8 @@ class PurchaseOrderController extends Controller
                 $accSubTotal = json_decode($request->input('acc_sub_total'));
 
                 //GENERAL VARIABLES
-
+                $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
+                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no');
 
                 $dbDATA = [
                     'dept_name' => ucfirst($request->input('department_name')),
