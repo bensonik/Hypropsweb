@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\model\Currency;
 use App\model\PoExtension;
 use App\model\PurchaseOrder;
+use App\model\VendorCustomer;
 use App\model\Warehouse;
 use App\model\Tax;
 use App\User;
@@ -87,13 +89,74 @@ class PurchaseOrderController extends Controller
 
                 //GENERAL VARIABLES
                 $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
-                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no');
+                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no'); $purchaseOrderNo = $request->input('purchase_order_no');
+                $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
+                $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
+                $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
+                $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
+                $message = $request->input('message'); $oneTimeDiscount = $request->input('one_time_discount'); $oneTimePerct = $request->input('one_time_perct');
+                $oneTimeTaxAmount = $request->input('one_time_tax_amount'); $taxType = $request->input('tax_type');
+                $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct');
+
+                $vendor = VendorCustomer::firstRow('id',$prefVendor);
+                $curr = Currency::firstRow('id',$vendor->currency_id);
+                $files = $request->file('file');
+                $attachment = [];
+                $mailFiles = [];
+
+                if($files != ''){
+                    foreach($files as $file){
+                        //return$file;
+                        $file_name = time() . "_" . Utility::generateUID(null, 10) . "." . $file->getClientOriginalExtension();
+                       
+                        $file->move(
+                            Utility::FILE_URL(), $file_name
+                        );
+                        //PUSH FILES TO AN ARRAY AND STORE IN JSON FORMAT IN A LONGTEXT MYSQL COLUMN
+                        //array_push($cdn_images,$file_name);
+                        $attachment[] =  $file_name;
+                        $mailFiles[] = Utility::FILE_URL($file_name);
+
+                    }
+                }
+
 
                 $dbDATA = [
-                    'dept_name' => ucfirst($request->input('department_name')),
+                    'assigned_user' => $user,
+                    'po_number' => $purchaseOrderNo,
+                    'vendor_invoice_no' => $vendorInvoiceNo,
+                    'sum_total' => $grandTotal,
+                    'trans_total' => $grandTotalVendorCurr,
+                    'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
+                    'discount_trans' => $oneTimeDiscount,
+                    'discount_perct' => $oneTimePerct,
+                    'discount_type' => $discountType,
+                    'tax_total' => Utility::convertAmountToDate($vendor->code,Utility::currencyArrayItem('code'),$oneTimeTaxAmount,$postingDate),
+                    'tax_trans' => $oneTimeTaxAmount,
+                    'tax_perct' => $oneTimeTaxPerct,
+                    'tax_type' => $taxType,
+                    'message' => $message,
+                    'attachment' => $attachment,
+                    'default_curr' => Utility::currencyArrayItem('id'),
+                    'trans_curr' => $curr->id,
+                    'vendor' => $prefVendor,
+                    'due_date' => $dueDate,
+                    'post_date' => $postingDate,
+                    'ship_to_city' => $shipCity,
+                    'ship_to_address' => $shipAddress,
+                    'ship_to_country' => $shipCountry,
+                    'ship_to_contact' => $shipContact,
+                    'ship_method' => $shipMethod,
+                    'ship_agent' => $shipAgent,
+                    'purchase_status' => $shipStatus,
+                    'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                Department::create($dbDATA);
+                $poExt= PoExtension::create($dbDATA);
+
+                if($poExt){
+
+                }
 
                 return response()->json([
                     'message' => 'good',

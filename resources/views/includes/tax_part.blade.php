@@ -4,7 +4,7 @@
         <b>Select Tax Type</b>
         <div class="form-group">
             <div class="form-line">
-                <select class="form-control" name="discount_type" >
+                <select class="form-control" name="tax_type" >
                         <option selected value="{{\App\Helpers\Utility::LINE_ITEM_TAX}}">Line Item Tax</option>
                         <option value="{{\App\Helpers\Utility::ONE_TIME_TAX}}">One time tax excluding line item tax(es)</option>
                 </select>
@@ -25,7 +25,7 @@
         <b>Total Tax Percentage</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" id="total_tax_perct" onkeyup="genPercentage('total_tax_perct','total_tax_amount','overall_sum','shared_sub_total','vendorCust','total_discount_amount')" name="one_time_perct" placeholder="Percentage" >
+                <input type="number" class="form-control" id="total_tax_perct" onkeyup="genPercentage('total_tax_perct','total_tax_amount','overall_sum','shared_sub_total','vendorCust','total_discount_amount')" name="one_time_tax_perct" placeholder="Percentage" >
             </div>
         </div>
     </div>
