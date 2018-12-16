@@ -1387,7 +1387,7 @@
                     var qtyVal = qty.val();
                     var rateGet = $('#'+rateId);
 
-                    rateGet.val(result*qtyVal);
+                    //rateGet.val(result*qtyVal);
 
                     var amount = $('#'+amountId);
                     var rate = data.rate;

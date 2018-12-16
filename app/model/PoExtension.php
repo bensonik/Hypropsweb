@@ -49,6 +49,16 @@ class PoExtension extends Model
 
     }
 
+    public function transCurr(){
+        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+
+    }
+
+    public function po(){
+        return $this->hasMany('App\model\PurchaseOrder','uid','po_uid');
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

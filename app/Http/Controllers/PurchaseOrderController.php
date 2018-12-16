@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\Helpers\Notify;
 use App\model\Currency;
 use App\model\Inventory;
 use App\model\PoExtension;
@@ -185,7 +186,7 @@ class PurchaseOrderController extends Controller
                     }
 
                     //LOOP THROUGH ITEMS
-                    if(count($invClass) == 0 && count($subTotal) == count($invClass)){
+                    if(count($invClass) == count($subTotal)){
                         for($i=0;$i<count($accClass);$i++){
                             $binStock = Inventory::firstRow('id',$invClass);
                             $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass[$i],0);
@@ -225,14 +226,31 @@ class PurchaseOrderController extends Controller
 
                     }
                 if(count($accClass) == count($accRate) && count($accSubTotal) == count($accClass)) {
-                    PoExtension::create($dbDATA);
+                   $mainPo = PoExtension::create($dbDATA);
                     PurchaseOrder::create($accDbData);
                     PurchaseOrder::create($poDbData);
+
+                    $poId = $mainPo->id;
+                    $getPo = PoExtension::firstRow('id',$poId);
+                    $getPoData = PurchaseOrder::specialColumns('uid',$getPo->po_uid);
+
+                    $mailContent = new \stdClass();
+                    $mailContent->po = $getPo;
+                    $mailContent->poData = $getPoData;
+
+                    $mailToArray = explode(',',$emails);
+                    if(count($mailToArray) >0){ //SEND MAIL TO ALL INVOLVED IN THE PURCHASE ORDER
+                        foreach($mailToArray as $data) {
+                            Notify::poMail('mail_views.purchase_order', $mailContent, $data, Auth::user()->firstname.' '.Auth::user()->lastname, 'Purchase Order');
+                        }
+                    }
+
 
                     return response()->json([
                         'message' => 'good',
                         'message2' => 'saved'
                     ]);
+
                 }else{
 
                     return response()->json([
