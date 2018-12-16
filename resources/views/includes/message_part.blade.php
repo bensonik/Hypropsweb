@@ -25,7 +25,7 @@
         <b>Attachment</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="file" class="form-control" name="file" >
+                <input type="file" class="form-control" multiple="multiple" name="file[]" >
             </div>
         </div>
     </div>

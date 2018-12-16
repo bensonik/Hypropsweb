@@ -21,7 +21,10 @@ class PurchaseOrder extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'department_name' => 'required'
+        'pref_vendor' => 'required',
+        'posting_date' => 'required',
+        'due_date' => 'required',
+        'pos_status' => 'required',
     ];
 
     public function user_c(){
