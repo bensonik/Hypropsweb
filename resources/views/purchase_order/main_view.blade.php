@@ -221,8 +221,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_dept'); ?>','reload_data',
-                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaFormJs('createModal','createMainForm','<?php echo url('create_dept'); ?>','reload_data',
+                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>',[])" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -376,6 +376,60 @@
 
     <!-- #END# Bordered Table -->
 
+    <script>
+        //SUBMIT FORM WITH A FILE
+        function submitMediaFormJs(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList){
+            var form_get = $('#'+formId);
+            var form = document.forms.namedItem(formId);
+            var postVars = new FormData(form);
+            postVars.append('token',token);
+            appendClassListToPostVar(classList,postVars);
+            $('#loading_modal').modal('show');
+            $('#'+formModal).modal('hide');
+            sendRequestMediaForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+                    $('#loading_modal').modal('hide');
+                    var rollback = JSON.parse(ajax.responseText);
+                    var message2 = rollback.message2;
+                    if(message2 == 'fail'){
+
+                        //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                        var serverError = phpValidationError(rollback.message);
+
+                        var messageError = swalFormError(serverError);
+                        swal("Error",messageError, "error");
+
+                    }else if(message2 == 'saved'){
+
+                        var successMessage = swalSuccess('Data saved successfully');
+                        swal("Success!", successMessage, "success");
+                        //location.reload();
+
+                    }else{
+
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
+
+                    }
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                    reloadContent(reload_id,reloadUrl);
+                }
+            }
+
+        }
+
+        function appendClassListToPostVar(classList,postVar){
+
+            for(var i=0;i<classList.length;i++){
+                var classToJson = sanitizeData(classList[i]);
+                postVar.append(classList[i],classToJson);
+            }
+
+        }
+
+    </script>
 
 <script>
 
