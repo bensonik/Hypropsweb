@@ -73,4 +73,17 @@ class Notify
         //Mail::to($email)->send(new PayrollMail($objContent));
     }
 
+    public static function poMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+        /*Mail::send($viewPage, $arrayContent,
+            function ($message) use ($email,$fullName,$subject)
+            {
+
+                $message->from('info@hyprops.com', 'No Reply');
+
+                $message->to($email)->subject($subject);
+
+            });*/
+        //Mail::to($email)->send(new PoMail($objContent));
+    }
+
 }

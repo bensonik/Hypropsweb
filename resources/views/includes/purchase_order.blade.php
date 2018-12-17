@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-striped" id="main_table">
+<table class="table table-bordered table-hover table-striped" id="po_main_table">
     <thead>
     <tr>
         <th>
