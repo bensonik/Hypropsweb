@@ -37,6 +37,16 @@ class PurchaseOrder extends Model
 
     }
 
+    public function account(){
+        return $this->belongsTo('App\model\AccountChart','account_id','id')->withDefault();
+
+    }
+
+    public function inventory(){
+        return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

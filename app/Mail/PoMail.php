@@ -42,12 +42,15 @@ class PoMail extends Mailable
             $name = $company->name;
         }
 
-        return $this->view('mail_views.purchase_order')
-            ->from($address, $name)/*
+        $message = $this->view('mail_views.purchase_order');
+            $message->from($address, $name);/*
             ->cc($address, $name)
             ->bcc($address, $name)
             ->replyTo($address, $name)*/
-            ->subject($subject)
-            ->with([ 'message' => $this->data ]);
+            $message->subject($subject);
+        foreach($this->data['attachment'] as $file){
+            $message->attach($file);
+        }
+            $message->with([ 'message' => $this->data ]);
     }
 }
