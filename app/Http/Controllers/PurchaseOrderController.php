@@ -209,7 +209,7 @@ class PurchaseOrderController extends Controller
                                 $statComHist[Utility::checkEmptyArrayItem($shipStatus,0)] = Utility::checkEmptyArrayItem($statusComment,'');
 
                             }
-                            
+
                             $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved,'');
                             $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived,'');
                             $poDbData['planned_receipt_date'] = Utility::checkEmptyArrayItem($planned,'');
