@@ -48,9 +48,12 @@ class PoMail extends Mailable
             ->bcc($address, $name)
             ->replyTo($address, $name)*/
             $message->subject($subject);
-        foreach($this->data['attachment'] as $file){
-            $message->attach($file);
+        if(count($this->data['attachment']) > 0){
+            foreach($this->data['attachment'] as $file){
+                $message->attach($file);
+            }
         }
+
             $message->with([ 'message' => $this->data ]);
     }
 }

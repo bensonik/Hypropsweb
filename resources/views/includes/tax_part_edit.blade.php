@@ -16,7 +16,7 @@
         <b>Total Tax Amount</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" readonly name="one_time_tax_amount" id="total_tax_amount" placeholder="Tax Amount" >
+                <input type="number" class="form-control" readonly name="one_time_tax_amount_edit" id="total_tax_amount_edit" placeholder="Tax Amount" >
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <b>Total Tax Percentage</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" id="total_tax_perct" onkeyup="genPercentage('total_tax_perct','total_tax_amount','overall_sum','shared_sub_total','vendorCust','total_discount_amount')" name="one_time_perct" placeholder="Percentage" >
+                <input type="number" class="form-control" id="total_tax_perct_edit" onkeyup="genPercentage('total_tax_perct_edit','total_tax_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_discount_amount_edit')" name="one_time_perct" placeholder="Percentage" >
             </div>
         </div>
     </div>

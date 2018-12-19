@@ -222,10 +222,17 @@ class PurchaseOrderController extends Controller
                         }
 
                     }
-                if(count($accClass) == count($accRate) && count($accSubTotal) == count($accClass)) {
-                   $mainPo = PoExtension::create($dbDATA);
-                    PurchaseOrder::create($accDbData);
-                    PurchaseOrder::create($poDbData);
+                if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
+
+                    if(count($accDbData) >0 || count($poDbData) >0) {
+                        $mainPo = PoExtension::create($dbDATA);
+                        $accDbData['po_id'] = $mainPo->id;
+                        $poDbData['po_id'] = $mainPo->id;
+                        if(count($accDbData) >0){ PurchaseOrder::create($accDbData);}
+                        if(count($poDbData) >0){PurchaseOrder::create($poDbData);}
+                    }
+
+
 
                     //MOVE FILES TO FOLDER
                     if($files != ''){
@@ -299,8 +306,9 @@ class PurchaseOrderController extends Controller
     public function editForm(Request $request)
     {
         //
-        $dept = Department::firstRow('id',$request->input('dataId'));
-        return view::make('purchase_order.edit_form')->with('edit',$dept);
+        $po = PoExtension::firstRow('id',$request->input('dataId'));
+        $poData = PurchaseOrder::specialColumns('po_id',$po->id);
+        return view::make('purchase_order.edit_form')->with('edit',$po)->with('poData',$poData);
 
     }
 
@@ -479,10 +487,14 @@ class PurchaseOrderController extends Controller
                     }
 
                 }
-                if(count($accClass) == count($accRate) && count($accSubTotal) == count($accClass)) {
-                    $mainPo = PoExtension::create($dbDATA);
-                    PurchaseOrder::create($accDbData);
-                    PurchaseOrder::create($poDbData);
+                if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
+                    if(count($accDbData) >0 || count($poDbData) >0) {
+                        $mainPo = PoExtension::create($dbDATA);
+                        $accDbData['po_id'] = $mainPo->id;
+                        $poDbData['po_id'] = $mainPo->id;
+                        if(count($accDbData) >0){ PurchaseOrder::create($accDbData);}
+                        if(count($poDbData) >0){PurchaseOrder::create($poDbData);}
+                    }
 
                     //MOVE FILES TO FOLDER
                     if($files != ''){

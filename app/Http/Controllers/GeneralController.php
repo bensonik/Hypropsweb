@@ -516,6 +516,25 @@ class GeneralController extends Controller
         }
         //END OF ADDING ACCOUNTS
 
+        //START OF ADDING PURCHASE ORDER EDIT
+        if($type == 'po_edit'){
+            $warehouse = Warehouse::getAllData();
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('warehouse',$warehouse)->with('tax',$tax);
+        }
+        //END OF ADDING PURCHASE ORDER
+
+        //START OF ADDING ACCOUNTS EDIT
+        if($type == 'acc_edit'){
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('tax',$tax);
+        }
+        //END OF ADDING ACCOUNTS
+
 
     }
     /**

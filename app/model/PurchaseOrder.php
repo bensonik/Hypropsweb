@@ -47,6 +47,16 @@ class PurchaseOrder extends Model
 
     }
 
+    public function taxVal(){
+        return $this->belongsTo('App\model\Tax','tax_id','id')->withDefault();
+
+    }
+
+    public function assigned(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

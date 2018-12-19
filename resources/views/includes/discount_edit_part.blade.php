@@ -16,7 +16,7 @@
         <b>Total Discount Amount</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" readonly name="one_time_discount_amount" id="total_discount_amount" placeholder="Discount Amount" >
+                <input type="number" class="form-control" readonly name="one_time_discount_amount" id="total_discount_amount_edit" placeholder="Discount Amount" >
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
         <b>Total Discount Percentage</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" id="total_discount_perct" onkeyup="genPercentage('total_discount_perct','total_discount_amount','overall_sum','shared_sub_total','vendorCust','total_tax_amount')" name="one_time_perct" placeholder="Percentage" >
+                <input type="number" class="form-control" id="total_discount_perct_edit" onkeyup="genPercentage('total_discount_perct_edit','total_discount_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_tax_amount_edit')" name="one_time_perct" placeholder="Percentage" >
             </div>
         </div>
     </div>
