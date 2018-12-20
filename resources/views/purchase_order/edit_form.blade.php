@@ -691,3 +691,12 @@
     </div>
     <input type="hidden" name="edit_id" value="{{$edit->id}}" >
 </form>
+
+<script>
+    $(function() {
+        $( ".datepicker" ).datepicker({
+            /*changeMonth: true,
+             changeYear: true*/
+        });
+    });
+</script>
