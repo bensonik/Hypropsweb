@@ -170,4 +170,10 @@ class PurchaseOrder extends Model
 
     }
 
+    public static function deleteItem($postId)
+    {
+        return Utility::deleteItem(self::table(),$postId);
+
+    }
+
 }

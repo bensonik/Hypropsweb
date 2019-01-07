@@ -197,7 +197,7 @@
                     <?php $num++; $num2++; $countDataAcc[] = $num2; ?>
                     @if($po->account_id != '')
 
-                        <tr>
+                        <tr id="itemId{{$po->id}}">
 
                             <td scope="row">
                                 <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" class="" />
@@ -309,7 +309,14 @@
                                 </div>
                             </td>
                             <td></td>
-                            <td></td>
+
+                            <td class="center-align" id="{{$po->unit_cost_trans}}">
+                                <div class="form-group">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->unit_cost_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit')">
+                                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                                    </div>
+                                </div>
+                            </td>
 
                         </tr>
 
@@ -325,6 +332,7 @@
                             </div>
                         </div>
                     </td>
+
 
                 </tr>
 
@@ -630,7 +638,13 @@
                                 </div>
                             </td>
                             <td></td>
-                            <td></td>
+                            <td class="center-align" id="{{$po->unit_cost_trans}}">
+                                <div class="form-group">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->unit_cost_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit')">
+                                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                                    </div>
+                                </div>
+                            </td>
 
                         </tr>
 

@@ -1692,6 +1692,38 @@
 
     }
 
+    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxSharedClass,discountSharedClass,totalTax,totalDiscount){
+        var bomVal = $('#'+dataIdVal).val();
+        var totalVal = $('#'+totalValId).val();
+
+        //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
+        var totalDiscountGet = $('#'+totalDiscount);
+        var totalTaxGet = $('#'+totalTax);
+        var sumToArrayTax = classToArray(taxSharedClass);
+        var sumArrayTax = sumArrayItems(sumToArrayTax);
+        var sumToArrayDiscount = classToArray(discountSharedClass);
+        var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
+
+
+        $.ajax({
+            url: page+'?dataId='+bomVal
+        }).done(function(data){
+            $('#'+dataId).hide();
+            var newTotal = totalVal - amtVal;
+            $('#'+totalValId).val(newTotal);
+
+            totalDiscountGet.val(sumArrayDiscount);
+            totalTaxGet.val(sumArrayTax);
+
+            convertToDefaultCurr(currRep,newTotal,currPage);
+
+            swal("Warning!", 'Item removed successfully', "success");
+
+        });
+
+
+    }
+
         ///////////////////////////  END OF ITEM AND ACCOUNT METHODS CALCULATION METHODS  //////////////////////
 
     function numONLY (e) {
