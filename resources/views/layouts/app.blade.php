@@ -1426,7 +1426,7 @@
 
     getCurrency('{{url('get_currency')}}','{{csrf_token()}}');
 
-    exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
+    //exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
 </script>
 
 </body>

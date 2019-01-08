@@ -24,7 +24,7 @@ class PurchaseOrder extends Model
         'pref_vendor' => 'required',
         'posting_date' => 'required',
         'due_date' => 'required',
-        'pos_status' => 'required',
+        'po_status' => 'required',
     ];
 
     public function user_c(){

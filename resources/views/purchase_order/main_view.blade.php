@@ -236,8 +236,15 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_dept'); ?>','reload_data',
-                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_po'); ?>','reload_data',
+                            '<?php echo url('purchase_order'); ?>','<?php echo csrf_token(); ?>',[
+                            'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
+                            'quantity_reserved','quantity_received','planned','expected','promised','b_order_no',
+                            'b_order_line_no','ship_status','status_comment','tax','tax_perct','tax_amount',
+                            'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
+                            'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
+                            'acc_sub_total'
+                            ])" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -257,8 +264,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_dept'); ?>','reload_data',
-                            '<?php echo url('department'); ?>','<?php echo csrf_token(); ?>',[
+                    <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_po'); ?>','reload_data',
+                            '<?php echo url('purchase_order'); ?>','<?php echo csrf_token(); ?>',[
                                     'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
                             'quantity_reserved','quantity_received','planned','expected','promised','b_order_no',
                             'b_order_line_no','ship_status','status_comment','tax','tax_perct','tax_amount',
@@ -289,7 +296,7 @@
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('department'); ?>',
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('purchase_order'); ?>',
                                     '<?php echo url('delete_dept'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
@@ -377,7 +384,7 @@
                             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_dept_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -430,8 +437,9 @@
 
                     }else{
 
-                        var infoMessage = swalWarningError(message2);
-                        swal("Warning!", infoMessage, "warning");
+                        alert(message2);
+                        //var infoMessage = swalWarningError(message2);
+                        //swal("Warning!", infoMessage, "warning");
 
                     }
 
@@ -442,10 +450,10 @@
 
         }
 
-        function appendClassToPost(classList,PostVars){
+        function appendClassToPost(classList,PostVar){
             for(var i=0; i<classList.length;i++){
                 var classValue = sanitizeData(classList[i]);
-                PostVars(classList[i],classValue);
+                PostVar.append(classList[i],classValue);
             }
         }
 

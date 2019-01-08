@@ -21,7 +21,7 @@ class PoExtension extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'department_name' => 'required'
+
     ];
 
     public function user_c(){
