@@ -61,43 +61,43 @@ class PurchaseOrderController extends Controller
         if($validator->passes()){
 
             $countData = PoExtension::countData('po_number',$request->input('po_number'));
-            if($countData > 0){
+            /*if($countData > 0){
 
                 return response()->json([
                     'message' => 'good',
                     'message2' => 'Entry(PO number) already exist, please try another entry'
                 ]);
 
-            }else{
+            }*/
 
                 //ITEM VARIABLES
-                $invClass = json_decode($request->input('inv_class')); $itemDesc = json_decode($request->input('item_desc'));
-                $warehouse = json_decode($request->input('warehouse')); $quantity = json_decode($request->input('quantity'));
-                $unitCost = json_decode($request->input('unit_cost')); $unitMeasure = json_decode($request->input('unit_measure'));
-                $quantityReserved = json_decode($request->input('quantity_reserved')); $quantityReceived = json_decode($request->input('quantity_received'));
-                $planned = json_decode($request->input('planned')); $expected = json_decode($request->input('expected'));
-                $promised = json_decode($request->input('promised')); $bOrderNo = json_decode($request->input('b_order_no'));
-                $bOrderLineNo = json_decode($request->input('b_order_line_no')); $shipStatus = json_decode($request->input('ship_status'));
-                $statusComment = json_decode($request->input('status_comment')); $tax = json_decode($request->input('tax'));
-                $taxPerct = json_decode($request->input('tax_perct')); $taxAmount = json_decode($request->input('tax_amount'));
-                $discountPerct = json_decode($request->input('discount_perct')); $discountAmount = json_decode($request->input('discount_amount'));
-                $subTotal = json_decode($request->input('sub_total'));
+                $invClass = Utility::jsonUrlDecode($request->input('inv_class')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc'));
+                $warehouse = Utility::jsonUrlDecode($request->input('warehouse')); $quantity = Utility::jsonUrlDecode($request->input('quantity'));
+                $unitCost = Utility::jsonUrlDecode($request->input('unit_cost')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure'));
+                $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received'));
+                $planned = Utility::jsonUrlDecode($request->input('planned')); $expected = Utility::jsonUrlDecode($request->input('expected'));
+                $promised = Utility::jsonUrlDecode($request->input('promised')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no'));
+                $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status'));
+                $statusComment = Utility::jsonUrlDecode($request->input('status_comment')); $tax = Utility::jsonUrlDecode($request->input('tax'));
+                $taxPerct = Utility::jsonUrlDecode($request->input('tax_perct')); $taxAmount = Utility::jsonUrlDecode($request->input('tax_amount'));
+                $discountPerct = Utility::jsonUrlDecode($request->input('discount_perct')); $discountAmount = Utility::jsonUrlDecode($request->input('discount_amount'));
+                $subTotal = Utility::jsonUrlDecode($request->input('sub_total'));
 
                 //ACCOUNT VARIABLES
-                $accClass = json_decode($request->input('acc_class')); $accDesc = json_decode($request->input('acc_desc'));
-                $accRate = json_decode($request->input('acct_rate')); $accTax = json_decode($request->input('acc_tax'));
-                $accTaxPerct = json_decode($request->input('acc_tax_perct')); $accTaxAmount = json_decode($request->input('acc_tax_amount'));
-                $accDiscountPerct = json_decode($request->input('acc_discount_perct')); $accDiscountAmount = json_decode($request->input('acc_discount_amount'));
-                $accSubTotal = json_decode($request->input('acc_sub_total'));
+                $accClass = Utility::jsonUrlDecode($request->input('acc_class')); $accDesc = Utility::jsonUrlDecode($request->input('acc_desc'));
+                $accRate = Utility::jsonUrlDecode($request->input('acct_rate')); $accTax = Utility::jsonUrlDecode($request->input('acc_tax'));
+                $accTaxPerct = Utility::jsonUrlDecode($request->input('acc_tax_perct')); $accTaxAmount = Utility::jsonUrlDecode($request->input('acc_tax_amount'));
+                $accDiscountPerct = Utility::jsonUrlDecode($request->input('acc_discount_perct')); $accDiscountAmount = Utility::jsonUrlDecode($request->input('acc_discount_amount'));
+                $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total'));
 
                 //GENERAL VARIABLES
                 $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
-                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no'); $purchaseOrderNo = $request->input('purchase_order_no');
+                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no'); $purchaseOrderNo = $request->input('po_number');
                 $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
                 $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
                 $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
                 $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
-                $message = $request->input('message'); $oneTimeDiscount = $request->input('one_time_discount'); $oneTimePerct = $request->input('one_time_perct');
+                $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount'); $oneTimePerct = $request->input('one_time_perct');
                 $oneTimeTaxAmount = $request->input('one_time_tax_amount'); $taxType = $request->input('tax_type');
                 $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct');
 
@@ -162,44 +162,41 @@ class PurchaseOrderController extends Controller
                     'uid' => $uid
                 ];
 
-               /* return response()->json([
+                /*return response()->json([
                     'message' => 'warning',
                     'message2' => json_encode($request->all())
                 ]);*/
 
-
-                if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
-
-                    /*return response()->json([
+                /*return response()->json([
                     'message' => 'warning',
                     'message2' => json_encode($dbDATA)
                 ]);*/
+                if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
 
                         $mainPo = PoExtension::create($dbDATA);
                         $accDbData['po_id'] = $mainPo->id;
                         $poDbData['po_id'] = $mainPo->id;
 
-
-
                     //LOOP THROUGH ACCOUNTS
                     if(count($accClass) == count($accRate) && count($accSubTotal) == count($accClass)){
                         for($i=0;$i<count($accClass);$i++){
-                            $accDbData['account_id'] = Utility::checkEmptyArrayItem($accClass[$i],0);
-                            $accDbData['po_desc'] = Utility::checkEmptyArrayItem($accDesc[$i],'');
-                            $accDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($accRate[$i],0);
-                            $accDbData['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accRate[$i],0),$postingDate);
-                            $accDbData['tax_id'] = Utility::checkEmptyArrayItem($accTax[$i],0);
-                            $accDbData['tax_perct'] = Utility::checkEmptyArrayItem($accTaxPerct[$i],0);
-                            $accDbData['tax_amount_trans'] = Utility::checkEmptyArrayItem($accTaxAmount[$i],0);
-                            $accDbData['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accTaxAmount[$i],0),$postingDate);
-                            $accDbData['discount_amount_trans'] = Utility::checkEmptyArrayItem($accDiscountAmount[$i],0);
-                            $accDbData['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accDiscountAmount[$i],0),$postingDate);
-                            $accDbData['discount_perct'] = Utility::checkEmptyArrayItem($accDiscountPerct[$i],0);
-                            $accDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($accSubTotal[$i],0);
-                            $accDbData['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accSubTotal[$i],0),$postingDate);
+                            $accDbData['account_id'] = Utility::checkEmptyArrayItem($accClass,$i,0);
+                            $accDbData['po_desc'] = Utility::checkEmptyArrayItem($accDesc,$i,'');
+                            $accDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($accRate,$i,0);
+                            $accDbData['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accRate,$i,0),$postingDate);
+                            $accDbData['tax_id'] = Utility::checkEmptyArrayItem($accTax,$i,0);
+                            $accDbData['tax_perct'] = Utility::checkEmptyArrayItem($accTaxPerct,$i,0);
+                            $accDbData['tax_amount_trans'] = Utility::checkEmptyArrayItem($accTaxAmount,$i,0);
+                            $accDbData['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accTaxAmount,$i,0),$postingDate);
+                            $accDbData['discount_amount_trans'] = Utility::checkEmptyArrayItem($accDiscountAmount,$i,0);
+                            $accDbData['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accDiscountAmount,$i,0),$postingDate);
+                            $accDbData['discount_perct'] = Utility::checkEmptyArrayItem($accDiscountPerct,$i,0);
+                            $accDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($accSubTotal,$i,0);
+                            $accDbData['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($accSubTotal,$i,0),$postingDate);
                             $accDbData['status'] = Utility::STATUS_ACTIVE;
+                            $accDbData['created_by'] = Auth::user()->id;
 
-                            PurchaseOrder::create($accDbData);
+                            //PurchaseOrder::create($accDbData);
 
                         }
 
@@ -209,45 +206,53 @@ class PurchaseOrderController extends Controller
                     if(count($invClass) == count($subTotal)){
                         for($i=0;$i<count($accClass);$i++){
                             $binStock = Inventory::firstRow('id',$invClass);
-                            $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass[$i],0);
+                            $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass,$i,0);
                             $poDbData['bin_stock'] = $binStock->inventory_type;
-                            $poDbData['unit_measurement'] = $unitMeasure;
-                            $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity[$i],0);
-                            $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc[$i],'');
-                            $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost[$i],0);
-                            $poDbData['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($unitCost[$i],0),$postingDate);
-                            $poDbData['tax_id'] = Utility::checkEmptyArrayItem($tax[$i],0);
-                            $poDbData['tax_perct'] = Utility::checkEmptyArrayItem($taxPerct[$i],0);
-                            $poDbData['tax_amount_trans'] = Utility::checkEmptyArrayItem($taxAmount[$i],0);
-                            $poDbData['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($taxAmount[$i],0),$postingDate);
-                            $poDbData['discount_amount_trans'] = Utility::checkEmptyArrayItem($discountAmount[$i],0);
-                            $poDbData['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($discountAmount[$i],0),$postingDate);
-                            $poDbData['discount_perct'] = Utility::checkEmptyArrayItem($discountPerct[$i],0);
-                            $poDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($subTotal[$i],0);
-                            $poDbData['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($subTotal[$i],0),$postingDate);
+                            $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure,$i,0);;
+                            $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity,$i,0);
+                            $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc,$i,'');
+                            $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost,$i,0);
+                            $poDbData['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($unitCost,$i,0),$postingDate);
+                            $poDbData['tax_id'] = Utility::checkEmptyArrayItem($tax,$i,0);
+                            $poDbData['tax_perct'] = Utility::checkEmptyArrayItem($taxPerct,$i,0);
+                            $poDbData['tax_amount_trans'] = Utility::checkEmptyArrayItem($taxAmount,$i,0);
+                            $poDbData['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($taxAmount,$i,0),$postingDate);
+                            $poDbData['discount_amount_trans'] = Utility::checkEmptyArrayItem($discountAmount,$i,0);
+                            $poDbData['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($discountAmount,$i,0),$postingDate);
+                            $poDbData['discount_perct'] = Utility::checkEmptyArrayItem($discountPerct,$i,0);
+                            $poDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($subTotal,$i,0);
+                            $poDbData['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($subTotal,$i,0),$postingDate);
 
                             $statComHist = [];
-                            if(Utility::checkEmptyArrayItem($shipStatus,0) != 0){
-                                $statComHist[Utility::checkEmptyArrayItem($shipStatus,0)] = Utility::checkEmptyArrayItem($statusComment,'');
+                            if(Utility::checkEmptyArrayItem($shipStatus,$i,0) != 0){
+                                $statComHist[Utility::checkEmptyArrayItem($shipStatus,$i,0)] = Utility::checkEmptyArrayItem($statusComment,$i,'');
 
                             }
 
-                            $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved,'');
-                            $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived,'');
-                            $poDbData['planned_receipt_date'] = Utility::checkEmptyArrayItem($planned,'');
-                            $poDbData['promised_receipt_date'] = Utility::checkEmptyArrayItem($promised,'');
-                            $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus,'');
-                            $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment,'');
-                            $poDbData['po_status_comment_history'] = json_encode($statComHist);
-                            $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo,'');
-                            $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo,'');
+                            $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse,$i,'');
+                            $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved,$i,'');
+                            $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived,$i,'');
+                            $poDbData['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned,$i,''));
+                            $poDbData['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised,$i,''));
+                            $poDbData['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected,$i,''));
+                            $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus,$i,'');
+                            $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment,$i,'');
+                            $poDbData['status_comment_history'] = json_encode($statComHist,true);
+                            $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo,$i,'');
+                            $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo,$i,'');
                             $poDbData['status'] = Utility::STATUS_ACTIVE;
+                            $poDbData['created_by'] = Auth::user()->id;
 
-                            PurchaseOrder::create($poDbData);
+                            //PurchaseOrder::create($poDbData);
 
                         }
 
                     }
+
+                   /* return response()->json([
+                    'message' => 'warning',
+                    'message2' => json_encode($poDbData)
+                ]);*/
 
                     //MOVE FILES TO FOLDER
                     if($files != ''){
@@ -298,9 +303,6 @@ class PurchaseOrderController extends Controller
 
                 }
 
-
-
-            }
         }
         $errors = $validator->errors();
         return response()->json([
@@ -371,12 +373,12 @@ class PurchaseOrderController extends Controller
 
                 //GENERAL VARIABLES
                 $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
-                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no'); $purchaseOrderNo = $request->input('purchase_order_no');
+                $poStatus = $request->input('po_status'); $vendorInvoiceNo = $request->input('vendor_invoice_no'); $purchaseOrderNo = $request->input('po_number');
                 $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
                 $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
                 $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
                 $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
-                $message = $request->input('message'); $oneTimeDiscount = $request->input('one_time_discount'); $oneTimePerct = $request->input('one_time_perct');
+                $message = $request->input('mail_message_edit'); $oneTimeDiscount = $request->input('one_time_discount_amount'); $oneTimePerct = $request->input('one_time_perct');
                 $oneTimeTaxAmount = $request->input('one_time_tax_amount'); $taxType = $request->input('tax_type');
                 $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct');
 
@@ -413,7 +415,6 @@ class PurchaseOrderController extends Controller
                     'assigned_user' => $user,
                     'po_number' => $purchaseOrderNo,
                     'vendor_invoice_no' => $vendorInvoiceNo,
-                    'unit_measurement' => $unitMeasure,
                     'sum_total' => $grandTotal,
                     'trans_total' => $grandTotalVendorCurr,
                     'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
@@ -425,19 +426,19 @@ class PurchaseOrderController extends Controller
                     'tax_perct' => $oneTimeTaxPerct,
                     'tax_type' => $taxType,
                     'message' => $message,
-                    'attachment' => json_encode($attachment),
+                    'attachment' => json_encode($attachment,true),
                     'default_curr' => Utility::currencyArrayItem('id'),
                     'trans_curr' => $curr->id,
                     'vendor' => $prefVendor,
-                    'due_date' => $dueDate,
-                    'post_date' => $postingDate,
+                    'due_date' => Utility::standardDate($dueDate),
+                    'post_date' => Utility::standardDate($postingDate),
                     'ship_to_city' => $shipCity,
-                    'ship_to_address' => $shipAddress,
+                    'ship_address' => $shipAddress,
                     'ship_to_country' => $shipCountry,
                     'ship_to_contact' => $shipContact,
                     'ship_method' => $shipMethod,
                     'ship_agent' => $shipAgent,
-                    'purchase_status' => $shipStatus,
+                    'purchase_status' => $poStatus,
                     'updated_by' => Auth::user()->id,
                 ];
                 $accDbData = [
@@ -457,37 +458,40 @@ class PurchaseOrderController extends Controller
                         $poDbDataEdit = [];
 
                         $binStock = Inventory::firstRow('id',$invClass);
-                        $poDbDataEdit['item_id'] = Utility::checkEmptyArrayItem($request->input('inv_class' . $i),0);
-                        $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
-                        $poDbDataEdit['quantity'] = Utility::checkEmptyArrayItem($request->input('quantity' . $i),0);
-                        $poDbDataEdit['po_desc'] = Utility::checkEmptyArrayItem($request->input('item_desc' . $i),'');
-                        $poDbDataEdit['unit_cost_trans'] = Utility::checkEmptyArrayItem($request->input('unit_cost' . $i),0);
-                        $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($request->input('unit_cost' . $i),0),$postingDate);
-                        $poDbDataEdit['tax_id'] = Utility::checkEmptyArrayItem($request->input('tax' . $i),0);
-                        $poDbDataEdit['tax_perct'] = Utility::checkEmptyArrayItem($request->input('tax_perct' . $i),0);
-                        $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyArrayItem($request->input('tax_amount' . $i),0);
-                        $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($request->input('tax_amount' . $i),0),$postingDate);
-                        $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyArrayItem($discountAmount[$i],0);
-                        $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($request->input('discount_amount' . $i),0),$postingDate);
-                        $poDbDataEdit['discount_perct'] = Utility::checkEmptyArrayItem($discountPerct[$i],0);
-                        $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyArrayItem($request->input('sub_total' . $i),0);
-                        $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($request->input('sub_total' . $i),0),$postingDate);
+                        $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass,$i,0);
+                        $poDbData['bin_stock'] = $binStock->inventory_type;
+                        $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure,$i,0);;
+                        $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity,$i,0);
+                        $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc,$i,'');
+                        $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost,$i,0);
+                        $poDbData['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($unitCost,$i,0),$postingDate);
+                        $poDbData['tax_id'] = Utility::checkEmptyArrayItem($tax,$i,0);
+                        $poDbData['tax_perct'] = Utility::checkEmptyArrayItem($taxPerct,$i,0);
+                        $poDbData['tax_amount_trans'] = Utility::checkEmptyArrayItem($taxAmount,$i,0);
+                        $poDbData['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($taxAmount,$i,0),$postingDate);
+                        $poDbData['discount_amount_trans'] = Utility::checkEmptyArrayItem($discountAmount,$i,0);
+                        $poDbData['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($discountAmount,$i,0),$postingDate);
+                        $poDbData['discount_perct'] = Utility::checkEmptyArrayItem($discountPerct,$i,0);
+                        $poDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($subTotal,$i,0);
+                        $poDbData['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyArrayItem($subTotal,$i,0),$postingDate);
 
                         $statComHist = [];
-                        if(Utility::checkEmptyArrayItem($request->input('ship_status' . $i),0) != 0){
-                            $statComHist[Utility::checkEmptyArrayItem($request->input('ship_status' . $i),0)] = Utility::checkEmptyArrayItem($request->input('status_comment' . $i),'');
+                        if(Utility::checkEmptyArrayItem($shipStatus,$i,0) != 0){
+                            $statComHist[Utility::checkEmptyArrayItem($shipStatus,$i,0)] = Utility::checkEmptyArrayItem($statusComment,$i,'');
 
                         }
 
-                        $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyArrayItem($request->input('quantity_reserved' . $i),'');
-                        $poDbDataEdit['received_quantity'] = Utility::checkEmptyArrayItem($request->input('quantity_received' . $i),'');
-                        $poDbDataEdit['planned_receipt_date'] = Utility::checkEmptyArrayItem($request->input('planned' . $i),'');
-                        $poDbDataEdit['promised_receipt_date'] = Utility::checkEmptyArrayItem($request->input('promised' . $i),'');
-                        $poDbDataEdit['po_status'] = Utility::checkEmptyArrayItem($request->input('ship_status' . $i),'');
-                        $poDbDataEdit['po_status_comment'] = Utility::checkEmptyArrayItem($request->input('status_comment' . $i),'');
-                        $poDbDataEdit['po_status_comment_history'] = json_encode($statComHist);
-                        $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyArrayItem($request->input('b_order_no' . $i),'');
-                        $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyArrayItem($request->input('b_order_line_no' . $i),'');
+                        $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse,$i,'');
+                        $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved,$i,'');
+                        $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived,$i,'');
+                        $poDbData['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned,$i,''));
+                        $poDbData['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised,$i,''));
+                        $poDbData['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected,$i,''));
+                        $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus,$i,'');
+                        $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment,$i,'');
+                        $poDbData['status_comment_history'] = json_encode($statComHist,true);
+                        $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo,$i,'');
+                        $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo,$i,'');
                         $poDbDataEdit['updated_by'] = Auth::user()->id;
 
                         PurchaseOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);

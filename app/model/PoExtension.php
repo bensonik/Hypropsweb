@@ -39,7 +39,7 @@ class PoExtension extends Model
 
     }
 
-    public function vendor(){
+    public function vendorCon(){
         return $this->belongsTo('App\model\VendorCustomer','vendor','id')->withDefault();
 
     }
@@ -51,6 +51,11 @@ class PoExtension extends Model
 
     public function transCurr(){
         return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+
+    }
+
+    public function assigned(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
 
     }
 

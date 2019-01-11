@@ -244,7 +244,7 @@
                             'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
                             'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
                             'acc_sub_total'
-                            ])" type="button" class="btn btn-link waves-effect">
+                            ],'mail_message')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -255,12 +255,12 @@
 
     <!-- Default Size -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                 </div>
-                <div class="modal-body" id="edit_content">
+                <div class="modal-body" id="edit_content" style="height:500px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -272,7 +272,7 @@
                             'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
                             'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
                             'acc_sub_total'
-                            ])"
+                            ],'mail_message_edit')"
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
                     </button>
@@ -346,7 +346,7 @@
                                        name="check_all" class="" />
 
                             </th>
-
+                            <th>Manage</th>
                             <th>PO Number</th>
                             <th>Vendor Invoice Number</th>
                             <th>Vendor</th>
@@ -359,7 +359,7 @@
                             <th>Sum Total {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Created by</th>
                             <th>Updated by</th>
-                            <th>Manage</th>
+
                         </tr>
                         </thead>
                         <tbody>
@@ -369,23 +369,24 @@
                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                             </td>
+                            <td>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                            </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->po_number}}</td>
-                            <td>{{$data->vendor_invoice_number}}</td>
-                            <td>{{$data->vendor->name}}</td>
+                            <td>{{$data->vendor_invoice_no}}</td>
+                            <td>{{$data->vendorCon->name}}</td>
                             <td>{{$data->post_date}}</td>
                             <td>{{$data->due_date}}</td>
                             <td>{{$data->ship_to_contact}}</td>
                             <td>{{$data->purchase_status}}</td>
-                            <td>{{$data->UserDtail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
+                            <td>{{$data->UserDetail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
                             <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{$data->sum_total}}</td>
                             <td>{{$data->trans_total}}</td>
                             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
                             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                            </td>
+
                         </tr>
                         @endforeach
                         </tbody>
@@ -407,11 +408,13 @@
 
     <script>
         //SUBMIT FORM WITH A FILE
-        function submitMediaFormClass(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList){
+        function submitMediaFormClass(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList,ckInputId){
             var form_get = $('#'+formId);
             var form = document.forms.namedItem(formId);
+            var ckInput = CKEDITOR.instances[ckInputId].getData();
             var postVars = new FormData(form);
             postVars.append('token',token);
+            postVars.append('mail_message',ckInput);
             appendClassToPost(classList,postVars);
             $('#loading_modal').modal('show');
             $('#'+formModal).modal('hide');
@@ -433,7 +436,7 @@
 
                         var successMessage = swalSuccess('Data saved successfully');
                         swal("Success!", successMessage, "success");
-                        location.reload();
+                        //location.reload();
 
                     }else{
 
@@ -491,6 +494,7 @@
         });
     }
 
+    //exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
 
 </script>
 

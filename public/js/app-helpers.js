@@ -1672,7 +1672,7 @@
 
     }
 
-    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId){
+    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId,foreignSumId,currPage){
         var perct = $('#'+perctId);
         var overallSum = $('#'+overallSumId);
         var perctAmount = $('#'+perctAmountId);
@@ -1683,8 +1683,10 @@
             var sumArray = sumArrayItems(sumToArray);
             var percentage = (perct.val()*sumArray)/100;
             perctAmount.val(percentage);
-            overallSum.val(((sumArray)-percentage)-odaperctAmount.val())
-
+            overallSum.val(((sumArray)-percentage)-odaperctAmount.val());
+            var newTotal = (sumArray-percentage)-odaperctAmount.val();
+            //alert(newTotal);
+            convertToDefaultCurr(foreignSumId,overallSumId,currPage);
 
         }else{
             swal("Warning!", 'Please Select Vendor/Customer and ensure there is existing amount', "warning");

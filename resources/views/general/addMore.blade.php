@@ -1247,7 +1247,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" datepicker planned planned_edit" name="planned_date" placeholder="Planned Date" >
+                    <input type="text" class=" datepicker2 planned planned_edit" name="planned_date" placeholder="Planned Date" >
                 </div>
             </div>
         </div>
@@ -1257,7 +1257,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" datepicker expected expected_edit" name="expected_date" placeholder="Expected Date" >
+                    <input type="text" class=" datepicker2 expected expected_edit" name="expected_date" placeholder="Expected Date" >
                 </div>
             </div>
         </div>
@@ -1267,7 +1267,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="text" class=" datepicker promised promised_edit" name="promised_date" placeholder="Promised Date" required>
+                    <input type="text" class=" datepicker2 promised promised_edit" name="promised_date" placeholder="Promised Date" required>
                 </div>
             </div>
         </div>
@@ -1418,7 +1418,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust');" name="select_user" placeholder="Select Account">
+                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust_edit');" name="select_user" placeholder="Select Account">
 
                         <input type="hidden" class="acc_class acc_class_edit" value="" name="user" id="acc500{{$num2}}" />
                     </div>
@@ -1547,7 +1547,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','qty{{$num2}}','vendorCust');" name="select_user" placeholder="Inventory Item">
+                        <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','qty{{$num2}}','vendorCust_edit');" name="select_user" placeholder="Inventory Item">
 
                         <input type="hidden" class="inv_class inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
                     </div>
@@ -1637,7 +1637,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker planned planned_edit" name="planned_date" placeholder="Planned Date" >
+                        <input type="text" class=" datepicker2 planned planned_edit" name="planned_date" placeholder="Planned Date" >
                     </div>
                 </div>
             </div>
@@ -1647,7 +1647,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker expected expected_edit" name="expected_date" placeholder="Expected Date" >
+                        <input type="text" class=" datepicker2 expected expected_edit" name="expected_date" placeholder="Expected Date" >
                     </div>
                 </div>
             </div>
@@ -1657,7 +1657,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker promised promised_edit" name="promised_date" placeholder="Promised Date" required>
+                        <input type="text" class=" datepicker2 promised promised_edit" name="promised_date" placeholder="Promised Date" required>
                     </div>
                 </div>
             </div>
@@ -1931,7 +1931,7 @@
 
 <script>
     $(function() {
-        $( ".datepicker" ).datepicker({
+        $( ".datepicker2" ).datepicker({
             /*changeMonth: true,
              changeYear: true*/
         });

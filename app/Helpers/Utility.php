@@ -596,10 +596,16 @@ class Utility
             //return floor($datediff / (60 * 60 * 24));
             $count = 0;
 
-            while(date('Y-m-d', $startDate) < date('Y-m-d', $endDate)){
+            /*while(date('Y-m-d', $startDate) < date('Y-m-d', $endDate)){
                 $count += date('N', $startDate) < 6 ? 1 : 0;
                 $startDate = strtotime("+1 day", $startDate);
+            }*/
+
+            //WORKING DAYS
+            for($i=$startDate; $i<=$endDate; $i = $i+(60*60*24) ){
+                if(date("N",$i) <= 5) $count = $count+ 1;
             }
+
             return $count;
 
 
@@ -634,8 +640,12 @@ class Utility
     }
 
     public static function standardDate($date){
-        $newDate = date("Y-m-d", strtotime($date));
-        return $newDate;
+        if($date != ''){
+            $newDate = date("Y-m-d", strtotime($date));
+            return $newDate;
+        }
+        return $date;
+
     }
 
     public static function standardDateTime($date){
@@ -1044,14 +1054,18 @@ class Utility
         return $data;
     }
 
-    public static function checkEmptyArrayItem($item,$replaceItem){
-        if(empty($item)){
-            $item = $replaceItem;
-            return $item;
+    public static function checkEmptyArrayItem($array,$item,$replaceItem){
+        if(array_key_exists($item, $array)){
+            return $array[$item];
         }
-        return $item;
+        return $replaceItem;
     }
 
+    public static function jsonUrlDecode($data){
+        $decoded = utf8_decode(urldecode($data));
+        return json_decode($decoded);
+        //return $decoded;
+    }
 
 
 }

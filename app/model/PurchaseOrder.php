@@ -47,6 +47,11 @@ class PurchaseOrder extends Model
 
     }
 
+    public function warehouse(){
+        return $this->belongsTo('App\model\Warehouse','ship_to_whse','id')->withDefault();
+
+    }
+
     public function taxVal(){
         return $this->belongsTo('App\model\Tax','tax_id','id')->withDefault();
 

@@ -34,7 +34,7 @@
 
 <div class="row clearfix">
 
-    <textarea id="message" name="message" class="ckeditor" placeholder="Message">Message...</textarea>
+    <textarea id="mail_message" name="message" class="ckeditor" placeholder="Message">Message...</textarea>
     <script>
         CKEDITOR.replace('message');
     </script>

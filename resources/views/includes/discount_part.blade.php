@@ -25,7 +25,7 @@
         <b>Total Discount Percentage</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control" id="total_discount_perct" onkeyup="genPercentage('total_discount_perct','total_discount_amount','overall_sum','shared_sub_total','vendorCust','total_tax_amount')" name="one_time_perct" placeholder="Percentage" >
+                <input type="number" class="form-control" id="total_discount_perct" onkeyup="genPercentage('total_discount_perct','total_discount_amount','overall_sum','shared_sub_total','vendorCust','total_tax_amount','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>')" name="one_time_perct" placeholder="Percentage" >
             </div>
         </div>
     </div>
