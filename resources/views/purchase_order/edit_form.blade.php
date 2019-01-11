@@ -742,7 +742,7 @@
                         <div class="form-line">
                             <input type="number" class="form-control" value="{{$edit->tax_trans}}" readonly name="one_time_tax_amount_edit" id="total_tax_amount_edit" placeholder="Tax Amount" >
                         </div>
-                    </div>
+                    </div> 
                 </div>
 
                 <div class="col-sm-4">
