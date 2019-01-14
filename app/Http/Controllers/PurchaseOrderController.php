@@ -497,7 +497,7 @@ class PurchaseOrderController extends Controller
 
                     for ($i = 1; $i <= $countExtAcc; $i++) {
                         $accDbDataEdit = [];
-                        $gg[] = $request->input('tax_perct_acc' . $i);
+                        $gg[] = $request->input('accId' . $i);
                         $accDbDataEdit['account_id'] = $request->input('acc_class_edit' . $i);
                         $accDbDataEdit['po_desc'] = $request->input('item_desc_acc' . $i);
                         $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
