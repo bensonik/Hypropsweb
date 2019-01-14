@@ -12,8 +12,8 @@
         </div>
     </div>
 
-    <div class="col-sm-4">
-        <b>Total Tax Amount</b>
+    <div class="col-sm-4 ">
+        <b>Total Tax Amount <span class="foreign_amount"></span></b>
         <div class="form-group">
             <div class="form-line">
                 <input type="number" class="form-control" readonly name="one_time_tax_amount" id="total_tax_amount" placeholder="Tax Amount" >

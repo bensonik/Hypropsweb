@@ -30,7 +30,7 @@
 
             </td>
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->po_number}}</td>
@@ -46,12 +46,9 @@
             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+            <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
 
         </tr>
     @endforeach
     </tbody>
 </table>
-
-<div class=" pagination pull-right">
-    {!! $mainData->render() !!}
-</div>

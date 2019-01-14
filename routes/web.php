@@ -440,3 +440,5 @@ Route::any('/search_po', 'PurchaseOrderController@searchInventory')->name('searc
 Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
 Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delete_po_item');
 Route::post('/change_po_status', 'PurchaseOrderController@changeStatus')->name('change_po_status');
+Route::any('/po_remove_attachment', 'PurchaseOrderController@removeAttachment')->name('po_remove_attachment');
+Route::any('/po_download_attachment', 'PurchaseOrderController@downloadAttachment')->name('po_download_attachment');

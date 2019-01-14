@@ -1061,6 +1061,13 @@ class Utility
         return $replaceItem;
     }
 
+    public static function checkEmptyItem($item,$replaceItem){
+        if(!empty($item)){
+            return $item;
+        }
+        return $replaceItem;
+    }
+
     public static function jsonUrlDecode($data){
         $decoded = utf8_decode(urldecode($data));
         return json_decode($decoded);

@@ -34,7 +34,7 @@
                                     Preferred Vendor
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_vendor" onkeyup="searchOptionListVenCust('select_vendor','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>');" name="select_user" placeholder="Select Vendor">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_vendor" onkeyup="searchOptionListVenCust('select_vendor','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum');" name="select_user" placeholder="Select Vendor">
 
                                             <input type="hidden" class="user_class" name="pref_vendor" id="vendorCust" />
                                         </div>
@@ -106,7 +106,7 @@
                                     <div class="form-group">
                                         Billing Address
                                         <div class="form-line">
-                                            <textarea class="form-control" readonly id="billing_address" name="billing_address" placeholder="Billing Address"></textarea>
+                                            <textarea class="form-control"  id="billing_address" name="billing_address" placeholder="Billing Address"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -211,15 +211,16 @@
                                     <div class="form-group">
                                         Grand Total {{\App\Helpers\Utility::defaultCurrency()}}
                                         <div class="form-line">
-                                            <input type="text" class="form-control" readonly id="overall_sum" name="grand_total" placeholder="Grand Total Default Currency">
+                                            <input type="text" class="form-control" readonly id="foreign_overall_sum" name="grand_total" placeholder="Grand Total Default Currency">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <div class="form-group foreign_amount">
-                                        Grand Total
+                                        Grand Total <span class="foreign_amount"></span>
+                                    <div class="form-group ">
+
                                         <div class="form-line">
-                                            <input type="text" class="form-control" id="foreign_overall_sum" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
+                                            <input type="text" class="form-control" id="overall_sum" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
                                         </div>
                                     </div>
                                 </div>
@@ -370,7 +371,7 @@
 
                             </td>
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->po_number}}</td>
@@ -386,6 +387,7 @@
                             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
                             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
 
                         </tr>
                         @endforeach
@@ -412,6 +414,7 @@
             var form_get = $('#'+formId);
             var form = document.forms.namedItem(formId);
             var ckInput = CKEDITOR.instances[ckInputId].getData();
+
             var postVars = new FormData(form);
             postVars.append('token',token);
             postVars.append('mail_message',ckInput);

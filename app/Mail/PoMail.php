@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Helpers\Utility;
+use Auth;
 
 class PoMail extends Mailable
 {
@@ -42,7 +43,7 @@ class PoMail extends Mailable
             $name = $company->name;
         }
 
-        $message = $this->view('mail_views.purchase_order');
+        $message = $this->from(Auth::user()->email)->view('mail_views.purchase_order');
             $message->from($address, $name);/*
             ->cc($address, $name)
             ->bcc($address, $name)
@@ -55,5 +56,6 @@ class PoMail extends Mailable
         }
 
             $message->with([ 'message' => $this->data ]);
+        return $message;
     }
 }

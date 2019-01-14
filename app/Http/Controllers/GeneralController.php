@@ -138,6 +138,7 @@ class GeneralController extends Controller
             $searchId = $_GET['searchId'];
             $hiddenId = $_GET['hiddenId'];
             $listId = $_GET['listId'];
+            $overallSumId = $_GET['overallSumId'];
 
             if($pickedVal != '') {
                 $search = VendorCustomer::searchVendor($pickedVal);
@@ -153,11 +154,11 @@ class GeneralController extends Controller
 
                 $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)->with('overallSumId',$overallSumId);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)->with('overallSumId',$overallSumId);
         }
 
         //SEARCH INVENTORY

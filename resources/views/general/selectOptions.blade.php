@@ -23,7 +23,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','overall_sum','<?php echo url('vendor_customer_currency') ?>','foreign_amount');">{{$data->name}} ({{$data->email1}})</a>
+            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{$overallSumId}}','<?php echo url('vendor_customer_currency') ?>','foreign_amount');">{{$data->name}} ({{$data->email1}})</a>
         </li>
 
     @endforeach
