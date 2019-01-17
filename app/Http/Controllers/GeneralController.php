@@ -205,6 +205,8 @@ class GeneralController extends Controller
             $overallSum = $_GET['overallSum'];
             $foreignOverallSum = $_GET['foreignOverallSum'];
             $qtyId = $_GET['qtyId'];
+            $vendCustId = $_GET['vendCustId'];
+            $postDateId = $_GET['postDateId'];
 
             if($pickedVal != '') {
                 $search = Inventory::searchInventory($pickedVal);
@@ -223,14 +225,14 @@ class GeneralController extends Controller
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                     ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
                     ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
-                    ->with('qtyId',$qtyId);
+                    ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                 ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
                 ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
-                ->with('qtyId',$qtyId);
+                ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId);
         }
 
         //FOR COMPETENCY CATEGORY

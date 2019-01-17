@@ -1315,13 +1315,13 @@
         });
     }
 
-    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId){
+    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId,postDateId){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         var vendCustVal = $('#'+vendCustId).val();
         if(vendCustVal != ''){
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId
         }).done(function(data){
             $('#'+listId).html(data);
 
@@ -1515,7 +1515,7 @@
             var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
             totalDiscountGet.val(sumArrayDiscount);
             totalTaxGet.val(sumArrayTax);
-            console.log('='+vendorCustId+'date='+postDateId)
+            //console.log('='+vendorCustId+'date='+postDateId)
             convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
         }else{
@@ -1607,7 +1607,7 @@
         var amount = $('#'+amountId).val();
         var vendorCust = $('#'+vendorCustId).val();
         var postDate = $('#'+postDateId).val();
-        console.log('?amount=' + amount+'&vendorCust='+vendorCustId+'&postDate='+postDateId);
+        console.log(amountId);
         $.ajax({
             url: page+'?amount=' + amount+'&vendorCust='+vendorCust+'&postDate='+postDate
         }).done(function(data){
@@ -1630,12 +1630,12 @@
 
     }
 
-    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId) {
+    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
         $("#"+dropdownId).hide();
 
-        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId);
+        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId);
 
     }
 
@@ -1714,7 +1714,6 @@
     }
 
     function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId){
-        var bomVal = $('#'+dataIdVal).val();
         var totalVal = $('#'+totalValId).val();
 
         //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
@@ -1727,7 +1726,7 @@
 
 
         $.ajax({
-            url: page+'?dataId='+bomVal
+            url: page+'?dataId='+dataIdVal
         }).done(function(data){
             $('#'+dataId).hide();
             var newTotal = totalVal - amtVal;
@@ -1736,7 +1735,7 @@
             totalDiscountGet.val(sumArrayDiscount);
             totalTaxGet.val(sumArrayTax);
 
-            convertToDefaultCurr(currRep,newTotal,currPage,vendorCustId,postDateId);
+            convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
 
             swal("Warning!", 'Item removed successfully', "success");
 

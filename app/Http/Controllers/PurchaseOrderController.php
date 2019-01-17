@@ -343,24 +343,24 @@ class PurchaseOrderController extends Controller
 
             }*/
                 //ITEM VARIABLES
-                $invClass = json_decode($request->input('inv_class_edit')); $itemDesc = json_decode($request->input('item_desc_edit'));
-                $warehouse = json_decode($request->input('warehouse_edit')); $quantity = json_decode($request->input('quantity_edit'));
-                $unitCost = json_decode($request->input('unit_cost_edit')); $unitMeasure = json_decode($request->input('unit_measure_edit'));
-                $quantityReserved = json_decode($request->input('quantity_reserved_edit')); $quantityReceived = json_decode($request->input('quantity_received_edit'));
-                $planned = json_decode($request->input('planned_edit')); $expected = json_decode($request->input('expected_edit'));
-                $promised = json_decode($request->input('promised_edit')); $bOrderNo = json_decode($request->input('b_order_no_edit'));
-                $bOrderLineNo = json_decode($request->input('b_order_line_no_edit')); $shipStatus = json_decode($request->input('ship_status_edit'));
-                $statusComment = json_decode($request->input('status_comment_edit')); $tax = json_decode($request->input('tax_edit'));
-                $taxPerct = json_decode($request->input('tax_perct')); $taxAmount = json_decode($request->input('tax_amount'));
-                $discountPerct = json_decode($request->input('discount_perct_edit')); $discountAmount = json_decode($request->input('discount_amount_edit'));
-                $subTotal = json_decode($request->input('sub_total_edit'));
+                $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
+                $warehouse = Utility::jsonUrlDecode($request->input('warehouse_edit')); $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
+                $unitCost = Utility::jsonUrlDecode($request->input('unit_cost_edit')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure_edit'));
+                $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received_edit'));
+                $planned = Utility::jsonUrlDecode($request->input('planned_edit')); $expected = Utility::jsonUrlDecode($request->input('expected_edit'));
+                $promised = Utility::jsonUrlDecode($request->input('promised_edit')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no_edit'));
+                $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no_edit')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status_edit'));
+                $statusComment = Utility::jsonUrlDecode($request->input('status_comment_edit')); $tax = Utility::jsonUrlDecode($request->input('tax_edit'));
+                $taxPerct = Utility::jsonUrlDecode($request->input('tax_perct_edit')); $taxAmount = Utility::jsonUrlDecode($request->input('tax_amount_edit'));
+                $discountPerct = Utility::jsonUrlDecode($request->input('discount_perct_edit')); $discountAmount = Utility::jsonUrlDecode($request->input('discount_amount_edit'));
+                $subTotal = Utility::jsonUrlDecode($request->input('sub_total_edit'));
 
                 //ACCOUNT VARIABLES
-                $accClass = json_decode($request->input('acc_class_edit')); $accDesc = json_decode($request->input('acc_desc_edit'));
-                $accRate = json_decode($request->input('acc_rate_edit')); $accTax = json_decode($request->input('acc_tax_edit'));
-                $accTaxPerct = json_decode($request->input('acc_tax_perct_edit')); $accTaxAmount = json_decode($request->input('acc_tax_amount_edit'));
-                $accDiscountPerct = json_decode($request->input('acc_discount_perct_edit')); $accDiscountAmount = json_decode($request->input('acc_discount_amount_edit'));
-                $accSubTotal = json_decode($request->input('acc_sub_total_edit'));
+                $accClass = Utility::jsonUrlDecode($request->input('acc_class_edit')); $accDesc = Utility::jsonUrlDecode($request->input('acc_desc_edit'));
+                $accRate = Utility::jsonUrlDecode($request->input('acc_rate_edit')); $accTax = Utility::jsonUrlDecode($request->input('acc_tax_edit'));
+                $accTaxPerct = Utility::jsonUrlDecode($request->input('acc_tax_perct_edit')); $accTaxAmount = Utility::jsonUrlDecode($request->input('acc_tax_amount_edit'));
+                $accDiscountPerct = Utility::jsonUrlDecode($request->input('acc_discount_perct_edit')); $accDiscountAmount = Utility::jsonUrlDecode($request->input('acc_discount_amount_edit'));
+                $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total_edit'));
 
                 //GENERAL VARIABLES
                 $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
@@ -380,7 +380,7 @@ class PurchaseOrderController extends Controller
 
                 $editId = $request->input('edit_id');
                 $editData = PoExtension::firstRow('id',$editId);
-                $uid = $editData->po_uid;
+                $uid = $editData->uid;
                 $attachment = ($editData->attachment != '') ? json_decode($editData->attachment,true) : [];
 
                 if($editData->attachment != ''){
@@ -435,14 +435,8 @@ class PurchaseOrderController extends Controller
                     'purchase_status' => $poStatus,
                     'updated_by' => Auth::user()->id,
                 ];
-                $accDbData = [
-                    'uid' => $uid
-                ];
-                $poDbData = [
-                    'uid' => $uid
-                ];
 
-                //$mainPo = PoExtension::defaultUpdate('id', $editId, $dbDATA);
+                $mainPo = PoExtension::defaultUpdate('id', $editId, $dbDATA);
                 $countExtAcc = $request->input('count_ext_acc');
                 $countExtPo = $request->input('count_ext_po');
 
@@ -456,7 +450,7 @@ class PurchaseOrderController extends Controller
                         $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
                         $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
                         $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                        $poDbDataEdit['po_desc'] = $request->input('acc_class' . $i);
+                        $poDbDataEdit['po_desc'] = $request->input('item_desc' . $i);
                         $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
                         $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
                         $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
@@ -488,17 +482,17 @@ class PurchaseOrderController extends Controller
                         $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
                         $poDbDataEdit['updated_by'] = Auth::user()->id;
 
-                        //PurchaseOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
+                        PurchaseOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
                     }
 
                 }
-                $gg = [];
+
                 if($countExtAcc > 0){
 
                     for ($i = 1; $i <= $countExtAcc; $i++) {
-                        $accDbDataEdit = [];
+
                         $gg[] = $request->input('accId' . $i);
-                        $accDbDataEdit['account_id'] = $request->input('acc_class_edit' . $i);
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
                         $accDbDataEdit['po_desc'] = $request->input('item_desc_acc' . $i);
                         $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
                         $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
@@ -506,7 +500,7 @@ class PurchaseOrderController extends Controller
                         $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
                         $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
                         $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount_acc' . $i),0),$postingDate);
-                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($accDiscountAmount[$i],0);
+                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0);
                         $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0),$postingDate);
                         $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
                         $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
@@ -515,25 +509,24 @@ class PurchaseOrderController extends Controller
 
                         PurchaseOrder::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
                     }
-                    /*return response()->json([
-                        'message' => 'good',
-                        'message2' =>  json_encode($gg).'count='.$countExtAcc  //json_encode($request->all(),true)
-                    ]);*/
+
 
                 }
                    //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
 
-
-
-           /* return response()->json([
-           'message' => 'good',
-           'message2' =>  json_encode($request->all(),true)
-       ]);*/
-
-
+                        $accDbData = [];
+                        $poDbData = [];
 
                         $accDbData['po_id'] = $editId;
-                        $poDbData['po_id'] = $editId;
+                        $accDbData['uid'] = $uid;
+
+
+            /*return response()->json([
+                'message' => 'good',
+                'message2' =>  json_encode($gg).'count='.$countExtAcc  //json_encode($request->all(),true)
+            ]);*/
+
+
 
                     //LOOP THROUGH ACCOUNTS
                     if(!empty($accClass)) {
@@ -553,6 +546,7 @@ class PurchaseOrderController extends Controller
                                 $accDbData['extended_amount_trans'] = Utility::checkEmptyArrayItem($accSubTotal, $i, 0);
                                 $accDbData['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($accSubTotal, $i, 0), $postingDate);
                                 $accDbData['status'] = Utility::STATUS_ACTIVE;
+                                $accDbData['created_by'] = Auth::user()->id;
 
                                 PurchaseOrder::create($accDbData);
 
@@ -563,9 +557,17 @@ class PurchaseOrderController extends Controller
                     }
 
                     //LOOP THROUGH ITEMS
+                    $poDbData['po_id'] = $editId;
+                    $poDbData['uid'] = $uid;
+                    $dda = '';
+
+            /*return response()->json([
+                'message' => 'good',
+                'message2' =>   json_encode($taxPerct)    //json_encode($request->all(),true)
+            ]);*/
                     if(!empty($invClass)) {
                         if (count($invClass) == count($subTotal)) {
-                            for ($i = 0; $i < count($accClass); $i++) {
+                            for ($i = 0; $i < count($invClass); $i++) {
                                 $binStock = Inventory::firstRow('id', $invClass);
                                 $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass, $i, 0);
                                 $poDbData['bin_stock'] = $binStock->inventory_type;
@@ -590,7 +592,7 @@ class PurchaseOrderController extends Controller
 
                                 }
 
-                                $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse, $i, '');
+                                $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse, $i, '0');
                                 $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved, $i, '');
                                 $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived, $i, '');
                                 $poDbData['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
@@ -607,6 +609,8 @@ class PurchaseOrderController extends Controller
                                 PurchaseOrder::create($poDbData);
 
                             }
+
+
 
                         }
 

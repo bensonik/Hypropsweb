@@ -211,7 +211,7 @@ class UnitGoalController extends Controller
 
 
             if (count($stratObj) > 0 || count($measure) > 0 ||  count($ops) > 0 ||
-                 count($q1) > 0 ||  count($q2) > 0 || count($q3) > 0 &&  count($q4) > 0) {
+                count($q1) > 0 ||  count($q2) > 0 || count($q3) > 0 &&  count($q4) > 0) {
 
                 if($hod == Utility::HOD_DETECTOR){
 
@@ -223,7 +223,7 @@ class UnitGoalController extends Controller
                             'program' => $program,
                             'unit_goal_cat' => $unitGoalCat,
                             'dept_id' => Auth::user()->dept_id,
-                            'created_by' => Auth::user()->id,
+                            'updated_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
                         UnitGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -233,7 +233,7 @@ class UnitGoalController extends Controller
 
                         for ($i = 0; $i < $countExt; $i++) {
                             $dbDATA2 = [
-                                'over_perf_score' => $request->input('over_perf_score_edit' . $i),
+                                'over_perf_score' => $request->input('ops_edit' . $i),
                                 'updated_by' => Auth::user()->id,
                             ];
 
@@ -246,7 +246,7 @@ class UnitGoalController extends Controller
                             $dbDATA2 = [
                                 'over_perf_score' => $ops[$i],
                                 'unit_goal_id' => $request->input('edit_id'),
-                                'created_by' => Auth::user()->id,
+                                'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
                             ];
 
@@ -282,7 +282,7 @@ class UnitGoalController extends Controller
                             'program' => $program,
                             'unit_goal_cat' => $unitGoalCat,
                             'dept_id' => Auth::user()->dept_id,
-                            'created_by' => Auth::user()->id,
+                            'updated_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
                         UnitGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
@@ -341,40 +341,70 @@ class UnitGoalController extends Controller
                 }
 
 
-                    }else{  //END OF IF $stratObj IS GREATER THAN 0
+            }else{  //END OF IF $stratObj IS GREATER THAN 0
 
-                        $dbDATA = [
-                            'goal_set_id' => $goalSet,
-                            'weight_perf_score' => $wps,
-                            'program' => $program,
-                            'unit_goal_cat' => $unitGoalCat,
-                            'dept_id' => Auth::user()->dept_id,
+                if($hod == Utility::HOD_DETECTOR){
+
+                    $dbDATA = [
+                        'goal_set_id' => $goalSet,
+                        'weight_perf_score' => $wps,
+                        'program' => $program,
+                        'unit_goal_cat' => $unitGoalCat,
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    UnitGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                    for($i=1; $i<=$countExt;$i++){
+                        $dbDATA2 = [
+
+                            'over_perf_score' => $request->input('ops_edit' . $i),
                             'updated_by' => Auth::user()->id,
-                            'status' => Utility::STATUS_ACTIVE
                         ];
-                        UnitGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
-                        for($i=1; $i<=$countExt;$i++){
-                            $dbDATA2 = [
-                                'strat_obj' => $request->input('strat_obj_edit'.$i),
-                                'measurement' => $request->input('measure_edit'.$i),
-                                'over_perf_score' => $request->input('over_perf_score_edit'.$i),
-                                'q1' => $request->input('q1_edit'.$i),
-                                'q2' => $request->input('q2_edit'.$i),
-                                'q3' => $request->input('q3_edit'.$i),
-                                'q4' => $request->input('q4_edit'.$i),
-                                'updated_by' => Auth::user()->id,
-                            ];
+                        UnitGoalExt::defaultUpdate('id', $request->input('ext_id'.$i), $dbDATA2);
+                    }
 
-                            UnitGoalExt::defaultUpdate('id', $request->input('ext_id'.$i), $dbDATA2);
-                        }
+                    return response()->json([
+                        'message' => 'good',
+                        'message2' => 'saved'
+                    ]);
 
-                        return response()->json([
-                            'message' => 'good',
-                            'message2' => 'saved'
-                        ]);
 
-                    }   //END OF IF $stratObj IS NOT GREATER THAN 0
+                }
+                //END OF UPDATE WITHOUT NEW ENTRIES FOR HOD DETECTOR
+
+                $dbDATA = [
+                    'goal_set_id' => $goalSet,
+                    'weight_perf_score' => $wps,
+                    'program' => $program,
+                    'unit_goal_cat' => $unitGoalCat,
+                    'updated_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+                UnitGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                for($i=1; $i<=$countExt;$i++){
+                    $dbDATA2 = [
+                        'strat_obj' => $request->input('strat_obj_edit'.$i),
+                        'measurement' => $request->input('measure_edit'.$i),
+                        'over_perf_score' => $request->input('over_perf_score_edit'.$i),
+                        'q1' => $request->input('q1_edit'.$i),
+                        'q2' => $request->input('q2_edit'.$i),
+                        'q3' => $request->input('q3_edit'.$i),
+                        'q4' => $request->input('q4_edit'.$i),
+                        'updated_by' => Auth::user()->id,
+                    ];
+
+                    UnitGoalExt::defaultUpdate('id', $request->input('ext_id'.$i), $dbDATA2);
+                }
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'saved'
+                ]);
+
+            }   //END OF IF $stratObj IS NOT GREATER THAN 0
 
         }
         $errors = $validator->errors();
@@ -385,6 +415,7 @@ class UnitGoalController extends Controller
 
 
     }
+
 
     /**
      * Update the specified resource in storage.

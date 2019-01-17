@@ -625,6 +625,7 @@ class Utility
             ->where('status', self::STATUS_ACTIVE)
             ->where('request_user', Auth::user()->id)
             ->where('deny_reason', '')
+            ->where('approval_status', self::APPROVED)
             ->where('year', $year)->get();
 
         $holdArr = [];

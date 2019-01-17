@@ -210,7 +210,7 @@
                                         <div class="form-line">
                                             <input type="text" class="" value="{{$po->account->acct_name}}" autocomplete="off" id="select_acc{{$num}}" onkeyup="searchOptionListAcc('select_acc{{$num}}','myUL500_acc{{$num}}','{{url('default_select')}}','search_accounts','acc500{{$num}}','vendorCust_edit');" name="select_user" placeholder="Select Account">
 
-                                            <input type="hidden" value="{{$po->po_desc}}" class=""  name="acc_class{{$num1}}" id="acc500{{$num}}" />
+                                            <input type="hidden" value="{{$po->account_id}}" class=""  name="acc_class{{$num1}}" id="acc500{{$num}}" />
                                         </div>
                                     </div>
                                     <ul id="myUL500_acc{{$num}}" class="myUL"></ul>
@@ -320,7 +320,7 @@
 
                         </tr>
 
-                        <input type="hidden" name="accId{{$num2}}" value="{{$po->id}}" >
+                        <input type="hidden" name="accId{{$num1}}" value="{{$po->id}}" >
                     @endif
                 @endforeach
 
@@ -389,7 +389,7 @@
 
                     @if(!empty($po->item_id))
                         <?php $num++; $num2++; $countDataPo[] = $num2; ?>
-                        <tr>
+                        <tr id="itemId{{$po->id}}">
 
                             <td scope="row">
                                 <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" class="kid_checkbox_po_edit" />

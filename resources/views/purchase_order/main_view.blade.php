@@ -267,12 +267,12 @@
                 <div class="modal-footer">
                     <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_po'); ?>','reload_data',
                             '<?php echo url('purchase_order'); ?>','<?php echo csrf_token(); ?>',[
-                                    'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
-                            'quantity_reserved','quantity_received','planned','expected','promised','b_order_no',
-                            'b_order_line_no','ship_status','status_comment','tax','tax_perct','tax_amount',
-                            'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
-                            'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
-                            'acc_sub_total'
+                                    'inv_class_edit','item_desc_edit','warehouse_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
+                            'quantity_reserved_edit','quantity_received_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
+                            'b_order_line_no_edit','ship_status_edit','status_comment_edit','tax_edit','tax_perct_edit','tax_amount_edit',
+                            'discount_perct_edit','discount_amount_edit','sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit',
+                            'acc_tax_edit','acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
+                            'acc_sub_total_edit'
                             ],'mail_message_edit')"
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
@@ -419,6 +419,7 @@
             postVars.append('token',token);
             postVars.append('mail_message',ckInput);
             appendClassToPost(classList,postVars);
+            console.log(JSON.stringify(postVars));
             $('#loading_modal').modal('show');
             $('#'+formModal).modal('hide');
             sendRequestMediaForm(submitUrl,token,postVars)
@@ -443,14 +444,15 @@
 
                     }else{
 
-                        alert(message2);
-                        //var infoMessage = swalWarningError(message2);
-                        //swal("Warning!", infoMessage, "warning");
+                        //alert(message2);
+                        console.log(message2)
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
 
                     }
 
                     //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                    //reloadContent(reload_id,reloadUrl);
+                    reloadContent(reload_id,reloadUrl);
                 }
             }
 
