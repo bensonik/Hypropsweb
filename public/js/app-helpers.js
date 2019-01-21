@@ -1287,10 +1287,11 @@
 
     }
 
-    function searchOptionListAcc(searchId,listId,page,moduleType,hiddenId,vendCustId){
+    function searchOptionListAcc(searchId,listId,page,moduleType,hiddenId,vendCustId,postDateId){
         var pickedVal = $('#'+searchId).val();
         var vendCustVal = $('#'+vendCustId).val();
-        if(vendCustVal != ''){
+        var postDate = $('#'+postDateId).val();
+        if(vendCustVal != '' && postDate != ''){
 
             $('#'+listId).show();
             $.ajax({
@@ -1300,7 +1301,7 @@
             });
 
         }else{
-            swal("Warning!", 'Please Select Vendor/Customer to continue', "warning");
+            swal("Warning!", 'Please Select Vendor/Customer and posting date to continue', "warning");
         }
 
     }
@@ -1319,7 +1320,8 @@
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         var vendCustVal = $('#'+vendCustId).val();
-        if(vendCustVal != ''){
+        var postDate = $('#'+postDateId).val();
+        if(vendCustVal != '' && postDate != ''){
         $.ajax({
             url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId
         }).done(function(data){
@@ -1328,7 +1330,7 @@
         });
 
         }else{
-            swal("Warning!", 'Please Select Vendor/Customer to continue', "warning");
+            swal("Warning!", 'Please Select Vendor/Customer and posting date to continue', "warning");
         }
     }
 
@@ -1420,6 +1422,7 @@
                     var taxA = (tax.val() != '') ? tax.val() : 0;
 
                     var real_amount = qtyVal*rate;
+
                     var new_amount = (real_amount-discountA) - taxA;
                     amount.val(new_amount);
                     var sumToArray = classToArray(sharedSumClass);
@@ -1461,7 +1464,7 @@
             var discountA = (discount != '') ? discount.val() : 0;
             var taxA = (tax.val() != '') ? tax.val() : 0;
             if(rate != '' && item != ''){
-                var real_amount = (event.target.id == qtyId) ? qtyVal*rate : rate;
+                var real_amount = (event.target.id == qtyId) ? rate : qtyVal*rate;
                 var new_amount = (real_amount-discountA) - taxA;
                 amount.val(new_amount);
                 var sumToArray = classToArray(sharedSumClass);
@@ -1499,7 +1502,9 @@
         var tax = $('#'+taxAmountId);
         var discountA = (discount != '') ? discount.val() : 0;
         var taxA = (tax.val() != '') ? tax.val() : 0;
-        if(account.val() != ''){
+        var postDate = $('#'+postDateId).val();
+
+        if(account.val() != '' && $('#'+postDateId).val() != ''){
             var new_amount = (rate-discountA) - taxA;
             amount.val(new_amount);
             var sumToArray = classToArray(sharedSumClass);
@@ -1519,7 +1524,7 @@
             convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
         }else{
-            alert('Please select an account and enter rate/amount');
+            alert('Please select an posting date, account and enter rate/amount');
         }
     }
 
@@ -1538,7 +1543,7 @@
         }
 
         if(rate != '' && item != ''){
-            var real_amount = (qtyId == '') ? rate : rate;
+            var real_amount = (qtyId == '') ? rate : rate*qtyVal;
             var percentage = (percent/100)*real_amount;
             perctAmount.val(percentage);
             var discountA = (discount.val() != '') ? discount.val() : 0;
@@ -1579,7 +1584,9 @@
             }).done(function(data){
                 $('#'+displayId).val(data);
                 var rate = $('#'+rateId);
-                $('#'+taxAmountId).val((data*rate.val())/100);
+                var qtyVal = $('#'+qtyId);
+
+                $('#'+taxAmountId).val((data*rate.val()*qtyVal.val())/100);
                 itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,'',taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId)
             });
         }
@@ -1644,12 +1651,13 @@
         var amt = $('#'+amtId).val();
 
         //MINUS SINGLE LINE AMOUNT FROM SUM TOTAL AMOUNT TO BE REMOVED
+
         if(amt != ''){
             var newAmt = $('#'+sumTotalId).val() - amt;
 
             $('#'+sumTotalId).val(newAmt);
         }else{
-            $('#'+sumTotalId).val(0);
+            //$('#'+sumTotalId).val(0);
         }
 
         var get_class = document.getElementsByClassName(all_new_fields_class);
@@ -1713,27 +1721,26 @@
 
     }
 
-    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId){
+    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId){
         var totalVal = $('#'+totalValId).val();
-
-        //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
-        var totalDiscountGet = $('#'+totalDiscount);
-        var totalTaxGet = $('#'+totalTax);
-        var sumToArrayTax = classToArray(taxSharedClass);
-        var sumArrayTax = sumArrayItems(sumToArrayTax);
-        var sumToArrayDiscount = classToArray(discountSharedClass);
-        var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-
+        var discountVal = $('#'+discountAmountId).val();
+        var taxVal = $('#'+taxAmountId).val();
+        var totalDiscountGet = $('#'+totalDiscount).val();
+        var totalTaxGet = $('#'+totalTax).val();
 
         $.ajax({
             url: page+'?dataId='+dataIdVal
         }).done(function(data){
-            $('#'+dataId).hide();
+            $('#'+dataId).remove();
             var newTotal = totalVal - amtVal;
             $('#'+totalValId).val(newTotal);
 
-            totalDiscountGet.val(sumArrayDiscount);
-            totalTaxGet.val(sumArrayTax);
+            //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
+           var newTotalTax = totalTaxGet - taxVal;
+            alert('total='+totalTaxGet+'taxVal='+taxVal);
+            var newTotalDiscount = totalDiscountGet - discountVal;
+            totalDiscountGet.val(newTotalDiscount);
+            totalTaxGet.val(newTotalTax);
 
             convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
 

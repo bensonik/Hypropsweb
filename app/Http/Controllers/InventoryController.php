@@ -329,7 +329,7 @@ class InventoryController extends Controller
 
                                 if ($countBom > 0) {
 
-                                for ($i = 0; $i < $countBom; $i++) {
+                                for ($i = 1; $i <= $countBom; $i++) {
                                     $dbDATA2 = [
                                         'item_id' => $request->input('item_id_edit' . $i),
                                         'quantity' => $request->input('bom_qty_edit' . $i),
@@ -365,7 +365,7 @@ class InventoryController extends Controller
 
                         }else{
                             $update = Inventory::defaultUpdate('id',$editId,$dbDATA);
-                            for ($i = 0; $i < $countBom; $i++) {
+                            for ($i = 1; $i <= $countBom; $i++) {
                                 $dbDATA2 = [
                                     'item_id' => $request->input('item_id_edit' . $i),
                                     'quantity' => $request->input('bom_qty_edit' . $i),

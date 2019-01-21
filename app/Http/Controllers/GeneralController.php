@@ -637,6 +637,7 @@ class GeneralController extends Controller
         $unitMeasure = UnitMeasure::firstRow('id',$searchData->unit_measure);
 
         $item_desc = ($request->input('bill_invoice_type') == Utility::PURCHASE_DESC) ? $searchData->purchase_desc : $searchData->sales_desc ;
+        $item_rate = ($request->input('bill_invoice_type') == Utility::PURCHASE_DESC) ? $searchData->unit_cost : $searchData->unit_price ;
         return response()->json([
             'rate' => $searchData->unit_cost,
             'unit_measure' => $unitMeasure->unit_name,

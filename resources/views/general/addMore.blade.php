@@ -1418,7 +1418,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust_edit');" name="select_user" placeholder="Select Account">
+                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust_edit','posting_date');" name="select_user" placeholder="Select Account">
 
                         <input type="hidden" class="acc_class " value="" name="user" id="acc500{{$num2}}" />
                     </div>
@@ -1454,6 +1454,7 @@
                     <div class="form-line">
                         <select class=" acc_tax shared_tax " name="tax" id="tax_acc{{$num2}}"
                                 onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                            <option value="">Select Tax</option>
                             @foreach($tax as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach
@@ -1688,7 +1689,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" ship_status ship_status_edit" name="ship_status" >
-                            <option value="">Select</option>
+                            <option value="">Select Ship Status</option>
                             @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
                                 <option value="{{$key}}">{{$val}}</option>
                             @endforeach
@@ -1714,7 +1715,7 @@
                     <div class="form-line">
                         <select class=" tax tax_edit" name="tax" id="tax{{$num2}}"
                                 onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
-                            <option value="">Select</option>
+                            <option value="">Select Tax</option>
                             @foreach($tax as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach
@@ -1808,7 +1809,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust_edit');" name="select_user" placeholder="Select Account">
+                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}','vendorCust_edit','posting_date_edit');" name="select_user" placeholder="Select Account">
 
                         <input type="hidden" class=" acc_class_edit" value="" name="user" id="acc500{{$num2}}" />
                     </div>
@@ -1844,6 +1845,7 @@
                     <div class="form-line">
                         <select class=" acc_tax shared_tax acc_tax_edit" name="tax" id="tax_acc{{$num2}}"
                                 onchange="fillNextInputTaxAcc('tax_acc{{$num2}}','tax_perct_acc{{$num2}}','{{url('default_select')}}','get_tax','sub_total_acc{{$num2}}','unit_cost_acc{{$num2}}','acc500{{$num2}}','discount_amount_acc{{$num2}}','tax_amount_acc{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                           <option value="">Select Tax</option>
                             @foreach($tax as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
                             @endforeach
@@ -1919,7 +1921,7 @@
 
         <td class="center-align" id="">
             <div class="form-group">
-                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_acc_edit{{$more}}','{{url('add_more')}}','acc_edit','new_acc_edit','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total_acc_edit{{$num2}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit');">
+                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_acc_edit{{$more}}','{{url('add_more')}}','acc_edit','new_acc_edit','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total_acc{{$num2}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit');">
                     <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                 </div>
             </div>

@@ -55,6 +55,12 @@ class PoMail extends Mailable
             }
         }
 
+        if(count($this->data['copy']) > 0){
+            foreach($this->data['copy'] as $copy){
+                $message->cc($copy);
+            }
+        }
+
             $message->with([ 'message' => $this->data ]);
         return $message;
     }

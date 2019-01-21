@@ -40,12 +40,12 @@
                 <div class="form-group">
                     Assign User
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL2','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL2_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Select User">
 
-                        <input type="hidden" class="user_class" value="{{$edit->assigned_user}}" name="user" id="user" />
+                        <input type="hidden" class="user_class_edit" value="{{$edit->assigned_user}}" name="user" id="user_edit" />
                     </div>
                 </div>
-                <ul id="myUL2" class="myUL"></ul>
+                <ul id="myUL2_edit" class="myUL"></ul>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
@@ -60,6 +60,19 @@
                     Due Date
                     <div class="form-line">
                         <input type="text" class="form-control datepicker4" value="{{$edit->due_date}}" id="due_date_edit" name="due_date" placeholder="Due Date">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+        <div class="row clearfix">
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    RFQ Number
+                    <div class="form-line">
+                        <input type="text" class="form-control" name="rfq_no" value="{{$edit->rfq_no}}" placeholder="RFQ Number">
                     </div>
                 </div>
             </div>
@@ -208,7 +221,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="" value="{{$po->account->acct_name}}" autocomplete="off" id="select_acc{{$num}}" onkeyup="searchOptionListAcc('select_acc{{$num}}','myUL500_acc{{$num}}','{{url('default_select')}}','search_accounts','acc500{{$num}}','vendorCust_edit');" name="select_user" placeholder="Select Account">
+                                            <input type="text" class="" value="{{$po->account->acct_name}}" autocomplete="off" id="select_acc{{$num}}" onkeyup="searchOptionListAcc('select_acc{{$num}}','myUL500_acc{{$num}}','{{url('default_select')}}','search_accounts','acc500{{$num}}','vendorCust_edit','posting_date_edit');" name="select_user" placeholder="Select Account">
 
                                             <input type="hidden" value="{{$po->account_id}}" class=""  name="acc_class{{$num1}}" id="acc500{{$num}}" />
                                         </div>
@@ -312,7 +325,7 @@
 
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->unit_cost_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -640,7 +653,7 @@
                             <td></td>
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->unit_cost_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -797,7 +810,7 @@
                     <b>Send Mail To</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <textarea class="form-control" name="emails" id="emails" placeholder="Enter Email(s), use a comma to separate them" ></textarea>
+                            <textarea class="form-control" name="emails" id="emails" placeholder="Enter Email(s), use a comma to separate them" >{{$edit->mails}}</textarea>
                         </div>
                     </div>
                 </div>
@@ -807,6 +820,19 @@
                     <div class="form-group">
                         <div class="form-line">
                             <input type="file" class="form-control" multiple="multiple" name="file[]" >
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row clearfix">
+
+                <div class="col-sm-4">
+                    <b>Copy (cc)</b>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <textarea class="form-control" name="mail_copy" id="copy_mails" placeholder="Enter Email(s), use a comma to separate them" >{{$edit->mail_copy}}</textarea>
                         </div>
                     </div>
                 </div>

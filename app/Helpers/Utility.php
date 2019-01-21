@@ -481,6 +481,14 @@ class Utility
 
     }
 
+    public static function deleteItemData($table,$id,$postId)
+    {
+        return DB::table($table)
+            ->where($id , $postId
+            )->delete();
+
+    }
+
     public static function tenColumnSingleValue($table,$column1,$column2,$column3,$column4
         ,$column5,$column6,$column7,$column8,$column9,$column10, $post)
     {

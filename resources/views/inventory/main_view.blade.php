@@ -731,7 +731,7 @@
                     var cArray = classToArray(cost);
                     var dArraySum = sumArray(dArray);
                     var cArraySum = sumArray(cArray);
-                    alert(cost);
+
                     $('#'+unitCostId).attr('value', cArraySum);
                     //$('#'+unitCostId).val(cArraySum);
                     $('#quantity').val(dArraySum);

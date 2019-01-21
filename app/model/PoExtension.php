@@ -177,6 +177,18 @@ class PoExtension extends Model
 
     }
 
+    public static function deleteItem($postId)
+    {
+        return Utility::deleteItem(self::table(),$postId);
+
+    }
+
+    public static function deleteItemData($id,$postId)
+    {
+        return Utility::deleteItemData(self::table(),$id,$postId);
+
+    }
+
     public static function searchPo($value){
         return static::where('po_extention.status', '=','1')
             ->where(function ($query) use($value){

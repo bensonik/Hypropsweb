@@ -100,6 +100,7 @@ class PurchaseOrderController extends Controller
                 $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount'); $oneTimePerct = $request->input('one_time_perct');
                 $oneTimeTaxAmount = $request->input('one_time_tax_amount'); $taxType = $request->input('tax_type');
                 $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct');
+                $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
 
                 $vendor = VendorCustomer::firstRow('id',$prefVendor);
                 $curr = Currency::firstRow('id',$vendor->currency_id);
@@ -132,6 +133,9 @@ class PurchaseOrderController extends Controller
                     'assigned_user' => $user,
                     'po_number' => $purchaseOrderNo,
                     'vendor_invoice_no' => $vendorInvoiceNo,
+                    'rfq_no' => $rfqNo,
+                    'mails' => $emails,
+                    'mail_copy' => $mailCopy,
                     'sum_total' => $grandTotal,
                     'trans_total' => $grandTotalVendorCurr,
                     'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
@@ -173,7 +177,7 @@ class PurchaseOrderController extends Controller
 
                 /*return response()->json([
                     'message' => 'warning',
-                    'message2' => json_encode($dbDATA)
+                    'message2' => json_encode($invClass)
                 ]);*/
                 if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
 
@@ -200,7 +204,7 @@ class PurchaseOrderController extends Controller
                             $accDbData['status'] = Utility::STATUS_ACTIVE;
                             $accDbData['created_by'] = Auth::user()->id;
 
-                            //PurchaseOrder::create($accDbData);
+                            PurchaseOrder::create($accDbData);
 
                         }
 
@@ -208,7 +212,7 @@ class PurchaseOrderController extends Controller
 
                     //LOOP THROUGH ITEMS
                     if(count($invClass) == count($subTotal)){
-                        for($i=0;$i<count($accClass);$i++){
+                        for($i=0;$i<count($invClass);$i++){
                             $binStock = Inventory::firstRow('id',$invClass);
                             $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass,$i,0);
                             $poDbData['bin_stock'] = $binStock->inventory_type;
@@ -247,7 +251,7 @@ class PurchaseOrderController extends Controller
                             $poDbData['status'] = Utility::STATUS_ACTIVE;
                             $poDbData['created_by'] = Auth::user()->id;
 
-                            //PurchaseOrder::create($poDbData);
+                            PurchaseOrder::create($poDbData);
 
                         }
 
@@ -264,6 +268,9 @@ class PurchaseOrderController extends Controller
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->po_uid);
 
                         $mailContent = [];
+
+                        $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
+                        $mailContent['copy'] = $mailCopyContent;
                         $mailContent['po']= $getPo;
                         $mailContent['poData'] = $getPoData;
                         $mailContent['attachment'] = $mailFiles;
@@ -372,6 +379,7 @@ class PurchaseOrderController extends Controller
                 $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount_edit'); $oneTimeDiscountPerct = $request->input('one_time_discount_perct_edit');
                 $oneTimeTaxAmount = $request->input('one_time_tax_amount_edit'); $taxType = $request->input('tax_type');
                 $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct_edit');
+                $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
 
                 $vendor = VendorCustomer::firstRow('id',$prefVendor);
                 $curr = Currency::firstRow('id',$vendor->currency_id);
@@ -409,6 +417,9 @@ class PurchaseOrderController extends Controller
                     'assigned_user' => $user,
                     'po_number' => $purchaseOrderNo,
                     'vendor_invoice_no' => $vendorInvoiceNo,
+                    'mails' => $emails,
+                    'mail_copy' => $mailCopy,
+                    'rfq_no' => $rfqNo,
                     'sum_total' => $grandTotal,
                     'trans_total' => $grandTotalVendorCurr,
                     'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
@@ -623,6 +634,8 @@ class PurchaseOrderController extends Controller
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->po_uid);
 
                         $mailContent = [];
+                        $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
+                        $mailContent['copy'] = $mailCopyContent;
                         $mailContent['po']= $getPo;
                         $mailContent['poData'] = $getPoData;
                         $mailContent['attachment'] = $mailFiles;
@@ -715,39 +728,24 @@ class PurchaseOrderController extends Controller
     public function destroy(Request $request)
     {
         //
-        $all_id = json_decode($request->input('all_data'));
+        $idArray = json_decode($request->input('all_data'));
 
-        $dbData = [
-            'status' => Utility::STATUS_DELETED
-        ];
-
-        $in_use = [];
-        $unused = [];
-        for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = User::specialColumns('dept_id', $all_id[$i]);
-            if(count($rowDataSalary)>0){
-                $unused[$i] = $all_id[$i];
-            }else{
-                $in_use[$i] = $all_id[$i];
+        foreach($idArray as $data){
+            $dataChild = PurchaseOrder::specialColumns('po_id',$data);
+            if(!empty($dataChild)){
+                foreach($dataChild as $child){
+                    $delete = PurchaseOrder::deleteItem($child->id);
+                }
             }
+            $delete = PoExtension::deleteItem($data);
         }
-        $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' tax(es) has been used in another module and cannot be deleted' : '';
-        if(count($in_use) > 0){
-            $delete = Department::massUpdate('id',$in_use,$dbData);
 
-            return response()->json([
-                'message2' => 'deleted',
-                'message' => count($in_use).' data(s) has been deleted'.$message
-            ]);
 
-        }else{
-            return  response()->json([
-                'message2' => 'The '.count($unused).' department(s) has been used in another module and cannot be deleted',
-                'message' => 'warning'
-            ]);
+        return response()->json([
+            'message2' => 'deleted',
+            'message' => 'Data deleted successfully'
+        ]);
 
-        }
     }
 
 }

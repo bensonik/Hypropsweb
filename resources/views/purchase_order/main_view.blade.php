@@ -94,6 +94,19 @@
                             </div>
                             <hr/>
                             <div class="row clearfix">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        RFQ Number
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="rfq_no" placeholder="RFQ Number">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <hr/>
+                            <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         1 {{\App\Helpers\Utility::defaultCurrency()}} =
@@ -298,7 +311,7 @@
                         </li>
                         <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('purchase_order'); ?>',
-                                    '<?php echo url('delete_dept'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                    '<?php echo url('delete_po'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
