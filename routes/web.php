@@ -193,6 +193,7 @@ Route::post('/status_indi_goal', 'UnitGoalController@statusChange')->name('statu
 
 // -------------INDIVIDUAL GOAL MODULE-----------
 Route::any('/individual_goal', 'IndiGoalController@index')->name('individual_goal')->middleware('auth');
+Route::any('/mark_indi_goal', 'IndiGoalController@markIndiGoal')->name('mark_indi_goal');
 Route::post('/create_indi_goal', 'IndiGoalController@create')->name('create_indi_goal');
 Route::post('/edit_indi_goal_form', 'IndiGoalController@editForm')->name('edit_indi_goal_form');
 Route::post('/edit_indi_goal', 'IndiGoalController@edit')->name('edit_indi_goal');

@@ -61,6 +61,33 @@ class IndiGoalController extends Controller
 
     }
 
+
+    //MARK INDIVIDUAL GOALS OF EMPLOYEES
+    public function markIndiGoal(Request $request)
+    {
+        //
+        $indiGoal = IndiGoal::firstRow('id',$request->input('dataId'));
+        $indiGoalCat = IndiGoalCat::getAllData();
+        $indiGoalSeries = UnitGoalSeries::getAllData();
+        $hod = Utility::appSupervisor('appraisal_supervision',$indiGoal->dept_id,Auth::user()->id);
+        $lowerHod = Utility::detectHOD(Auth::user()->id);
+        $hodId = Utility::appSupervisorId('appraisal_supervision',$indiGoal->dept_id,Auth::user()->dept_id);
+        $lowerHodId = Utility::detectHODId(Auth::user()->dept_id);
+        $lowerHodDetail = User::firstRow('id',$lowerHodId);
+        $hodDetail = User::firstRow('id',$hodId);
+        $compFrame = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::BEHAV_COMP):
+            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::BEHAV_COMP);
+        $techComp = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS):
+            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
+
+        return view::make('indi_goals.mark_indi_goal')->with('edit',$indiGoal)->with('$IndiGoalCat',$indiGoalCat)
+            ->with('hod',$hod)->with('indiGoalSeries',$indiGoalSeries)->with('lowerHod',$lowerHod)
+            ->with('behavComp',$compFrame)->with('lowerHodId',$lowerHodId)->with('hodId',$hodId)
+            ->with('techComp',$techComp)->with('lowerHodDetail',$lowerHodDetail)->with('hodDetail',$hodDetail);
+
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
