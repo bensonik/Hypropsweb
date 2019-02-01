@@ -1725,8 +1725,8 @@
         var totalVal = $('#'+totalValId).val();
         var discountVal = $('#'+discountAmountId).val();
         var taxVal = $('#'+taxAmountId).val();
-        var totalDiscountGet = $('#'+totalDiscount).val();
-        var totalTaxGet = $('#'+totalTax).val();
+        var totalDiscountGet = $('#'+totalDiscount);
+        var totalTaxGet = $('#'+totalTax);
 
         $.ajax({
             url: page+'?dataId='+dataIdVal
@@ -1736,15 +1736,32 @@
             $('#'+totalValId).val(newTotal);
 
             //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
-           var newTotalTax = totalTaxGet - taxVal;
-            alert('total='+totalTaxGet+'taxVal='+taxVal);
-            var newTotalDiscount = totalDiscountGet - discountVal;
+           var newTotalTax = totalTaxGet.val() - taxVal;
+            alert('total='+totalTaxGet.val()+'taxVal='+taxVal+'total='+newTotalTax);
+            var newTotalDiscount = totalDiscountGet.val() - discountVal;
             totalDiscountGet.val(newTotalDiscount);
             totalTaxGet.val(newTotalTax);
 
             convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
+            updateDbSum(dataIdVal,page,totalVal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId);
 
             swal("Warning!", 'Item removed successfully', "success");
+
+        });
+
+
+    }
+
+    function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId){
+
+        var postDate = $('#'+postDateId).val();
+        var vendorCust = $('#'+vendorCustId).val();
+
+
+        $.ajax({
+            url: page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust
+        }).done(function(data){
+
 
         });
 

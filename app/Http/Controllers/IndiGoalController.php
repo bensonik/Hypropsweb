@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Notify;
+use App\model\ApprovalDept;
 use App\model\BehavComp;
 use App\model\CompetencyAssess;
 use App\model\CompetencyFramework;
@@ -45,18 +46,19 @@ class IndiGoalController extends Controller
         $lowerHod = Utility::detectHOD(Auth::user()->id);
         $hodId = Utility::appSupervisorId('appraisal_supervision',Auth::user()->dept_id,Auth::user()->id);
         $lowerHodId = Utility::detectHODId(Auth::user()->dept_id);
+        $deptHead = ApprovalDept::getAllData();
 
         if ($request->ajax()) {
             return \Response::json(view::make('indi_goals.reload',array('mainData' => $mainData,'indiGoalCat' => $indiGoalCat
             ,'indiGoalSeries' => $indiGoalSeries,'hod' => $hod,'behavComp' => $compFrame,
             'hodId' => $hodId,'lowerHodId' => $lowerHodId,'lowerHod' => $lowerHod,'dept' => $department
-            ,'techComp' => $techComp))->render());
+            ,'techComp' => $techComp,'deptHead' => $deptHead))->render());
 
         }else{
             return view::make('indi_goals.main_view')->with('mainData',$mainData)->with('indiGoalCat',$indiGoalCat)
                 ->with('indiGoalSeries',$indiGoalSeries)->with('hod',$hod)->with('lowerHod',$lowerHod)
                 ->with('behavComp',$compFrame)->with('hodId',$hodId)->with('lowerHodId',$lowerHodId)
-                ->with('dept',$department)->with('techComp',$techComp);
+                ->with('dept',$department)->with('techComp',$techComp)->with('deptHead',$deptHead);
         }
 
     }
@@ -66,24 +68,45 @@ class IndiGoalController extends Controller
     public function markIndiGoal(Request $request)
     {
         //
-        $indiGoal = IndiGoal::firstRow('id',$request->input('dataId'));
+        $goalSetId = $request->input('goal_set');
+        $deptId = $request->input('department');
+        $userId = $request->input('user');
+        if($deptId == 0 && $userId != ''){
+            $getDept = User::where('id',$userId)->where('status',Utility::STATUS_ACTIVE)->first(['dept_id']);
+            $deptId = $getDept->dept_id;
+
+        }
+        $dept = Department::getAllData();
+        $userDetail = User::firstRow('id',$userId);
+        $deptHead = ApprovalDept::getAllData();
+
+
+        $indiGoal = IndiGoal::specialColumns3('goal_set_id',$goalSetId,'dept_id',$deptId,'user_id',$userId);
         $indiGoalCat = IndiGoalCat::getAllData();
         $indiGoalSeries = UnitGoalSeries::getAllData();
-        $hod = Utility::appSupervisor('appraisal_supervision',$indiGoal->dept_id,Auth::user()->id);
+        $hod = Utility::appSupervisor('appraisal_supervision',$deptId,Auth::user()->id);
         $lowerHod = Utility::detectHOD(Auth::user()->id);
-        $hodId = Utility::appSupervisorId('appraisal_supervision',$indiGoal->dept_id,Auth::user()->dept_id);
+        $hodId = Utility::appSupervisorId('appraisal_supervision',$deptId,Auth::user()->dept_id);
         $lowerHodId = Utility::detectHODId(Auth::user()->dept_id);
         $lowerHodDetail = User::firstRow('id',$lowerHodId);
         $hodDetail = User::firstRow('id',$hodId);
-        $compFrame = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::BEHAV_COMP):
-            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::BEHAV_COMP);
-        $techComp = (Auth::user()->dept_id == $indiGoal->dept_id) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS):
-            SkillCompCat::specialColumns2('dept_id',$indiGoal->dept_id,'skill_comp_id',Utility::COMP_ASSESS);
+        $compFrame = (Auth::user()->dept_id == $deptId) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::BEHAV_COMP):
+            SkillCompCat::specialColumns2('dept_id',$deptId,'skill_comp_id',Utility::BEHAV_COMP);
+        $techComp = (Auth::user()->dept_id == $deptId) ? SkillCompCat::specialColumns2('dept_id',Auth::user()->dept_id,'skill_comp_id',Utility::COMP_ASSESS):
+            SkillCompCat::specialColumns2('dept_id',$deptId,'skill_comp_id',Utility::COMP_ASSESS);
+            //print_r($indiGoalCat);exit();
+       /* if($goalSetId == '' && $deptId == '' && $userId == '' && count($indiGoal)){
+            return 'No match found to your search, please search again';
+        }*/
 
-        return view::make('indi_goals.mark_indi_goal')->with('edit',$indiGoal)->with('$IndiGoalCat',$indiGoalCat)
-            ->with('hod',$hod)->with('indiGoalSeries',$indiGoalSeries)->with('lowerHod',$lowerHod)
-            ->with('behavComp',$compFrame)->with('lowerHodId',$lowerHodId)->with('hodId',$hodId)
-            ->with('techComp',$techComp)->with('lowerHodDetail',$lowerHodDetail)->with('hodDetail',$hodDetail);
+            return view::make('indi_goals.mark_indi_goal')->with('indiGoal',$indiGoal)->with('$IndiGoalCat',$indiGoalCat)
+                ->with('hod',$hod)->with('indiGoalSeries',$indiGoalSeries)->with('lowerHod',$lowerHod)
+                ->with('behavComp',$compFrame)->with('lowerHodId',$lowerHodId)->with('hodId',$hodId)
+                ->with('techComp',$techComp)->with('lowerHodDetail',$lowerHodDetail)->with('hodDetail',$hodDetail)
+                ->with('dept',$dept)->with('userDetail',$userDetail)->with('deptHead',$deptHead);
+
+
+
 
     }
 
@@ -929,7 +952,7 @@ class IndiGoalController extends Controller
                     IndiGoal::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
 
-                    for ($i = 0; $i < $countExt; $i++) {
+                    for ($i = 1; $i <= $countExt; $i++) {
                         $dbDATA2 = [
                             'core_behav_comp' => $request->input('core_behav_comp_edit' . $i),
                             'element_behav_comp' => $request->input('element_edit' . $i),

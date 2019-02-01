@@ -722,6 +722,144 @@
                 <div class="body">
 
                     <div class="row clearfix">
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+                        <form name="import_excel" action="{{url('mark_indi_goal')}}" id="" class="form form-horizontal" method="get" enctype="multipart/form-data">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select  class="form-control " name="goal_set" >
+                                            <option value="">Goal Set</option>
+                                            @foreach($indiGoalSeries as $ap)
+                                                <option value="{{$ap->id}}">{{$ap->goal_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select  class="form-control " name="user" id="user_detail">
+                                                <option value="">Select Head of Department (HOD)</option>
+                                                @if(!empty($deptHead))
+                                                @foreach($deptHead as $ap)
+                                                    <option value="{{$ap->dept_head}}">{{$ap->hod->firstname}} {{$ap->hod->lastname}}({{$ap->department->dept_name}})</option>
+                                                @endforeach
+                                                @endif
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="">
+                                    <div class="">
+                                        <div class="" id="" >
+                                            <input type="hidden" id="dept2" class="" value="0" name="department"  >
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            <button  type="submit" class="btn btn-info waves-effect">
+                                Mark HOD Appraisals
+                            </button>
+                        </form>
+                        <hr/><hr/>
+                        @endif
+                        <form name="import_excel" action="{{url('mark_indi_goal')}}" id="" class="form form-horizontal" method="get" enctype="multipart/form-data">
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select  class="form-control " name="goal_set" >
+                                            <option value="">Goal Set</option>
+                                            @foreach($indiGoalSeries as $ap)
+                                                <option value="{{$ap->id}}">{{$ap->goal_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || ($lowerHod == \App\Helpers\Utility::HOD_DETECTOR && in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT)))
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select  class="form-control " name="department" id="dept1" onchange="fillNextInput('dept1','display_user1','<?php echo url('default_select'); ?>','dept_users')">
+                                                <option value="">Department</option>
+                                                @foreach($dept as $ap)
+                                                    <option value="{{$ap->id}}">{{$ap->dept_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line" id="display_user1" >
+                                            <select  class="form-control" name="user"  >
+                                                <option value="">Select User</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if($lowerHod == \App\Helpers\Utility::HOD_DETECTOR && !in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select  class="form-control " name="department" id="dept1" onchange="fillNextInput('dept1','display_user1','<?php echo url('default_select'); ?>','dept_users')">
+                                                <option value="" selected>Select Department</option>
+                                                <option value="{{Auth::user()->dept_id}}">My Department</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line" id="display_user1" >
+                                            <select  class="form-control" name="user"  >
+                                                <option value="">Select User</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            @if(!in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) && $lowerHod != \App\Helpers\Utility::HOD_DETECTOR)
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select  class="form-control " name="department" id="dept">
+                                                <option value="">Department</option>
+                                                @foreach($dept as $ap)
+                                                    <option value="{{$ap->id}}">{{$ap->dept_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line" >
+                                            <select  class="form-control" name="user"  >
+                                                <option value="{{Auth::user()->id}}">{{Auth::user()->firstname}} {{Auth::user()->lastname}}</option>
+
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                            <button  type="submit" class="btn btn-info waves-effect">
+                                Mark/View Appraisal
+                            </button>
+                        </form>
+
+                        <hr/>
                         <form name="import_excel" id="searchFrameForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
 
                             <div class="col-sm-4">
@@ -766,7 +904,7 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select  class="form-control " name="department" id="dept" onchange="fillNextInput('dept','display_user','<?php echo url('default_select'); ?>','dept_users')">
-                                                <option value="{{Auth::user()->dept_id}} selected">My Department</option>
+                                                <option value="" selected>Select Department</option>
                                                 <option value="{{Auth::user()->dept_id}}">My Department</option>
                                             </select>
                                         </div>
@@ -905,6 +1043,14 @@
     <!-- #END# Bordered Table -->
 
 <script>
+
+    function updateDeptValue(deptId,userId,deptVal){
+        var dept = $('#'+deptId);
+        var user = $('#'+userId).val();
+        if(user != ''){
+            dept.val(deptVal);
+        }
+    }
 
     function save1(formModal,formId,submitUrl,reload_id,reloadUrl,token,obj,review,level) {
         var inputVars = $('#' + formId).serialize();

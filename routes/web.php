@@ -99,6 +99,7 @@ Route::any('/vendor_customer_currency', 'GeneralController@vendorCustomerCurrenc
 Route::any('/inventory_details', 'GeneralController@inventoryDetails')->name('inventory_details');
 Route::any('/amount_to_default_curr', 'GeneralController@convertToDefault')->name('amount_to_default_curr');
 Route::any('/get_rate', 'GeneralController@getRate')->name('get_rate');
+Route::any('/update_sum', 'GeneralController@updateSum')->name('update_sum');
 
 // -------------COMPANY INFO MODULE-----------
 Route::any('/company', 'CompanyController@index')->name('user')->middleware('auth.admin');
@@ -193,7 +194,7 @@ Route::post('/status_indi_goal', 'UnitGoalController@statusChange')->name('statu
 
 // -------------INDIVIDUAL GOAL MODULE-----------
 Route::any('/individual_goal', 'IndiGoalController@index')->name('individual_goal')->middleware('auth');
-Route::any('/mark_indi_goal', 'IndiGoalController@markIndiGoal')->name('mark_indi_goal');
+Route::any('/mark_indi_goal', 'IndiGoalController@markIndiGoal')->name('mark_indi_goal')->middleware('auth');
 Route::post('/create_indi_goal', 'IndiGoalController@create')->name('create_indi_goal');
 Route::post('/edit_indi_goal_form', 'IndiGoalController@editForm')->name('edit_indi_goal_form');
 Route::post('/edit_indi_goal', 'IndiGoalController@edit')->name('edit_indi_goal');

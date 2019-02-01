@@ -8,6 +8,8 @@ use App\model\AccountDetailType;
 use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\Currency;
+use App\model\PoExtension;
+use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
 use App\model\SkillCompCat;
 use App\model\Inventory;
@@ -686,6 +688,38 @@ class GeneralController extends Controller
 
     }
 
+        //UPDATE TOTAL SUM,TAX SUM, DISCOUNT SUM AND THEIR DEFAULT CURRENCY
+        public function updateSum(Request $request)
+        {
+            //
+            $dataId = $request->input('dataId'); $grandTotal = $request->input('grandTotal');
+            $totalTax = $request->input('totalTax'); $totalDiscount = $request->input('totalDiscount');
+            $postDate = $request->input('postDate'); $vendorCust = $request->input('vendorCust');
 
+            $data = VendorCustomer::firstRow('id',$vendorCust);
+            $dataCurr = $data->currency_id;
+            $curr = Currency::firstRow('id',$dataCurr);
+
+            $grandTotalDefaultCurr = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$grandTotal,$postDate);
+            $totalTaxDefaultCurr = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$totalTax,$postDate);
+            $totalDiscountDefaultCurr = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$totalDiscount,$postDate);
+
+            $dbData = [
+                'sum_total' => $grandTotalDefaultCurr,
+                'trans_total' => $grandTotal,
+                'discount_total' => $totalDiscountDefaultCurr,
+                'discount_trans' => $totalDiscount,
+                'tax_total' => $totalTaxDefaultCurr,
+                'tax_trans' => $totalTax,
+            ];
+
+            PoExtension::defaultUpdate('id',$dataId,$dbData);
+
+            return response()->json([
+                'message' => 'saved',
+                'message2' => 'saved successfully',
+            ]);
+
+        }
 
 }
