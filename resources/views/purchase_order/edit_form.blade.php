@@ -325,7 +325,7 @@
 
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -413,7 +413,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="" value="{{$po->inventory->item_name}}" autocomplete="off" id="select_inv{{$num}}" onkeyup="searchOptionListInventory('select_inv{{$num}}','myUL500{{$num}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num}}','item_desc{{$num}}','unit_cost{{$num}}','unit_measure{{$num}}','sub_total{{$num}}','shared_sub_tota_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num}}','vendorCust_edit');" name="select_user" placeholder="Inventory Item">
+                                            <input type="text" class="" value="{{$po->inventory->item_name}}" autocomplete="off" id="select_inv{{$num}}" onkeyup="searchOptionListInventory('select_inv{{$num}}','myUL500{{$num}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num}}','item_desc{{$num}}','unit_cost{{$num}}','unit_measure{{$num}}','sub_total{{$num}}','shared_sub_tota_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num}}','vendorCust_edit','posting_date_edit','total_tax_amount_edit');" name="select_user" placeholder="Inventory Item">
 
                                             <input type="hidden" class="inv_class" value="{{$po->item_id}}" name="inv_class{{$num2}}" id="inv500{{$num}}" />
                                         </div>
@@ -653,7 +653,7 @@
                             <td></td>
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -748,7 +748,7 @@
                         </div>
                     </div>
                 </div>
-
+                <?php $exclTax = $edit->trans_total + $edit->tax_trans; ?>
                 <div class="col-sm-4 ">
                     <b>Total Tax Amount <span class="foreign_amount_edit"></span></b>
                     <div class="form-group ">
@@ -781,10 +781,19 @@
                 </div>
             </div>
             <div class="col-sm-4 ">
-                Grand Total <span class="foreign_amount_edit"></span>
+                Grand Total(Incl. Tax) <span class="foreign_amount_edit"></span>
                 <div class="form-group ">
                     <div class="form-line">
                         <input type="text" class="form-control" value="{{$edit->trans_total}}" id="overall_sum_edit" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                Grand Total(Excl. Tax) <span class="foreign_amount"></span>
+                <div class="form-group ">
+
+                    <div class="form-line">
+                        <input type="text" class="form-control" id="excl_overall_sum_edit" value="{{$exclTax}}" readonly name="" placeholder="Grand Total(Excl. Tax) Vendor Currency">
                     </div>
                 </div>
             </div>

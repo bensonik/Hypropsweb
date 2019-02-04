@@ -222,18 +222,27 @@
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        Grand Total {{\App\Helpers\Utility::defaultCurrency()}}
+                                        Grand Total(Default Curr(Incl. Tax)) {{\App\Helpers\Utility::defaultCurrency()}}
                                         <div class="form-line">
                                             <input type="text" class="form-control" readonly id="foreign_overall_sum" name="grand_total" placeholder="Grand Total Default Currency">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                        Grand Total <span class="foreign_amount"></span>
+                                        Grand Total(Incl. Tax) <span class="foreign_amount"></span>
                                     <div class="form-group ">
 
                                         <div class="form-line">
                                             <input type="text" class="form-control" id="overall_sum" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    Grand Total(Excl. Tax) <span class="foreign_amount"></span>
+                                    <div class="form-group ">
+
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" id="excl_overall_sum" readonly name="" placeholder="Grand Total(Excl. Tax) Vendor Currency">
                                         </div>
                                     </div>
                                 </div>

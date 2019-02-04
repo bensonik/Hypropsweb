@@ -732,9 +732,9 @@
                     var dArraySum = sumArray(dArray);
                     var cArraySum = sumArray(cArray);
 
-                    $('#'+unitCostId).attr('value', cArraySum);
+                    $('#'+unitCostId).attr('value', decPoints(cArraySum,2));
                     //$('#'+unitCostId).val(cArraySum);
-                    $('#quantity').val(dArraySum);
+                    $('#quantity').val(decPoints(dArraySum,2));
 
                 });
 
@@ -751,7 +751,7 @@
             }).done(function(data){
                 $('#'+bomId).hide();
                 var newTotal = totalVal - amtVal;
-                $('#'+totalValId).val(newTotal);
+                $('#'+totalValId).val(decPoints(newTotal,2));
                 swal("Warning!", 'Item removed successfully', "success");
 
             });
@@ -767,9 +767,9 @@
             if(amt != ''){
                 var newAmt = $('#'+unitCostId).val() - amt;
 
-                $('#'+unitCostId).val(newAmt);
+                $('#'+unitCostId).val(decPoints(newAmt,2));
             }else{
-                $('#'+unitCostId).val(0);
+                $('#'+unitCostId).val(0.00);
             }
 
             var get_class = document.getElementsByClassName(all_new_fields_class);

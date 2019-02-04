@@ -416,7 +416,6 @@ class Utility
         return DB::table($table)
             ->whereIn($column, $post)
             ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
             ->orderBy('id','DESC')->get();
 
     }

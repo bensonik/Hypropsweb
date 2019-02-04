@@ -46,7 +46,7 @@
           <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionListInventory('select_inv','myUL500','{{url('default_select')}}','search_inventory_transact','inv500','item_desc','unit_cost','unit_measure','sub_total','shared_sub_total','overall_sum','foreign_overall_sum','qty','vendorCust','posting_date');" name="select_user" placeholder="Inventory Item">
+                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionListInventory('select_inv','myUL500','{{url('default_select')}}','search_inventory_transact','inv500','item_desc','unit_cost','unit_measure','sub_total','shared_sub_total','overall_sum','foreign_overall_sum','qty','vendorCust','posting_date','total_tax_amount');" name="select_user" placeholder="Inventory Item">
 
                         <input type="hidden" class="inv_class" value="" name="inventory" id="inv500" />
                     </div>

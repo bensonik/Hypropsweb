@@ -725,6 +725,34 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    public function searchPo(Request $request)
+    {
+        //
+        //$search = User::searchUser($request->input('searchVar'));
+        $search = PoExtension::searchPo($_GET['searchVar']);
+        $obtain_array = [];
+
+        foreach($search as $data){
+
+            $obtain_array[] = $data->uid;
+        }
+        /*for($i=0;$i<count($search);$i++){
+            $obtain_array[] = $search[$i]->id;
+        }*/
+        //print_r($search); exit();
+        $user_ids = array_unique($obtain_array);
+        $mainData =  PoExtension::massData('uid', $user_ids);
+        //print_r($obtain_array); die();
+        if (count($user_ids) > 0) {
+
+            return view::make('purchase_order.search_po')->with('mainData',$mainData);
+        }else{
+            return 'No match found, please search again with sensitive words';
+        }
+
+    }
+
     public function destroy(Request $request)
     {
         //

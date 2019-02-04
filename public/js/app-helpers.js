@@ -1252,6 +1252,10 @@
         return total;
     }
 
+    function decPoints(param,decP){
+        return parseFloat(param).toFixed(decP);
+    }
+
 
     function permDelete(bomId,page,bomIdVal){
             var bomVal = $('#'+bomIdVal).val();
@@ -1259,7 +1263,7 @@
                 $.ajax({
                     url: page+'?dataId='+bomVal
                 }).done(function(data){
-                    $('#'+bomId).hide();
+                    $('#'+bomId).remove();
                     swal("Warning!", 'Item removed successfully', "success");
 
                 });
@@ -1285,6 +1289,13 @@
             }
         },2000)
 
+    }
+
+    function exclTax(totalAmtId,totalTaxId,exclTaxId){
+        var totalAmt = $('#'+totalAmtId);
+        var totalTax = $('#'+totalTaxId);
+        var newAmt = parseFloat(totalAmt.val())+parseFloat(totalTax.val());
+        $('#'+exclTaxId).val(decPoints(newAmt,2));
     }
 
     function searchOptionListAcc(searchId,listId,page,moduleType,hiddenId,vendCustId,postDateId){
@@ -1316,14 +1327,14 @@
         });
     }
 
-    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId,postDateId){
+    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId,postDateId,totalTaxId){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         var vendCustVal = $('#'+vendCustId).val();
         var postDate = $('#'+postDateId).val();
         if(vendCustVal != '' && postDate != ''){
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId+'&totalTaxId='+totalTaxId
         }).done(function(data){
             $('#'+listId).html(data);
 
@@ -1352,24 +1363,25 @@
 
     }
 
-    function fetchInventory(searchId,bill_invoice,page,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId) {
+    function fetchInventory(searchId,bill_invoice,page,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId,totalTaxId) {
         var pickedVal = $('#'+searchId).val();
 
 
             $.ajax({
                 url:  page+'?search_id='+pickedVal+'&bill_invoice'+bill_invoice
             }).done(function(data){
-                //console.log(data);
+
                 $('#'+descId).val(data.item_desc);
-                $('#'+rateId).val(data.rate);
+                $('#'+rateId).val(decPoints(data.rate,2));
                 $('#'+unitMId).val(data.unit_measure);
-                $('#'+subTotalId).val(data.rate);
+                $('#'+subTotalId).val(decPoints(data.rate,2));
                 $('#'+qtyId).val('1');
 
                 var sumToArray = classToArray2(sharedSumClass);
                 var sumArray = sumArrayItems(sumToArray);
 
-                $('#'+overallSumId).val(sumArray);
+                $('#'+overallSumId).val(decPoints(sumArray,2));
+                exclTax(overallSumId,totalTaxId,'excl_'+overallSumId);
 
                 convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
@@ -1386,7 +1398,7 @@
                 url:  page+'?itemId='+pickedVal
             }).done(function(data){
                 var result = data.rate;
-                rate.val(result*qtyVal);
+                rate.val(decPoints(result*qtyVal,2));
             });
         }
     }
@@ -1424,10 +1436,10 @@
                     var real_amount = qtyVal*rate;
 
                     var new_amount = (real_amount-discountA) - taxA;
-                    amount.val(new_amount);
+                    amount.val(decPoints(new_amount,2));
                     var sumToArray = classToArray(sharedSumClass);
                     var sumArray = sumArrayItems(sumToArray);
-                    $('#'+overallSumId).val(sumArray);
+                    $('#'+overallSumId).val(decPoints(sumArray,2));
 
                     //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
                     var totalDiscountGet = $('#'+totalDiscount);
@@ -1436,8 +1448,8 @@
                     var sumArrayTax = sumArrayItems(sumToArrayTax);
                     var sumToArrayDiscount = classToArray(discountSharedClass);
                     var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-                    totalDiscountGet.val(sumArrayDiscount);
-                    totalTaxGet.val(sumArrayTax);
+                    totalDiscountGet.val(decPoints(sumArrayDiscount,2));
+                    totalTaxGet.val(decPoints(sumArrayTax,2));
 
                     convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
@@ -1466,10 +1478,10 @@
             if(rate != '' && item != ''){
                 var real_amount = (event.target.id == qtyId) ? rate : qtyVal*rate;
                 var new_amount = (real_amount-discountA) - taxA;
-                amount.val(new_amount);
+                amount.val(decPoints(new_amount,2));
                 var sumToArray = classToArray(sharedSumClass);
                 var sumArray = sumArrayItems(sumToArray);
-                $('#'+overallSumId).val(sumArray);
+                $('#'+overallSumId).val(decPoints(sumArray,2));
 
                 //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
                 var totalDiscountGet = $('#'+totalDiscount);
@@ -1478,9 +1490,8 @@
                 var sumArrayTax = sumArrayItems(sumToArrayTax);
                 var sumToArrayDiscount = classToArray(discountSharedClass);
                 var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-                //console.log('totaltax='+sumArrayTax+'totaldiscount='+sumArrayDiscount+'discountArray='+sumToArrayDiscount+'discountclass='+discountSharedClass);
-                totalDiscountGet.val(sumArrayDiscount);
-                totalTaxGet.val(sumArrayTax);
+                totalDiscountGet.val(decPoints(sumArrayDiscount,2));
+                totalTaxGet.val(decPoints(sumArrayTax,2));
 
                 convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
@@ -1506,10 +1517,10 @@
 
         if(account.val() != '' && $('#'+postDateId).val() != ''){
             var new_amount = (rate-discountA) - taxA;
-            amount.val(new_amount);
+            amount.val(decPoints(new_amount,2));
             var sumToArray = classToArray(sharedSumClass);
             var sumArray = sumArrayItems(sumToArray);
-            $('#'+overallSumId).val(sumArray);
+            $('#'+overallSumId).val(decPoints(sumArray,2));
 
             //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
             var totalDiscountGet = $('#'+totalDiscount);
@@ -1518,8 +1529,8 @@
             var sumArrayTax = sumArrayItems(sumToArrayTax);
             var sumToArrayDiscount = classToArray(discountSharedClass);
             var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-            totalDiscountGet.val(sumArrayDiscount);
-            totalTaxGet.val(sumArrayTax);
+            totalDiscountGet.val(decPoints(sumArrayDiscount,2));
+            totalTaxGet.val(decPoints(sumArrayTax,2));
             //console.log('='+vendorCustId+'date='+postDateId)
             convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
 
@@ -1545,17 +1556,17 @@
         if(rate != '' && item != ''){
             var real_amount = (qtyId == '') ? rate : rate*qtyVal;
             var percentage = (percent/100)*real_amount;
-            perctAmount.val(percentage);
+            perctAmount.val(decPoints(percentage,2));
             var discountA = (discount.val() != '') ? discount.val() : 0;
             var taxA = (tax.val() != '') ? tax.val() : 0;
             var new_amount = (real_amount-discountA) - taxA;
 
-            amount.val(new_amount);
+            amount.val(decPoints(new_amount,2));
 
             //DISPLAY SUM TOTAL OF SUB TOTALS IN THE TOTAL SUM FIELD
             var sumToArray = classToArray(sharedSumClass);
             var sumArray = sumArrayItems(sumToArray);
-            $('#'+overallSumId).val(sumArray);
+            $('#'+overallSumId).val(decPoints(sumArray,2));
 
             //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
             var totalDiscountGet = $('#'+totalDiscount);
@@ -1564,8 +1575,8 @@
             var sumArrayTax = sumArrayItems(sumToArrayTax);
             var sumToArrayDiscount = classToArray(discountSharedClass);
             var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-            totalDiscountGet.val(sumArrayDiscount);
-            totalTaxGet.val(sumArrayTax);
+            totalDiscountGet.val(decPoints(sumArrayDiscount,2));
+            totalTaxGet.val(decPoints(sumArrayTax,2));
 
 
             convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
@@ -1586,7 +1597,7 @@
                 var rate = $('#'+rateId);
                 var qtyVal = $('#'+qtyId);
 
-                $('#'+taxAmountId).val((data*rate.val()*qtyVal.val())/100);
+                $('#'+taxAmountId).val(decPoints((data*rate.val()*qtyVal.val())/100,2));
                 itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,'',taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId)
             });
         }
@@ -1602,7 +1613,7 @@
             }).done(function(data){
                 $('#'+displayId).val(data);
                 var rate = $('#'+rateId);
-                $('#'+taxAmountId).val((data*rate.val())/100);
+                $('#'+taxAmountId).val(decPoints((data*rate.val())/100,2));
                 accountSum(amountId,accountId,rateId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId);
 
             });
@@ -1614,11 +1625,11 @@
         var amount = $('#'+amountId).val();
         var vendorCust = $('#'+vendorCustId).val();
         var postDate = $('#'+postDateId).val();
-        console.log(amountId);
+        //console.log(amountId);
         $.ajax({
             url: page+'?amount=' + amount+'&vendorCust='+vendorCust+'&postDate='+postDate
         }).done(function(data){
-            $('#'+repId).val(data.overall_sum);
+            $('#'+repId).val(decPoints(data.overall_sum,2));
         });
     }
 
@@ -1637,12 +1648,12 @@
 
     }
 
-    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId) {
+    function dropdownItemInv(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId,totalTaxId) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
         $("#"+dropdownId).hide();
 
-        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId);
+        fetchInventory(hiddenValId,bill_invoice,invPage,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,qtyId,vendorCustId,postDateId,totalTaxId);
 
     }
 
@@ -1655,7 +1666,7 @@
         if(amt != ''){
             var newAmt = $('#'+sumTotalId).val() - amt;
 
-            $('#'+sumTotalId).val(newAmt);
+            $('#'+sumTotalId).val(decPoints(newAmt,2));
         }else{
             //$('#'+sumTotalId).val(0);
         }
@@ -1692,8 +1703,8 @@
         var sumArrayTax = sumArrayItems(sumToArrayTax);
         var sumToArrayDiscount = classToArray(discountSharedClass);
         var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
-        totalDiscountGet.val(sumArrayDiscount);
-        totalTaxGet.val(sumArrayTax);
+        totalDiscountGet.val(decPoints(sumArrayDiscount,2));
+        totalTaxGet.val(decPoints(sumArrayTax,2));
 
         convertToDefaultCurr(currRep,sumTotalId,currPage,vendorCustId,postDateId);
 
@@ -1709,8 +1720,8 @@
             var sumToArray = classToArray(sharedSumClass);
             var sumArray = sumArrayItems(sumToArray);
             var percentage = (perct.val()*sumArray)/100;
-            perctAmount.val(percentage);
-            overallSum.val(((sumArray)-percentage)-odaperctAmount.val());
+            perctAmount.val(decPoints(percentage,2));
+            overallSum.val(decPoints(((sumArray)-percentage)-odaperctAmount.val(),2));
             var newTotal = (sumArray-percentage)-odaperctAmount.val();
             //alert(newTotal);
             convertToDefaultCurr(foreignSumId,overallSumId,currPage,vendorCustId,postDateId);
@@ -1721,7 +1732,7 @@
 
     }
 
-    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId){
+    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId,parentDataId,updateSumPage,reloadId,reloadUrl){
         var totalVal = $('#'+totalValId).val();
         var discountVal = $('#'+discountAmountId).val();
         var taxVal = $('#'+taxAmountId).val();
@@ -1733,18 +1744,16 @@
         }).done(function(data){
             $('#'+dataId).remove();
             var newTotal = totalVal - amtVal;
-            $('#'+totalValId).val(newTotal);
+            $('#'+totalValId).val(decPoints(newTotal,2));
 
             //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
            var newTotalTax = totalTaxGet.val() - taxVal;
-            alert('total='+totalTaxGet.val()+'taxVal='+taxVal+'total='+newTotalTax);
             var newTotalDiscount = totalDiscountGet.val() - discountVal;
-            totalDiscountGet.val(newTotalDiscount);
-            totalTaxGet.val(newTotalTax);
+            totalDiscountGet.val(decPoints(newTotalDiscount,2));
+            totalTaxGet.val(decPoints(newTotalTax,2));
 
             convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
-            updateDbSum(dataIdVal,page,totalVal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId);
-
+            updateDbSum(parentDataId,updateSumPage,newTotal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId,reloadId,reloadUrl);
             swal("Warning!", 'Item removed successfully', "success");
 
         });
@@ -1752,7 +1761,7 @@
 
     }
 
-    function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId){
+    function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId,reloadId,reloadUrl){
 
         var postDate = $('#'+postDateId).val();
         var vendorCust = $('#'+vendorCustId).val();
@@ -1761,7 +1770,8 @@
         $.ajax({
             url: page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust
         }).done(function(data){
-
+            //console.log(data);
+            reloadContent(reloadId,reloadUrl);
 
         });
 

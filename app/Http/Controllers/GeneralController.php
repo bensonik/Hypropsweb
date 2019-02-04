@@ -209,6 +209,7 @@ class GeneralController extends Controller
             $qtyId = $_GET['qtyId'];
             $vendCustId = $_GET['vendCustId'];
             $postDateId = $_GET['postDateId'];
+            $totalTaxId = $_GET['totalTaxId'];
 
             if($pickedVal != '') {
                 $search = Inventory::searchInventory($pickedVal);
@@ -227,14 +228,14 @@ class GeneralController extends Controller
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                     ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
                     ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
-                    ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId);
+                    ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId)->with('totalTaxId',$totalTaxId);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
                 ->with('descId',$descId)->with('rateId',$rateId)->with('unitMId',$unitMId)->with('subTotalId',$subTotalId)
                 ->with('sharedSubTotal',$sharedSubTotal)->with('overallSum',$overallSum)->with('foreignOverallSum',$foreignOverallSum)
-                ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId);
+                ->with('qtyId',$qtyId)->with('vendCustId',$vendCustId)->with('postDateId',$postDateId)->with('totalTaxId',$totalTaxId);
         }
 
         //FOR COMPETENCY CATEGORY
@@ -716,8 +717,8 @@ class GeneralController extends Controller
             PoExtension::defaultUpdate('id',$dataId,$dbData);
 
             return response()->json([
-                'message' => 'saved',
-                'message2' => 'saved successfully',
+                'message' => $dataId,
+                'message2' => json_encode($dbData),
             ]);
 
         }

@@ -143,7 +143,7 @@ class PoExtension extends Model
 
     public static function massData($column, $post)
     {
-        return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->get();
 
     }
     public static function massDataCondition($column, $post, $column2, $post2)
@@ -191,11 +191,14 @@ class PoExtension extends Model
 
     public static function searchPo($value){
         return static::where('po_extention.status', '=','1')
+            ->join('vendor_customer', 'vendor_customer.id', '=', 'po_extention.vendor')
             ->where(function ($query) use($value){
-                $query->where('po_extention.po_number','LIKE','%'.$value.'%')->orWhere('po_extention.vendor_customer','LIKE','%'.$value.'%')
+                $query->where('po_extention.po_number','LIKE','%'.$value.'%')->orWhere('vendor_customer.name','LIKE','%'.$value.'%')
                     ->orWhere('po_extention.vendor_invoice_no','LIKE','%'.$value.'%')->orWhere('po_extention.assigned_user','LIKE','%'.$value.'%')
                     ->orWhere('po_extention.ship_method','LIKE','%'.$value.'%')->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_country','LIKE','%'.$value.'%')->orWhere('po_extention.ship_to_address','LIKE','%'.$value.'%');
+                    ->orWhere('po_extention.ship_to_country','LIKE','%'.$value.'%')->orWhere('po_extention.ship_address','LIKE','%'.$value.'%')
+                    ->orWhere('po_extention.purchase_status','LIKE','%'.$value.'%')->orWhere('po_extention.ship_to_contact','LIKE','%'.$value.'%')
+                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%');
             })->get();
     }
 

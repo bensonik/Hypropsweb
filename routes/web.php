@@ -438,7 +438,7 @@ Route::any('/purchase_order', 'PurchaseOrderController@index')->name('inventory'
 Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_form');
 Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
 Route::post('/edit_po', 'PurchaseOrderController@edit')->name('edit_po');
-Route::any('/search_po', 'PurchaseOrderController@searchInventory')->name('search_po');
+Route::any('/search_po', 'PurchaseOrderController@searchPo')->name('search_po');
 Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
 Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delete_po_item');
 Route::post('/change_po_status', 'PurchaseOrderController@changeStatus')->name('change_po_status');
