@@ -70,6 +70,8 @@ class Utility
         6 => 'Item Delivered to Client', 7 => 'Invoice Submitted to client', 8 => 'Close PO'];
 
     const SALES_DESC = 2, PURCHASE_DESC = 1;
+    const POST_RECEIPT = 1, CREATE_RECEIPT = 2;
+    const PUT_AWAY = 1, PICK = 2;
 
 
     public static function IMG_URL(){

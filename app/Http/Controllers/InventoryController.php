@@ -14,7 +14,7 @@ use App\model\PhysicalInvCount;
 use App\Helpers\Utility;
 use App\model\TransferOrder;
 use App\model\Stock;
-use App\model\WhseShipReceipt;
+use App\model\WhsePickPutAway;
 use App\User;
 use Auth;
 use View;
@@ -210,7 +210,7 @@ class InventoryController extends Controller
     public function warehouseInventory(Request $request)
     {
         //
-        $warehouse = TransferOrder::specialColumnsPage('item_id',$request->input('dataId'));
+        $warehouse = WhsePickPutAway::specialColumnsPage('item_id',$request->input('dataId'));
         return view::make('inventory.warehouse.items')->with('mainData',$warehouse)->with('itemId',$request->input('dataId'));
 
     }
@@ -226,8 +226,6 @@ class InventoryController extends Controller
         //
 
         $inventory = Inventory::firstRow('id',$request->input('dataId'));
-        //$this->connectBom($inventory);
-        //return $inventory; exit();
         $inventoryType = InventoryType::getAllData();
         $itemCategory = InventoryCategory::getAllData();
         $unitMeasure = UnitMeasure::getAllData();

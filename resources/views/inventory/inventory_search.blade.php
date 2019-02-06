@@ -78,8 +78,8 @@
         </tr>
     @endforeach
     </tbody>
-</table>
-
-<div class=" pagination pull-right">
+</table><div class=" pagination pull-right">
     {!! $mainData->render() !!}
 </div>
+
+

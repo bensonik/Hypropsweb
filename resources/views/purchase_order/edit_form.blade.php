@@ -401,11 +401,11 @@
                 @foreach($poData as $po)
 
                     @if(!empty($po->item_id))
-                        <?php $num++; $num2++; $countDataPo[] = $num2; ?>
+                        <?php $num++; $num2++; $countDataPo[] = $num2; $receiptStatus = ($po->receipt_status != '0') ? 'checked' : ''; ?>
                         <tr id="itemId{{$po->id}}">
 
                             <td scope="row">
-                                <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" class="kid_checkbox_po_edit" />
+                                <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" {{$receiptStatus}} class="kid_checkbox_po_edit" />
 
                             </td>
 

@@ -798,6 +798,35 @@
 
     }
 
+    function warehousePost(klass,reloadId,reloadUrl,submitUrl,token,status,category) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to "+category+" ?",
+                    text: "This will permanently "+category+"!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
+                        swal("Processed!", "process complete.", "success");
+                    } else {
+                        swal(" Cancelled", category, "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
     function changeItemStatus(klass,reloadId,reloadUrl,submitUrl,token,status) {
         var items = group_val(klass);
         if (items.length > 0){

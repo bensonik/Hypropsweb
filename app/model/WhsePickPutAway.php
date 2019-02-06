@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 use Monolog\Handler\Curl\Util;
 
-class WhseShipReceipt extends Model
+class WhsePickPutAway extends Model
 {
     //
-    protected  $table = 'whse_ship_receipt';
+    protected  $table = 'whse_pick_put_away';
 
     private static function table(){
-        return 'whse_ship_receipt';
+        return 'whse_pick_put_away';
     }
     /**
      * The attributes that are mass assignable.
@@ -43,62 +43,32 @@ class WhseShipReceipt extends Model
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
-    public function def_bin(){
-        return $this->belongsTo('App\model\Bin','default_bin_select','id');
+    public function inventory(){
+        return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
 
     }
 
-    public function receipt_bin(){
-        return $this->belongsTo('App\model\Bin','receipt_bin_code','id');
+    public function warehouse(){
+        return $this->belongsTo('App\model\Warehouse','to_whse','id')->withDefault();
 
     }
 
-    public function adjust_bin(){
-        return $this->belongsTo('App\model\Bin','adjust_bin_code','id');
+    public function to_zone(){
+        return $this->belongsTo('App\model\Zone','to_zone','id')->withDefault();
 
     }
 
-    public function ship_bin(){
-        return $this->belongsTo('App\model\Bin','ship_bin_code','id');
+    public function to_bin(){
+        return $this->belongsTo('App\model\Bin','to_bin','id')->withDefault();
 
     }
 
-    public function open_shop_floor(){
-        return $this->belongsTo('App\model\Bin','open_shop_floor_bin_code','id');
-
-    }
-
-    public function to_prod_bin(){
-        return $this->belongsTo('App\model\Bin','to_prod_bin_code','id');
-
-    }
-
-    public function from_prod_bin(){
-        return $this->belongsTo('App\model\Bin','from_prod_bin_code','id');
-
-    }
-
-    public function cross_dock(){
-        return $this->belongsTo('App\model\Bin','cross_dock_bin_code','id');
-
-    }
-
-    public function to_assembly(){
-        return $this->belongsTo('App\model\Bin','to_assembly_bin_code','id');
-
-    }
-
-    public function from_assembly(){
-        return $this->belongsTo('App\model\Bin','from_assembly_bin_code','id');
-
-    }
-
-    public function assembly_to_order(){
-        return $this->belongsTo('App\model\Bin','assembly_to_order_ship_bin_code','id');
+    public function receipt(){
+        return $this->belongsTo('App\model\WarehouseReceipt','receipt_id','id')->withDefault();
 
     }
 

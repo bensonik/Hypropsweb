@@ -437,6 +437,7 @@ Route::post('/change_account_chart_status', 'AccountChartController@changeStatus
 Route::any('/purchase_order', 'PurchaseOrderController@index')->name('inventory')->middleware('auth');
 Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_form');
 Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
+Route::post('/post_create_receipt', 'PurchaseOrderController@postCreateReceipt')->name('post_create_receipt');
 Route::post('/edit_po', 'PurchaseOrderController@edit')->name('edit_po');
 Route::any('/search_po', 'PurchaseOrderController@searchPo')->name('search_po');
 Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
@@ -444,3 +445,13 @@ Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delet
 Route::post('/change_po_status', 'PurchaseOrderController@changeStatus')->name('change_po_status');
 Route::any('/po_remove_attachment', 'PurchaseOrderController@removeAttachment')->name('po_remove_attachment');
 Route::any('/po_download_attachment', 'PurchaseOrderController@downloadAttachment')->name('po_download_attachment');
+
+// -------------WAREHOUSE EMPLOYEE MODULE-----------
+Route::any('/warehouse_employee', 'WarehouseEmployeeController@index')->name('warehouse_employee')->middleware('auth');
+Route::post('/create_warehouse_employee', 'WarehouseEmployeeController@create')->name('create_warehouse_employee');
+Route::post('/edit_warehouse_employee_form', 'WarehouseEmployeeController@editForm')->name('edit_warehouse_employee_form');
+Route::post('/edit_warehouse_employee', 'WarehouseEmployeeController@edit')->name('edit_warehouse_employee');
+Route::post('/delete_warehouse_employee', 'WarehouseEmployeeController@destroy')->name('delete_warehouse_employee');
+
+
+

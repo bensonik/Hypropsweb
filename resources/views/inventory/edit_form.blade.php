@@ -21,10 +21,10 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class="form-control" name="storage_type" >
-                            @if($edit->storage_type == 1)
-                            <option value="1">Warehouse</option>
-                            @else
-                            <option value="0">Stock</option>
+                            @if($edit->whse_status == 1)
+                            <option value="1" selected>Warehouse</option>
+                            @elseif($edit->whse_status == 0)
+                            <option value="0" selected>Stock</option>
                             @endif
                             <option value="">Select</option>
                             <option value="1">Warehouse</option>

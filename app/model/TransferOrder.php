@@ -63,7 +63,7 @@ class TransferOrder extends Model
     }
 
     public function to_bin(){
-        return $this->belongsTo('App\model\Bin','to_nin','id');
+        return $this->belongsTo('App\model\Bin','to_bin','id');
 
     }
 

@@ -143,7 +143,7 @@ class PoExtension extends Model
 
     public static function massData($column, $post)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->paginate(Utility::P35);
 
     }
     public static function massDataCondition($column, $post, $column2, $post2)

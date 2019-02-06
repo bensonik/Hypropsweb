@@ -1,44 +1,31 @@
-
-
-<div class=" table-responsive" id="reload_data_warehouse">
-
-<input type="hidden" id="whseId" value="{{$itemId}}">
-<table class="table table-bordered table-hover table-striped" id="main_table_warehouse">
+<table class="table table-bordered table-hover table-striped" id="main_table">
     <thead>
     <tr>
         <th>
-            <input type="checkbox" onclick="toggleme(this,'kid_checkbox_warehouse');" id="parent_check_warehouse"
+            <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
                    name="check_all" class="" />
 
         </th>
-        <th>Item Name</th>
-        <th>Warehouse</th>
-        <th>Zone</th>
-        <th>Bin</th>
-        <th>Quantity Received</th>
-        <th>Quantity Remaining</th>
+
+        <th>User Name</th>
+        <th>Assigned Warehouse</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
         <th>Updated at</th>
+        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
     @foreach($mainData as $data)
         <tr>
             <td scope="row">
-                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox_warehouse" />
+                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
             </td>
-
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-
-            <td>{{$data->inventory->item_name}} </td>
-            <td>{{$data->warehouse->name}}</td>
-            <td>{{$data->to_zone->name}}</td>
-            <td>{{$data->to_bin->code}}</td>
-            <td>{{$data->qty_handled}}</td>
-            <td>{{$data->qty_outstanding}}</td>
+            <td>{{$data->access_user->firstname}} {{$data->access_user->lastname}}</td>
+            <td>{{$data->warehouse->name}} ({{$data->warehouse->code}})</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -52,15 +39,15 @@
             <td>{{$data->created_at}}</td>
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-
+            <td>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_employee_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+            </td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
-    <div class="warehouse_pagination pull-right">
+    <div class=" pagination pull-right">
         {!! $mainData->render() !!}
     </div>
-
-</div>
 
