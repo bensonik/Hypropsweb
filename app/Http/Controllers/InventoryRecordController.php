@@ -174,7 +174,7 @@ class InventoryRecordController extends Controller
         }*/
         //print_r($search); exit();
         $user_ids = array_unique($obtain_array);
-        $mainData =  InventoryRecord::massData('id', $user_ids);
+        $mainData =  InventoryRecord::massDataPaginate('id', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 

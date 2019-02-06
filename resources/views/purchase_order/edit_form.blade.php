@@ -84,7 +84,7 @@
                 <div class="form-group">
                     1 {{\App\Helpers\Utility::defaultCurrency()}} =
                     <div class="form-line ">
-                        <input type="text" class="form-control" name="curr_rate" id="curr_rate" readonly placeholder="Currency Rate">
+                        <input type="text" class="form-control" name="curr_rate" id="curr_rate_edit" readonly placeholder="Currency Rate">
                     </div>
                 </div>
             </div>

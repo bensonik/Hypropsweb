@@ -495,7 +495,7 @@
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">view_quilt</i>
-                            <span>PO/RFQ/Estimates</span>
+                            <span>PO/RFQ/Quotes</span>
                         </a>
                         <ul class="ml-menu">
                             <li>
@@ -505,7 +505,7 @@
                                 <a href="{{url('purchase_order')}}">Purchase Order</a>
                             </li>
                             <li>
-                                <a href="{{url('zone')}}">Create Estimate for Customer</a>
+                                <a href="{{url('zone')}}">Create Quote for Customer</a>
                             </li>
                         </ul>
                     </li>

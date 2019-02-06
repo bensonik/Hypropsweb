@@ -132,6 +132,15 @@ class InventoryRecord extends Model
         return Utility::massData(self::table(),$column, $post);
 
     }
+
+    public static function massDataPaginate($column, $post)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, '=',$post)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+
+    }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);

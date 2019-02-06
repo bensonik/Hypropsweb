@@ -526,7 +526,16 @@
         });
     }
 
-    //exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
+    var pDate = $("#posting_date").val();
+    var pDateEdit = $("#posting_date_edit").val();
+    if(pDate != ''){
+        exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
+    }
+
+    if(pDateEdit != ''){
+        exchangeRate('vendorCust_edit','curr_rate_edit','posting_date_edit','<?php echo url('exchange_rate'); ?>')
+    }
+
 
 </script>
 
