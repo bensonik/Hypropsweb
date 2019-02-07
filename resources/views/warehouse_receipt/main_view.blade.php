@@ -12,72 +12,12 @@
                 <div class="modal-body" style="height:400px; overflow:scroll;">
 
                     <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-                        <div class="body">
-
-                            <div class="row clearfix">
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <b>Assign User</b>
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Inventory Item">
-
-                                            <input type="hidden" class="inv_class" value="" name="item" id="inv500" />
-                                        </div>
-                                    </div>
-                                    <ul id="myUL500" class="myUL"></ul>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <b>Assigned Date/Time</b>
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" name="item_description" placeholder="Item Description">
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                            <div class="row clearfix">
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" name="serial_no" placeholder="Serial Number">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input type="text" class="form-control datepicker" name="warranty_expiry_date" placeholder="Warranty/Expiry Date">
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select class="form-control" name="item_condition" >
-                                                <option value="Brand New">Brand New</option>
-                                                <option value="Fairly Used">Fairly Used</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-
 
                     </form>
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('createModal','createMainForm','<?php echo url('create_inv_record'); ?>','reload_data',
-                            '<?php echo url('inventory_record'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -91,14 +31,29 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt</h4>
+                    <ul>
+                        <li class="dropdown pull-right">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('editMainForm');" ><i class="fa fa-print"></i>Print</a></li>
+                                <li><a class="btn bg-red waves-effect" onClick ="print_content('editMainForm');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                                <li><a class="btn btn-warning" onClick ="$('#editMainForm').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
+                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#editMainForm').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
+                                <li><a class="btn btn-info" onClick ="$('#editMainForm').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
+
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
                 <div class="modal-body" id="edit_content">
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_inv_record'); ?>','reload_data',
-                            '<?php echo url('inventory_record'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_warehouse_receipt'); ?>','reload_data',
+                            '<?php echo url('warehouse_receipt'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -114,15 +69,15 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Record of Inventory Items
+                        Warehouse Receipt(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('inventory_record'); ?>',
-                                    '<?php echo url('delete_inv_record'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
+                                    '<?php echo url('delete_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
@@ -166,10 +121,12 @@
 
                             <th>Inventory Item</th>
                             <th>Item Desc</th>
-                            <th>Department</th>
-                            <th>Serial No</th>
-                            <th>Warranty/Expiry Date</th>
-                            <th>Item Condition</th>
+                            <th>Quantity</th>
+                            <th>Quantity to receive</th>
+                            <th>Quantity to Cross-Dock</th>
+                            <th>Quantity Received</th>
+                            <th>Quantity Outstanding</th>
+                            <th>Unit of Measurement</th>
                             <th>Created by</th>
                             <th>Created at</th>
                             <th>Updated by</th>
@@ -186,11 +143,13 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->inventory->item_name}}</td>
-                            <td>{{$data->item_desc}}</td>
-                            <td>{{$data->department->dept_name}}</td>
-                            <td>{{$data->serial_no}}</td>
-                            <td>{{$data->warranty_expiry_date}}</td>
-                            <td>{{$data->item_condition}}</td>
+                            <td>{{$data->poItem->po_desc}}</td>
+                            <td>{{$data->qty}}</td>
+                            <td>{{$data->qty_to_receive}}</td>
+                            <td>{{$data->qty_to_cross_dock}}</td>
+                            <td>{{$data->qty_received}}</td>
+                            <td>{{$data->qty_outstanding}}</td>
+                            <td>{{$data->unit_measurement}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -207,7 +166,7 @@
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_inv_record_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                         </tr>
                         @endforeach

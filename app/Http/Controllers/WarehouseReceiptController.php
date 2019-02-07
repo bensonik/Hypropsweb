@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\model\WhsePickPutAway;
-use App\model\Zone;
+use App\model\Warehouse;
 use Illuminate\Http\Request;
 use App\model\WarehouseReceipt;
 use App\Helpers\Utility;
@@ -30,15 +30,15 @@ class WarehouseReceiptController extends Controller
     {
 
         $mainData = WarehouseReceipt::paginateAllData();
-        $zone = Zone::getAllData();
+        $warehouse = Warehouse::getAllData();
 
         if ($request->ajax()) {
             return \Response::json(view::make('warehouse_receipt.reload',array('mainData' => $mainData,
-                'zone' => $zone))->render());
+                'warehouse' => $warehouse))->render());
 
         }else{
             if(Utility::detectSelected('warehouse_employee',Auth::user()->id))
-                return view::make('warehouse_receipt.main_view')->with('mainData',$mainData)->with('zone',$zone);
+                return view::make('warehouse_receipt.main_view')->with('mainData',$mainData)->with('warehouse',$warehouse);
             else
                 return view::make('errors.403');
         }
@@ -104,8 +104,8 @@ class WarehouseReceiptController extends Controller
     {
         //
         $mainData = WarehouseReceipt::paginateAllData();
-        $zone = Zone::getAllData();
-        return view::make('warehouse_receipt.edit_form')->with('edit',$mainData)->with('zone',$zone);
+        $warehouse = Warehouse::getAllData();
+        return view::make('warehouse_receipt.edit_form')->with('edit',$mainData)->with('warehouse',$warehouse);
 
     }
 
@@ -123,21 +123,42 @@ class WarehouseReceiptController extends Controller
         $validator = Validator::make($request->all(),$mainRules);
         if($validator->passes()) {
 
-            $item = $request->input('item');
-            $dept= $request->input('department');
-            $item_desc = $request->input('item_description');
-            $serial_no = $request->input('serial_no');
-            $condition = $request->input('item_condition');
-            $warranty = $request->input('warranty_expiry');
+            $assignedUser = $request->input('user');
+            $assignedDate= $request->input('assigned_date');
+            $warehouse = $request->input('warehouse');
+            $zone = $request->input('zone');
+            $bin = $request->input('bin');
+            $vendorShipNo = $request->input('vendor_ship_no');
+
+            $receiptNo = $request->input('receipt_no');
+            $postingDate= $request->input('posting_date');
+            $itemId = $request->input('item_id');
+            $itemDesc = $request->input('item_desc');
+            $qty = $request->input('qty');
+            $qtyToReceive = $request->input('qty_to_receive');
+            $qtyToCrossDock = $request->input('qty_to_cross_dock');
+            $qtyReceived= $request->input('qty_received');
+            $qtyOutstanding = $request->input('qty_outstanding');
+            $unitMeasure = $request->input('unit_measure');
+            $dueDate = $request->input('due_date');
 
             $dbDATA = [
-                'item_id' => $item,
-                'dept_id' => $dept,
-                'item_desc' => $item_desc,
-                'serial_no' => $serial_no,
-                'item_condition' => $condition,
-                'warranty_expiry_date' => $warranty,
-                'created_by' => Auth::user()->id,
+                'assigned_user' => $assignedUser,
+                'assigned_date' => $assignedDate,
+                'warehouse' => $warehouse,
+                'zone' => $zone,
+                'bin' => $bin,
+                'vendor_ship_no' => $vendorShipNo,
+                'receipt_no' => $receiptNo,
+                'posting_date' => $postingDate,
+                'qty' => $qty,
+                'qty_to_receive' => $qtyToReceive,
+                'qty_to_cross_dock' => $qtyToCrossDock,
+                'qty_received' => $qtyReceived,
+                'qty_outstanding' => $qtyOutstanding,
+                'unit_measure' => $unitMeasure,
+                'due_date' => $dueDate,
+                'updated_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE
             ];
 

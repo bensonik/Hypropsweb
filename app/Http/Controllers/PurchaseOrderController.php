@@ -762,7 +762,7 @@ class PurchaseOrderController extends Controller
         $all_id = json_decode($request->input('all_data'));
         $status = $request->input('status');
 
-        $createPost = PurchaseOrder::massDataCondition('id',$all_id,'receipt_status',$status);
+        $createPost = PurchaseOrder::massData('id',$all_id);
         $updateData = [
             'receipt_status' => $status
         ];
@@ -777,6 +777,7 @@ class PurchaseOrderController extends Controller
                         $receiptBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['receipt_bin_code']);
                         $dbData = [
                             'item_id' => $data->item_id,
+                            'po_id' => $data->id,
                             'pick_put_type' => Utility::PUT_AWAY,
                             'to_whse' => $data->ship_to_whse,
                             'to_bin' => $receiptBin->receipt_bin_code,
@@ -786,30 +787,39 @@ class PurchaseOrderController extends Controller
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
                         ];
-                        WhsePickPutAway::create($dbData);
-                        PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
-                        //UPDATE QUANTITY OF INVENTORY
-                        $itemQty = Inventory::where('id',$data->item_id)->where('',Utility::STATUS_ACTIVE)->first(['qty']);
-                        $newQty = $itemQty->qty + $data->quantity;
-                        $changeQty = ['qty' => $newQty];
-                        Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+                        $checkData = WhsePickPutAway::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            WhsePickPutAway::create($dbData);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                            //UPDATE QUANTITY OF INVENTORY
+                            $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
+                            $newQty = $itemQty->qty + $data->quantity;
+                            $changeQty = ['qty' => $newQty];
+                            Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+                        }
+
                     }
                     //PROCESS IF ITEM IS NOT IN A WAREHOUSE BUT A STOCK ITEM
                     if ($data->whse_status == 0) {
                         $dbData3 = [
                             'item_id' => $data->item_id,
+                            'po_id' => $data->id,
                             'qty' => $data->qty,
                             'purchase_date' => $data->post_date,
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
                         ];
-                        Stock::create($dbData3);
-                        PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
-                        //UPDATE QUANTITY OF INVENTORY
-                        $itemQty = Inventory::where('id',$data->item_id)->where('',Utility::STATUS_ACTIVE)->first(['qty']);
-                        $newQty = $itemQty->qty + $data->quantity;
-                        $changeQty = ['qty' => $newQty];
-                        Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+                        $checkData = Stock::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            Stock::create($dbData3);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                            //UPDATE QUANTITY OF INVENTORY
+                            $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
+                            $newQty = $itemQty->qty + $data->quantity;
+                            $changeQty = ['qty' => $newQty];
+                            Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+                        }
+
                     }
                 }
                 if ($status == Utility::CREATE_RECEIPT) {
@@ -826,8 +836,11 @@ class PurchaseOrderController extends Controller
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
                         ];
-                        WarehouseReceipt::create($dbData4);
-                        PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                        $checkData = WarehouseReceipt::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            WarehouseReceipt::create($dbData4);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                        }
 
                     }
 

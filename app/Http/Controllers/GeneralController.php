@@ -16,6 +16,7 @@ use App\model\Inventory;
 use App\model\UnitMeasure;
 use App\model\Warehouse;
 use App\model\Tax;
+use App\model\WarehouseZone;
 use View;
 use Validator;
 use Input;
@@ -26,6 +27,7 @@ use App\model\VendorCustomer;
 use App\model\ExchangeRate;
 use App\model\Department;
 use App\model\Zone;
+use App\model\ZoneBin;
 use App\model\Bin;
 use App\model\Position;
 use App\model\SkillCompFrame;
@@ -338,6 +340,21 @@ class GeneralController extends Controller
 
         }
         //END OF GET TAX PERCENTAGE
+
+        //FOR SELECTING ZONES OF A WAREHOUSE
+        if($type == 'w_zones'){
+            //print_r($pickedVal);exit();
+            $optionArray = WarehouseZone::specialColumns('warehouse_id',$pickedVal);
+
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+        }
+
+        //FOR SELECTING ZONES OF A WAREHOUSE
+        if($type == 'z_bins'){
+            //print_r($pickedVal);exit();
+            $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+        }
 
 
     }

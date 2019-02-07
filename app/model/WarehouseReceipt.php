@@ -52,18 +52,28 @@ class WarehouseReceipt extends Model
 
     }
 
+    public function assigned(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
+
+    }
+
+    public function poItem(){
+        return $this->belongsTo('App\model\Purchase_order','item_id','id')->withDefault();
+
+    }
+
     public function warehouse(){
-        return $this->belongsTo('App\model\Warehouse','to_whse','id')->withDefault();
+        return $this->belongsTo('App\model\Warehouse','whse_id','id')->withDefault();
 
     }
 
     public function to_zone(){
-        return $this->belongsTo('App\model\Zone','to_zone','id')->withDefault();
+        return $this->belongsTo('App\model\Zone','zone_id','id')->withDefault();
 
     }
 
     public function to_bin(){
-        return $this->belongsTo('App\model\Bin','to_bin','id')->withDefault();
+        return $this->belongsTo('App\model\Bin','bin_id','id')->withDefault();
 
     }
 

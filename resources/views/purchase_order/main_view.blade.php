@@ -532,7 +532,7 @@
         exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
     }
 
-    if(pDateEdit != ''){
+    if($('#posting_date_edit').length){
         exchangeRate('vendorCust_edit','curr_rate_edit','posting_date_edit','<?php echo url('exchange_rate'); ?>')
     }
 

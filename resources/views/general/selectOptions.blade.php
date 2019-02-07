@@ -158,3 +158,31 @@
         @endif
     </select>
 @endif
+
+@if($type == 'w_zones')
+
+    <select name="zone"  class="form-control " id="zone_id" onchange="fillNextInput('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')" >
+        @if(count($optionArray) > 0)
+            @foreach($optionArray as $data)
+                <option value="{{$data->zone_id}}">{{$data->zone->name}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Zones found</option>
+        @endif
+    </select>
+@endif
+
+@if($type == 'z_bins')
+
+    <select name="bin"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            @foreach($optionArray as $data)
+                <option value="{{$data->bin_id}}">{{$data->bin->code}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Bins found</option>
+        @endif
+    </select>
+@endif
