@@ -12,6 +12,7 @@ use App\model\Stock;
 use App\model\VendorCustomer;
 use App\model\Warehouse;
 use App\model\Tax;
+use App\model\WarehouseEmployee;
 use App\model\WarehouseReceipt;
 use App\model\WhsePickPutAway;
 use App\User;
@@ -756,114 +757,6 @@ class PurchaseOrderController extends Controller
 
     }
 
-    public function postCreateReceipt(Request $request)
-    {
-        //
-        $all_id = json_decode($request->input('all_data'));
-        $status = $request->input('status');
-
-        $createPost = PurchaseOrder::massData('id',$all_id);
-        $updateData = [
-            'receipt_status' => $status
-        ];
-        $checkStock = [];
-        if(!empty($createPost)) {
-            foreach ($createPost as $data) {
-
-                //PROCESS IF USER IS POSTING RECEIPT
-                if ($status == Utility::POST_RECEIPT) {
-                    //PROCESS IF ITEM IS IN A WAREHOUSE
-                    if ($data->whse_status == 1) {
-                        $receiptBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['receipt_bin_code']);
-                        $dbData = [
-                            'item_id' => $data->item_id,
-                            'po_id' => $data->id,
-                            'pick_put_type' => Utility::PUT_AWAY,
-                            'to_whse' => $data->ship_to_whse,
-                            'to_bin' => $receiptBin->receipt_bin_code,
-                            'qty' => $data->qty,
-                            'qty_to_handle' => $data->received,
-                            'qty_handled' => $data->qty,
-                            'status' => Utility::STATUS_ACTIVE,
-                            'created_by' => Auth::user()->id
-                        ];
-                        $checkData = WhsePickPutAway::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
-                        if(empty($checkData)){
-                            WhsePickPutAway::create($dbData);
-                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
-                            //UPDATE QUANTITY OF INVENTORY
-                            $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
-                            $newQty = $itemQty->qty + $data->quantity;
-                            $changeQty = ['qty' => $newQty];
-                            Inventory::defaultUpdate('id',$data->item_id,$changeQty);
-                        }
-
-                    }
-                    //PROCESS IF ITEM IS NOT IN A WAREHOUSE BUT A STOCK ITEM
-                    if ($data->whse_status == 0) {
-                        $dbData3 = [
-                            'item_id' => $data->item_id,
-                            'po_id' => $data->id,
-                            'qty' => $data->qty,
-                            'purchase_date' => $data->post_date,
-                            'status' => Utility::STATUS_ACTIVE,
-                            'created_by' => Auth::user()->id
-                        ];
-                        $checkData = Stock::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
-                        if(empty($checkData)){
-                            Stock::create($dbData3);
-                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
-                            //UPDATE QUANTITY OF INVENTORY
-                            $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
-                            $newQty = $itemQty->qty + $data->quantity;
-                            $changeQty = ['qty' => $newQty];
-                            Inventory::defaultUpdate('id',$data->item_id,$changeQty);
-                        }
-
-                    }
-                }
-                if ($status == Utility::CREATE_RECEIPT) {
-
-                    if ($data->whse_status == 1) {
-
-                        $dbData4 = [
-                            'item_id' => $data->item_id,
-                            'receipt_id' => Utility::PUT_AWAY,
-                            'whse_id' => $data->ship_to_whse,
-                            'po_id' => $data->id,
-                            'qty' => $data->qty,
-                            'work_status' => Utility::ZERO,
-                            'status' => Utility::STATUS_ACTIVE,
-                            'created_by' => Auth::user()->id
-                        ];
-                        $checkData = WarehouseReceipt::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
-                        if(empty($checkData)){
-                            WarehouseReceipt::create($dbData4);
-                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
-                        }
-
-                    }
-
-                    if ($data->whse_status == 0){
-                        $checkStock[] = $data->item_id;
-                    }
-
-
-                }
-
-            }
-        }
-
-        $message = (count($checkStock) >0) ? count($checkStock).' items were stock items and cannot be created for warehouse receipt' : '';
-
-            return response()->json([
-                'message2' => 'deleted',
-                'message' => 'receipt has been created for the selected items'.$message
-            ]);
-
-
-
-    }
 
     public function destroy(Request $request)
     {
@@ -882,8 +775,8 @@ class PurchaseOrderController extends Controller
 
 
         return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
+            'message' => 'deleted',
+            'message2' => 'Data deleted successfully'
         ]);
 
     }

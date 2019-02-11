@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\model\WhsePickPutAway;
 use App\model\Warehouse;
+use App\model\PurchaseOrder;
+use App\model\PoExtension;
 use Illuminate\Http\Request;
 use App\model\WarehouseReceipt;
 use App\Helpers\Utility;
@@ -30,17 +32,13 @@ class WarehouseReceiptController extends Controller
     {
 
         $mainData = WarehouseReceipt::paginateAllData();
-        $warehouse = Warehouse::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('warehouse_receipt.reload',array('mainData' => $mainData,
-                'warehouse' => $warehouse))->render());
+            return \Response::json(view::make('warehouse_receipt.reload',array('mainData' => $mainData,))->render());
 
         }else{
-            if(Utility::detectSelected('warehouse_employee',Auth::user()->id))
-                return view::make('warehouse_receipt.main_view')->with('mainData',$mainData)->with('warehouse',$warehouse);
-            else
-                return view::make('errors.403');
+                return view::make('warehouse_receipt.main_view')->with('mainData',$mainData);
+
         }
 
     }
@@ -103,9 +101,11 @@ class WarehouseReceiptController extends Controller
     public function editForm(Request $request)
     {
         //
-        $mainData = WarehouseReceipt::paginateAllData();
+        $mainData = WarehouseReceipt::firstRow('id',$request->input('dataId'));
+        $poItems = WarehouseReceipt::specialColumns('po_id',$mainData->po_id);
         $warehouse = Warehouse::getAllData();
-        return view::make('warehouse_receipt.edit_form')->with('edit',$mainData)->with('warehouse',$warehouse);
+        return view::make('warehouse_receipt.edit_form')->with('edit',$mainData)->with('warehouse',$warehouse)
+            ->with('poItems',$poItems);
 
     }
 
@@ -141,32 +141,35 @@ class WarehouseReceiptController extends Controller
             $qtyOutstanding = $request->input('qty_outstanding');
             $unitMeasure = $request->input('unit_measure');
             $dueDate = $request->input('due_date');
+            $arr = [];
+            for($i=1; $i<= $request->input('count_po'); $i++) {
+                $dbDATA = [
+                    'assigned_user' => $request->input('user'),
+                    'assigned_date' => Utility::standardDate($request->input('assigned_date')),
+                    'whse_id' => $request->input('warehouse'),
+                    'zone_id' => $request->input('zone'),
+                    'bin_id' => $request->input('bin'),
+                    'vendor_ship_no' => $request->input('vendor_ship_no'),
+                    'receipt_no' => $request->input('receipt_no'),
+                    'post_date' => Utility::standardDate($request->input('posting_date')),
+                    'qty' => $request->input('qty' . $i),
+                    'qty_to_receive' => $request->input('qty_to_receive' . $i),
+                    'qty_to_cross_dock' => $request->input('qty_to_cross_dock' . $i),
+                    'qty_received' => $request->input('qty_received' . $i),
+                    'qty_outstanding' => $request->input('qty_outstanding' . $i),
+                    'due_date' => Utility::standardDate($request->input('due_date' . $i)),
+                    'updated_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+                $arr[] = $dbDATA;
+                if ($request->input('work_status'.$i) != 1) {
 
-            $dbDATA = [
-                'assigned_user' => $assignedUser,
-                'assigned_date' => $assignedDate,
-                'warehouse' => $warehouse,
-                'zone' => $zone,
-                'bin' => $bin,
-                'vendor_ship_no' => $vendorShipNo,
-                'receipt_no' => $receiptNo,
-                'posting_date' => $postingDate,
-                'qty' => $qty,
-                'qty_to_receive' => $qtyToReceive,
-                'qty_to_cross_dock' => $qtyToCrossDock,
-                'qty_received' => $qtyReceived,
-                'qty_outstanding' => $qtyOutstanding,
-                'unit_measure' => $unitMeasure,
-                'due_date' => $dueDate,
-                'updated_by' => Auth::user()->id,
-                'status' => Utility::STATUS_ACTIVE
-            ];
-
-            WarehouseReceipt::defaultUpdate('id',$request->input('edit_id'),$dbDATA);
-
+                    WarehouseReceipt::defaultUpdate('id', $request->input('edit_id'.$i), $dbDATA);
+                }
+            }
             return response()->json([
                 'message' => 'good',
-                'message2' => 'saved'
+                'message2' =>  'saved'  //json_encode($request->all())  //json_encode($arr)
             ]);
 
 
@@ -184,7 +187,7 @@ class WarehouseReceiptController extends Controller
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = Inventory::searchWarehouseReceipt($_GET['searchVar']);
+        $search = WarehouseReceipt::searchWarehouseReceipt($_GET['searchVar']);
         $obtain_array = [];
 
         foreach($search as $data){
@@ -195,12 +198,12 @@ class WarehouseReceiptController extends Controller
             $obtain_array[] = $search[$i]->id;
         }*/
         //print_r($search); exit();
-        $user_ids = array_unique($obtain_array);
-        $mainData =  WarehouseReceipt::massData('id', $user_ids);
+        $receipt_ids = array_unique($obtain_array);
+        $mainData =  WarehouseReceipt::massDataPaginate('id', $receipt_ids);
         //print_r($obtain_array); die();
-        if (count($user_ids) > 0) {
+        if (count($receipt_ids) > 0) {
 
-            return view::make('warehouse_receipt.inventory_search')->with('mainData',$mainData);
+            return view::make('warehouse_receipt.receipt_search')->with('mainData',$mainData);
         }else{
             return 'No match found, please search again with sensitive words';
         }
@@ -214,11 +217,164 @@ class WarehouseReceiptController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function postCreateReceipt(Request $request)
     {
         //
-    }
+        $all_id = json_decode($request->input('all_data'));
+        $status = $request->input('status');
 
+        $createPost = PurchaseOrder::massData('id',$all_id);
+        $updateData = [
+            'receipt_status' => $status
+        ];
+        $checkStock = [];
+        $noWhse = [];
+        if(!empty($createPost)) {
+            foreach ($createPost as $data) {
+
+                //PROCESS IF USER IS POSTING RECEIPT
+                if ($status == Utility::POST_RECEIPT) {
+                    //PROCESS IF ITEM IS IN A WAREHOUSE
+                    if ($data->inventory->whse_status == 1) {
+                        $receiptBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['receipt_bin_code']);
+                        $dbData = [
+                            'item_id' => $data->item_id,
+                            'po_id' => $data->id,
+                            'pick_put_type' => Utility::PUT_AWAY,
+                            'to_whse' => $data->ship_to_whse,
+                            'to_bin' => $receiptBin->receipt_bin_code,
+                            'qty' => $data->qty,
+                            'qty_to_handle' => $data->received,
+                            'qty_handled' => $data->qty,
+                            'status' => Utility::STATUS_DELETED,
+                            'created_by' => Auth::user()->id
+                        ];
+                        $checkData = WhsePickPutAway::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        $checkPo = WarehouseReceipt::firstRow('po_id',$data->id);
+                        if(empty($checkData) && empty($checkPo)){
+                            if($data->to_whse != '' && $data->to_whse != 0){
+                                WhsePickPutAway::create($dbData);
+                                PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                                //UPDATE QUANTITY OF INVENTORY
+                                $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
+                                $newQty = $itemQty->qty + $data->quantity;
+                                $changeQty = ['qty' => $newQty];
+                                Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+
+                                $whseEmployee = WarehouseEmployee::specialColumns('warehouse_id',$data->to_whse);
+
+
+                                $emailContent1 = [];
+                                $emailContent1['subject'] = 'Warehouse Put-Away';
+
+                                if(!empty($whseEmployee)){
+                                    foreach($whseEmployee as $user){
+                                        $toMail = $user->access_user->email;
+                                        $name = $user->access_user->firstname.' '.$user->access_user->lastname;
+                                        $messageBody = "Hello $name, a new warehouse receipt was posted a while ago and are ready for put-away";
+                                        $emailContent1['message'] = $messageBody;
+                                        $emailContent1['to_mail'] = $toMail;
+
+                                        Notify::warehouseMail('mail.warehouse', $emailContent1,$toMail,'', $emailContent1['subject']);
+
+
+                                    }
+                                }
+
+                            }else{
+                                $noWhse[] = $data->inventory->item_name;
+                            }
+
+                        }
+
+                    }
+                    //PROCESS IF ITEM IS NOT IN A WAREHOUSE ITEM BUT A STOCK ITEM
+                    if ($data->inventory->whse_status == 0) {
+                        $dbData3 = [
+                            'item_id' => $data->item_id,
+                            'po_id' => $data->id,
+                            'qty' => $data->qty,
+                            'purchase_date' => $data->post_date,
+                            'status' => Utility::STATUS_ACTIVE,
+                            'created_by' => Auth::user()->id
+                        ];
+                        $checkData = Stock::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            Stock::create($dbData3);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+                            //UPDATE QUANTITY OF INVENTORY
+                            $itemQty = Inventory::where('id',$data->item_id)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
+                            $newQty = $itemQty->qty + $data->quantity;
+                            $changeQty = ['qty' => $newQty];
+                            Inventory::defaultUpdate('id',$data->item_id,$changeQty);
+                        }
+
+                    }
+                }
+                if ($status == Utility::CREATE_RECEIPT) {
+
+                    //PROCESS IF ITEM IS A WAREHOUSE ITEM
+                    if ($data->inventory->whse_status == 1) {
+
+                        $dbData4 = [
+                            'item_id' => $data->item_id,
+                            'whse_id' => $data->ship_to_whse,
+                            'po_id' => $data->id,
+                            'qty' => $data->qty,
+                            'work_status' => Utility::ZERO,
+                            'status' => Utility::STATUS_ACTIVE,
+                            'created_by' => Auth::user()->id
+                        ];
+                        $checkData = WarehouseReceipt::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            WarehouseReceipt::create($dbData4);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+
+                            //SEND OUT MAIL TO WAREHOUSE MANAGER IF WAREHOUSE IS NOT EMPTY
+                            if($data->to_whse != '' && $data->to_whse != 0){
+                                $whseData = Warehouse::firstRow('id',$data->to_whse);
+                                $whseManager = $whseData->whseManager->firstname.' '.$whseData->whseManager->lastname;
+                                $toMail = $whseData->email;
+
+                                $messageBody = "Hello $whseManager, you have awaiting warehouse receipts to be posted";
+
+                                $emailContent = [];
+                                $emailContent['subject'] = 'Warehouse Receipt';
+                                $emailContent['message'] = $messageBody;
+                                $emailContent['to_mail'] = $toMail;
+                                Notify::warehouseMail('mail.warehouse', $emailContent,$toMail,'', $emailContent['subject']);
+
+                            }
+
+
+                        }
+
+                    }
+
+                    if ($data->inventory->whse_status == 0){
+                        $checkStock[] = $data->inventory->item_name;
+                    }
+
+
+                }
+
+            }
+        }
+
+        $displayMessage1 = (count($checkStock) >0) ? 'and '.implode(',',$checkStock).
+            ' items were stock items and cannot be created for warehouse receipt' : '';
+
+        $displayMessage2 = (count($noWhse) >0) ? ' also '.implode(',',$noWhse).
+            ' items have not been assigned to a warehouse,zone and bin and therefore receipt cannot be posted' : '';
+
+        return response()->json([
+            'message' => 'deleted',
+            'message2' => 'receipt has been processed for the selected items'.$displayMessage1.$displayMessage2
+        ]);
+
+
+
+    }
     /**
      * Remove the specified resource from storage.
      *

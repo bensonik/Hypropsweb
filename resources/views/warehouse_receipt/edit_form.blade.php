@@ -1,18 +1,21 @@
 <form name="import_excel" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
     <div class="body">
 
-        @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
+        @if($edit->work_status == 1)
+        <h4>This Warehouse receipt has been posted and therefore cannot be modified</h4>
+        @endif
+        @if(Auth::user()->role == $edit->warehouse->whse_manager)
         <div class="row clearfix">
             <div class="col-sm-4">
                 <div class="form-group">
                     <b>Assign User</b>
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Inventory Item">
+                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
 
-                        <input type="hidden" class=""  value="{{$edit->assigned_user}}" name="user" id="inv500" />
+                        <input type="hidden" class="user_class" name="user" id="user" />
                     </div>
                 </div>
-                <ul id="myUL500" class="myUL"></ul>
+                <ul id="myUL1" class="myUL"></ul>
             </div>
 
             <div class="col-sm-4">
@@ -26,9 +29,54 @@
 
         </div>
         <hr/>
+        <div class="row clearfix">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            Warehouse
+                            <div class="form-line" >
+                                <select class=" warehouse" name="warehouse" id="warehouse_id" onchange="fillNextInput('warehouse_id','zone_display_id','<?php echo url('default_select'); ?>','w_zones')" >
+                                    <option value="">Select Receipt Warehouse</option>
+                                    @foreach($warehouse as $inv)
+                                        @if($edit->whse_id == $inv->id)
+                                            <option selected value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
+                                        @endif
+                                        <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <b>Zone</b>
+                            <div class="form-line" id="zone_display_id">
+                                <select class=" "  name="zone" >
+                                    <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <b>Receipt Bin</b>
+                            <div class="form-line" id="bin_id">
+                                <select class=" " name="bin"  >
+                                    <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+        <hr/>
         @else
 
-            <div class="row clearfix">
+         <div class="row clearfix">
                 <div class="col-sm-4">
                     <div class="form-group">
                         <b>Assign User</b>
@@ -50,8 +98,47 @@
                 </div>
 
             </div>
-            <hr/>
+         <hr/>
+         <div class="row clearfix">
 
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            Warehouse
+                            <div class="form-line" id="warehouse_id">
+                                <select class=" warehouse" name="warehouse" onchange="fillNextInput('warehouse_id','zone_display_id','<?php echo url('default_select'); ?>','w_zones')" >
+                                    <option value="{{$edit->whse_id}}">{{$edit->warehouse->name}} ({{$edit->warehouse->code}})</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <b>Zone</b>
+                            <div class="form-line" id="zone_display_id">
+                                <select class=" "  name="zone" >
+                                    <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <b>Receipt Bin</b>
+                            <div class="form-line" id="bin_id">
+                                <select class=" " name="bin"  >
+                                    <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+         <hr/>
         @endif
         <div class="row clearfix">
 
@@ -86,51 +173,6 @@
         <hr/>
         <div class="row clearfix">
 
-            <div class="col-sm-4">
-                <div class="form-group">
-                    Warehouse
-                    <div class="form-line" id="warehouse_id">
-                        <select class=" warehouse" name="warehouse" onchange="fillNextInput('warehouse_id','zone_display_id','<?php echo url('default_select'); ?>','w_zones')" >
-                            <option value="">Select Receipt Warehouse</option>
-                            @foreach($warehouse as $inv)
-                                @if($edit->whse_id == $inv->id)
-                                    <option selected value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
-                                @endif
-                                <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
-                            @endforeach
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <b>Zone</b>
-                    <div class="form-line" id="zone_display_id">
-                        <select class=" "  name="zone" >
-                            <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
-
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-sm-4">
-                <div class="form-group">
-                    <b>Receipt Bin</b>
-                    <div class="form-line" id="bin_id">
-                        <select class=" " name="bin"  >
-                            <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
-
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-        <hr/>
-        <div class="row clearfix">
-
             <table class="table table-bordered table-hover table-striped" id="account_main_table">
                 <thead>
                 <tr>
@@ -150,7 +192,10 @@
                     <th>Due Date</th>
                 </tr>
                 </thead>
-                <tbody id="add_more_acc">
+                <tbody id="">
+                <?php $num = 0; $count = []; ?>
+                @foreach($poItems as $po)
+                    <?php $num++; $count[] = $num; ?>
                 <tr>
 
                     <td scope="row">
@@ -162,9 +207,9 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" readonly value="{{$edit->inventory->item_name}} ({{$edit->inventory->item_no}})" id="select_acc" name="select_user" placeholder="Select Account">
+                                    <input type="text" class="" readonly value="{{$po->inventory->item_name}} ({{$edit->inventory->item_no}})" id="select_acc" name="select_user" placeholder="Select Account">
 
-                                    <input type="hidden" class="acc_class" value="{{$edit->poItem->item_id}}" name="item_id" id="acc500" />
+                                    <input type="hidden" class="acc_class" value="{{$po->inventory->item_id}}" name="item_id{{$num}}" id="acc500" />
                                 </div>
                             </div>
                         </div>
@@ -174,7 +219,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <textarea class=" " readonly name="item_desc"  id="item_desc_acc" placeholder="Description">{{$edit->poItem->po_desc}}</textarea>
+                                    <textarea class="" readonly name="item_desc{{$num}}"  id="item_desc_acc" placeholder="Description">{{$po->poItem->po_desc}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -184,7 +229,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class=" " value="{{$qty}}" name="qty" id="unit_cost_acc" placeholder="Quantity">
+                                    <input type="text" class="" readonly value="{{$po->poItem->quantity}}" name="qty{{$num}}" id="unit_cost_acc" placeholder="Quantity">
                                 </div>
                             </div>
                         </div>
@@ -194,7 +239,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class=" " value="{{$edit->qty_to_receive}}" name="qty_to_receive" id="tax_perct_acc" placeholder="Quantity to Receive" />
+                                    <input type="text" class="" value="{{$po->qty_to_receive}}" name="qty_to_receive{{$num}}" id="tax_perct_acc" placeholder="Quantity to Receive" />
                                 </div>
                             </div>
                         </div>
@@ -204,7 +249,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$edit->qty_to_cross_dock}}" name="qty_to_cross_dock" id="" placeholder="Quantity to Cross-Dock" />
+                                    <input type="text" class="" value="{{$po->qty_to_cross_dock}}" name="qty_to_cross_dock{{$num}}" id="" placeholder="Quantity to Cross-Dock" />
                                 </div>
                             </div>
                         </div>
@@ -214,7 +259,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$edit->qty_received}}" name="qty_received" id="" placeholder="Discount Percentage" />
+                                    <input type="text" class="" value="{{$po->qty_received}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
                                 </div>
                             </div>
                         </div>
@@ -224,7 +269,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$edit->qty_outstanding}}" name="qty_outstanding" id="" placeholder="Quantity Outstanding" />
+                                    <input type="text" class="" value="{{$po->qty_outstanding}}" name="qty_outstanding{{$num}}" id="" placeholder="Quantity Outstanding" />
                                 </div>
                             </div>
                         </div>
@@ -234,7 +279,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class=" " readonly value="{{$edit->poItem->unit_measurement}}"  name="unit_measure" id="sub_total_acc" >
+                                    <input type="text" class=" " readonly value="{{$po->poItem->unit_measurement}}"  name="unit_measure{{$num}}" id="sub_total_acc" >
                                 </div>
                             </div>
                         </div>
@@ -244,14 +289,16 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="datepicker" value="{{$edit->due_date}}" name="due_date" id="" placeholder="Due Date" />
+                                    <input type="text" class="datepicker" value="{{$po->due_date}}" name="due_date{{$num}}" id="" placeholder="Due Date" />
                                 </div>
                             </div>
                         </div>
                     </td>
 
                 </tr>
-
+                    <input value="{{$po->id}}" type="hidden" name="edit_id{{$num}}" />
+                    <input value="{{$po->work_status}}" type="hidden" name="work_status{{$num}}" />
+                @endforeach
                 </tbody>
             </table>
 
@@ -260,6 +307,8 @@
     </div>
 
 <input value="{{$edit->id}}" type="hidden" name="edit_id" />
+<input value="{{$edit->work_status}}" type="hidden" name="work_status" />
+<input value="<?php echo count($count); ?>" type="hidden" name="count_po" />
 </form>
 
 <script>

@@ -21,24 +21,15 @@ class WarehouseReceipt extends Model
      */
     protected $guarded = [];
 
-    public static $mainRules = [
-        'code' => 'required',
-        'name' => 'required',
-        'address' => 'required',
-        'shipment_bin' => 'required',
-        'receipt_bin' => 'required',
-    ];
-
     public static $mainRulesEdit = [
-        'code' => 'required',
-        'name' => 'required',
-        'address' => 'required',
-        'shipment_bin' => 'required',
-        'receipt_bin' => 'required',
+        'warehouse' => 'required',
+        'zone' => 'required',
+        'bin' => 'required',
+        'qty' => 'required',
     ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
@@ -58,7 +49,7 @@ class WarehouseReceipt extends Model
     }
 
     public function poItem(){
-        return $this->belongsTo('App\model\Purchase_order','item_id','id')->withDefault();
+        return $this->belongsTo('App\model\PurchaseOrder','po_id','id')->withDefault();
 
     }
 
@@ -67,24 +58,20 @@ class WarehouseReceipt extends Model
 
     }
 
-    public function to_zone(){
+    public function zone(){
         return $this->belongsTo('App\model\Zone','zone_id','id')->withDefault();
 
     }
 
-    public function to_bin(){
+    public function bin(){
         return $this->belongsTo('App\model\Bin','bin_id','id')->withDefault();
 
     }
 
-    public function receipt(){
-        return $this->belongsTo('App\model\WarehouseReceipt','receipt_id','id')->withDefault();
-
-    }
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P35);
         //return Utility::paginateAllData(self::table());
 
     }
@@ -167,7 +154,7 @@ class WarehouseReceipt extends Model
 
     public static function massDataPaginate($column, $post)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, '=',$post)
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->paginate(Utility::P35);
 
 
@@ -209,6 +196,25 @@ class WarehouseReceipt extends Model
         return Utility::tenColumnSingleValue(self::table(),'receipt_bin_code','adjust_bin_code','ship_bin_code',
             'open_shop_floor_bin_code','to_prod_bin_code','from_prod_bin_code','cross_dock_bin_code',
             'to_assembly_bin_code','from_assembly_bin_code','assembly_to_order_ship_bin_code',$post);
+    }
+
+    public static function searchWarehouseReceipt($value){
+        return static::where('warehouse_receipt.status', '=','1')
+            ->join('inventory', 'inventory.id', '=', 'warehouse_receipt.item_id')
+            ->join('purchase_order', 'purchase_order.id', '=', 'warehouse_receipt.po_id')
+            ->join('warehouse', 'warehouse.id', '=', 'warehouse_receipt.whse_id')
+            ->join('zone', 'zone.id', '=', 'warehouse_receipt.zone_id')
+            ->join('bin', 'bin.id', '=', 'bin.bin_id')
+            ->where(function ($query) use($value){
+                $query->where('inventory.item_name','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse_receipt.receipt_no','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse_receipt.vendor_ship_no','LIKE','%'.$value.'%')
+                    ->orWhere('purchase_order.po_desc','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse_receipt.vendor_ship_no','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse.name','LIKE','%'.$value.'%')
+                    ->orWhere('zone.name','LIKE','%'.$value.'%')
+                    ->orWhere('bin.code','LIKE','%'.$value.'%');
+            })->get();
     }
 
 }

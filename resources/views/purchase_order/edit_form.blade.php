@@ -401,7 +401,7 @@
                 @foreach($poData as $po)
 
                     @if(!empty($po->item_id))
-                        <?php $num++; $num2++; $countDataPo[] = $num2; $receiptStatus = ($po->receipt_status != '0') ? 'checked' : ''; ?>
+                        <?php $num++; $num2++; $countDataPo[] = $num2; $receiptStatus = ($po->receipt_status != '0' && $po->receipt_status != '') ? 'checked' : ''; ?>
                         <tr id="itemId{{$po->id}}">
 
                             <td scope="row">

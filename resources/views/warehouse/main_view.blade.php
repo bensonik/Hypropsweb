@@ -113,6 +113,18 @@
                                     </div>
                                 </div>
 
+                                <div class="col-sm-4">
+                                    <b>Warehouse Manager</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+
+                                            <input type="hidden" class="user_class" name="warehouse_manager" id="user" />
+                                        </div>
+                                    </div>
+                                    <ul id="myUL1" class="myUL"></ul>
+                                </div>
+
                             </div>
 
                      </div>

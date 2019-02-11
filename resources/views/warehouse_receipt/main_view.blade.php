@@ -28,7 +28,7 @@
 
     <!-- Default Size -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt</h4>
@@ -48,7 +48,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="modal-body" id="edit_content">
+                <div class="modal-body" id="edit_content" style=" overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -72,14 +72,17 @@
                         Warehouse Receipt(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
-                        <li>
-                            <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
-                        </li>
+
                         <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
                                     '<?php echo url('delete_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('purchase_order'); ?>',
+                                        '<?php echo url('post_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button>
+
                         </li>
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -103,8 +106,8 @@
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" id="search_inventory" class="form-control"
-                                           onkeyup="searchItem('search_inventory','reload_data','<?php echo url('search_inventory_record') ?>','{{url('inventory_record')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_inventory" placeholder="Search Inventory" >
+                                           onkeyup="searchItem('search_receipt','reload_data','<?php echo url('search_warehouse_receipt') ?>','{{url('warehouse_receipt')}}','<?php echo csrf_token(); ?>')"
+                                           name="search_inventory" placeholder="Search Warehouse Receipts" >
                                 </div>
                             </div>
                         </div>
@@ -277,7 +280,7 @@
         if(searchVal == ''){
             pageData = '?page=' + page;
         }else{
-            pageData = '<?php echo url('search_inventory_record') ?>?page=' + page+'&searchVar='+searchVal;
+            pageData = '<?php echo url('search_warehouse_receipt') ?>?page=' + page+'&searchVar='+searchVal;
         }
 
         $.ajax({

@@ -135,7 +135,7 @@ class InventoryRecord extends Model
 
     public static function massDataPaginate($column, $post)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, '=',$post)
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->paginate(Utility::P35);
 
 

@@ -35,55 +35,29 @@ class Notify
     }
 
     public static function appraisalMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
-        /*Mail::send($viewPage, $arrayContent,
-            function ($message) use ($email,$fullName,$subject)
-            {
 
-                $message->from('info@hyprops.com', 'No Reply');
-
-                $message->to($email)->subject($subject);
-
-            });*/
         //Mail::to($email)->send(new DemoMail($objContent));
     }
 
     public static function leaveRequestMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
-        /*Mail::send($viewPage, $arrayContent,
-            function ($message) use ($email,$fullName,$subject)
-            {
 
-                $message->from('info@hyprops.com', 'No Reply');
-
-                $message->to($email)->subject($subject);
-
-            });*/
         //Mail::to($email)->send(new LeaveRequestMail($objContent));
     }
 
     public static function payrollMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
-        /*Mail::send($viewPage, $arrayContent,
-            function ($message) use ($email,$fullName,$subject)
-            {
 
-                $message->from('info@hyprops.com', 'No Reply');
-
-                $message->to($email)->subject($subject);
-
-            });*/
         //Mail::to($email)->send(new PayrollMail($objContent));
     }
 
     public static function poMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
-        /*Mail::send($viewPage, $arrayContent,
-            function ($message) use ($email,$fullName,$subject)
-            {
 
-                $message->from('info@hyprops.com', 'No Reply');
-
-                $message->to($email)->subject($subject);
-
-            });*/
         //Mail::to($email)->send(new PoMail($objContent));
     }
+
+    public static function warehouseMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+
+        //Mail::to($email)->send(new WarehouseMail($objContent));
+    }
+
 
 }

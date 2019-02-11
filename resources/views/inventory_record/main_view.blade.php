@@ -153,7 +153,7 @@
 
                     </ul>
                 </div>
-                <div class="body table-responsive" id="reload_data">
+                <div class="body">
                     <div class="row">
                         <div class="col-sm-12 pull-right">
                             <div class="form-group">
@@ -165,6 +165,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="body table-responsive" id="reload_data">
+
 
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>

@@ -809,13 +809,13 @@
                     confirmButtonClass: "btn-danger",
                     confirmButtonText: "Yes, change it!",
                     cancelButtonText: "No, cancel change!",
-                    closeOnConfirm: false,
+                    closeOnConfirm: true,
                     closeOnCancel: false
                 },
                 function (isConfirm) {
                     if (isConfirm) {
                         changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
-                        swal("Processed!", "process complete.", "success");
+                        //swal("Processed!", "process complete.", "success");
                     } else {
                         swal(" Cancelled", category, "error");
                     }

@@ -464,12 +464,14 @@
                 </li>
                 @endif
 
+
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">domain</i>
-                        <span>Inventory </span>
+                        <span>Inventory System</span>
                     </a>
                     <ul class="ml-menu">
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_SCM_WHSE_MANAGEMENT))
                         <li>
                             <a href="{{url('physical_inv_count')}}">Physical Inventory Count Setup </a>
                         </li>
@@ -488,10 +490,19 @@
                         <li>
                             <a href="{{url('inventory_record')}}">Record Inventory Items</a>
                         </li>
+                        @else
+                            <li>
+                                <a href="{{url('inventory_assign')}}">Inventory Assignment</a>
+                            </li>
+                            <li>
+                                <a href="{{url('inventory_record')}}">Record Inventory Items</a>
+                            </li>
+                        @endif
                     </ul>
                 </li>
 
-                @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
+
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_SCM_WHSE_MANAGEMENT))
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">view_quilt</i>

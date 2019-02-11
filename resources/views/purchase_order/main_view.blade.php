@@ -283,10 +283,10 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                     <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('purchase_order'); ?>',
-                                '<?php echo url('post_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button></div>
+                                '<?php echo url('post_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button></div>
 
                     <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('purchase_order'); ?>',
-                                '<?php echo url('create_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::CREATE_RECEIPT}}','Create Warehouse Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-plus"></i>Create Warehouse Receipt</button></div>
+                                '<?php echo url('create_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::CREATE_RECEIPT}}','Create Warehouse Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-plus"></i>Create Warehouse Receipt</button></div>
                 </div>
                 <div class="modal-body" id="edit_content" style="height:500px; overflow:scroll;">
 

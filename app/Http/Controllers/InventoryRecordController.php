@@ -162,7 +162,7 @@ class InventoryRecordController extends Controller
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = Inventory::searchInventoryRecord($_GET['searchVar']);
+        $search = InventoryRecord::searchInventoryRecord($_GET['searchVar']);
         $obtain_array = [];
 
         foreach($search as $data){
@@ -172,10 +172,10 @@ class InventoryRecordController extends Controller
         /*for($i=0;$i<count($search);$i++){
             $obtain_array[] = $search[$i]->id;
         }*/
-        //print_r($search); exit();
+        //print_r($obtain_array); exit();
         $user_ids = array_unique($obtain_array);
         $mainData =  InventoryRecord::massDataPaginate('id', $user_ids);
-        //print_r($obtain_array); die();
+        //print_r($user_ids); die();
         if (count($user_ids) > 0) {
 
             return view::make('inventory_record.inventory_search')->with('mainData',$mainData);

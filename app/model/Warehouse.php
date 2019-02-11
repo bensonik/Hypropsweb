@@ -27,6 +27,7 @@ class Warehouse extends Model
         'address' => 'required',
         'shipment_bin' => 'required',
         'receipt_bin' => 'required',
+        'warehouse_manager' => 'required',
     ];
 
     public static $mainRulesEdit = [
@@ -35,15 +36,20 @@ class Warehouse extends Model
         'address' => 'required',
         'shipment_bin' => 'required',
         'receipt_bin' => 'required',
+        'warehouse_manager' => 'required',
     ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
+
+    }
+    public function whseManager(){
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
