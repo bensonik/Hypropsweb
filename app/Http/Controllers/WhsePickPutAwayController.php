@@ -24,7 +24,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class WarehouseReceiptController extends Controller
+class WhsePickPutAwayController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,13 +34,13 @@ class WarehouseReceiptController extends Controller
     public function index(Request $request)
     {
 
-        $mainData = WarehouseReceipt::paginateAllData();
+        $mainData = WhsePickPutAway::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('warehouse_receipt.reload',array('mainData' => $mainData,))->render());
+            return \Response::json(view::make('whse_pick_put_away.reload',array('mainData' => $mainData,))->render());
 
         }else{
-                return view::make('warehouse_receipt.main_view')->with('mainData',$mainData);
+            return view::make('whse_pick_put_away.main_view')->with('mainData',$mainData);
 
         }
 
@@ -269,6 +269,52 @@ class WarehouseReceiptController extends Controller
 
                     }
                 }
+                if ($status == Utility::CREATE_RECEIPT) {
+
+                    //PROCESS IF ITEM IS A WAREHOUSE ITEM
+                    if ($data->inventory->whse_status == 1) {
+
+                        $dbData4 = [
+                            'item_id' => $data->item_id,
+                            'whse_id' => $data->ship_to_whse,
+                            'po_id' => $data->id,
+                            'qty' => $data->qty,
+                            'work_status' => Utility::ZERO,
+                            'status' => Utility::STATUS_ACTIVE,
+                            'created_by' => Auth::user()->id
+                        ];
+                        $checkData = WarehouseReceipt::where('po_id',$data->id)->where('status',Utility::STATUS_ACTIVE)->first();
+                        if(empty($checkData)){
+                            WarehouseReceipt::create($dbData4);
+                            PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
+
+                            //SEND OUT MAIL TO WAREHOUSE MANAGER IF WAREHOUSE IS NOT EMPTY
+                            if($data->to_whse != '' && $data->to_whse != 0){
+                                $whseData = Warehouse::firstRow('id',$data->to_whse);
+                                $whseManager = $whseData->whseManager->firstname.' '.$whseData->whseManager->lastname;
+                                $toMail = $whseData->email;
+
+                                $messageBody = "Hello $whseManager, you have awaiting warehouse receipts to be posted";
+
+                                $emailContent = [];
+                                $emailContent['subject'] = 'Warehouse Receipt';
+                                $emailContent['message'] = $messageBody;
+                                $emailContent['to_mail'] = $toMail;
+                                Notify::warehouseMail('mail.warehouse', $emailContent,$toMail,'', $emailContent['subject']);
+
+                            }
+
+
+                        }
+
+                    }
+
+                    if ($data->inventory->whse_status == 0){
+                        $checkStock[] = $data->inventory->item_name;
+                    }
+
+
+                }
 
             }
         }
@@ -308,3 +354,4 @@ class WarehouseReceiptController extends Controller
         ]);
     }
 }
+
