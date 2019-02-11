@@ -455,12 +455,18 @@ Route::post('/delete_warehouse_employee', 'WarehouseEmployeeController@destroy')
 
 // -------------WAREHOUSE RECEIPT  MODULE-----------
 Route::get('/warehouse_receipt', 'WarehouseReceiptController@index')->name('warehouse_receipt')->middleware('auth');
-Route::any('/create_warehouse_receipt', 'WarehouseReceiptController@postCreateReceipt')->name('create_warehouse_receipt');
 Route::any('/post_warehouse_receipt', 'WarehouseReceiptController@postCreateReceipt')->name('post_warehouse_receipt');
 Route::post('/edit_warehouse_receipt_form', 'WarehouseReceiptController@editForm')->name('edit_warehouse_receipt_form');
 Route::post('/edit_warehouse_receipt', 'WarehouseReceiptController@edit')->name('edit_warehouse_receipt');
 Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchInventoryRecord')->name('search_warehouse_receipt');
-Route::post('/delete_warehouse_receipt', 'InventoryRecordController@destroy')->name('delete_warehouse_receipt');
+Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
+// -------------WAREHOUSE PUT AWAY  MODULE-----------
+Route::get('/put_away', 'WarehouseReceiptController@index')->name('put_away')->middleware('auth');
+Route::any('/register_put_away', 'WarehouseReceiptController@postCreateReceipt')->name('post_warehouse_receipt');
+Route::post('/edit_warehouse_receipt_form', 'WarehouseReceiptController@editForm')->name('edit_warehouse_receipt_form');
+Route::post('/edit_warehouse_receipt', 'WarehouseReceiptController@edit')->name('edit_warehouse_receipt');
+Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchInventoryRecord')->name('search_warehouse_receipt');
+Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
 

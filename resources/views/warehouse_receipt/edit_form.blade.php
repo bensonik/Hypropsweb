@@ -239,7 +239,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$po->qty_to_receive}}" name="qty_to_receive{{$num}}" id="tax_perct_acc" placeholder="Quantity to Receive" />
+                                    <input type="number" class="" value="{{$po->qty_to_receive}}" name="qty_to_receive{{$num}}" id="tax_perct_acc" placeholder="Quantity to Receive" />
                                 </div>
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$po->qty_to_cross_dock}}" name="qty_to_cross_dock{{$num}}" id="" placeholder="Quantity to Cross-Dock" />
+                                    <input type="number" class="" value="{{$po->qty_to_cross_dock}}" name="qty_to_cross_dock{{$num}}" id="" placeholder="Quantity to Cross-Dock" />
                                 </div>
                             </div>
                         </div>
@@ -259,7 +259,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$po->qty_received}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
+                                    <input type="number" class="" value="{{$po->qty_received}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
                                 </div>
                             </div>
                         </div>
@@ -269,7 +269,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" value="{{$po->qty_outstanding}}" name="qty_outstanding{{$num}}" id="" placeholder="Quantity Outstanding" />
+                                    <input type="number" class="" value="{{$po->qty_outstanding}}" name="qty_outstanding{{$num}}" id="" placeholder="Quantity Outstanding" />
                                 </div>
                             </div>
                         </div>

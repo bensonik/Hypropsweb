@@ -163,6 +163,7 @@
 
     <select name="zone"  class="form-control " id="zone_id" onchange="fillNextInput('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')" >
         @if(count($optionArray) > 0)
+            <option value="">Select</option>
             @foreach($optionArray as $data)
                 <option value="{{$data->zone_id}}">{{$data->zone->name}}</option>
             @endforeach
@@ -177,6 +178,7 @@
 
     <select name="bin"  class="form-control " id=""  >
         @if(count($optionArray) > 0)
+            <option value="">Select</option>
             @foreach($optionArray as $data)
                 <option value="{{$data->bin_id}}">{{$data->bin->code}}</option>
             @endforeach

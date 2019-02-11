@@ -100,9 +100,9 @@
 
                     </ul>
                 </div>
-                <div class="body table-responsive" id="reload_data">
-                    <div class="row">
-                        <div class="col-sm-12 pull-right">
+                <div class="container">
+                    <div class=" row">
+                        <div class="col-sm-6 ">
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" id="search_inventory" class="form-control"
@@ -112,6 +112,9 @@
                             </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="body table-responsive" id="reload_data">
 
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
@@ -123,6 +126,7 @@
                             </th>
 
                             <th>Inventory Item</th>
+                            <th>Warehouse</th>
                             <th>Item Desc</th>
                             <th>Quantity</th>
                             <th>Quantity to receive</th>
@@ -145,6 +149,7 @@
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <td>{{$data->warehouse->name}}</td>
                             <td>{{$data->inventory->item_name}}</td>
                             <td>{{$data->poItem->po_desc}}</td>
                             <td>{{$data->qty}}</td>

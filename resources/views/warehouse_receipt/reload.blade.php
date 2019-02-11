@@ -6,7 +6,7 @@
                    name="check_all" class="" />
 
         </th>
-
+        <th>Warehouse</th>
         <th>Inventory Item</th>
         <th>Item Desc</th>
         <th>Quantity</th>
@@ -30,6 +30,7 @@
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+            <td>{{$data->warehouse->name}}</td>
             <td>{{$data->inventory->item_name}}</td>
             <td>{{$data->poItem->po_desc}}</td>
             <td>{{$data->qty}}</td>
