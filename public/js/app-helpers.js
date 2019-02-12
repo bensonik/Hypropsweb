@@ -397,6 +397,16 @@
             });
         }
 
+    function fillNextInputParam(value_id,displayId,page,moduleType,param){
+        var pickedVal = $('#'+value_id).val();
+
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
+        }).done(function(data){
+            $('#'+displayId).html(data);
+        });
+    }
+
     function searchOptionList(searchId,listId,page,moduleType,hiddenId){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();

@@ -259,7 +259,8 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="number" class="" value="{{$po->qty_received}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
+                                    <?php $idealReceipt = ($po->qty_received == '') ? $po->poItem->received_quantity: $po->qty_received; ?>
+                                    <input type="number" class="" value="{{$idealReceipt}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
                                 </div>
                             </div>
                         </div>

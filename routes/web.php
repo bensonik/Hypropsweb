@@ -458,15 +458,15 @@ Route::get('/warehouse_receipt', 'WarehouseReceiptController@index')->name('ware
 Route::any('/post_warehouse_receipt', 'WarehouseReceiptController@postCreateReceipt')->name('post_warehouse_receipt');
 Route::post('/edit_warehouse_receipt_form', 'WarehouseReceiptController@editForm')->name('edit_warehouse_receipt_form');
 Route::post('/edit_warehouse_receipt', 'WarehouseReceiptController@edit')->name('edit_warehouse_receipt');
-Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchInventoryRecord')->name('search_warehouse_receipt');
+Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchWarehouseRecipt')->name('search_warehouse_receipt');
 Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
 // -------------WAREHOUSE PUT AWAY  MODULE-----------
-Route::get('/put_away', 'WarehouseReceiptController@index')->name('put_away')->middleware('auth');
-Route::any('/register_put_away', 'WarehouseReceiptController@postCreateReceipt')->name('post_put_away');
-Route::post('/edit_put_away_form', 'WarehouseReceiptController@editForm')->name('edit_put_away_form');
-Route::post('/edit_put_away', 'WarehouseReceiptController@edit')->name('edit_put_away');
-Route::any('/search_put_away', 'WarehouseReceiptController@searchInventoryRecord')->name('search_put_away');
-Route::post('/delete_put_away', 'WarehouseReceiptController@destroy')->name('delete_put_away');
+Route::get('/put_away', 'WhsePickPutAwayController@index')->name('put_away')->middleware('auth');
+Route::any('/register_put_away', 'WhsePickPutAwayController@putAway')->name('post_put_away');
+Route::post('/edit_put_away_form', 'WhsePickPutAwayController@editForm')->name('edit_put_away_form');
+Route::post('/edit_put_away', 'WhsePickPutAwayController@edit')->name('edit_put_away');
+Route::any('/search_put_away', 'WhsePickPutAwayController@searchWhsePickPutAway')->name('search_put_away');
+Route::post('/delete_put_away', 'WhsePickPutAwayController@destroy')->name('delete_put_away');
 
 

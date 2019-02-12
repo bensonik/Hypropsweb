@@ -21,20 +21,11 @@ class WhsePickPutAway extends Model
      */
     protected $guarded = [];
 
-    public static $mainRules = [
-        'code' => 'required',
-        'name' => 'required',
-        'address' => 'required',
-        'shipment_bin' => 'required',
-        'receipt_bin' => 'required',
-    ];
-
     public static $mainRulesEdit = [
-        'code' => 'required',
-        'name' => 'required',
-        'address' => 'required',
-        'shipment_bin' => 'required',
-        'receipt_bin' => 'required',
+        'warehouse' => 'required',
+        'zone' => 'required',
+        'bin' => 'required',
+        'qty' => 'required',
     ];
 
     public function user_c(){
@@ -49,6 +40,11 @@ class WhsePickPutAway extends Model
 
     public function inventory(){
         return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
+
+    }
+
+    public function poItem(){
+        return $this->belongsTo('App\model\PurchaseOrder','po_id','id')->withDefault();
 
     }
 
@@ -74,7 +70,7 @@ class WhsePickPutAway extends Model
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P35);
         //return Utility::paginateAllData(self::table());
 
     }
@@ -154,6 +150,15 @@ class WhsePickPutAway extends Model
         return Utility::massData(self::table(),$column, $post);
 
     }
+
+    public static function massDataPaginate($column, $post)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+
+    }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
@@ -191,5 +196,25 @@ class WhsePickPutAway extends Model
             'open_shop_floor_bin_code','to_prod_bin_code','from_prod_bin_code','cross_dock_bin_code',
             'to_assembly_bin_code','from_assembly_bin_code','assembly_to_order_ship_bin_code',$post);
     }
+
+    public static function searchWhsePickPutAway($value){
+        return static::where('warehouse_receipt.status', '=',Utility::STATUS_ACTIVE)->where('whse_pick_put_away.pick_put_status', '=',Utility::STATUS_ACTIVE)
+            ->join('inventory', 'inventory.id', '=', 'whse_pick_put_away.item_id')
+            ->join('po_extension', 'po_extention.id', '=', 'whse_pick_put_away.po_id')
+            ->join('warehouse', 'warehouse.id', '=', 'whse_pick_put_away.to_whse')
+            ->join('zone', 'zone.id', '=', 'whse_pick_put_away.to_zone')
+            ->join('bin', 'bin.id', '=', 'bin.to_bin')
+            ->where(function ($query) use($value){
+                $query->where('inventory.item_name','LIKE','%'.$value.'%')
+                    ->orWhere('whse_pick_put_away.receipt_no','LIKE','%'.$value.'%')
+                    ->orWhere('whse_pick_put_away.vendor_ship_no','LIKE','%'.$value.'%')
+                    ->orWhere('po_extention.po_number','LIKE','%'.$value.'%')
+                    ->orWhere('whse_pick_put_away.vendor_ship_no','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse.name','LIKE','%'.$value.'%')
+                    ->orWhere('zone.name','LIKE','%'.$value.'%')
+                    ->orWhere('bin.code','LIKE','%'.$value.'%');
+            })->get();
+    }
+
 
 }

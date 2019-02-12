@@ -188,3 +188,20 @@
         @endif
     </select>
 @endif
+
+@if($type == 'z_bins_param')
+
+    <select name="bin{{$param}}"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->bin_id}}">{{$data->bin->code}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Bins found</option>
+        @endif
+    </select>
+@endif
+
+

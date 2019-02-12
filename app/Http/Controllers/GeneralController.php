@@ -349,11 +349,19 @@ class GeneralController extends Controller
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
         }
 
-        //FOR SELECTING ZONES OF A WAREHOUSE
+        //FOR SELECTING BINS OF A ZONE
         if($type == 'z_bins'){
             //print_r($pickedVal);exit();
             $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+        }
+
+        //FOR SELECTING BINS OF A ZONE WITH PARAMETER
+        if($type == 'z_bins_param'){
+            $param = $_GET['param'];
+            $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type)
+                ->with('param',$param);
         }
 
 

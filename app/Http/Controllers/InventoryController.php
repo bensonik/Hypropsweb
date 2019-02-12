@@ -202,7 +202,7 @@ class InventoryController extends Controller
     public function stockInventory(Request $request)
     {
         //
-        $stock = Stock::specialColumnsPage('item_id',$request->input('dataId'));
+        $stock = Stock::specialColumnsPage2('item_id',$request->input('dataId'),'pick_put_status',Utility::STATUS_ACTIVE);
         return view::make('inventory.stock.items')->with('mainData',$stock)->with('itemId',$request->input('dataId'));
 
     }
