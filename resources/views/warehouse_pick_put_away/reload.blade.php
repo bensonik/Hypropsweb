@@ -6,11 +6,11 @@
                    name="check_all" class="" />
 
         </th>
-
-        <th>Inventory Item</th>
         <th>Warehouse</th>
+        <th>Inventory Item</th>
         <th>Item Desc</th>
         <th>Po Number</th>
+        <th>Assigned User</th>
         <th>Created by</th>
         <th>Created at</th>
         <th>Updated by</th>
@@ -30,6 +30,7 @@
             <td>{{$data->inventory->item_name}}</td>
             <td>{{$data->poItem->po_desc}}</td>
             <td>{{$data->poExtItem->po_number}}</td>
+            <td>{{$data->assigned->firstname}} {{$data->assigned->lastname}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -46,7 +47,7 @@
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_put_away_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Put-Away</a>
             </td>
         </tr>
     @endforeach

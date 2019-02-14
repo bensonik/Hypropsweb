@@ -25,7 +25,6 @@ class WarehouseReceipt extends Model
         'warehouse' => 'required',
         'zone' => 'required',
         'bin' => 'required',
-        'qty' => 'required',
     ];
 
     public function user_c(){

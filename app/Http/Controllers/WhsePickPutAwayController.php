@@ -78,6 +78,7 @@ class WhsePickPutAwayController extends Controller
         $validator = Validator::make($request->all(),$mainRules);
         if($validator->passes()) {
 
+            $warehouseId = $request->input('warehouse');
             $holdEmpty = [];
             for($i=1; $i<= $request->input('count_po'); $i++) {
                 if($request->input('zone'.$i) == '' || $request->input('bin'.$i) == '' ){
@@ -96,9 +97,9 @@ class WhsePickPutAwayController extends Controller
                 $dbDATA = [
                     'assigned_user' => $request->input('user'),
                     'assigned_date' => Utility::standardDate($request->input('assigned_date')),
-                    'whse_id' => $request->input('warehouse'),
-                    'zone_id' => $request->input('zone'.$i),
-                    'bin_id' => $request->input('bin'.$i),
+                    'to_whse' => $request->input('warehouse'),
+                    'to_zone' => $request->input('zone'.$i),
+                    'to_bin' => $request->input('bin'.$i),
                     'qty' => $request->input('qty' . $i),
                     'qty_to_handle' => $request->input('qty_to_handle' . $i),
                     'qty_handled' => $request->input('qty_handled' . $i),
@@ -112,6 +113,21 @@ class WhsePickPutAwayController extends Controller
                     WhsePickPutAway::defaultUpdate('id', $request->input('edit_id'.$i), $dbDATA);
 
             }
+
+            //SEND OUT MAIL TO WAREHOUSE MANAGER IF WAREHOUSE IS NOT EMPTY
+            $whseData = Warehouse::firstRow('id',$warehouseId);
+            $whseMan = $whseData->whseManager->firstname.' '.$whseData->whseManager->lastname;
+            $toMail = $whseData->whseManager->email;
+
+            $messageBody = "Hello $whseMan, some Put-Away(s) were registered a while ago";
+
+            $emailContent = [];
+            $emailContent['subject'] = 'Warehouse Put-Away(s)';
+            $emailContent['message'] = $messageBody;
+            $emailContent['to_mail'] = $toMail;
+            Notify::warehouseMail('mail.warehouse', $emailContent,$toMail,'', $emailContent['subject']);
+
+
             return response()->json([
                 'message' => 'good',
                 'message2' =>  'saved'  //json_encode($request->all())  //json_encode($arr)
@@ -137,14 +153,14 @@ class WhsePickPutAwayController extends Controller
 
         foreach($search as $data){
 
-            $obtain_array[] = $data->id;
+            $obtain_array[] = $data->assigned_user;
         }
         /*for($i=0;$i<count($search);$i++){
             $obtain_array[] = $search[$i]->id;
         }*/
-        //print_r($search); exit();
+        print_r($search); exit();
         $receipt_ids = array_unique($obtain_array);
-        $mainData =  WhsePickPutAway::massDataPaginate('id', $receipt_ids);
+        $mainData =  WhsePickPutAway::massDataPaginate('assigned_user', $receipt_ids);
         //print_r($obtain_array); die();
         if (count($receipt_ids) > 0) {
 

@@ -38,6 +38,11 @@ class WhsePickPutAway extends Model
 
     }
 
+    public function assigned(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
+
+    }
+
     public function inventory(){
         return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
 
@@ -58,12 +63,12 @@ class WhsePickPutAway extends Model
 
     }
 
-    public function to_zone(){
+    public function zone(){
         return $this->belongsTo('App\model\Zone','to_zone','id')->withDefault();
 
     }
 
-    public function to_bin(){
+    public function bin(){
         return $this->belongsTo('App\model\Bin','to_bin','id')->withDefault();
 
     }
@@ -203,21 +208,15 @@ class WhsePickPutAway extends Model
     }
 
     public static function searchWhsePickPutAway($value){
-        return static::where('warehouse_receipt.status', '=',Utility::STATUS_ACTIVE)->where('whse_pick_put_away.pick_put_status', '=',Utility::STATUS_ACTIVE)
+        return static::where('whse_pick_put_away.status', '=',Utility::STATUS_ACTIVE)->where('whse_pick_put_away.pick_put_status', '=',Utility::STATUS_ACTIVE)
             ->join('inventory', 'inventory.id', '=', 'whse_pick_put_away.item_id')
-            ->join('po_extension', 'po_extention.id', '=', 'whse_pick_put_away.po_id')
             ->join('warehouse', 'warehouse.id', '=', 'whse_pick_put_away.to_whse')
-            ->join('zone', 'zone.id', '=', 'whse_pick_put_away.to_zone')
-            ->join('bin', 'bin.id', '=', 'bin.to_bin')
+            ->join('users', 'users.id', '=', 'whse_pick_put_away.assigned_user')
             ->where(function ($query) use($value){
                 $query->where('inventory.item_name','LIKE','%'.$value.'%')
-                    ->orWhere('whse_pick_put_away.receipt_no','LIKE','%'.$value.'%')
-                    ->orWhere('whse_pick_put_away.vendor_ship_no','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.po_number','LIKE','%'.$value.'%')
-                    ->orWhere('whse_pick_put_away.vendor_ship_no','LIKE','%'.$value.'%')
                     ->orWhere('warehouse.name','LIKE','%'.$value.'%')
-                    ->orWhere('zone.name','LIKE','%'.$value.'%')
-                    ->orWhere('bin.code','LIKE','%'.$value.'%');
+                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
+                    ->orWhere('users.lastname','LIKE','%'.$value.'%');
             })->get();
     }
 

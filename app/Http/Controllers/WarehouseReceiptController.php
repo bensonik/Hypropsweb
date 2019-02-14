@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\model\WarehouseZone;
 use App\model\WhsePickPutAway;
 use App\model\Warehouse;
 use App\model\Inventory;
@@ -59,8 +60,9 @@ class WarehouseReceiptController extends Controller
         $mainData = WarehouseReceipt::firstRow('id',$request->input('dataId'));
         $poItems = WarehouseReceipt::specialColumns('po_ext_id',$mainData->po_ext_id);
         $warehouse = Warehouse::getAllData();
+        $zones = WarehouseZone::specialColumns('warehouse_id',$mainData->whse_id);
         return view::make('warehouse_receipt.edit_form')->with('edit',$mainData)->with('warehouse',$warehouse)
-            ->with('poItems',$poItems);
+            ->with('poItems',$poItems)->with('zones',$zones);
 
     }
 
@@ -194,6 +196,9 @@ class WarehouseReceiptController extends Controller
                         $realWhse = (empty($checkPo)) ? $data->ship_to_whse : $checkPo->whse_id;
                         $realZone = (empty($checkPo)) ? '0' : $checkPo->zone_id;
                         $realBin = (empty($checkPo)) ? $receiptBin->receipt_bin_code : $checkPo->bin_id;
+                        $assignedTo = (empty($checkPo)) ? '0' : $checkPo->assigned_user;
+                        $assignedDate = (empty($checkPo)) ? '0000-00-00' : $checkPo->assigned_date;
+                        $dueDate = (empty($checkPo)) ? '0000-00-00' : $checkPo->due_date;
 
                         $qty = (empty($checkPo)) ? $poQty : $checkPo->qty_to_receive;
 
@@ -201,6 +206,9 @@ class WarehouseReceiptController extends Controller
                             'item_id' => $data->item_id,
                             'po_id' => $data->id,
                             'po_ext_id' => $data->po_id,
+                            'assigned_user' => $assignedTo,
+                            'assigned_date' => $assignedDate,
+                            'due_date' => $dueDate,
                             'pick_put_type' => Utility::PUT_AWAY,
                             'to_whse' => $realWhse,
                             'to_zone' => $realZone,
@@ -212,19 +220,14 @@ class WarehouseReceiptController extends Controller
                             'created_by' => Auth::user()->id
                         ];
 
-                        $dbDataWhseReceipt = [
-                            'status' => Utility::STATUS_DELETED
-                        ];
-
                         $checkData = WhsePickPutAway::firstRow('po_id',$data->id);
 
                         //WarehouseReceipt::defaultUpdate('po_id',$data->id,$dbDataWhseReceipt);
-                        WarehouseReceipt::deleteItemData('po_id',$data->id);
+                          WarehouseReceipt::deleteItemData('po_id',$data->id);
 
                         if(empty($checkData) ){
                             if($data->ship_to_whse != '' && $data->ship_to_whse != 0){
                                 WhsePickPutAway::create($dbData);
-                                WarehouseReceipt::defaultUpdate('po_id',$data->id,$dbDataWhseReceipt);
                                 $whseEmp[] = $data->ship_to_whse;
 
 

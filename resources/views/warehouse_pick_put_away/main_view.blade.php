@@ -52,9 +52,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_warehouse_receipt'); ?>','reload_data',
-                            '<?php echo url('warehouse_receipt'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
-                        SAVE
+                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_put_away'); ?>','reload_data',
+                            '<?php echo url('put_away'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-success waves-effect">
+                        <i class="fa fa-check"></i>Register Put-Away(s)
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                 </div>
@@ -100,9 +100,9 @@
                         <div class="col-sm-6 ">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="search_inventory" class="form-control"
-                                           onkeyup="searchItem('search_receipt','reload_data','<?php echo url('search_warehouse_receipt') ?>','{{url('warehouse_receipt')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_inventory" placeholder="Search Warehouse Receipts" >
+                                    <input type="text" id="search_put_away" class="form-control"
+                                           onkeyup="searchItem('search_put_away','reload_data','<?php echo url('search_put_away') ?>','{{url('put_away')}}','<?php echo csrf_token(); ?>')"
+                                           name="search_put_away" placeholder="Search Warehouse Receipts" >
                                 </div>
                             </div>
                         </div>
@@ -119,11 +119,11 @@
                                        name="check_all" class="" />
 
                             </th>
-
-                            <th>Inventory Item</th>
                             <th>Warehouse</th>
+                            <th>Inventory Item</th>
                             <th>Item Desc</th>
                             <th>Po Number</th>
+                            <th>Assigned User</th>
                             <th>Created by</th>
                             <th>Created at</th>
                             <th>Updated by</th>
@@ -143,6 +143,7 @@
                             <td>{{$data->inventory->item_name}}</td>
                             <td>{{$data->poItem->po_desc}}</td>
                             <td>{{$data->poExtItem->po_number}}</td>
+                            <td>{{$data->assigned->firstname}} {{$data->assigned->lastname}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -159,7 +160,7 @@
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_put_away_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Put-Away</a>
                             </td>
                         </tr>
                         @endforeach
@@ -265,12 +266,12 @@
 
     function getProducts(page){
 
-        var searchVal = $('#search_inventory').val();
+        var searchVal = $('#search_put_away').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;
         }else{
-            pageData = '<?php echo url('search_warehouse_receipt') ?>?page=' + page+'&searchVar='+searchVal;
+            pageData = '<?php echo url('search_put_away') ?>?page=' + page+'&searchVar='+searchVal;
         }
 
         $.ajax({

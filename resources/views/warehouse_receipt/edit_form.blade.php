@@ -1,11 +1,9 @@
 <form name="import_excel" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
     <div class="body">
 
-        @if($edit->work_status == 1)
-        <h4>This Warehouse receipt has been posted and therefore cannot be modified</h4>
-        @endif
-        @if(Auth::user()->role == $edit->warehouse->whse_manager)
-        <div class="row clearfix">
+            @if($edit->warehouse->whse_manager == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
+
+            <div class="row clearfix">
             <div class="col-sm-4">
                 <div class="form-group">
                     <b>Assign User</b>
@@ -52,9 +50,11 @@
                         <div class="form-group">
                             <b>Zone</b>
                             <div class="form-line" id="zone_display_id">
-                                <select class=" "  name="zone" >
+                                <select class=" " id="zone_id" name="zone" onchange="fillNextInput('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')">
                                     <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
-
+                                    @foreach($zones as $z)
+                                        <option value="{{$z->id}}">{{$z->zone->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

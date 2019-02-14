@@ -162,5 +162,15 @@ class WarehouseEmployee extends Model
 
     }
 
+    public static function searchWarehouseEmployee($value){
+        return static::where('warehouse_employee.status',Utility::STATUS_ACTIVE)
+            ->join('users', 'users.id', '=', 'warehouse_employee.user_id')
+            ->where(function ($query) use($value){
+                $query->where('users.firstname','LIKE','%'.$value.'%')
+                    ->orWhere('users.lastname','LIKE','%'.$value.'%')
+                    ->orWhere('users.othername','LIKE','%'.$value.'%');
+            })->get();
+    }
+
 
 }

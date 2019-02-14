@@ -55,7 +55,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" shared_rate acct_rate" name="unit_cost" id="unit_cost_acc" placeholder="Rate/Cost Amount"
+                        <input type="number" class=" shared_rate acct_rate" name="unit_cost" id="unit_cost_acc" placeholder="Rate/Cost Amount"
                         onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
                     </div>
                 </div>
@@ -83,7 +83,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_tax_perct shared_tax_perct" name="tax_perct" id="tax_perct_acc" placeholder="Tax Percentage"
+                        <input type="number" class=" acc_tax_perct shared_tax_perct" name="tax_perct" id="tax_perct_acc" placeholder="Tax Percentage"
                                onkeyup="percentToAmount('tax_perct_acc','tax_amount_acc','sub_total_acc','unit_cost_acc','acc500','','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
                     </div>
                 </div>
@@ -94,7 +94,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_tax_amount shared_tax_amount" name="tax_amount" id="tax_amount_acc" placeholder="Tax Amount"
+                        <input type="number" class=" acc_tax_amount shared_tax_amount" name="tax_amount" id="tax_amount_acc" placeholder="Tax Amount"
                                onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
                     </div>
                 </div>
@@ -105,7 +105,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_discount_perct shared_discount_perct" name="discount_perct" id="discount_perct_acc" placeholder="Discount Percentage"
+                        <input type="number" class=" acc_discount_perct shared_discount_perct" name="discount_perct" id="discount_perct_acc" placeholder="Discount Percentage"
                                onkeyup="percentToAmount('discount_perct_acc','discount_amount_acc','sub_total_acc','unit_cost_acc','acc500','','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
                     </div>
                 </div>
@@ -116,7 +116,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_discount_amount shared_discount_amount" name="discount_amount" id="discount_amount_acc" placeholder="Discount Amount"
+                        <input type="number" class=" acc_discount_amount shared_discount_amount" name="discount_amount" id="discount_amount_acc" placeholder="Discount Amount"
                                onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
                     </div>
                 </div>
@@ -127,7 +127,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" acc_sub_total shared_sub_total" readonly name="sub_total" id="sub_total_acc" placeholder="Sub Total" >
+                        <input type="number" class=" acc_sub_total shared_sub_total" readonly name="sub_total" id="sub_total_acc" placeholder="Sub Total" >
                     </div>
                 </div>
             </div>

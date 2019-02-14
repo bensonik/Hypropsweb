@@ -9,6 +9,7 @@ use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\Currency;
 use App\model\PoExtension;
+use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
 use App\model\SkillCompCat;
@@ -52,6 +53,7 @@ class GeneralController extends Controller
         $pickedVal = $_GET['pickedVal'];
         $type = $_GET['type'];
 
+        //SEARCH USER
         if($type == 'default_search'){
 
             $searchId = $_GET['searchId'];
@@ -60,6 +62,34 @@ class GeneralController extends Controller
 
             if($pickedVal != '') {
                 $search = User::searchUser($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = (Auth::user()->id == 3) ? User::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
+                    : User::massData('uid', $user_ids);
+            }else{
+
+                $fetchData = User::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        if($type == 'warehouse_employee'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = WarehouseEmployee::searchWarehouseEmployee($pickedVal);
                 $obtain_array = [];
 
                 foreach ($search as $data) {

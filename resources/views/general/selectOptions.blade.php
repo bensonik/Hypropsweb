@@ -9,6 +9,17 @@
 @endforeach
 @endif
 
+@if($type == 'warehouse_employee')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}</a>
+        </li>
+
+    @endforeach
+@endif
+
+
 @if($type == 'search_vendor' || $type == 'search_customer')
     @foreach($optionArray as $data)
 
