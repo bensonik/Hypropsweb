@@ -80,8 +80,8 @@
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('purchase_order'); ?>',
-                                        '<?php echo url('post_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button>
+                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
+                                        '<?php echo url('post_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button>
 
                         </li>
                         <li class="dropdown">
@@ -105,9 +105,9 @@
                         <div class="col-sm-6 ">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="search_inventory" class="form-control"
+                                    <input type="text" id="search_receipt" class="form-control"
                                            onkeyup="searchItem('search_receipt','reload_data','<?php echo url('search_warehouse_receipt') ?>','{{url('warehouse_receipt')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_inventory" placeholder="Search Warehouse Receipts" >
+                                           name="search_receipt" placeholder="Search Warehouse Receipts" >
                                 </div>
                             </div>
                         </div>
@@ -125,6 +125,7 @@
 
                             </th>
 
+                            <th>Manage</th>
                             <th>Inventory Item</th>
                             <th>Warehouse</th>
                             <th>Item Desc</th>
@@ -138,7 +139,6 @@
                             <th>Created at</th>
                             <th>Updated by</th>
                             <th>Updated at</th>
-                            <th>Manage</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -147,6 +147,9 @@
                             <td scope="row">
                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->warehouse->name}}</td>
@@ -173,9 +176,7 @@
 
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                            </td>
+
                         </tr>
                         @endforeach
                         </tbody>
@@ -280,7 +281,7 @@
 
     function getProducts(page){
 
-        var searchVal = $('#search_inventory').val();
+        var searchVal = $('#search_receipt').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;

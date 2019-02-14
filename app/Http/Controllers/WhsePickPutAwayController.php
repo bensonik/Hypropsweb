@@ -9,7 +9,7 @@ use App\model\PurchaseOrder;
 use App\model\PoExtension;
 use Illuminate\Http\Request;
 use App\model\WarehouseReceipt;
-use App\model\WarehouseEmployee;
+use App\model\Zone;
 use App\Helpers\Utility;
 use App\Helpers\Notify;
 use App\User;
@@ -37,10 +37,10 @@ class WhsePickPutAwayController extends Controller
         $mainData = WhsePickPutAway::specialColumnsPage('pick_put_status',Utility::ZERO);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('whse_pick_put_away.reload',array('mainData' => $mainData,))->render());
+            return \Response::json(view::make('warehouse_pick_put_away.reload',array('mainData' => $mainData,))->render());
 
         }else{
-            return view::make('whse_pick_put_away.main_view')->with('mainData',$mainData);
+            return view::make('warehouse_pick_put_away.main_view')->with('mainData',$mainData);
 
         }
 
@@ -57,9 +57,9 @@ class WhsePickPutAwayController extends Controller
     {
         //
         $mainData = WhsePickPutAway::firstRow('id',$request->input('dataId'));
-        $poItems = WhsePickPutAway::specialColumns('po_id',$mainData->poItem->po_id);
+        $poItems = WhsePickPutAway::specialColumns('po_ext_id',$mainData->po_ext_id);
         $zone = Zone::getAllData();
-        return view::make('whse_pick_put_away.edit_form')->with('edit',$mainData)->with('zone',$zone)
+        return view::make('warehouse_pick_put_away.edit_form')->with('edit',$mainData)->with('zone',$zone)
             ->with('poItems',$poItems);
 
     }
@@ -148,7 +148,7 @@ class WhsePickPutAwayController extends Controller
         //print_r($obtain_array); die();
         if (count($receipt_ids) > 0) {
 
-            return view::make('whse_pick_put_away.receipt_search')->with('mainData',$mainData);
+            return view::make('warehouse_pick_put_away.receipt_search')->with('mainData',$mainData);
         }else{
             return 'No match found, please search again with sensitive words';
         }

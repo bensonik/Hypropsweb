@@ -31,7 +31,7 @@
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Put-Away</h4>
                     <ul>
                         <li class="dropdown pull-right">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -69,19 +69,14 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Warehouse Receipt(s)
+                        Warehouse Put-Away(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
 
+
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
-                                    '<?php echo url('delete_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
-                                <i class="fa fa-trash-o"></i>Delete
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('purchase_order'); ?>',
-                                        '<?php echo url('post_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button>
+                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('put_away'); ?>',
+                                        '<?php echo url('register_put_away'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Register Put-Away(s)</button>
 
                         </li>
                         <li class="dropdown">
@@ -128,12 +123,7 @@
                             <th>Inventory Item</th>
                             <th>Warehouse</th>
                             <th>Item Desc</th>
-                            <th>Quantity</th>
-                            <th>Quantity to receive</th>
-                            <th>Quantity to Cross-Dock</th>
-                            <th>Quantity Received</th>
-                            <th>Quantity Outstanding</th>
-                            <th>Unit of Measurement</th>
+                            <th>Po Number</th>
                             <th>Created by</th>
                             <th>Created at</th>
                             <th>Updated by</th>
@@ -152,12 +142,7 @@
                             <td>{{$data->warehouse->name}}</td>
                             <td>{{$data->inventory->item_name}}</td>
                             <td>{{$data->poItem->po_desc}}</td>
-                            <td>{{$data->qty}}</td>
-                            <td>{{$data->qty_to_receive}}</td>
-                            <td>{{$data->qty_to_cross_dock}}</td>
-                            <td>{{$data->qty_received}}</td>
-                            <td>{{$data->qty_outstanding}}</td>
-                            <td>{{$data->unit_measurement}}</td>
+                            <td>{{$data->poExtItem->po_number}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

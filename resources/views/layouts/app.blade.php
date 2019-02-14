@@ -455,7 +455,7 @@
                             <a href="{{url('warehouse_shipment')}}">Warehouse Shipments</a>
                         </li>
                         <li>
-                            <a href="{{url('put_aways')}}">Put-Aways</a>
+                            <a href="{{url('put_away')}}">Put-Aways</a>
                         </li>
                         <li>
                             <a href="{{url('picks')}}">Picks</a>

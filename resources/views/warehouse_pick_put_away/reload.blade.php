@@ -6,15 +6,11 @@
                    name="check_all" class="" />
 
         </th>
-        <th>Warehouse</th>
+
         <th>Inventory Item</th>
+        <th>Warehouse</th>
         <th>Item Desc</th>
-        <th>Quantity</th>
-        <th>Quantity to receive</th>
-        <th>Quantity to Cross-Dock</th>
-        <th>Quantity Received</th>
-        <th>Quantity Outstanding</th>
-        <th>Unit of Measurement</th>
+        <th>Po Number</th>
         <th>Created by</th>
         <th>Created at</th>
         <th>Updated by</th>
@@ -33,12 +29,7 @@
             <td>{{$data->warehouse->name}}</td>
             <td>{{$data->inventory->item_name}}</td>
             <td>{{$data->poItem->po_desc}}</td>
-            <td>{{$data->qty}}</td>
-            <td>{{$data->qty_to_receive}}</td>
-            <td>{{$data->qty_to_cross_dock}}</td>
-            <td>{{$data->qty_received}}</td>
-            <td>{{$data->qty_outstanding}}</td>
-            <td>{{$data->unit_measurement}}</td>
+            <td>{{$data->poExtItem->po_number}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

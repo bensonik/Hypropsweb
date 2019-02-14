@@ -48,6 +48,11 @@ class WhsePickPutAway extends Model
 
     }
 
+    public function poExtItem(){
+        return $this->belongsTo('App\model\PoExtension','po_ext_id','id')->withDefault();
+
+    }
+
     public function warehouse(){
         return $this->belongsTo('App\model\Warehouse','to_whse','id')->withDefault();
 

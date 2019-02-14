@@ -53,6 +53,11 @@ class WarehouseReceipt extends Model
 
     }
 
+    public function poExtItem(){
+        return $this->belongsTo('App\model\PoExtention','po_ext_id','id')->withDefault();
+
+    }
+
     public function warehouse(){
         return $this->belongsTo('App\model\Warehouse','whse_id','id')->withDefault();
 
@@ -191,6 +196,18 @@ class WarehouseReceipt extends Model
 
     }
 
+    public static function deleteItem($postId)
+    {
+        return Utility::deleteItem(self::table(),$postId);
+
+    }
+
+    public static function deleteItemData($id,$postId)
+    {
+        return Utility::deleteItemData(self::table(),$id,$postId);
+
+    }
+
     public static function tenColumnSingleValue($post)
     {
         return Utility::tenColumnSingleValue(self::table(),'receipt_bin_code','adjust_bin_code','ship_bin_code',
@@ -199,21 +216,14 @@ class WarehouseReceipt extends Model
     }
 
     public static function searchWarehouseReceipt($value){
-        return static::where('warehouse_receipt.status', '=','1')
+        return static::where('warehouse_receipt.status',Utility::STATUS_ACTIVE)
             ->join('inventory', 'inventory.id', '=', 'warehouse_receipt.item_id')
-            ->join('purchase_order', 'purchase_order.id', '=', 'warehouse_receipt.po_id')
             ->join('warehouse', 'warehouse.id', '=', 'warehouse_receipt.whse_id')
-            ->join('zone', 'zone.id', '=', 'warehouse_receipt.zone_id')
-            ->join('bin', 'bin.id', '=', 'bin.bin_id')
             ->where(function ($query) use($value){
                 $query->where('inventory.item_name','LIKE','%'.$value.'%')
                     ->orWhere('warehouse_receipt.receipt_no','LIKE','%'.$value.'%')
                     ->orWhere('warehouse_receipt.vendor_ship_no','LIKE','%'.$value.'%')
-                    ->orWhere('purchase_order.po_desc','LIKE','%'.$value.'%')
-                    ->orWhere('warehouse_receipt.vendor_ship_no','LIKE','%'.$value.'%')
-                    ->orWhere('warehouse.name','LIKE','%'.$value.'%')
-                    ->orWhere('zone.name','LIKE','%'.$value.'%')
-                    ->orWhere('bin.code','LIKE','%'.$value.'%');
+                    ->orWhere('warehouse.name','LIKE','%'.$value.'%');
             })->get();
     }
 

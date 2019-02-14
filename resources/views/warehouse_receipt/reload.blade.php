@@ -6,6 +6,8 @@
                    name="check_all" class="" />
 
         </th>
+
+        <th>Manage</th>
         <th>Warehouse</th>
         <th>Inventory Item</th>
         <th>Item Desc</th>
@@ -19,7 +21,6 @@
         <th>Created at</th>
         <th>Updated by</th>
         <th>Updated at</th>
-        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
@@ -28,6 +29,9 @@
             <td scope="row">
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
+            </td>
+            <td>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->warehouse->name}}</td>
@@ -54,9 +58,7 @@
 
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-            </td>
+
         </tr>
     @endforeach
     </tbody>
