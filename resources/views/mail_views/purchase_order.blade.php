@@ -11,9 +11,10 @@
             <td>Billing Address: {{$data['po']->vendor->address}}</td>
         </tr>
         <tr>
+            <td>PO Number: {{$data['po']->po_number}}</td>
             <td>Ship to city: {{$data['po']->ship_to_city}}</td>
             <td>Ship to address: {{$data['po']->ship_to_address}}</td>
-            <td></td>
+
         </tr>
         <tr>
             <td>Message:</td>
@@ -88,7 +89,7 @@
         @endforeach
         </tbody>
     </table><hr/>
-
+    <?php $totalExclTax =  $data['po']->trans_total - $data['po']->tax_trans; ?>
     <table class="table table-responsive">
         <thead>
 
@@ -109,6 +110,10 @@
         <tr>
             <td>Total Discount Amount</td>
             <td>{{$data['po']->discount_trans}}</td>
+        </tr>
+        <tr>
+            <td>Grand Total (Excl. Tax)</td>
+            <td>{{$totalExclTax}}</td>
         </tr>
         <tr>
             <td>Grand Total</td>

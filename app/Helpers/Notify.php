@@ -54,6 +54,11 @@ class Notify
         //Mail::to($email)->send(new PoMail($objContent));
     }
 
+    public static function rfqMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+
+        //Mail::to($email)->send(new rfqMail($objContent));
+    }
+
     public static function warehouseMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
 
         //Mail::to($email)->send(new WarehouseMail($objContent));

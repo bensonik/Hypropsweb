@@ -5,13 +5,13 @@ namespace App\model;
 use App\Helpers\Utility;
 use Illuminate\Database\Eloquent\Model;
 
-class RFQ extends Model
+class RFQExtension extends Model
 {
     //
-    protected  $table = 'rfq';
+    protected  $table = 'rfq_extention';
 
     private static function table(){
-        return 'rfq';
+        return 'rfq_extention';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,8 +21,7 @@ class RFQ extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'rfq_no' => 'required',
-        'due_date' => 'required',
+
     ];
 
     public function user_c(){

@@ -40,8 +40,6 @@ class PurchaseOrderController extends Controller
         //
         //$req = new Request();
         $mainData = PoExtension::paginateAllData();
-        $warehouse = Warehouse::getAllData();
-        $tax = Tax::getAllData();
 
         if ($request->ajax()) {
             return \Response::json(view::make('purchase_order.reload',array('mainData' => $mainData))->render());
@@ -269,7 +267,7 @@ class PurchaseOrderController extends Controller
                     if($mailOption == Utility::STATUS_ACTIVE){
                         $poId = $mainPo->id;
                         $getPo = PoExtension::firstRow('id',$poId);
-                        $getPoData = PurchaseOrder::specialColumns('uid',$getPo->po_uid);
+                        $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
 
                         $mailContent = [];
 
@@ -586,7 +584,7 @@ class PurchaseOrderController extends Controller
                                 $binStock = Inventory::firstRow('id', $invClass);
                                 $poDbData['item_id'] = Utility::checkEmptyArrayItem($invClass, $i, 0);
                                 $poDbData['bin_stock'] = $binStock->inventory_type;
-                                $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure, $i, 0);;
+                                $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure, $i, 0);
                                 $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity, $i, 0);
                                 $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
                                 $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost, $i, 0);
@@ -635,7 +633,7 @@ class PurchaseOrderController extends Controller
                     if($mailOption == Utility::STATUS_ACTIVE){
                         $poId = $editId;
                         $getPo = PoExtension::firstRow('id',$poId);
-                        $getPoData = PurchaseOrder::specialColumns('uid',$getPo->po_uid);
+                        $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
 
                         $mailContent = [];
                         $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];

@@ -511,7 +511,7 @@
     });
 
     function getData(page){
-        var searchVal = $('#search_inventory').val();
+        var searchVal = $('#search_po').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;
