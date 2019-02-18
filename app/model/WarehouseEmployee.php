@@ -26,17 +26,17 @@ class WarehouseEmployee extends Model
     ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept','id');
+        return $this->belongsTo('App\model\Department','dept','id')->withDefault();
 
     }
     public function access_user(){
@@ -126,14 +126,51 @@ class WarehouseEmployee extends Model
 
     }
 
-    public static function massData($column, $post)
+    public static function massData($column, $post = [])
     {
-        return Utility::massData(self::table(),$column, $post);
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->get();
 
     }
+
+    public static function massDataPaginate($column, $post = [])
+    {
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataConditionPaginate($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function massDataMassCondition($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataMassConditionPaginate($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 
@@ -163,10 +200,12 @@ class WarehouseEmployee extends Model
     }
 
     public static function searchWarehouseEmployee($value){
-        return static::where('warehouse_employee.status',Utility::STATUS_ACTIVE)
-            ->join('users', 'users.id', '=', 'warehouse_employee.user_id')
+        return static::join('users', 'users.id', '=', 'warehouse_employee.user_id')
+            ->join('warehouse', 'warehouse.id', '=', 'warehouse_employee.warehouse_id')
+            ->where('warehouse_employee.status',Utility::STATUS_ACTIVE)
             ->where(function ($query) use($value){
-                $query->where('users.firstname','LIKE','%'.$value.'%')
+                $query->where('warehouse.name','LIKE','%'.$value.'%')
+                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
                     ->orWhere('users.lastname','LIKE','%'.$value.'%')
                     ->orWhere('users.othername','LIKE','%'.$value.'%');
             })->get();

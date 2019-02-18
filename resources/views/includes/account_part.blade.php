@@ -56,7 +56,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class=" shared_rate acct_rate" name="unit_cost" id="unit_cost_acc" placeholder="Rate/Cost Amount"
-                        onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                        onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct_acc','discount_perct_acc')">
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class=" acc_tax shared_tax" name="tax" id="tax_acc"
-                        onchange="fillNextInputTaxAcc('tax_acc','tax_perct_acc','{{url('default_select')}}','get_tax','sub_total_acc','unit_cost_acc','acc500','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                        onchange="fillNextInputTaxAcc('tax_acc','tax_perct_acc','{{url('default_select')}}','get_tax','sub_total_acc','unit_cost_acc','acc500','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct_acc','discount_perct_acc')">
                                 <option value="">Select Tax</option>
                             @foreach(\App\Helpers\Utility::taxData() as $inv)
                                 <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
@@ -95,7 +95,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class=" acc_tax_amount shared_tax_amount" name="tax_amount" id="tax_amount_acc" placeholder="Tax Amount"
-                               onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                               onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct_acc','discount_perct_acc')">
                     </div>
                 </div>
             </div>
@@ -117,7 +117,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class=" acc_discount_amount shared_discount_amount" name="discount_amount" id="discount_amount_acc" placeholder="Discount Amount"
-                               onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                               onkeyup="accountSum('sub_total_acc','acc500','unit_cost_acc','discount_amount_acc','tax_amount_acc','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct_acc','discount_perct_acc')">
                     </div>
                 </div>
             </div>

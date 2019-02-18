@@ -10,6 +10,7 @@ use App\model\PurchaseOrder;
 use App\model\PoExtension;
 use Illuminate\Http\Request;
 use App\model\WarehouseReceipt;
+use App\model\Stock;
 use App\model\WarehouseEmployee;
 use App\Helpers\Utility;
 use App\Helpers\Notify;
@@ -366,8 +367,8 @@ class WarehouseReceiptController extends Controller
                         $dbData3 = [
                             'item_id' => $data->item_id,
                             'po_id' => $data->id,
-                            'qty' => $data->qty,
-                            'purchase_date' => $data->post_date,
+                            'qty' => $data->quantity,
+                            'purchase_date' => $data->poItem->post_date,
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
                         ];

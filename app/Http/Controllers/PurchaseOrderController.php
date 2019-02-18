@@ -746,7 +746,7 @@ class PurchaseOrderController extends Controller
         }*/
         //print_r($search); exit();
         $user_ids = array_unique($obtain_array);
-        $mainData =  PoExtension::massData('uid', $user_ids);
+        $mainData =  PoExtension::massDataPaginate('uid', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 

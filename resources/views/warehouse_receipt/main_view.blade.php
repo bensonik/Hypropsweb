@@ -126,8 +126,8 @@
                             </th>
 
                             <th>Manage</th>
-                            <th>Inventory Item</th>
                             <th>Warehouse</th>
+                            <th>Inventory Item</th>
                             <th>Item Desc</th>
                             <th>Quantity</th>
                             <th>Quantity to receive</th>

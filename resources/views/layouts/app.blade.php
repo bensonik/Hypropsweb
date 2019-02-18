@@ -449,16 +449,16 @@
                             <a href="{{url('warehouse_employee')}}">Warehouse Employee(s)</a>
                         </li>
                         <li>
-                            <a href="{{url('warehouse_receipt')}}">Warehouse Receipts</a>
+                            <a href="{{url('warehouse_receipt')}}">Warehouse Receipt(s)</a>
                         </li>
                         <li>
-                            <a href="{{url('warehouse_shipment')}}">Warehouse Shipments</a>
+                            <a href="{{url('warehouse_shipment')}}">Warehouse Shipment(s)</a>
                         </li>
                         <li>
-                            <a href="{{url('put_away')}}">Put-Aways</a>
+                            <a href="{{url('put_away')}}">Put-Away(s)</a>
                         </li>
                         <li>
-                            <a href="{{url('picks')}}">Picks</a>
+                            <a href="{{url('picks')}}">Pick(s)</a>
                         </li>
                     </ul>
                 </li>

@@ -94,6 +94,8 @@ class WhsePickPutAwayController extends Controller
             }
 
             for($i=1; $i<= $request->input('count_po'); $i++) {
+                $itemId = $request->input('item_id'.$i);
+                $quantity = $request->input('qty' . $i);
                 $dbDATA = [
                     'assigned_user' => $request->input('user'),
                     'assigned_date' => Utility::standardDate($request->input('assigned_date')),
@@ -111,6 +113,11 @@ class WhsePickPutAwayController extends Controller
                 ];
 
                     WhsePickPutAway::defaultUpdate('id', $request->input('edit_id'.$i), $dbDATA);
+                //UPDATE QUANTITY OF INVENTORY
+                $itemQty = Inventory::where('id',$itemId)->where('status',Utility::STATUS_ACTIVE)->first(['qty']);
+                $newQty = $itemQty->qty + $quantity;
+                $changeQty = ['qty' => $newQty];
+                Inventory::defaultUpdate('id',$itemId,$changeQty);
 
             }
 
@@ -153,14 +160,12 @@ class WhsePickPutAwayController extends Controller
 
         foreach($search as $data){
 
-            $obtain_array[] = $data->assigned_user;
+            $obtain_array[] = $data->po_id;
         }
-        /*for($i=0;$i<count($search);$i++){
-            $obtain_array[] = $search[$i]->id;
-        }*/
-        print_r($search); exit();
+
+        //print_r($search); exit();
         $receipt_ids = array_unique($obtain_array);
-        $mainData =  WhsePickPutAway::massDataPaginate('assigned_user', $receipt_ids);
+        $mainData =  WhsePickPutAway::massDataPaginate('po_id', $receipt_ids);
         //print_r($obtain_array); die();
         if (count($receipt_ids) > 0) {
 

@@ -94,14 +94,15 @@ class GeneralController extends Controller
 
                 foreach ($search as $data) {
 
-                    $obtain_array[] = $data->uid;
+                    $obtain_array[] = $data->user_id;
                 }
+                //print_r($search); exit();
                 $user_ids = array_unique($obtain_array);
-                $fetchData = (Auth::user()->id == 3) ? User::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
-                    : User::massData('uid', $user_ids);
+                $fetchData = (Auth::user()->id == 3) ? WarehouseEmployee::massDataMassCondition('user_id', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
+                    : WarehouseEmployee::massData('user_id', $user_ids);
             }else{
 
-                $fetchData = User::getAllData();
+                $fetchData = WarehouseEmployee::getAllData();
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
             }

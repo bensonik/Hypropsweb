@@ -13,7 +13,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}</a>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->access_user->firstname}} {{$data->access_user->lastname}}','{{$hiddenId}}','{{$data->access_user->id}}','{{$listId}}');">{{$data->access_user->firstname}} &nbsp; {{$data->access_user->lastname}} ({{$data->warehouse->name}})</a>
         </li>
 
     @endforeach

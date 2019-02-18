@@ -324,8 +324,8 @@ class UsersController extends Controller
         }*/
 
         $user_ids = array_unique($obtain_array);
-        $mainData =  (Auth::user()->id == 3) ? User::massDataMassCondition('uid',$user_ids,'role',Utility::USER_ROLES_ARRAY)
-                        :User::massData('uid', $user_ids);
+        $mainData =  (Auth::user()->id == 3) ? User::massDataMassConditionPaginate('uid',$user_ids,'role',Utility::USER_ROLES_ARRAY)
+                        :User::massDataPaginate('uid', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 

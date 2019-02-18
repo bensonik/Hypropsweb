@@ -35,9 +35,9 @@
 
             <td>{{$data->inventory->item_name}} </td>
             <td>{{$data->warehouse->name}}</td>
-            <td>{{$data->to_zone->name}}</td>
-            <td>{{$data->to_bin->code}}</td>
-            <td>{{$data->qty_handled}}</td>
+            <td>{{$data->zone->name}}</td>
+            <td>{{$data->bin->code}}</td>
+            <td>{{$data->qty}}</td>
             <td>{{$data->qty_outstanding}}</td>
             <td>
                 @if($data->created_by != '0')

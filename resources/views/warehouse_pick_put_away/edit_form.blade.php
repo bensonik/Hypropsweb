@@ -176,7 +176,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="datepicker" readonly value="{{$po->due_date}}" name="due_date" id="" placeholder="Due Date" />
+                                        <input type="text" class="" readonly value="{{$po->due_date}}" name="due_date" id="" placeholder="Due Date" />
                                     </div>
                                 </div>
                             </div>
@@ -200,7 +200,7 @@
                                 <div class="form-line">
                                     <input type="text" class="" readonly value="{{$po->inventory->item_name}} ({{$edit->inventory->item_no}})" id="select_acc" name="select_user" placeholder="Select Account">
 
-                                    <input type="hidden" class="acc_class" value="{{$po->inventory->item_id}}" name="item_id{{$num}}" id="acc500" />
+                                    <input type="hidden" class="acc_class" value="{{$po->inventory->id}}" name="item_id{{$num}}" id="acc500" />
                                 </div>
                             </div>
                         </div>
@@ -298,7 +298,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="datepicker" value="{{$po->due_date}}" name="due_date{{$num}}" id="" placeholder="Due Date" />
+                                    <input type="text" class="" readonly value="{{$po->due_date}}" name="due_date{{$num}}" id="" placeholder="Due Date" />
                                 </div>
                             </div>
                         </div>

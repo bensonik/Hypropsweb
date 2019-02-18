@@ -8,7 +8,7 @@
                 <div class="form-group">
                     <b>Assign User</b>
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','warehouse_employee','user');" name="select_user" placeholder="Select User">
 
                         <input type="hidden" class="user_class" name="user" id="user" />
                     </div>

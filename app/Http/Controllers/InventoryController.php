@@ -202,7 +202,7 @@ class InventoryController extends Controller
     public function stockInventory(Request $request)
     {
         //
-        $stock = Stock::specialColumnsPage2('item_id',$request->input('dataId'),'pick_put_status',Utility::STATUS_ACTIVE);
+        $stock = Stock::specialColumnsPage('item_id',$request->input('dataId'));
         return view::make('inventory.stock.items')->with('mainData',$stock)->with('itemId',$request->input('dataId'));
 
     }
@@ -210,7 +210,7 @@ class InventoryController extends Controller
     public function warehouseInventory(Request $request)
     {
         //
-        $warehouse = WhsePickPutAway::specialColumnsPage('item_id',$request->input('dataId'));
+        $warehouse = WhsePickPutAway::specialColumnsPage2('item_id',$request->input('dataId'),'pick_put_status',Utility::STATUS_ACTIVE);
         return view::make('inventory.warehouse.items')->with('mainData',$warehouse)->with('itemId',$request->input('dataId'));
 
     }
@@ -482,7 +482,7 @@ class InventoryController extends Controller
         }*/
         //print_r($search); exit();
         $user_ids = array_unique($obtain_array);
-        $mainData =  Inventory::massData('id', $user_ids);
+        $mainData =  Inventory::massDataPaginate('id', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 

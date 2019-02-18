@@ -163,10 +163,27 @@ class User extends Authenticatable
     {
         //return Utility::massData(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataPaginate($column, $post = [])
+    {
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
+
     public static function massDataCondition($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataConditionPaginate($column, $post, $column2, $post2)
     {
         //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
@@ -175,6 +192,14 @@ class User extends Authenticatable
     }
 
     public static function massDataMassCondition($column, $post, $column2, $post2)
+    {
+        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
+            ->orderBy('id','DESC')->get(Utility::P35);
+
+    }
+
+    public static function massDataMassConditionPaginate($column, $post, $column2, $post2)
     {
         //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)

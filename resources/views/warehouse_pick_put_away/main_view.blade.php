@@ -74,11 +74,11 @@
                     <ul class="header-dropdown m-r--5">
 
 
-                        <li>
+                        <!--<li>
                             <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('put_away'); ?>',
                                         '<?php echo url('register_put_away'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Register Put-Away(s)</button>
 
-                        </li>
+                        </li>-->
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
@@ -102,7 +102,7 @@
                                 <div class="form-line">
                                     <input type="text" id="search_put_away" class="form-control"
                                            onkeyup="searchItem('search_put_away','reload_data','<?php echo url('search_put_away') ?>','{{url('put_away')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_put_away" placeholder="Search Warehouse Receipts" >
+                                           name="search_put_away" placeholder="Search Warehouse Put-Away(s)" >
                                 </div>
                             </div>
                         </div>
