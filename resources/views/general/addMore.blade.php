@@ -1929,7 +1929,129 @@
 
     </tr>
 @endif
-<!-- END OF ACCOUNT PART EDIT -->
+<!-- END OF ACCOUNT PART  -->
+
+<!-- BEGIN OF RFQ ACCOUNT PART EDIT -->
+@if($type == 'acc_rfq')
+    <tr class="row clearfix new_acc_rfq remove_acc_rfq{{$more}}">
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="" autocomplete="off" id="select_acc{{$num2}}" onkeyup="searchOptionListAcc('select_acc{{$num2}}','myUL500_acc{{$num2}}','{{url('default_select')}}','search_accounts','acc500{{$num2}}');" name="select_user" placeholder="Select Account">
+
+                        <input type="hidden" class="acc_class acc_class_edit" value="" name="user" id="acc500{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL500_acc{{$num2}}" class="myUL"></ul>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea class="acc_desc acc_desc_edit" name="acc_desc" id="item_desc{{$num2}}" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td class=" addButtons center-align" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','acc_rfq','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+        <td class="center-align" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_acc_rfq{{$more}}','{{url('add_more')}}','acc_rfq','new_acc_rfq','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+@endif
+<!-- END OF ACCOUNT PART -->
+
+<!-- BEGIN OF RFQ -->
+@if($type == 'rfq')
+    <tr class="row clearfix new_rfq remove_rfq{{$more}}">
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory','inv500{{$num2}}');" name="select_user" placeholder="Inventory Item">
+
+                        <input type="hidden" class="inv_class " value="" name="user" id="inv500{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL500{{$num2}}" class="myUL"></ul>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea class=" item_desc " name="item_desc item_desc_edit" id="item_desc{{$num2}}" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select name="unit_measure"  class="unit_measure unit_measure_edit" id="" id="unit_measure{{$num2}}" >
+                            <option value="">Select Unit OF measurement</option>
+                            @foreach($unitMeasure as $data)
+                                <option value="{{$data->unit_name}}">{{$data->unit_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td class=" addButtons center-align" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','rfq','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+        <td class="center-align" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_rfq{{$more}}','{{url('add_more')}}','rfq','new_rfq','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+@endif
+<!-- END OF RFQ -->
+
+
 
 <script>
     $(function() {

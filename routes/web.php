@@ -470,4 +470,18 @@ Route::post('/edit_put_away', 'WhsePickPutAwayController@edit')->name('edit_put_
 Route::any('/search_put_away', 'WhsePickPutAwayController@searchWhsePickPutAway')->name('search_put_away');
 Route::post('/delete_put_away', 'WhsePickPutAwayController@destroy')->name('delete_put_away');
 
+// -------------PURCHASE ORDER MODULE-----------
+Route::any('/rfq', 'RFQController@index')->name('inventory')->middleware('auth');
+Route::post('/edit_rfq_form', 'RFQController@editForm')->name('edit_rfq_form');
+Route::post('/create_rfq', 'RFQController@create')->name('create_rfq');
+Route::post('/edit_rfq', 'RFQController@edit')->name('edit_rfq');
+Route::any('/search_rfq', 'RFQController@searchRfq')->name('search_rfq');
+Route::post('/delete_rfq', 'RFQController@destroy')->name('delete_po');
+Route::any('/delete_rfq_item', 'RFQController@permDelete')->name('delete_rfq_item');
+Route::post('/change_rfq_status', 'RFQController@changeStatus')->name('change_rfq_status');
+Route::any('/rfq_remove_attachment', 'RFQController@removeAttachment')->name('rfq_remove_attachment');
+Route::any('/rfq_download_attachment', 'RFQController@downloadAttachment')->name('rfq_download_attachment');
+
+
+
 

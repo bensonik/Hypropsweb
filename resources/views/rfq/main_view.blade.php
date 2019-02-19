@@ -7,7 +7,7 @@
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Purchase Order</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">New RFQ (Request for Quote)</h4>
 
                     <li class="dropdown pull-right">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -34,9 +34,9 @@
                                     <div class="form-group">
                                         Assign User
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL2','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL2','{{url('default_select')}}','default_search','assign_user');" name="select_user" placeholder="Select User">
 
-                                            <input type="hidden" class="user_class" name="user" id="user" />
+                                            <input type="hidden" class="user_class" name="user" id="assign_user" />
                                         </div>
                                     </div>
                                     <ul id="myUL2" class="myUL"></ul>
@@ -73,11 +73,10 @@
                                         </th>
                                         <th>Account</th>
                                         <th>Description</th>
-                                        <th>Add</th>
-                                        <th>Remove</th>
+                                        <th>Manage</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="add_more_acc">
+                                    <tbody id="add_more_acc_rfq">
                                     <tr>
 
                                         <td scope="row">
@@ -108,9 +107,9 @@
                                             </div>
                                         </td>
 
-                                        <td class="center-align" id="hide_button_acc">
+                                        <td class="center-align" id="hide_button_acc_rfq">
                                             <div class="form-group center-align">
-                                                <div onclick="addMore('add_more_acc','hide_button_acc','1','<?php echo URL::to('add_more'); ?>','acc_rfq','hide_button_acc');">
+                                                <div onclick="addMore('add_more_acc_rfq','hide_button_acc_rfq','1','<?php echo URL::to('add_more'); ?>','acc_rfq','hide_button_acc_rfq');">
                                                     <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                                                 </div>
                                             </div>
@@ -142,11 +141,9 @@
                                         <th>Quantity</th>
                                         <th>Unit Measure</th>
                                         <th>Manage</th>
-                                        <th>Add</th>
-                                        <th>Remove</th>
                                     </tr>
                                     </thead>
-                                    <tbody id="add_more_po">
+                                    <tbody id="add_more_rfq">
                                     <tr>
 
                                         <td scope="row">
@@ -158,7 +155,7 @@
                                             <div class="col-sm-4">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionListRfq('select_inv','myUL500','{{url('default_select')}}','search_inventory_transact','inv500','item_desc','unit_measure');" name="select_user" placeholder="Inventory Item">
+                                                        <input type="text" class="" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Inventory Item">
 
                                                         <input type="hidden" class="inv_class" value="" name="inventory" id="inv500" />
                                                     </div>
@@ -188,18 +185,16 @@
                                         </td>
 
                                         <td>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <div class="form-line">
-                                                        <input type="text" class=" unit_measure" readonly name="unit_measure" id="unit_measure" placeholder="Unit Measure" >
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <select name="unit_measure"  class="form-control unit_measure" id=""  >
+                                                <option value="">Select Unit OF measurement</option>
+                                            @foreach($unitMeasure as $data)
+                                                        <option value="{{$data->unit_name}}">{{$data->unit_name}}</option>
+                                                    @endforeach
+                                            </select>
                                         </td>
-                                        <td></td>
-                                        <td class="col-sm-4" id="hide_button_po">
+                                        <td class="col-sm-4" id="hide_button_rfq">
                                             <div class="form-group">
-                                                <div onclick="addMore('add_more_po','hide_button_po','1','<?php echo URL::to('add_more'); ?>','rfq','hide_button_po');">
+                                                <div onclick="addMore('add_more_rfq','hide_button_rfq','1','<?php echo URL::to('add_more'); ?>','rfq','hide_button_rfq');">
                                                     <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                                                 </div>
                                             </div>
@@ -332,7 +327,8 @@
                             <th>Due date</th>
                             <th>Created by</th>
                             <th>Updated by</th>
-
+                            <th>Created at</th>
+                            <th>Updated at</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -351,6 +347,8 @@
                             <td>{{$data->due_date}}</td>
                             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
                             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
+                            <td>{{$data->created_at}} </td>
+                            <td>{{$data->updated_at}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
 
@@ -405,6 +403,9 @@
 
                         var successMessage = swalSuccess('Data saved successfully');
                         swal("Success!", successMessage, "success");
+                        clearClassInputs('inv_class','item_desc','quantity','unit_measure',
+                                'acc_class','acc_desc','inv_class_edit','item_desc_edit',
+                                'quantity_edit','unit_measure_edit','acc_class_edit','acc_desc_edit');
                         //location.reload();
 
                     }else{
@@ -428,27 +429,6 @@
                 var classValue = sanitizeData(classList[i]);
                 PostVar.append(classList[i],classValue);
             }
-        }
-
-        function searchOptionListRfq(searchId,listId,page,moduleType,hiddenId,descId,unitMId,qtyId){
-            var pickedVal = $('#'+searchId).val();
-            $('#'+listId).show();
-                $.ajax({
-                    url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&unitMId='+unitMId+'&qtyId='+qtyId
-                }).done(function(data){
-                    $('#'+listId).html(data);
-
-                });
-
-        }
-
-        function dropdownItemInvRfq(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,bill_invoice,invPage,descId,unitMId,qtyId) {
-            $("#"+valDisplayId).val(val);
-            $("#"+hiddenValId).val(hiddenVal);
-            $("#"+dropdownId).hide();
-
-            fetchInventoryRfq(hiddenValId,bill_invoice,invPage,descId,unitMId,qtyId);
-
         }
 
 

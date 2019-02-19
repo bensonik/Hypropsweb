@@ -567,18 +567,7 @@ class GeneralController extends Controller
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
                 ->with('warehouse',$warehouse)->with('tax',$tax);
         }
-        //END OF ADDING PURCHASE ORDER
 
-        //START OF ADDING ACCOUNTS
-        if($type == 'acc'){
-            $tax = Tax::getAllData();
-            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
-                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
-                ->with('tax',$tax);
-        }
-        //END OF ADDING ACCOUNTS
-
-        //START OF ADDING PURCHASE ORDER EDIT
         if($type == 'po_edit'){
             $warehouse = Warehouse::getAllData();
             $tax = Tax::getAllData();
@@ -588,7 +577,14 @@ class GeneralController extends Controller
         }
         //END OF ADDING PURCHASE ORDER
 
-        //START OF ADDING ACCOUNTS EDIT
+        //START OF ADDING ACCOUNTS
+        if($type == 'acc'){
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('tax',$tax);
+        }
+
         if($type == 'acc_edit'){
             $tax = Tax::getAllData();
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
@@ -596,6 +592,34 @@ class GeneralController extends Controller
                 ->with('tax',$tax);
         }
         //END OF ADDING ACCOUNTS
+
+        //START OF ADDING RFQ EDIT
+        if($type == 'rfq'){
+            $unitMeasure = UnitMeasure::paginateAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('unitMeasure',$unitMeasure);
+        }
+
+        if($type == 'rfq_edit'){
+            $unitMeasure = UnitMeasure::paginateAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('unitMeasure',$unitMeasure);
+        }
+        //END OF ADDING RFQ
+
+        //START OF ADDING RFQ CHART OF ACCOUNT EDIT
+        if($type == 'acc_rfq'){
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+
+        if($type == 'acc_rfq_edit'){
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING RFQ CHART OF ACCOUNT
 
 
     }

@@ -12,7 +12,8 @@
         <th>Due date</th>
         <th>Created by</th>
         <th>Updated by</th>
-
+        <th>Created at</th>
+        <th>Updated at</th>
     </tr>
     </thead>
     <tbody>
@@ -31,6 +32,8 @@
             <td>{{$data->due_date}}</td>
             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
+            <td>{{$data->created_at}} </td>
+            <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
 

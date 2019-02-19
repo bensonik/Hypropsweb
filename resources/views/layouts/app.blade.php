@@ -510,7 +510,7 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="{{url('bin_type')}}">Request for Quote (RFQ)</a>
+                                <a href="{{url('rfq')}}">Request for Quote (RFQ)</a>
                             </li>
                             <li>
                                 <a href="{{url('purchase_order')}}">Purchase Order</a>

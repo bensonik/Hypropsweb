@@ -238,6 +238,15 @@
         }
     }
 
+    function removeClassInputs(getclass){
+        var objects = getclass.split(',');
+        for(var i=0; i<objects.length;i++){
+
+            $('.' + objects[i]).remove();
+
+        }
+    }
+
     //CATCH ALL SELECTED DATA FROM MUTIPLE SELECT OPTIONS LIST AND PUSH TO AN ARRAY
     function mselectToArray(getid ){
         var objects = document.getElementById(getid);
@@ -1298,7 +1307,6 @@
 
     function permDelete(bomId,page,bomIdVal){
             var bomVal = $('#'+bomIdVal).val();
-
                 $.ajax({
                     url: page+'?dataId='+bomVal
                 }).done(function(data){
@@ -1309,6 +1317,19 @@
 
 
         }
+
+    function permDeleteData(bomId,page,dataVal){
+
+        $.ajax({
+            url: page+'?dataId='+dataVal
+        }).done(function(data){
+            $('#'+bomId).remove();
+            swal("Warning!", 'Item removed successfully', "success");
+
+        });
+
+
+    }
 
         //////////////////////////// ITEM AND ACCOUNT METHODS INVOLVED IN CALCULATION OF VARIOUS INPUT AMOUNT FIELDS ////////////////
 

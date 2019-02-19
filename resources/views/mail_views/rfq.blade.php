@@ -6,18 +6,11 @@
         <thead></thead>
         <tbody>
         <tr>
-            <td>Vendor: {{$data['po']->vendor->name}}</td>
-            <td>Vendor Invoice No.:{{$data['po']->vendor_invoice_no}}</td>
-            <td>Billing Address: {{$data['po']->vendor->address}}</td>
+            <td>RFQ Number: {{$data['rfq']->rfq_no}}</td>
+            <td>RFQ Due Date: {{$data['rfq']->due_date}}</td>
         </tr>
         <tr>
-            <td>PO Number: {{$data['po']->po_number}}</td>
-            <td>Ship to city: {{$data['po']->ship_to_city}}</td>
-            <td>Ship to address: {{$data['po']->ship_to_address}}</td>
-
-        </tr>
-        <tr>
-            <td>Message: {{$data['po']->message}}</td>
+            <td>Message:  {{$data['rfq']->message}}</td>
             <td></td>
         </tr>
         </tbody>

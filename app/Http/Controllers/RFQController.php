@@ -9,6 +9,7 @@ use App\model\Inventory;
 use App\model\RFQ;
 use App\model\RFQExtension;
 use App\model\Stock;
+use App\model\UnitMeasure;
 use App\model\VendorCustomer;
 use App\model\Warehouse;
 use App\model\Tax;
@@ -40,12 +41,14 @@ class RFQController extends Controller
         //
         //$req = new Request();
         $mainData = RFQExtension::paginateAllData();
+        $unitMeasure = UnitMeasure::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('rfq.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('rfq.reload',array('mainData' => $mainData,
+                'unitMeasure' => $unitMeasure))->render());
 
         }else{
-            return view::make('rfq.main_view')->with('mainData',$mainData);
+            return view::make('rfq.main_view')->with('mainData',$mainData)->with('unitMeasure',$unitMeasure);
         }
 
     }
@@ -138,7 +141,7 @@ class RFQController extends Controller
                 'message' => 'warning',
                 'message2' => json_encode($invClass)
             ]);*/
-            if(count($accClass) == count($accRate) ) {
+            if(!empty($accClass)) {
 
                 $mainRfq = RFQExtension::create($dbDATA);
                 $accDbData['rfq_id'] = $mainRfq->id;
@@ -241,7 +244,9 @@ class RFQController extends Controller
         //
         $rfq = RFQExtension::firstRow('id',$request->input('dataId'));
         $rfqData = RFQ::specialColumns('rfq_id',$rfq->id);
-        return view::make('rfq.edit_form')->with('edit',$rfq)->with('rfqData',$rfqData);
+        $unitMeasure = UnitMeasure::paginateAllData();
+        return view::make('rfq.edit_form')->with('edit',$rfq)->with('rfqData',$rfqData)
+            ->with('unitMeasure',$unitMeasure);
 
     }
 
@@ -428,8 +433,8 @@ class RFQController extends Controller
                 $mailContent = [];
                 $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                 $mailContent['copy'] = $mailCopyContent;
-                $mailContent['po']= $getRfq;
-                $mailContent['poData'] = $getRfqData;
+                $mailContent['rfq']= $getRfq;
+                $mailContent['rfqData'] = $getRfqData;
                 $mailContent['attachment'] = $mailFiles;
 
                 //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
@@ -518,23 +523,23 @@ class RFQController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function searchPo(Request $request)
+    public function searchRfq(Request $request)
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = RFQExtension::searchPo($_GET['searchVar']);
+        $search = RFQExtension::searchRfq($_GET['searchVar']);
         $obtain_array = [];
 
         foreach($search as $data){
 
-            $obtain_array[] = $data->uid;
+            $obtain_array[] = $data->id;
         }
         /*for($i=0;$i<count($search);$i++){
             $obtain_array[] = $search[$i]->id;
         }*/
         //print_r($search); exit();
         $user_ids = array_unique($obtain_array);
-        $mainData =  RFQExtension::massDataPaginate('uid', $user_ids);
+        $mainData =  RFQExtension::massDataPaginate('id', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 

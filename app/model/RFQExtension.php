@@ -21,7 +21,8 @@ class RFQExtension extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-
+        'rfq_no' => 'required',
+        'due_date' => 'required',
     ];
 
     public function user_c(){
@@ -227,16 +228,14 @@ class RFQExtension extends Model
 
     }
 
-    public static function searchPo($value){
-        return static::where('po_extention.status', '=','1')
-            ->join('vendor_customer', 'vendor_customer.id', '=', 'po_extention.vendor')
+    public static function searchRfq($value){
+        return static::where('rfq_extention.status', '=','1')
+            ->join('users', 'users.id', '=', 'rfq_extention.assigned_user')
             ->where(function ($query) use($value){
-                $query->where('po_extention.po_number','LIKE','%'.$value.'%')->orWhere('vendor_customer.name','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.vendor_invoice_no','LIKE','%'.$value.'%')->orWhere('po_extention.assigned_user','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_method','LIKE','%'.$value.'%')->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_country','LIKE','%'.$value.'%')->orWhere('po_extention.ship_address','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.purchase_status','LIKE','%'.$value.'%')->orWhere('po_extention.ship_to_contact','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%');
+                $query->where('rfq_extention.rfq_no','LIKE','%'.$value.'%')
+                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
+                    ->orWhere('rfq_extention.due_date','LIKE','%'.$value.'%')
+                    ->orWhere('users.lastname','LIKE','%'.$value.'%');
             })->get();
     }
 
