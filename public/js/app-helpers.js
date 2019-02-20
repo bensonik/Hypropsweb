@@ -1430,14 +1430,14 @@
         });
     }
 
-    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId,postDateId,totalTaxId){
+    function searchOptionListInventory(searchId,listId,page,moduleType,hiddenId,descId,rateId,unitMId,subTotalId,sharedSumClass,overallSumId,foreignCurrId,qtyId,vendCustId,postDateId,totalTaxId,billInvoice){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         var vendCustVal = $('#'+vendCustId).val();
         var postDate = $('#'+postDateId).val();
         if(vendCustVal != '' && postDate != ''){
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId+'&totalTaxId='+totalTaxId
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&descId='+descId+'&rateId='+rateId+'&unitMId='+unitMId+'&subTotalId='+subTotalId+'&sharedSubTotal='+sharedSumClass+'&overallSum='+overallSumId+'&foreignOverallSum='+foreignCurrId+'&qtyId='+qtyId+'&vendCustId='+vendCustId+'&postDateId='+postDateId+'&totalTaxId='+totalTaxId+'&billInvoice='+billInvoice
         }).done(function(data){
             $('#'+listId).html(data);
 

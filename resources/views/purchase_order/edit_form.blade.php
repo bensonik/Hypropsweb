@@ -413,7 +413,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="" value="{{$po->inventory->item_name}}" autocomplete="off" id="select_inv{{$num}}" onkeyup="searchOptionListInventory('select_inv{{$num}}','myUL500{{$num}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num}}','item_desc{{$num}}','unit_cost{{$num}}','unit_measure{{$num}}','sub_total{{$num}}','shared_sub_tota_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num}}','vendorCust_edit','posting_date_edit','total_tax_amount_edit');" name="select_user" placeholder="Inventory Item">
+                                            <input type="text" class="" value="{{$po->inventory->item_name}}" autocomplete="off" id="select_inv{{$num}}" onkeyup="searchOptionListInventory('select_inv{{$num}}','myUL500{{$num}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num}}','item_desc{{$num}}','unit_cost{{$num}}','unit_measure{{$num}}','sub_total{{$num}}','shared_sub_tota_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num}}','vendorCust_edit','posting_date_edit','total_tax_amount_edit','{{\App\Helpers\Utility::PURCHASE_DESC}}');" name="select_user" placeholder="Inventory Item">
 
                                             <input type="hidden" class="inv_class" value="{{$po->item_id}}" name="inv_class{{$num2}}" id="inv500{{$num}}" />
                                         </div>
