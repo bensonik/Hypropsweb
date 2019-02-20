@@ -690,20 +690,9 @@ class PurchaseOrderController extends Controller
         $attachment = [];
         $editId = $request->input('edit_id');
         $oldData = PoExtension::firstRow('id',$editId);
-        $oldAttachment = json_decode($oldData->attachment,true);
 
-
-        //REMOVE FILES FROM AN ARRAY AND STORE IN JSON FORMAT IN A LONGTEXT MYSQL COLUMN
-        if (($key = array_search($file_name, $oldAttachment)) !== false) {
-            $fileUrl = Utility::FILE_URL($file_name);
-            unset($oldAttachment[$key]);
-            unlink($fileUrl);
-        }
-
-
-        $attachJson = json_encode($oldAttachment);
         $dbData = [
-            'attachment' => $attachJson
+            'attachment' => Utility::removeJsonItem($oldData->attachment,$file_name)
         ];
         $save = PoExtension::defaultUpdate('id',$editId,$dbData);
 

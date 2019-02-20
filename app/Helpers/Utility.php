@@ -1084,5 +1084,22 @@ class Utility
         //return $decoded;
     }
 
+    public static function removeJsonItem($json,$item){
+
+        $oldAttachment = json_decode($json,true);
+
+        if(count($oldAttachment) >0){
+            foreach($oldAttachment as $key => $val){
+                if($val == $item){
+                    $fileUrl = Utility::FILE_URL($item);
+                    unset($oldAttachment[$key]);
+                    unlink($fileUrl);
+                }
+            }
+        }
+        $attachJson = json_encode($oldAttachment);
+        return $attachJson;
+
+    }
 
 }
