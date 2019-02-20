@@ -148,7 +148,7 @@
                         <?php $num++; $num2++; $countDataPo[] = $num2; ?>
                         <tr id="itemId{{$po->id}}">
 
-                            <td scope="row">
+                            <td >
                                 <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" class="kid_checkbox_po_edit" />
 
                             </td>
@@ -312,7 +312,7 @@
         <tbody>
         @foreach($attach as $at)
             <?php $num++; ?>
-            <tr>
+            <tr id="removeAttach{{$num}}">
                 <td>File{{$num}}</td>
                 <td><a target="_blank" href="<?php echo URL::to('rfq_download_attachment?file='); ?>{{$at}}">
                         <i class="fa fa-files-o fa-2x"></i>
@@ -338,7 +338,7 @@
                         <input type="hidden" name="edit_id" value="{{$edit->id}}" >
                     </form>
 
-                    <button type="button"  onclick="submitMediaForm('attachModal','removeAttachForm','<?php echo url('rfq_remove_attachment'); ?>','reload_data',
+                    <button type="button"  onclick="removeMediaForm('removeAttach{{$num}}','removeAttachForm','<?php echo url('rfq_remove_attachment'); ?>','reload_data',
                             '<?php echo url('rfq'); ?>','<?php echo csrf_token(); ?>')"
                             class="btn btn-danger waves-effect">
                         Remove

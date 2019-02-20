@@ -395,6 +395,48 @@
 
     }
 
+    //SUBMIT FORM TO REMOVE ATTACHED FILE FROM EDIT FORM
+    function removeMediaForm(hideId,formId,submitUrl,reload_id,reloadUrl,token){
+        var form_get = $('#'+formId);
+        var form = document.forms.namedItem(formId);
+        var postVars = new FormData(form);
+        postVars.append('token',token);
+        $('#loading_modal').modal('show');
+        sendRequestMediaForm(submitUrl,token,postVars);
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                $('#loading_modal').modal('hide');
+                var rollback = JSON.parse(ajax.responseText);
+                var message2 = rollback.message2;
+                if(message2 == 'fail'){
+
+                    //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                    var serverError = phpValidationError(rollback.message);
+
+                    var messageError = swalFormError(serverError);
+                    swal("Error",messageError, "error");
+
+                }else if(message2 == 'saved'){
+
+                    var successMessage = swalSuccess('Data saved successfully');
+                    swal("Success!", successMessage, "success");
+                    $('#'+hideId).remove();
+
+                }else if(message2 == 'token_mismatch'){
+
+                    location.reload();
+
+                }else {
+                    var infoMessage = swalWarningError(message2);
+                    swal("Warning!", infoMessage, "warning");
+                }
+
+                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                reloadContent(reload_id,reloadUrl);
+            }
+        }
+
+    }
 
     function fillNextInput(value_id,displayId,page,moduleType){
             var pickedVal = $('#'+value_id).val();

@@ -877,7 +877,7 @@
         <tbody>
         @foreach($attach as $at)
             <?php $num++; ?>
-            <tr>
+            <tr id="removeAttach{{$num}}">
                 <td>File{{$num}}</td>
                 <td><a target="_blank" href="<?php echo URL::to('po_download_attachment?file='); ?>{{$at}}">
                         <i class="fa fa-files-o fa-2x"></i>
@@ -903,7 +903,7 @@
                         <input type="hidden" name="edit_id" value="{{$edit->id}}" >
                     </form>
 
-                    <button type="button"  onclick="submitMediaForm('attachModal','removeAttachForm','<?php echo url('po_remove_attachment'); ?>','reload_data',
+                    <button type="button"  onclick="removeMediaForm('removeAttach{{$num}}','removeAttachForm','<?php echo url('po_remove_attachment'); ?>','reload_data',
                             '<?php echo url('purchase_order'); ?>','<?php echo csrf_token(); ?>')"
                             class="btn btn-danger waves-effect">
                         Remove

@@ -1988,7 +1988,7 @@
                     <div class="form-line">
                         <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory','inv500{{$num2}}');" name="select_user" placeholder="Inventory Item">
 
-                        <input type="hidden" class="inv_class " value="" name="user" id="inv500{{$num2}}" />
+                        <input type="hidden" class="inv_class inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
                     </div>
                 </div>
                 <ul id="myUL500{{$num2}}" class="myUL"></ul>
@@ -2009,8 +2009,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
-                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                        <input type="number" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity" />
                     </div>
                 </div>
             </div>

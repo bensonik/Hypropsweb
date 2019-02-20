@@ -432,7 +432,6 @@
         }
 
 
-
     /*==================== PAGINATION =========================*/
 
     $(window).on('hashchange',function(){

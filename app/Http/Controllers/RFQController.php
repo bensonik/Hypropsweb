@@ -271,15 +271,17 @@ class RFQController extends Controller
                 ]);
 
             }*/
+
             //ITEM VARIABLES
-            $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
+            $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit'));
+            $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
             $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
             $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure_edit'));
 
 
             //ACCOUNT VARIABLES
-            $accClass = Utility::jsonUrlDecode($request->input('acc_class_edit')); $accDesc = Utility::jsonUrlDecode($request->input('acc_desc_edit'));
-
+            $accClass = Utility::jsonUrlDecode($request->input('acc_class_edit'));
+            $accDesc = Utility::jsonUrlDecode($request->input('acc_desc_edit'));
 
             //GENERAL VARIABLES
             $dueDate = $request->input('due_date'); $mailOption = $request->input('mail_option');
@@ -396,7 +398,7 @@ class RFQController extends Controller
             }
 
             //LOOP THROUGH ITEMS
-            $poDbData['rfq_id'] = $editId;
+            $rfqDbData['rfq_id'] = $editId;
             $rfqDbData['uid'] = $uid;
             $dda = '';
 
@@ -489,7 +491,7 @@ class RFQController extends Controller
 
 
         //REMOVE FILES FROM AN ARRAY AND STORE IN JSON FORMAT IN A LONGTEXT MYSQL COLUMN
-        if (($key = array_search($file_name, $oldAttachment)) !== false) {
+        if (($key = array_search($file_name, $oldAttachment)) != false) {
             $fileUrl = Utility::FILE_URL($file_name);
             unset($oldAttachment[$key]);
             unlink($fileUrl);
@@ -503,8 +505,8 @@ class RFQController extends Controller
         $save = RFQExtension::defaultUpdate('id',$editId,$dbData);
 
         return response()->json([
-            'message' => 'good',
-            'message2' => 'File have been removed'
+            'message2' => 'saved',
+            'message' => 'File have been removed'
         ]);
 
     }
