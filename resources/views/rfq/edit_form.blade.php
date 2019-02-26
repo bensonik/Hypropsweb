@@ -126,7 +126,7 @@
             <table class="table table-bordered table-hover table-striped" id="po_main_table_edit">
                 <thead>
                 <tr>
-                    <th>
+                    <th class="col-md-2">
                         <input type="checkbox" onclick="toggleme(this,'kid_checkbox_po_edit');" id="parent_check_po_edit"
                                name="check_all_po_edit" class="" />
 
@@ -217,8 +217,8 @@
                 @endforeach
 
                 <tr>
-                    <td class="col-sm-4" id="hide_button_rfq_edit">
-                        <div class="form-group">
+                    <td class="center-align" id="hide_button_rfq_edit">
+                        <div class="form-group center-align">
                             <div onclick="addMore('add_more_rfq_edit','hide_button_rfq_edit','100','<?php echo URL::to('add_more'); ?>','rfq','hide_button_rfq_edit');">
                                 <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                             </div>

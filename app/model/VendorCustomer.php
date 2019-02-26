@@ -212,6 +212,7 @@ class VendorCustomer extends Model
 
     public static function searchCustomer($value){
         return static::where('vendor_customer.status', '=','1')
+            ->where('vendor_customer.company_type', '=',Utility::CUSTOMER)
             ->where(function ($query) use($value){
                 $query->where('vendor_customer.name','LIKE','%'.$value.'%')
                     ->orWhere('vendor_customer.address','LIKE','%'.$value.'%') ->orWhere('vendor_customer.phone','LIKE','%'.$value.'%')

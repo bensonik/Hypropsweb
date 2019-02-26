@@ -230,12 +230,9 @@ class RFQExtension extends Model
 
     public static function searchRfq($value){
         return static::where('rfq_extention.status', '=','1')
-            ->join('users', 'users.id', '=', 'rfq_extention.assigned_user')
             ->where(function ($query) use($value){
                 $query->where('rfq_extention.rfq_no','LIKE','%'.$value.'%')
-                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
-                    ->orWhere('rfq_extention.due_date','LIKE','%'.$value.'%')
-                    ->orWhere('users.lastname','LIKE','%'.$value.'%');
+                    ->orWhere('rfq_extention.due_date','LIKE','%'.$value.'%');
             })->get();
     }
 

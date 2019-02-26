@@ -513,10 +513,10 @@
                                 <a href="{{url('rfq')}}">Request for Quote (RFQ)</a>
                             </li>
                             <li>
-                                <a href="{{url('purchase_order')}}">Purchase Order</a>
+                                <a href="{{url('quote')}}">Create Quote for Customer</a>
                             </li>
                             <li>
-                                <a href="{{url('zone')}}">Create Quote for Customer</a>
+                                <a href="{{url('purchase_order')}}">Purchase Order</a>
                             </li>
                         </ul>
                     </li>

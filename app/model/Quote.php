@@ -5,13 +5,13 @@ namespace App\model;
 use App\Helpers\Utility;
 use Illuminate\Database\Eloquent\Model;
 
-class PoExtension extends Model
+class Quote extends Model
 {
     //
-    protected  $table = 'po_extention';
+    protected  $table = 'quote';
 
     private static function table(){
-        return 'po_extention';
+        return 'quote';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,9 @@ class PoExtension extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-
+        'pref_customer' => 'required',
+        'posting_date' => 'required',
+        'quote_status' => 'required',
     ];
 
     public function user_c(){
@@ -34,33 +36,28 @@ class PoExtension extends Model
 
     }
 
-    public function userDetail(){
-        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
+    public function account(){
+        return $this->belongsTo('App\model\AccountChart','account_id','id')->withDefault();
 
     }
 
-    public function vendorCon(){
-        return $this->belongsTo('App\model\VendorCustomer','vendor','id')->withDefault();
+    public function inventory(){
+        return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
 
     }
 
-    public function currency(){
-        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+    public function warehouse(){
+        return $this->belongsTo('App\model\Warehouse','ship_to_whse','id')->withDefault();
 
     }
 
-    public function transCurr(){
-        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+    public function taxVal(){
+        return $this->belongsTo('App\model\Tax','tax_id','id')->withDefault();
 
     }
 
     public function assigned(){
         return $this->belongsTo('App\User','assigned_user','id')->withDefault();
-
-    }
-
-    public function po(){
-        return $this->hasMany('App\model\PurchaseOrder','uid','po_uid');
 
     }
 
@@ -141,54 +138,26 @@ class PoExtension extends Model
 
     }
 
-    public static function massData($column, $post = [])
+    public static function massData($column, $post)
     {
-        //return Utility::massData(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->get();
 
     }
 
-    public static function massDataPaginate($column, $post = [])
+    public static function massDataPaginate($column, $post)
     {
-        //return Utility::massData(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->orderBy('id','DESC')->paginate(Utility::P35);
+
 
     }
 
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->get();
+        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
 
     }
-
-    public static function massDataConditionPaginate($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
-
-    }
-
-    public static function massDataMassCondition($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
-            ->orderBy('id','DESC')->get(Utility::P35);
-
-    }
-
-    public static function massDataMassConditionPaginate($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->whereIn($column2,$post2)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
-
-    }
-
 
     public static function firstRow($column, $post)
     {
@@ -225,23 +194,6 @@ class PoExtension extends Model
     {
         return Utility::deleteItemData(self::table(),$id,$postId);
 
-    }
-
-    public static function searchPo($value){
-        return static::where('po_extention.status', '=','1')
-            ->join('vendor_customer', 'vendor_customer.id', '=', 'po_extention.vendor')
-            ->where(function ($query) use($value){
-                $query->where('po_extention.po_number','LIKE','%'.$value.'%')
-                    ->orWhere('vendor_customer.name','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.vendor_invoice_no','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_method','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_country','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_address','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.purchase_status','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_contact','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%');
-            })->get();
     }
 
 }

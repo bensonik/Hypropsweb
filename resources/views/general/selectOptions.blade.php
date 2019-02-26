@@ -34,7 +34,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{$overallSumId}}','<?php echo url('vendor_customer_currency') ?>','foreign_amount');">{{$data->name}} ({{$data->email1}})</a>
+            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{$overallSumId}}','<?php echo url('vendor_customer_currency') ?>','{{$currencyClass}}');">{{$data->name}} ({{$data->email1}})</a>
         </li>
 
     @endforeach
@@ -214,5 +214,27 @@
         @endif
     </select>
 @endif
+
+@if($type == 'search_rfq_select')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->rfq_no}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->rfq_no}}</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'search_quote_select')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->quote_number}} ({{$data->vendorCon->name}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->quote_number}} ({{$data->vendorCon->name}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+
 
 

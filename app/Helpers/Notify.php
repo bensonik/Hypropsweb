@@ -64,5 +64,9 @@ class Notify
         //Mail::to($email)->send(new WarehouseMail($objContent));
     }
 
+    public static function quoteMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+
+        //Mail::to($email)->send(new quoteMail($objContent));
+    }
 
 }

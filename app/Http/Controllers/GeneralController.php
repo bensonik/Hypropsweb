@@ -9,6 +9,9 @@ use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\Currency;
 use App\model\PoExtension;
+use App\model\Quote;
+use App\model\QuoteExtension;
+use App\model\RFQExtension;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
@@ -174,9 +177,11 @@ class GeneralController extends Controller
             $hiddenId = $_GET['hiddenId'];
             $listId = $_GET['listId'];
             $overallSumId = $_GET['overallSumId'];
+            $contactType = $_GET['contactType'];
+            $currencyClass = $_GET['currencyClass'];
 
             if($pickedVal != '') {
-                $search = VendorCustomer::searchVendor($pickedVal);
+                $search =  ($contactType == Utility::CUSTOMER) ? VendorCustomer::searchCustomer($pickedVal) :VendorCustomer::searchVendor($pickedVal);
                 $obtain_array = [];
 
                 foreach ($search as $data) {
@@ -187,13 +192,15 @@ class GeneralController extends Controller
                 $fetchData = VendorCustomer::massData('id', $user_ids);
             }else{
 
-                $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
+                $fetchData = ($contactType == Utility::CUSTOMER) ? VendorCustomer::specialColumns('company_type', Utility::CUSTOMER) : VendorCustomer::specialColumns('company_type', Utility::VENDOR);
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)->with('overallSumId',$overallSumId);
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                    ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
-                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)->with('overallSumId',$overallSumId);
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass);
         }
 
         //SEARCH INVENTORY
@@ -216,6 +223,62 @@ class GeneralController extends Controller
             }else{
 
                 $fetchData = Inventory::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH RFQ SELECT
+        if($type == 'search_rfq_select'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = RFQExtension::searchRfq($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = RFQExtension::massData('id', $user_ids);
+            }else{
+
+                $fetchData = RFQExtension::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH QUOTE SELECT
+        if($type == 'search_quote_select'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = QuoteExtension::searchQuote($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = QuoteExtension::massData('uid', $user_ids);
+            }else{
+
+                $fetchData = QuoteExtension::getAllData();
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
             }
@@ -607,13 +670,6 @@ class GeneralController extends Controller
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
                 ->with('unitMeasure',$unitMeasure);
         }
-
-        if($type == 'rfq_edit'){
-            $unitMeasure = UnitMeasure::paginateAllData();
-            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
-                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
-                ->with('unitMeasure',$unitMeasure);
-        }
         //END OF ADDING RFQ
 
         //START OF ADDING RFQ CHART OF ACCOUNT EDIT
@@ -621,13 +677,23 @@ class GeneralController extends Controller
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
-
-        if($type == 'acc_rfq_edit'){
-            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
-                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
-        }
         //END OF ADDING RFQ CHART OF ACCOUNT
 
+        //START OF ADDING INVENTORY ITEM
+        if($type == 'get_inv'){
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('tax',$tax);
+        }
+
+        if($type == 'get_inv_edit'){
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('tax',$tax);
+        }
+        //END OF ADDING INVENTORY ITEM
 
     }
     /**
@@ -783,6 +849,7 @@ class GeneralController extends Controller
             $dataId = $request->input('dataId'); $grandTotal = $request->input('grandTotal');
             $totalTax = $request->input('totalTax'); $totalDiscount = $request->input('totalDiscount');
             $postDate = $request->input('postDate'); $vendorCust = $request->input('vendorCust');
+            $dbTable = $request->input('dbTable');
 
             $data = VendorCustomer::firstRow('id',$vendorCust);
             $dataCurr = $data->currency_id;
@@ -801,7 +868,7 @@ class GeneralController extends Controller
                 'tax_trans' => $totalTax,
             ];
 
-            PoExtension::defaultUpdate('id',$dataId,$dbData);
+            Utility::defaultUpdate($dbTable,'id', $dataId, $dbData);
 
             return response()->json([
                 'message' => $dataId,

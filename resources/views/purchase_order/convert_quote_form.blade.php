@@ -1,4 +1,4 @@
-<form name="" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+<form name="" id="convertQuoteForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
 
     <div class="body">
         <div class="row clearfix">
@@ -7,9 +7,9 @@
                 Preferred Vendor
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->vendorCon->name}}" autocomplete="off" id="select_vendor_edit" onkeyup="searchOptionListVenCust('select_vendor_edit','myUL1_edit','{{url('default_select')}}','search_vendor_transact','vendorCust_edit','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum_edit','{{\App\Helpers\Utility::VENDOR}}');" name="select_user" placeholder="Select Vendor">
+                        <input type="text" class="form-control" value="" autocomplete="off" id="select_vendor_edit" onkeyup="searchOptionListVenCust('select_vendor_edit','myUL1_edit','{{url('default_select')}}','search_vendor_transact','vendorCust_edit','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum_edit','{{\App\Helpers\Utility::VENDOR}}');" name="select_user" placeholder="Select Vendor">
 
-                        <input type="hidden" class="user_class" value="{{$edit->vendor}}" name="pref_vendor" id="vendorCust_edit" />
+                        <input type="hidden" class="user_class" value="" name="pref_vendor" id="vendorCust_edit" />
                     </div>
                 </div>
                 <ul id="myUL1_edit" class="myUL"></ul>
@@ -18,7 +18,7 @@
                 <div class="form-group">
                     Vendor Invoice Number
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->vendor_invoice_no}} " name="vendor_invoice_no" placeholder="Vendor Invoice Number">
+                        <input type="text" class="form-control" value="" name="vendor_invoice_no" placeholder="Vendor Invoice Number">
                     </div>
                 </div>
             </div>
@@ -26,7 +26,7 @@
                 <div class="form-group">
                     PO Number
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->po_number}} " name="po_number" placeholder="Purchase Order Number">
+                        <input type="text" class="form-control" value="" name="po_number" placeholder="Purchase Order Number">
                     </div>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     Assign User
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->assigned->firstname}} {{$edit->assigned->lastname}}" autocomplete="off" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL2_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Select User">
+                        <input type="text" class="form-control" value="" autocomplete="off" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL2_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Select User">
 
                         <input type="hidden" class="user_class_edit" value="{{$edit->assigned_user}}" name="user" id="user_edit" />
                     </div>
@@ -55,14 +55,6 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-4">
-                <div class="form-group">
-                    Due Date
-                    <div class="form-line">
-                        <input type="text" class="form-control datepicker4" value="{{$edit->due_date}}" id="due_date_edit" name="due_date" placeholder="Due Date">
-                    </div>
-                </div>
-            </div>
 
         </div>
         <hr/>
@@ -72,7 +64,7 @@
                 <div class="form-group">
                     RFQ Number
                     <div class="form-line">
-                        <input type="text" class="form-control" name="rfq_no" value="{{$edit->rfq_no}}" placeholder="RFQ Number">
+                        <input type="text" class="form-control" name="rfq_no" value="" placeholder="RFQ Number">
                     </div>
                 </div>
             </div>
@@ -100,15 +92,10 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class="form-control ship_status" name="po_status" >
-
+                            <option value="">Select PO status</option>
                             @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
-                                @if($edit->purchase_status == $val)
-                                    <option selected value="{{$edit->purchase_status}}">{{$val}}</option>
-
-                                @endif
-                                <option value="{{$val}}">{{$val}}</option>
+                                <option value="{{$key}}">{{$val}}</option>
                             @endforeach
-                                <option value="">Select PO status</option>
                         </select>
                     </div>
                 </div>
@@ -206,7 +193,7 @@
                 <tbody id="add_more_acc_edit">
 
                 <?php $num = 1000; $num2 = 0; $num1 = 0; $countDataAcc = []; $countDataPo = []; ?>
-                @foreach($poData as $po)
+                @foreach($quoteData as $po)
 
                     @if($po->account_id != '')
                         <?php $num++; $num1++; $countDataAcc[] = $num2; ?>
@@ -398,14 +385,14 @@
                 </thead>
                 <tbody id="add_more_po_edit">
 
-                @foreach($poData as $po)
+                @foreach($quoteData as $po)
 
                     @if(!empty($po->item_id))
-                        <?php $num++; $num2++; $countDataPo[] = $num2; $receiptStatus = ($po->receipt_status != '0' && $po->receipt_status != '') ? 'checked' : ''; ?>
+                        <?php $num++; $num2++; $countDataPo[] = $num2;  ?>
                         <tr id="itemId{{$po->id}}">
 
                             <td scope="row">
-                                <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" {{$receiptStatus}} class="kid_checkbox_po_edit" />
+                                <input value="{{$po->id}}" type="checkbox" id="po_id{{$po->id}}" class="kid_checkbox_po_edit" />
 
                             </td>
 
@@ -437,7 +424,6 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select class=" " name="warehouse{{$num2}}" >
-                                                <option value="{{$po->ship_to_whse}}" selected>{{$po->warehouse->name}} ({{$po->warehouse->code}})</option>
                                                 <option value="">Select Receipt Warehouse</option>
                                                 @foreach(\App\Helpers\Utility::warehouseData() as $inv)
                                                     <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
@@ -484,7 +470,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class=" " value="{{$po->reserved_quantity}}" name="quantity_reserved{{$num2}}" id="qty_res{{$num}}" placeholder="Quantity" >
+                                            <input type="number" class=" " value="" name="quantity_reserved{{$num2}}" id="qty_res{{$num}}" placeholder="Quantity" >
                                         </div>
                                     </div>
                                 </div>
@@ -494,7 +480,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class=" " name="quantity_received{{$num2}}" value="{{$po->received_quantity}}" id="qty_rec{{$num}}" placeholder="Quantity" >
+                                            <input type="number" class=" " name="quantity_received{{$num2}}" value="" id="qty_rec{{$num}}" placeholder="Quantity" >
                                         </div>
                                     </div>
                                 </div>
@@ -504,7 +490,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" datepicker4 " value="{{$po->planned_receipt_date}}" name="planned_date{{$num2}}" placeholder="Planned Date" required>
+                                            <input type="text" class=" datepicker4 " value="" name="planned_date{{$num2}}" placeholder="Planned Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -514,7 +500,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" datepicker4 " value="{{$po->expected_receipt_date}}" name="expected_date{{$num2}}" placeholder="Expected Date" required>
+                                            <input type="text" class=" datepicker4 " value="" name="expected_date{{$num2}}" placeholder="Expected Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -524,7 +510,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" datepicker4 " value="{{$po->promised_receipt_date}}" name="promised_date{{$num2}}" placeholder="Promised Date" required>
+                                            <input type="text" class=" datepicker4 " value="" name="promised_date{{$num2}}" placeholder="Promised Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -534,7 +520,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" " value="{{$po->blanket_order_no}}" name="blanket_order_no{{$num2}}" id="" placeholder="Blanket Order Number" >
+                                            <input type="text" class=" " value="" name="blanket_order_no{{$num2}}" id="" placeholder="Blanket Order Number" >
                                         </div>
                                     </div>
                                 </div>
@@ -544,7 +530,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" " value="{{$po->blanket_order_line_no}}" name="blanket_order_line_no{{$num2}}" id="" placeholder="Blanket Order Line No" >
+                                            <input type="text" class=" " value="" name="blanket_order_line_no{{$num2}}" id="" placeholder="Blanket Order Line No" >
                                         </div>
                                     </div>
                                 </div>
@@ -557,11 +543,6 @@
                                             <select class=" " name="ship_status{{$num2}}" >
                                                 <option value="">Select Item Status</option>
                                                 @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
-                                                    @if($edit->po_status == $val)
-                                                        <option selected value="{{$key}}">{{$val}}</option>
-                                                    @else
-                                                        <option selected value="">Select Item status</option>
-                                                    @endif
                                                     <option value="{{$key}}">{{$val}}</option>
                                                 @endforeach
                                             </select>
@@ -574,7 +555,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class=" " name="status_comment{{$num2}}" value="{{$po->po_status_comment}}" id="" placeholder="Comment on ship status" >
+                                            <input type="text" class=" " name="status_comment{{$num2}}" value="" id="" placeholder="Comment on ship status" >
                                         </div>
                                     </div>
                                 </div>
@@ -850,9 +831,9 @@
 
             <div class="row clearfix">
 
-                <textarea id="mail_message_edit" name="message" class="ckeditor" placeholder="Message">{{$edit->message}}</textarea>
+                <textarea id="mail_message_quote" name="message" class="ckeditor" placeholder="Message">{{$edit->message}}</textarea>
                 <script>
-                    CKEDITOR.replace('mail_message_edit');
+                    CKEDITOR.replace('mail_message_quote');
                 </script>
                 <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
             </div>
@@ -914,6 +895,8 @@
         </tbody>
     </table>
 @endif
+
+
 
 <script>
     $(function() {

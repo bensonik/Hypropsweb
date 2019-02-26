@@ -5,13 +5,13 @@ namespace App\model;
 use App\Helpers\Utility;
 use Illuminate\Database\Eloquent\Model;
 
-class PoExtension extends Model
+class QuoteExtension extends Model
 {
     //
-    protected  $table = 'po_extention';
+    protected  $table = 'quote_extention';
 
     private static function table(){
-        return 'po_extention';
+        return 'quote_extention';
     }
     /**
      * The attributes that are mass assignable.
@@ -40,7 +40,7 @@ class PoExtension extends Model
     }
 
     public function vendorCon(){
-        return $this->belongsTo('App\model\VendorCustomer','vendor','id')->withDefault();
+        return $this->belongsTo('App\model\VendorCustomer','customer','id')->withDefault();
 
     }
 
@@ -227,20 +227,12 @@ class PoExtension extends Model
 
     }
 
-    public static function searchPo($value){
-        return static::where('po_extention.status', '=','1')
-            ->join('vendor_customer', 'vendor_customer.id', '=', 'po_extention.vendor')
+    public static function searchQuote($value){
+        return static::where('quote_extention.status', '=','1')
+            ->join('vendor_customer', 'vendor_customer.id', '=', 'quote_extention.customer')
             ->where(function ($query) use($value){
-                $query->where('po_extention.po_number','LIKE','%'.$value.'%')
-                    ->orWhere('vendor_customer.name','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.vendor_invoice_no','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_method','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_country','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_address','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.purchase_status','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_to_contact','LIKE','%'.$value.'%')
-                    ->orWhere('po_extention.ship_agent','LIKE','%'.$value.'%');
+                $query->where('quote_extention.quote_number','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.name','LIKE','%'.$value.'%');
             })->get();
     }
 

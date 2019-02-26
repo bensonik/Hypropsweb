@@ -2050,7 +2050,307 @@
 @endif
 <!-- END OF RFQ -->
 
+<!-- BEGIN OF INVENTORY ITEM TEMPLATE -->
+@if($type == 'get_inv')
+    <tr class="row clearfix new_inv remove_inv{{$more}}">
 
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','qty{{$num2}}','vendorCust','posting_date','total_tax_amount','{{\App\Helpers\Utility::PURCHASE_DESC}}');" name="select_user" placeholder="Inventory Item">
+
+                        <input type="hidden" class="inv_class " value="" name="user" id="inv500{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL500{{$num2}}" class="myUL"></ul>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea class=" item_desc " name="item_desc" id="item_desc{{$num2}}" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" quantity " name="quantity" id="qty{{$num2}}" placeholder="Quantity"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" unit_cost " name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class=" unit_measure " readonly name="unit_measure" id="unit_measure{{$num2}}" placeholder="Unit Measure" >
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class=" tax " name="tax" id="tax{{$num2}}"
+                                onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                            <option value="">Select</option>
+                            @foreach($tax as $inv)
+                                <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" tax_perct " name="tax_perct" id="tax_perct{{$num2}}" placeholder="Tax Percentage"
+                               onkeyup="percentToAmount('tax_perct{{$num2}}','tax_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class="tax_amount shared_tax_amount " name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" discount_perct " name="discount_perct" id="discount_perct{{$num2}}" placeholder="Discount Percentage"
+                               onkeyup="percentToAmount('discount_perct{{$num2}}','discount_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" discount_amount  shared_discount_amount " name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" sub_total  shared_sub_total " readonly name="sub_total" id="sub_total{{$num2}}" placeholder="Sub Total" >
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td></td>
+
+        <td class=" addButtons center-align" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','get_inv','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+        <td class="center-align" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_inv{{$more}}','{{url('add_more')}}','get_inv','new_inv','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total{{$num2}}','overall_sum','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount','shared_discount_amount','total_tax_amount','total_discount_amount','vendorCust','posting_date');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+@endif
+<!-- END OF INVENTORY ITEM TEMPLATE -->
+
+<!-- BEGIN OF INVENTORY ITEM TEMPLATE EDIT -->
+@if($type == 'get_inv_edit')
+    <tr class="row clearfix new_inv_edit remove_inv_edit{{$more}}">
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num2}}','vendorCust_edit','posting_date_edit','total_tax_amount_edit','{{\App\Helpers\Utility::PURCHASE_DESC}}');" name="select_user" placeholder="Inventory Item">
+
+                        <input type="hidden" class="inv_class inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL500{{$num2}}" class="myUL"></ul>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea class=" item_desc item_desc_edit" name="item_desc" id="item_desc{{$num2}}" placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" unit_cost unit_cost_edit"  name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class=" unit_measure unit_measure_edit" readonly name="unit_measure" id="unit_measure{{$num2}}" placeholder="Unit Measure" >
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class=" tax tax_edit" name="tax" id="tax{{$num2}}"
+                                onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                            <option value="">Select Tax</option>
+                            @foreach($tax as $inv)
+                                <option value="{{$inv->id}}">{{$inv->tax_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" tax_perct tax_perct_edit" name="tax_perct" id="tax_perct{{$num2}}" placeholder="Tax Percentage"
+                               onkeyup="percentToAmount('tax_perct{{$num2}}','tax_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class="tax_amount tax_amount_edit shared_tax_amount shared_tax_amount_edit" name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" discount_perct discount_perct_edit" name="discount_perct" id="discount_perct{{$num2}}" placeholder="Discount Percentage"
+                               onkeyup="percentToAmount('discount_perct{{$num2}}','discount_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class=" discount_amount discount_amount_edit shared_discount_amount shared_discount_amount_edit" name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
+                               onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class="sub_total_edit  shared_sub_total_edit" readonly name="sub_total" id="sub_total{{$num2}}" placeholder="Sub Total" >
+                    </div>
+                </div>
+            </div>
+        </td>
+
+        <td></td>
+
+        <td class=" addButtons center-align" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','get_inv_edit','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+        <td class="center-align" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputCalc('{{$add_id}}','remove_inv_edit{{$more}}','{{url('add_more')}}','get_inv_edit','new_inv_edit','{{$more}}','{{$add_id}}','{{$hide_id}}','sub_total{{$num2}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+@endif
+<!-- END OF INVENTORY ITEM TEMPLATE EDIT -->
 
 <script>
     $(function() {

@@ -1052,6 +1052,33 @@
 
     }
 
+    function convertForm(dataId,displayId,submitUrl,token,modalId,hideContent){
+        var dataVal = $('#'+dataId).val();
+        if(dataVal != ''){
+            $('#edit_content').html('');
+            if(hideContent != ''){
+                $('#'+hideContent).html('');
+            }
+            var postVars = "dataId="+dataVal;
+            $('#'+modalId).modal('show');
+            sendRequest(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    var ajaxData = ajax.responseText;
+                    $('#'+displayId).html(ajaxData);
+
+                }
+            }
+            $('#'+displayId).html('LOADING DATA');
+
+        }else{
+            swal("Warning!", "Ensure to select an item from the dropdown.", "warning");
+        }
+
+
+    }
+
     function editTransactForm(dataId,displayId,submitUrl,token,currencyClass,vendorCustCurrPage,vendorId){
 
         var postVars = "dataId="+dataId;
@@ -1420,11 +1447,11 @@
 
     }
 
-    function searchOptionListVenCust(searchId,listId,page,moduleType,hiddenId,currencyClass,currPage,overallSumId){
+    function searchOptionListVenCust(searchId,listId,page,moduleType,hiddenId,currencyClass,currPage,overallSumId,contactType){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&overallSumId='+overallSumId
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&overallSumId='+overallSumId+'&contactType='+contactType+'&currencyClass='+currencyClass
         }).done(function(data){
             $('#'+listId).html(data);
         });
@@ -1460,7 +1487,7 @@
             }
             $('#billing_address').val(data.billing_address);
             $('#curr_rate').val(data.rate);
-            //console.log(currencyClass);
+            //console.log(currencyClass+'curr='+data.currency);
 
         });
 
@@ -1599,6 +1626,7 @@
             var taxA = (taxPerct.val() == '') ? taxVal: taxPerctVal ;
             discount.val(decPoints(discountA,2));
             tax.val(decPoints(taxA,2));
+            console.log(taxPerct.val());
 
             if(rate != '' && item != ''){
                 //var real_amount = (event.target.id == qtyId) ? rate : qtyVal*rate;
@@ -1618,7 +1646,7 @@
                 totalDiscountGet.val(decPoints(sumArrayDiscount,2));
                 totalTaxGet.val(decPoints(sumArrayTax,2));
                 exclTax(overallSumId,totalTax,'excl_'+overallSumId);
-                convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId)
+                convertToDefaultCurr(foreignCurrId,overallSumId,defaultCurrPage,vendorCustId,postDateId);
 
             }else{
                 swal("Warning!", 'Please Select an item and enter quantity to continue', "warning");
@@ -1731,7 +1759,7 @@
                 var rate = $('#'+rateId);
                 var qtyVal = $('#'+qtyId);
 
-                $('#'+taxAmountId).val(decPoints((data*rate.val()*qtyVal.val())/100,2));
+                $('#'+taxAmountId).val(decPoints((data*rate.val()*qtyVal.val()*data)/100,2));
                 itemSum(amountId,rateId,itemId,qtyId,discountAmountId,taxAmountId,sharedSumClass,overallSumId,foreignCurrId,defaultCurrPage,'',taxSharedClass,discountSharedClass,totalTax,totalDiscount,vendorCustId,postDateId,taxPerctId,discountPerctId)
             });
         }
@@ -1889,7 +1917,7 @@
 
     }
 
-    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId,parentDataId,updateSumPage,reloadId,reloadUrl){
+    function permItemDelete(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId,parentDataId,updateSumPage,reloadId,reloadUrl,dbTable){
         var totalVal = $('#'+totalValId).val();
         var discountVal = $('#'+discountAmountId).val();
         var taxVal = $('#'+taxAmountId).val();
@@ -1911,7 +1939,7 @@
             exclTax(totalValId,totalTax,'excl_'+totalValId);
 
             convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
-            updateDbSum(parentDataId,updateSumPage,newTotal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId,reloadId,reloadUrl);
+            updateDbSum(parentDataId,updateSumPage,newTotal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId,reloadId,reloadUrl,dbTable);
             swal("Warning!", 'Item removed successfully', "success");
 
         });
@@ -1919,14 +1947,15 @@
 
     }
 
-    function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId,reloadId,reloadUrl){
+    function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId,reloadId,reloadUrl,dbTable){
 
         var postDate = $('#'+postDateId).val();
         var vendorCust = $('#'+vendorCustId).val();
+        alert( page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust+'&dbTable='+dbTable
+    );
 
-
-        $.ajax({
-            url: page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust
+       $.ajax({
+            url: page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust+'&dbTable='+dbTable
         }).done(function(data){
             //console.log(data);
             reloadContent(reloadId,reloadUrl);

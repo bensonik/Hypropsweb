@@ -7,8 +7,8 @@
 
         </th>
         <th>Manage</th>
-        <th>Assigned User</th>
         <th>RFQ Number</th>
+        <th>Assigned User</th>
         <th>Due date</th>
         <th>Created by</th>
         <th>Updated by</th>

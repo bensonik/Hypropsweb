@@ -67,7 +67,11 @@ class Utility
     const LINE_ITEM_TAX = 1, ONE_TIME_TAX = 2;
     const SHIP_STATUS = [1 => 'PO sent to supplier', 2 => 'Actioned payment to supplier',
         3 => 'Item Delivered to designated forwarder', 4 => 'Delivered to port', 5 =>'Custom clearing',
-        6 => 'Item Delivered to Client', 7 => 'Invoice Submitted to client', 8 => 'Close PO'];
+        6 => 'Item Delivered to Client', 7 => 'Invoice Submitted to client', 8 => 'Po Closed'];
+
+    const QUOTE_STATUS = [1 => 'Invoice Submitted to client', 2 => 'PO sent to supplier',
+        3 => 'Received Payment from Customer', 4 => 'Actioned payment to supplier',
+        5 => 'Item Delivered to Client', 6 => 'SQuote Closed'];
 
     const SALES_DESC = 2, PURCHASE_DESC = 1;
     const POST_RECEIPT = 1, CREATE_RECEIPT = 2;

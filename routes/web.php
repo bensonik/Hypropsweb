@@ -439,6 +439,10 @@ Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_
 Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
 Route::post('/post_create_receipt', 'PurchaseOrderController@postCreateReceipt')->name('post_create_receipt');
 Route::post('/edit_po', 'PurchaseOrderController@edit')->name('edit_po');
+Route::post('/convert_quote_form', 'PurchaseOrderController@convertQuoteForm')->name('convert_quote_form');
+Route::post('/convert_rfq_form', 'PurchaseOrderController@convertRfqForm')->name('convert_rfq_form');
+Route::post('/convert_rfq', 'PurchaseOrderController@convertRfq')->name('convert_rfq');
+Route::post('/convert_quote', 'PurchaseOrderController@convertQuote')->name('convert_quote');
 Route::any('/search_po', 'PurchaseOrderController@searchPo')->name('search_po');
 Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
 Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delete_po_item');
@@ -470,17 +474,29 @@ Route::post('/edit_put_away', 'WhsePickPutAwayController@edit')->name('edit_put_
 Route::any('/search_put_away', 'WhsePickPutAwayController@searchWhsePickPutAway')->name('search_put_away');
 Route::post('/delete_put_away', 'WhsePickPutAwayController@destroy')->name('delete_put_away');
 
-// -------------PURCHASE ORDER MODULE-----------
-Route::any('/rfq', 'RFQController@index')->name('inventory')->middleware('auth');
+// -------------REQUEST FOR QUOTE (RFQ) MODULE-----------
+Route::any('/rfq', 'RFQController@index')->name('rfq')->middleware('auth');
 Route::post('/edit_rfq_form', 'RFQController@editForm')->name('edit_rfq_form');
 Route::post('/create_rfq', 'RFQController@create')->name('create_rfq');
 Route::post('/edit_rfq', 'RFQController@edit')->name('edit_rfq');
 Route::any('/search_rfq', 'RFQController@searchRfq')->name('search_rfq');
-Route::post('/delete_rfq', 'RFQController@destroy')->name('delete_po');
+Route::post('/delete_rfq', 'RFQController@destroy')->name('delete_rfq');
 Route::any('/delete_rfq_item', 'RFQController@permDelete')->name('delete_rfq_item');
 Route::post('/change_rfq_status', 'RFQController@changeStatus')->name('change_rfq_status');
 Route::any('/rfq_remove_attachment', 'RFQController@removeAttachment')->name('rfq_remove_attachment');
 Route::any('/rfq_download_attachment', 'RFQController@downloadAttachment')->name('rfq_download_attachment');
+
+// -------------QUOTE MODULE-----------
+Route::any('/quote', 'QuoteController@index')->name('quote')->middleware('auth');
+Route::post('/edit_quote_form', 'QuoteController@editForm')->name('edit_quote_form');
+Route::post('/create_quote', 'QuoteController@create')->name('create_quote');
+Route::post('/edit_quote', 'QuoteController@edit')->name('edit_quote');
+Route::any('/search_quote', 'QuoteController@searchQuote')->name('search_quote');
+Route::post('/delete_quote', 'QuoteController@destroy')->name('delete_quote');
+Route::any('/delete_quote_item', 'QuoteController@permDelete')->name('delete_quote_item');
+Route::post('/change_quote_status', 'QuoteController@changeStatus')->name('change_quote_status');
+Route::any('/quote_remove_attachment', 'QuoteController@removeAttachment')->name('quote_remove_attachment');
+Route::any('/quote_download_attachment', 'QuoteController@downloadAttachment')->name('quote_download_attachment');
 
 
 
