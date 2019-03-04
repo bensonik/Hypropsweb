@@ -162,15 +162,7 @@ class QuoteController extends Controller
                 'uid' => $uid
             ];
 
-            /*return response()->json([
-                'message' => 'warning',
-                'message2' => json_encode($request->all())
-            ]);*/
 
-            /*return response()->json([
-                'message' => 'warning',
-                'message2' => json_encode($invClass)
-            ]);*/
             if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
 
                 $mainQuote = QuoteExtension::create($dbDATA);
@@ -315,6 +307,11 @@ class QuoteController extends Controller
         $validator = Validator::make($request->all(),Quote::$mainRules);
         if($validator->passes()){
 
+            /*return response()->json([
+                'message' => 'warning',
+                'message2' =>  $request->input('count_ext_po').'&countAcc='.$request->input('count_ext_acc')
+            ]);*/
+
             //ITEM VARIABLES
             $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit'));
             $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
@@ -414,7 +411,6 @@ class QuoteController extends Controller
             $mainQuote = QuoteExtension::defaultUpdate('id', $editId, $dbDATA);
             $countExtAcc = $request->input('count_ext_acc');
             $countExtPo = $request->input('count_ext_po');
-
             if($countExtPo > 0){
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
@@ -425,7 +421,7 @@ class QuoteController extends Controller
                     $quoteDbDataEdit['bin_stock'] = $binStock->inventory_type;
                     $quoteDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
                     $quoteDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $quoteDbDataEdit['po_desc'] = $request->input('item_desc' . $i);
+                    $quoteDbDataEdit['quote_desc'] = $request->input('item_desc' . $i);
                     $quoteDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
                     $quoteDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
                     $quoteDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
@@ -440,7 +436,7 @@ class QuoteController extends Controller
 
                     $poDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    Quote::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
+                    Quote::defaultUpdate('id', $request->input('poId' . $i), $quoteDbDataEdit);
                 }
 
             }
@@ -449,7 +445,7 @@ class QuoteController extends Controller
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
 
-                    $gg[] = $request->input('accId' . $i);
+
                     $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
                     $accDbDataEdit['quote_desc'] = $request->input('item_desc_acc' . $i);
                     $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
@@ -477,13 +473,6 @@ class QuoteController extends Controller
 
             $accDbData['quote_id'] = $editId;
             $accDbData['uid'] = $uid;
-
-
-            /*return response()->json([
-                'message' => 'good',
-                'message2' =>  json_encode($gg).'count='.$countExtAcc  //json_encode($request->all(),true)
-            ]);*/
-
 
 
             //LOOP THROUGH ACCOUNTS
@@ -531,7 +520,7 @@ class QuoteController extends Controller
                         $quoteDbData['bin_stock'] = $binStock->inventory_type;
                         $quoteDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure, $i, 0);
                         $quoteDbData['quantity'] = Utility::checkEmptyArrayItem($quantity, $i, 0);
-                        $quoteDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
+                        $quoteDbData['quote_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
                         $quoteDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost, $i, 0);
                         $quoteDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($unitCost, $i, 0), $postingDate);
                         $quoteDbData['tax_id'] = Utility::checkEmptyArrayItem($tax, $i, 0);

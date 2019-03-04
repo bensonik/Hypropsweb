@@ -24,7 +24,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->name}} ({{$data->email1}})</a>
+            <a href="#"  onclick="dropdownItem('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->name}} ({{$data->email1}})</a>
         </li>
 
     @endforeach
@@ -34,7 +34,7 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{$overallSumId}}','<?php echo url('vendor_customer_currency') ?>','{{$currencyClass}}');">{{$data->name}} ({{$data->email1}})</a>
+            <a href="#" onclick="dropdownItemTransact('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}','{{$overallSumId}}','<?php echo url('vendor_customer_currency') ?>','{{$currencyClass}}','{{$vendorCustId}}','{{$postDateId}}','<?php echo url('amount_to_default_curr') ?>','{{$billAddress}}','{{$currRate}}','{{$foreignOverallSum}}');">{{$data->name}} ({{$data->email1}})</a>
         </li>
 
     @endforeach

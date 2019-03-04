@@ -177,15 +177,6 @@ class PurchaseOrderController extends Controller
                     'uid' => $uid
                 ];
 
-                /*return response()->json([
-                    'message' => 'warning',
-                    'message2' => json_encode($request->all())
-                ]);*/
-
-                /*return response()->json([
-                    'message' => 'warning',
-                    'message2' => json_encode($invClass)
-                ]);*/
                 if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)) {
 
                         $mainPo = PoExtension::create($dbDATA);
@@ -531,7 +522,6 @@ class PurchaseOrderController extends Controller
 
                     for ($i = 1; $i <= $countExtAcc; $i++) {
 
-                        $gg[] = $request->input('accId' . $i);
                         $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
                         $accDbDataEdit['po_desc'] = $request->input('item_desc_acc' . $i);
                         $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
@@ -738,14 +728,15 @@ class PurchaseOrderController extends Controller
             $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
 
 
-           if(count($accClass) == count($accRate) && count($invClass) == count($subTotal)){
 
-               return response()->json([
-                   'message' => 'good',
-                   'message2' => 'Please ensure to enter rate or/and quantity for each item/account'
-               ]);
+            if (count($accClass) != count($accRate) && count($invClass) != count($unitCost)) {
 
-           }
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'Please ensure to enter rate or/and quantity for each item/account'
+                ]);
+
+            }
 
             $vendor = VendorCustomer::firstRow('id',$prefVendor);
             $curr = Currency::firstRow('id',$vendor->currency_id);
@@ -824,7 +815,6 @@ class PurchaseOrderController extends Controller
             if($countExtPo > 0){
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
-                    $poDbDataEdit = [];
 
                     $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
                     $poDbDataEdit['uid'] = $uid;
@@ -865,7 +855,7 @@ class PurchaseOrderController extends Controller
                     $poDbDataEdit['created_by'] = Auth::user()->id;
                     $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
-                    PurchaseOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
+                    PurchaseOrder::create($poDbDataEdit);
                 }
 
             }
@@ -888,8 +878,8 @@ class PurchaseOrderController extends Controller
                     $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
                     $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
                     $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $poDbDataEdit['created_by'] = Auth::user()->id;
-                    $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+                    $accDbDataEdit['created_by'] = Auth::user()->id;
+                    $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
                     PurchaseOrder::create($accDbDataEdit);
                 }
@@ -1049,15 +1039,7 @@ class PurchaseOrderController extends Controller
         $validator = Validator::make($request->all(),PurchaseOrder::$mainRules);
         if($validator->passes()){
 
-            /*$countData = PoExtension::countData('po_number',$request->input('po_number'));
-            if($countData > 0){
 
-                return response()->json([
-                    'message' => 'good',
-                    'message2' => 'Entry(PO number) already exist, please try another entry'
-                ]);
-
-            }*/
             //ITEM VARIABLES
             $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
             $warehouse = Utility::jsonUrlDecode($request->input('warehouse_edit')); $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
@@ -1089,6 +1071,16 @@ class PurchaseOrderController extends Controller
             $oneTimeTaxAmount = $request->input('one_time_tax_amount_edit'); $taxType = $request->input('tax_type');
             $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct_edit');
             $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
+
+
+            if (count($accClass) != count($accRate) && count($invClass) != count($subTotal)) {
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'Please ensure to enter rate or/and quantity for each item/account'
+                ]);
+
+            }
 
             $vendor = VendorCustomer::firstRow('id',$prefVendor);
             $curr = Currency::firstRow('id',$vendor->currency_id);
@@ -1123,6 +1115,7 @@ class PurchaseOrderController extends Controller
             }
 
             $dbDATA = [
+                'uid' => $uid,
                 'assigned_user' => $user,
                 'po_number' => $purchaseOrderNo,
                 'vendor_invoice_no' => $vendorInvoiceNo,
@@ -1153,7 +1146,8 @@ class PurchaseOrderController extends Controller
                 'ship_method' => $shipMethod,
                 'ship_agent' => $shipAgent,
                 'purchase_status' => $poStatus,
-                'updated_by' => Auth::user()->id,
+                'created_by' => Auth::user()->id,
+                'status' => Utility::STATUS_ACTIVE
             ];
 
             $mainPo = PoExtension::create($dbDATA);
@@ -1166,7 +1160,6 @@ class PurchaseOrderController extends Controller
             if($countExtPo > 0){
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
-                    $poDbDataEdit = [];
 
                     $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
                     $poDbDataEdit['uid'] = $uid;
@@ -1207,7 +1200,7 @@ class PurchaseOrderController extends Controller
                     $poDbDataEdit['created_by'] = Auth::user()->id;
                     $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
-                    PurchaseOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
+                    PurchaseOrder::create($poDbDataEdit);
                 }
 
             }
@@ -1230,8 +1223,8 @@ class PurchaseOrderController extends Controller
                     $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
                     $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
                     $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $poDbDataEdit['created_by'] = Auth::user()->id;
-                    $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+                    $accDbDataEdit['created_by'] = Auth::user()->id;
+                    $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
                     PurchaseOrder::create($accDbDataEdit);
                 }

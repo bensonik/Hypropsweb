@@ -23,8 +23,6 @@ class PurchaseOrder extends Model
     public static $mainRules = [
         'pref_vendor' => 'required',
         'posting_date' => 'required',
-        'due_date' => 'required',
-        'po_status' => 'required',
     ];
 
     public function user_c(){

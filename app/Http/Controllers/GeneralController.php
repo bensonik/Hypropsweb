@@ -21,6 +21,7 @@ use App\model\UnitMeasure;
 use App\model\Warehouse;
 use App\model\Tax;
 use App\model\WarehouseZone;
+use Illuminate\Support\Facades\Log;
 use View;
 use Validator;
 use Input;
@@ -179,6 +180,11 @@ class GeneralController extends Controller
             $overallSumId = $_GET['overallSumId'];
             $contactType = $_GET['contactType'];
             $currencyClass = $_GET['currencyClass'];
+            $vendCustId = $_GET['vendCustId'];
+            $postDateId = $_GET['postDateId'];
+            $billAddress = $_GET['billAddress'];
+            $currRate = $_GET['currRate'];
+            $foreignOverallSum = $_GET['foreignOverallSum'];
 
             if($pickedVal != '') {
                 $search =  ($contactType == Utility::CUSTOMER) ? VendorCustomer::searchCustomer($pickedVal) :VendorCustomer::searchVendor($pickedVal);
@@ -195,12 +201,18 @@ class GeneralController extends Controller
                 $fetchData = ($contactType == Utility::CUSTOMER) ? VendorCustomer::specialColumns('company_type', Utility::CUSTOMER) : VendorCustomer::specialColumns('company_type', Utility::VENDOR);
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
-                    ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass);
+                    ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass)
+                    ->with('vendorCustId',$vendCustId)->with('postDateId',$postDateId)
+                    ->with('billAddress',$billAddress)->with('currRate',$currRate)
+                    ->with('foreignOverallSum',$foreignOverallSum);
             }
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
-                ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass);
+                ->with('overallSumId',$overallSumId)->with('currencyClass',$currencyClass)
+                ->with('vendorCustId',$vendCustId)->with('postDateId',$postDateId)
+                ->with('billAddress',$billAddress)->with('currRate',$currRate)
+                ->with('foreignOverallSum',$foreignOverallSum);
         }
 
         //SEARCH INVENTORY
@@ -764,6 +776,7 @@ class GeneralController extends Controller
         //
         $searchId = $request->input('search_id');
         $searchData = VendorCustomer::firstRow('id',$searchId);
+        //log::info('ddddd',[$searchId => json_encode($searchData)]);
         $searchCurrency = Currency::firstRow('id',$searchData->currency_id);
         $currency = '('.$searchCurrency->code.')'.$searchCurrency->symbol;
         $amount = 1;

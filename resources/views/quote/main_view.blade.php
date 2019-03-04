@@ -34,7 +34,7 @@
                                     Preferred Customer
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_vendor" onkeyup="searchOptionListVenCust('select_vendor','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum','{{\App\Helpers\Utility::CUSTOMER}}');" name="select_user" placeholder="Select Cutomer">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_vendor" onkeyup="searchOptionListVenCust('select_vendor','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum','{{\App\Helpers\Utility::CUSTOMER}}','vendorCust','posting_date','billing_address','curr_rate','foreign_overall_sum');" name="select_user" placeholder="Select Cutomer">
 
                                             <input type="hidden" class="user_class" name="pref_customer" id="vendorCust" />
                                         </div>
@@ -360,7 +360,7 @@
 
                                 </td>
                                 <td>
-                                    <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_quote_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_quote_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay','billing_address_edit','curr_rate_edit','','')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                 <td>{{$data->quote_number}}</td>

@@ -7,7 +7,7 @@
                 Preferred Customer/Client
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->vendorCon->name}}" autocomplete="off" id="select_vendor_edit" onkeyup="searchOptionListVenCust('select_vendor_edit','myUL1_edit','{{url('default_select')}}','search_vendor_transact','vendorCust_edit','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum_edit','{{\App\Helpers\Utility::CUSTOMER}}');" name="select_user" placeholder="Select Customer">
+                        <input type="text" class="form-control" value="{{$edit->vendorCon->name}}" autocomplete="off" id="select_vendor_edit" onkeyup="searchOptionListVenCust('select_vendor_edit','myUL1_edit','{{url('default_select')}}','search_vendor_transact','vendorCust_edit','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum_edit','{{\App\Helpers\Utility::CUSTOMER}}','vendorCust_edit','posting_date_edit','billing_address_edit','curr_rate_edit','foreign_overall_sum_edit');" name="select_user" placeholder="Select Customer">
 
                         <input type="hidden" class="user_class" value="{{$edit->customer}}" name="pref_customer" id="vendorCust_edit" />
                     </div>
@@ -63,7 +63,7 @@
                 <div class="form-group">
                     Billing Address
                     <div class="form-line">
-                        <textarea class="form-control" readonly id="billing_address" value="{{$edit->vendorCon->address}}" name="billing_address" placeholder="Billing Address"></textarea>
+                        <textarea class="form-control" readonly id="billing_address_edit" value="{{$edit->vendorCon->address}}" name="billing_address" placeholder="Billing Address"></textarea>
                     </div>
                 </div>
             </div>
@@ -205,7 +205,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea class=" " name="item_desc_acc{{$num1}}" id="item_desc_acc{{$num}}" placeholder="Description">{{$po->po_desc}}</textarea>
+                                            <textarea class=" " name="item_desc_acc{{$num1}}" id="item_desc_acc{{$num}}" placeholder="Description">{{$po->quote_desc}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -387,7 +387,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea class=" " name="item_desc{{$num2}}" id="item_desc{{$num}}" placeholder="Description">{{$po->po_desc}}</textarea>
+                                            <textarea class=" " name="item_desc{{$num2}}" id="item_desc{{$num}}" placeholder="Description">{{$po->quote_desc}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -563,7 +563,7 @@
                     <b>Total Discount Percentage</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="number" class="form-control" value="{{$edit->discount_perct}}" id="total_discount_perct_edit" onkeyup="genPercentage('total_discount_perct_edit','total_discount_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_tax_amount_edit','vendorCust_edit','posting_date_edit')" name="one_time_discount_perct_edit" placeholder="Percentage" >
+                            <input type="number" class="form-control" value="{{$edit->discount_perct}}" id="total_discount_perct_edit" onkeyup="genPercentage('total_discount_perct_edit','total_discount_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_tax_amount_edit','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','vendorCust_edit','posting_date_edit','shared_discount_amount_edit')" name="one_time_discount_perct_edit" placeholder="Percentage" >
                         </div>
                     </div>
                 </div>
@@ -607,7 +607,7 @@
                     <b>Total Tax Percentage</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="number" class="form-control" value="{{$edit->tax_perct}}" id="total_tax_perct_edit" onkeyup="genPercentageTax('total_tax_perct_edit','total_tax_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')" name="one_time_discount_perct_edit" placeholder="Percentage" >
+                            <input type="number" class="form-control" value="{{$edit->tax_perct}}" id="total_tax_perct_edit" onkeyup="genPercentageTax('total_tax_perct_edit','total_tax_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_discount_amount_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','vendorCust_edit','posting_date_edit')" name="one_time_discount_perct_edit" placeholder="Percentage" >
                         </div>
                     </div>
                 </div>

@@ -1079,9 +1079,16 @@
 
     }
 
-    function editTransactForm(dataId,displayId,submitUrl,token,currencyClass,vendorCustCurrPage,vendorId){
+    function editTransactForm(dataId,displayId,submitUrl,token,currencyClass,vendorCustCurrPage,vendorId,billAddress,currRate,formContent1,formContent2){
 
         var postVars = "dataId="+dataId;
+
+        if(formContent1 != ''){
+            $('#'+formContent1).html('');
+        }
+        if(formContent2 != ''){
+            $('#'+formContent2).html('');
+        }
         $('#editModal').modal('show');
         sendRequest(submitUrl,token,postVars)
         ajax.onreadystatechange = function(){
@@ -1089,7 +1096,7 @@
 
                 var ajaxData = ajax.responseText;
                 $('#'+displayId).html(ajaxData);
-                fetchVendCustCurr(vendorId,currencyClass,vendorCustCurrPage)
+                fetchVendCustCurr(vendorId,currencyClass,vendorCustCurrPage,billAddress,currRate)
 
             }
         }
@@ -1447,11 +1454,11 @@
 
     }
 
-    function searchOptionListVenCust(searchId,listId,page,moduleType,hiddenId,currencyClass,currPage,overallSumId,contactType){
+    function searchOptionListVenCust(searchId,listId,page,moduleType,hiddenId,currencyClass,currPage,overallSumId,contactType,vendCustId,postDateId,billAddress,currRate,foreignOverallSum){
         var pickedVal = $('#'+searchId).val();
         $('#'+listId).show();
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&overallSumId='+overallSumId+'&contactType='+contactType+'&currencyClass='+currencyClass
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&overallSumId='+overallSumId+'&contactType='+contactType+'&currencyClass='+currencyClass+'&vendCustId='+vendCustId+'&postDateId='+postDateId+'&billAddress='+billAddress+'&currRate='+currRate+'&foreignOverallSum='+foreignOverallSum
         }).done(function(data){
             $('#'+listId).html(data);
         });
@@ -1475,7 +1482,7 @@
         }
     }
 
-    function fetchVendCustCurr(searchId,currencyClass,page) {
+    function fetchVendCustCurr(searchId,currencyClass,page,billAddress,currRate) {
         var pickedVal = $('#'+searchId).val();
         $.ajax({
             url:  page+'?search_id='+pickedVal
@@ -1485,9 +1492,9 @@
                 var column = all[i];
                 column.innerHTML = data.currency;
             }
-            $('#billing_address').val(data.billing_address);
-            $('#curr_rate').val(data.rate);
-            //console.log(currencyClass+'curr='+data.currency);
+            $('#'+billAddress).val(data.billing_address);
+            $('#'+currRate).val(data.rate);
+            //console.log(billAddress+'curr='+data.billing_address);
 
         });
 
@@ -1786,8 +1793,9 @@
     function convertToDefaultCurr(repId,amountId,page,vendorCustId,postDateId){
         var amount = $('#'+amountId).val();
         var vendorCust = $('#'+vendorCustId).val();
-        var postDate = $('#'+postDateId).val();
-        //console.log(amountId);
+        var postDateVal = $('#'+postDateId);
+        var postDate = (postDateVal.length >0) ? postDateVal.val() : '';
+
         $.ajax({
             url: page+'?amount=' + amount+'&vendorCust='+vendorCust+'&postDate='+postDate
         }).done(function(data){
@@ -1795,17 +1803,16 @@
         });
     }
 
-    function dropdownItemTransact(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,amountId,currPage,currencyClass,vendorCustId,postDateId) {
+    function dropdownItemTransact(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,amountId,currPage,currencyClass,vendorCustId,postDateId,convertToDefaultCurrPage,billAddress,currRate,foreignOverallSum) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
         $("#"+dropdownId).hide();
-
         var amount = $("#"+amountId).val();
-        fetchVendCustCurr(hiddenValId,currencyClass,currPage);
+        fetchVendCustCurr(hiddenValId,currencyClass,currPage,billAddress,currRate);
 
         //CONVERT SELECTED VENDOR CURRENCY TO DEFAULT CURRENCY IN CASE THERE IS EXISTING TOTAL SUM
         if(amount != 0 && amount != ''){
-            convertToDefaultCurr(hiddenValId,amountId,currPage,vendorCustId,postDateId)
+            convertToDefaultCurr(foreignOverallSum,amountId,convertToDefaultCurrPage,vendorCustId,postDateId)
         }
 
     }
@@ -1873,19 +1880,29 @@
 
     }
 
-    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId,foreignSumId,currPage,vendorCustId,postDateId){
+    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId,foreignSumId,currPage,vendorCustId,postDateId,discountSharedClass){
         var perct = $('#'+perctId);
         var overallSum = $('#'+overallSumId);
         var overallSumExcl = $('#excl_'+overallSumId);
         var perctAmount = $('#'+perctAmountId);
         var odaperctAmount = $('#'+odaPerctAmountId);
+        var sumToArrayDiscount = classToArray(discountSharedClass);
+        var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
+
+        var sumToArray = classToArray(sharedSumClass);
+        var sumArrayInclTax = sumArrayItems(sumToArray);
+
         var vendCustVal = $('#'+vendCustId).val();
         if(vendCustVal != '' && overallSum.val() != ''){
-            var overallSumVal = overallSumExcl.val();
+            //GET OVERALL SUM WITHOUT TAX AND DISCOUNT INCLUSIVE
+            var overallSumVal = parseInt(sumArrayInclTax)+parseInt(odaperctAmount.val())+sumArrayDiscount;
+
+            //GET PERCENTAGE DISCOUNT AMOUNT
             var percentage = (perct.val()*overallSumVal)/100;
-            perctAmount.val(decPoints(percentage,2));
-            overallSum.val(decPoints(((overallSumVal)-percentage)-odaperctAmount.val(),2));
-            var newTotal = (overallSumVal-percentage)-odaperctAmount.val();
+            perctAmount.val(decPoints(percentage,2));   // DISPLAY PERCENTAGE AMOUNT
+            overallSum.val(decPoints((overallSumVal-percentage)-odaperctAmount.val(),2)); //DISPLAY OVERALL SUM INCLUDING TAX AND DISCOUNT AMOUNT
+            overallSumExcl.val(decPoints((overallSumVal-percentage),2)); //DISPLAY OVERALL SUM WITHOUT TAX
+
 
             convertToDefaultCurr(foreignSumId,overallSumId,currPage,vendorCustId,postDateId);
 
@@ -1902,12 +1919,13 @@
         var perctAmount = $('#'+perctAmountId);
         var odaperctAmount = $('#'+odaPerctAmountId);
         var vendCustVal = $('#'+vendCustId).val();
+        console.log(vendorCustId);
         if(vendCustVal != '' && overallSum.val() != ''){
             var overallSumVal = overallSumExcl.val();
             var percentage = (perct.val()*overallSumVal)/100;
             perctAmount.val(decPoints(percentage,2));
-            overallSum.val(decPoints(((overallSumVal)-percentage)-odaperctAmount.val(),2));
-            var newTotal = (overallSumVal-percentage)-odaperctAmount.val();
+            overallSum.val(decPoints(((overallSumVal)-percentage),2));
+            var newTotal = (overallSumVal-percentage);
             //exclTax(overallSumId,perctAmountId,'excl_'+overallSumId);
             convertToDefaultCurr(foreignSumId,overallSumId,currPage,vendorCustId,postDateId);
 
