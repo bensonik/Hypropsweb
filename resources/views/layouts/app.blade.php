@@ -732,6 +732,15 @@
                         <li>
                             <a href="{{url('my_requests')}}">Requisition Approval</a>
                         </li>
+                        <li>
+                            <a href="{{url('approved_requests')}}">Requisition Reports</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
+                            <li>
+                                <a href="{{url('finance_requests')}}">Finance Request Approval</a>
+                            </li>
+
+                        @endif
                     </ul>
                 </li>
 

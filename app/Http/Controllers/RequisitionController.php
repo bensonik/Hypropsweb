@@ -69,6 +69,26 @@ class RequisitionController extends Controller
 
     }
 
+    public function approveFinanceRequests(Request $request)
+    {
+        //
+        $all_id = json_decode($request->input('all_data'));
+
+        $dbData = [
+            'finance_status' => Utility::APPROVED,
+        ];
+
+        $updateApproval = Requisition::massUpdate('id',$all_id,$dbData);
+
+        return response()->json([
+            'message2' => 'saved',
+            'message' => 'Payment(s) has been processed'
+        ]);
+
+
+
+    }
+
     public function loanRequests(Request $request)
     {
         //
@@ -159,6 +179,62 @@ class RequisitionController extends Controller
 
     }
 
+    public function financeRequests(Request $request)
+    {
+        //
+        //$req = new Request();
+        $approveSys = ApprovalSys::getAllData();
+        $approveAccess = Approve::approveAccess($approveSys);
+        $mainData = Requisition::specialColumnsPage3('complete_status',Utility::STATUS_ACTIVE,'finance_status',Utility::ZERO,'approval_status',Utility::STATUS_ACTIVE);
+
+        $this->filterData($mainData);
+        $reqCat = RequestCategory::getAllData();
+        $requestType = RequestType::getAllData();
+        $project = ProjectTeam::specialColumns('user_id',Auth::user()->id);
+        $currSymbol = session('currency')['symbol'];
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('requisition.finance_request_reload',array('mainData' => $mainData,
+                'reqType' => $requestType,'project' => $project, 'reqCat' => $reqCat, 'appAccess' => $approveAccess,
+                'curr_symbol' => $currSymbol))->render());
+
+        }else{
+            return view::make('requisition.finance_request')->with('mainData',$mainData)->with('reqType',$requestType)
+                ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
+                ->with('curr_symbol',$currSymbol);
+        }
+
+    }
+
+    public function approvedRequests(Request $request)
+    {
+        //
+        //$req = new Request();
+        $approveSys = ApprovalSys::getAllData();
+        $approveAccess = Approve::approveAccess($approveSys);
+        $mainData = (in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT)) ? Requisition::paginateAllData() : Requisition::specialColumnsPageOr2('request_user',Auth::user()->id,'created_by',Auth::user()->id);
+
+        $this->filterData($mainData);
+        $reqCat = RequestCategory::getAllData();
+        $requestType = RequestType::getAllData();
+        $project = ProjectTeam::specialColumns('user_id',Auth::user()->id);
+        $currSymbol = session('currency')['symbol'];
+
+        $requestAccess = RequestAccess::getAllData();
+        $access = Utility::detectRequestAccess($requestAccess);
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('requisition.approved_requests_reload',array('mainData' => $mainData,
+                'reqType' => $requestType,'project' => $project, 'reqCat' => $reqCat, 'appAccess' => $approveAccess,
+                'curr_symbol' => $currSymbol,'access' => $access))->render());
+
+        }else{
+            return view::make('requisition.approved_requests')->with('mainData',$mainData)->with('reqType',$requestType)
+                ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
+                ->with('curr_symbol',$currSymbol)->with('access',$access);
+        }
+
+    }
 
     /**
      * Show the form for creating a new resource.

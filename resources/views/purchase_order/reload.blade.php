@@ -41,8 +41,8 @@
             <td>{{$data->ship_to_contact}}</td>
             <td>{{$data->purchase_status}}</td>
             <td>{{$data->UserDetail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
-            <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{$data->sum_total}}</td>
-            <td>{{$data->trans_total}}</td>
+            <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{number_format($data->sum_total)}}</td>
+            <td>{{number_format($data->trans_total)}}</td>
             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->

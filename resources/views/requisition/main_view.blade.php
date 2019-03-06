@@ -217,6 +217,7 @@
                             <th>Requested by</th>
                             <th>Department</th>
                             <th>Approval Status</th>
+                            <th>Finance Status</th>
                             <th>Approved by</th>
                             <th>Created by</th>
                             <th>Updated by</th>
@@ -258,6 +259,14 @@
                                 @endif
                                 @if($data->approval_status === 2)
                                     Request Denied
+                                @endif
+                            </td>
+                            <td>
+                                @if($data->finance_status === 0)
+                                    Processing
+                                @endif
+                                @if($data->approval_status === 1)
+                                    Complete and Ready for Print
                                 @endif
                             </td>
                             <td>

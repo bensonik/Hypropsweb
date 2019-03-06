@@ -1035,6 +1035,35 @@
 
     }
 
+    function approveFinanceRequest(klass,reloadId,reloadUrl,submitUrl,token,status) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "You are about to complete these request(s) ?",
+                    text: "Do you with to continue!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
+                        swal("Processed!", "Request(s) have been processed.", "success");
+                    } else {
+                        swal("Cancelled", "Request processing Cancelled :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
     function editForm(dataId,displayId,submitUrl,token){
 
         var postVars = "dataId="+dataId;
