@@ -212,5 +212,38 @@ class Requisition extends Model
 
     }
 
+    ///////////////////////////////
+
+    public static function specialArrayColumnsPage2($column, $post, $column2, $post2)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->whereIn($column2,$post2)->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
+    public static function specialArrayColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->whereIn($column2, $post2)->whereIn($column3, $post3)->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
+    public static function specialArraySingleColumnsPage2($column, $post, $column2, $post2)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->where($column2, '=',$post2)->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
+    public static function specialArraySingleColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->whereIn($column2, $post2)->where($column3, $post3)->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
 
 }

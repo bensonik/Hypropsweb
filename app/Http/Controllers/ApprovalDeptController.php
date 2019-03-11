@@ -6,6 +6,7 @@ use App\model\ApprovalDept;
 use App\Helpers\Utility;
 use App\model\ApprovalSys;
 use App\model\Department;
+use App\model\Requisition;
 use App\User;
 use Auth;
 use View;
@@ -130,7 +131,16 @@ class ApprovalDeptController extends Controller
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    Department::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
+                    $activeApprovalSys = Requisition::specialColumns2('dept_id',$rowData[0]->dept_id,'approval_id',$rowData[0]->approval_id,'complete_status',Utility::ZERO);
+                    if(!empty($activeApprovalSys)){
+                        return response()->json([
+                            'message' => 'warning',
+                            'message2' => 'Ensure there are no pending requests for approval for this department'
+                        ]);
+                    }
+
+                        Department::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -146,6 +156,16 @@ class ApprovalDeptController extends Controller
                 }
 
             } else{
+
+                //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
+                $activeApprovalSys = Requisition::specialColumns2('dept_id',$rowData[0]->dept_id,'approval_id',$rowData[0]->approval_id,'complete_status',Utility::ZERO);
+                if(!empty($activeApprovalSys)){
+                    return response()->json([
+                        'message' => 'warning',
+                        'message2' => 'Ensure there are no pending requests for approval for this department'
+                    ]);
+                }
+
                 ApprovalDept::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([

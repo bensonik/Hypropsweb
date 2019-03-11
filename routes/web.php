@@ -122,7 +122,7 @@ Route::any('/my_requests', 'RequisitionController@myRequests')->name('my_request
 Route::any('/salary_advance_requests', 'RequisitionController@salaryAdvanceRequests')->name('salary_advance_requests')->middleware('auth');
 Route::any('/finance_requests', 'RequisitionController@financeRequests')->name('finance_requests')->middleware('auth');
 Route::any('/approved_requests', 'RequisitionController@approvedRequests')->name('approved_requests')->middleware('auth');
-Route::any('/search_requests', 'RequisitionController@searchRequests')->name('search_requests')->middleware('auth');
+Route::any('/table_request_report', 'RequisitionController@tableRequestReport')->name('table_request_report')->middleware('auth');
 Route::any('/print_request', 'RequisitionController@searchRequests')->name('print_request')->middleware('auth');
 Route::any('/loan_requests', 'RequisitionController@loanRequests')->name('loan_requests')->middleware('auth');
 Route::post('/create_requisition', 'RequisitionController@create')->name('create_requisition');

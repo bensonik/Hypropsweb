@@ -76,6 +76,7 @@ class Utility
     const SALES_DESC = 2, PURCHASE_DESC = 1;
     const POST_RECEIPT = 1, CREATE_RECEIPT = 2;
     const PUT_AWAY = 1, PICK = 2;
+    const ALL_DATA = 0, SELECTED = 1;
 
 
     public static function IMG_URL(){

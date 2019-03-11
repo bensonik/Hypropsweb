@@ -47,7 +47,8 @@
     <link rel="stylesheet" href="{{ asset('sweetalert/dist/sweetalert.css') }}">
     <!-- SummerNote Css -->
     <link rel="stylesheet" href="{{ asset('summernote/dist/summernote.css') }}">
-
+    <!-- Multiselect Css -->
+    <link rel="stylesheet" href="{{ asset('multiselect/dist/css/bootstrap-multiselect.css') }}">
     <!-- Jquery Core Js -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
@@ -1433,6 +1434,7 @@
 
 <script src="{{ asset('sweetalert/dist/sweetalert.js') }}"></script>
 <script src="{{ asset('summernote/dist/summernote.js') }}"></script>
+<script src="{{ asset('multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
 <!-- Waves Effect Plugin Js -->
 <script src="{{ asset('plugins/node-waves/waves.js') }}"></script>
 <!-- App Custom Helpers -->

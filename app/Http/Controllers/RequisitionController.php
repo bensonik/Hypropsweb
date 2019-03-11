@@ -219,6 +219,7 @@ class RequisitionController extends Controller
         $requestType = RequestType::getAllData();
         $project = ProjectTeam::specialColumns('user_id',Auth::user()->id);
         $currSymbol = session('currency')['symbol'];
+        $dept = Department::getAllData();
 
         $requestAccess = RequestAccess::getAllData();
         $access = Utility::detectRequestAccess($requestAccess);
@@ -226,12 +227,12 @@ class RequisitionController extends Controller
         if ($request->ajax()) {
             return \Response::json(view::make('requisition.approved_requests_reload',array('mainData' => $mainData,
                 'reqType' => $requestType,'project' => $project, 'reqCat' => $reqCat, 'appAccess' => $approveAccess,
-                'curr_symbol' => $currSymbol,'access' => $access))->render());
+                'curr_symbol' => $currSymbol,'access' => $access,'dept'=>$dept))->render());
 
         }else{
             return view::make('requisition.approved_requests')->with('mainData',$mainData)->with('reqType',$requestType)
                 ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
-                ->with('curr_symbol',$currSymbol)->with('access',$access);
+                ->with('curr_symbol',$currSymbol)->with('access',$access)->with('dept',$dept);
         }
 
     }
@@ -885,6 +886,121 @@ class RequisitionController extends Controller
        //END FOR NORMAL USER DELETE
 
     }
+
+    public function allOrSome($array){
+        $data = '';
+        $mainData = '';
+        foreach($array as $var){
+            if($var == 0){
+                $data = 0;
+            }
+        }
+        if($data == 0 && count($array) >0){
+            $mainData = Utility::ALL_DATA;
+        }
+        if($data == '' && count($array) >0){
+            $mainData = Utility::SELECTED;
+        }
+        return $mainData;
+
+    }
+
+    public function valdDeptUsers($dept1,$users1){
+
+        $users = count($users1);
+        $dept = count($dept1);
+
+        if($dept > 0 && $users == ''){
+            $data = 1;
+        }
+        if($dept > 0 && $users != ''){
+            $data = 1;
+        }
+        if($dept < 1 && $users != ''){
+            $data = 0;
+        }
+        return $data;
+
+    }
+
+    public function valSelType($type){
+        $dataType = '';
+        if($type == Utility::USUAL_REQUEST_TYPE){
+            $dataType = Utility::USUAL_REQUEST_TYPE;
+        }
+        if($type == Utility::PROJECT_REQUEST_TYPE){
+            $dataType =  Utility::PROJECT_REQUEST_TYPE;
+        }
+        if($type == Utility::ALL_DATA){
+            $dataType = Utility::ALL_DATA;
+        }
+        return $dataType;
+    }
+
+    public function valReqType($reqType){
+        $type = '';
+        if($reqType == '1' || $reqType == '2'){
+            $type = 1;
+        }
+        if($reqType == '0'){
+            $type = 0;
+        }
+        return $type;
+    }
+
+    public function tableRequestReport(Request $request){
+
+        $dept = $request->input('department');
+        $user = $request->input('user');
+        $category = $request->input('request_category');
+        $type = $request->input('request_type');
+        $project = $request->input('project');
+        $query = '';
+
+        //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+             $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+            }
+            //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialArrayColumnsPage2('req_cat',$category,'req_type',$type);
+            }
+
+            //DEPARTMENT,CATEGORY,TYPE SELECTED
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+                }
+            }
+
+            //DEPARTMENT IS ALL,CATEGORY,TYPE SELECTED
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'proj_id',$project);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'proj_id',$project);
+                }
+            }
+
+        }
+
+        
+
+    }
+
 
     /**
      * Remove the specified resource from storage.

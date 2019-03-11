@@ -459,7 +459,12 @@
     }
 
     function searchOptionList(searchId,listId,page,moduleType,hiddenId){
-        var pickedVal = $('#'+searchId).val();
+        var pickedValGet = $('#'+searchId);
+        var pickedVal = pickedValGet.val();
+        var hiddenValGet = $('#'+hiddenId);
+        if(pickedVal == ''){
+            hiddenValGet.val('');
+        }
         $('#'+listId).show();
         $.ajax({
             url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId
