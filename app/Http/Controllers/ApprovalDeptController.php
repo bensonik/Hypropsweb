@@ -128,12 +128,13 @@ class ApprovalDeptController extends Controller
                 'status' => Utility::STATUS_ACTIVE
             ];
             $rowData = ApprovalDept::specialColumns('dept', $request->input('dept'));
+            $rowData2 = ApprovalDept::specialColumns('id', $request->input('edit_id'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
                     //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
-                    $activeApprovalSys = Requisition::specialColumns2('dept_id',$rowData[0]->dept_id,'approval_id',$rowData[0]->approval_id,'complete_status',Utility::ZERO);
-                    if(!empty($activeApprovalSys)){
+                    $activeApprovalSys = Requisition::specialColumns3('dept_id',$rowData2[0]->dept_id,'approval_id',$rowData2[0]->approval_id,'complete_status',Utility::ZERO);
+                    if($activeApprovalSys->count() >0){
                         return response()->json([
                             'message' => 'warning',
                             'message2' => 'Ensure there are no pending requests for approval for this department'
@@ -158,8 +159,13 @@ class ApprovalDeptController extends Controller
             } else{
 
                 //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
-                $activeApprovalSys = Requisition::specialColumns2('dept_id',$rowData[0]->dept_id,'approval_id',$rowData[0]->approval_id,'complete_status',Utility::ZERO);
-                if(!empty($activeApprovalSys)){
+                /*return response()->json([
+                    'message' => 'warning',
+                    'message2' => json_encode($rowData)//'dept_id'.$rowData[0]->dept_id.'approval_id'.$rowData[0]->approval_id.'complete_status',Utility::ZERO
+                ]);*/
+
+                $activeApprovalSys = Requisition::specialColumns3('dept_id',$rowData2[0]->dept,'approval_id',$rowData2[0]->approval_id,'complete_status',Utility::ZERO);
+                if($activeApprovalSys->count() >0){
                     return response()->json([
                         'message' => 'warning',
                         'message2' => 'Ensure there are no pending requests for approval for this department'

@@ -318,6 +318,13 @@ class RequisitionController extends Controller
             $reqDept = ($request->input('user') == null) ? Auth::user()->dept_id : $user->dept_id ;
 
             $approveDept = ApprovalDept::firstRow('dept',$reqDept);
+            if(empty($approveDept)){
+                return response()->json([
+                    'message' => 'warning',
+                    'message2' => 'There is no approval system assigned to your department, contact admin for help'
+                ]);
+            }
+
             $approveSys = ApprovalSys::firstRow('id',$approveDept->approval_id);
             $acctCat = RequestCategory::firstRow('id',$request->input('request_category'));
             $project = $request->input('project');
@@ -330,10 +337,7 @@ class RequisitionController extends Controller
             $appUser = [];
 
             Approve::processApproval($approvalArray,$approvalLevel,$approvalUsers,$approveUsers,$approveLevels,$appLevel,$appUser,$holdUser);
-            /*return response()->json([
-                            'message' => 'good',
-                            'message2' => json_encode($approvalUsers)
-                        ]);*/
+
             if($holdUser != '') {
                 $firstUser = User::firstRow('id', $holdUser);
                 $email = $firstUser->email;
@@ -890,6 +894,7 @@ class RequisitionController extends Controller
     public function allOrSome($array){
         $data = '';
         $mainData = '';
+        if(count($array) >0){
         foreach($array as $var){
             if($var == 0){
                 $data = 0;
@@ -901,6 +906,12 @@ class RequisitionController extends Controller
         if($data == '' && count($array) >0){
             $mainData = Utility::SELECTED;
         }
+
+            $mainData = Utility::SELECTED;
+        }else{
+            $mainData = Utility::ALL_DATA;
+        }
+
         return $mainData;
 
     }
@@ -909,6 +920,7 @@ class RequisitionController extends Controller
 
         $users = count($users1);
         $dept = count($dept1);
+        $data = '';
 
         if($dept > 0 && $users == ''){
             $data = 1;
@@ -955,49 +967,211 @@ class RequisitionController extends Controller
         $category = $request->input('request_category');
         $type = $request->input('request_type');
         $project = $request->input('project');
-        $query = '';
+        $fromDate = Utility::standardDate($request->input('from_date'));
+        $toDate = Utility::standardDate($request->input('to_date'));
 
+        if($toDate < $fromDate){
+            return  response()->json([
+                'message2' => 'Please ensure that the start/from date is less than the end/to date',
+                'message' => 'warning'
+            ]);
+        }
+
+        $dateArray = [$fromDate,$toDate];
+        $query = [];
+
+        //FIRST CONDITION
         //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
-        if($this->valdDeptUsers($dept,$user)== Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
+        if($this->valdDeptUsers($dept,$user)== '1' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
-            if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-             $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+             $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
             }
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
-            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-                $query = Requisition::specialArrayColumnsPage2('req_cat',$category,'req_type',$type);
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'req_type',$type,$dateArray);
             }
 
             //DEPARTMENT,CATEGORY,TYPE SELECTED
-            if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'req_type',$type);
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
 
             //DEPARTMENT IS ALL,CATEGORY,TYPE SELECTED
-            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($category) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'proj_id',$project);
+                if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($type) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPage3('dept_id',$dept,'req_cat',$category,'proj_id',$project);
+                if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
 
         }
 
-        
+        //SECOND CONDITION
+        //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialArraySingleColumns2PageDate3('req_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
+            }
+
+            //USER,CATEGORY,TYPE SELECTED
+            if($this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY,USER SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialArraySingleColumns2PageDate3('req_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate3('req_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
+                }
+            }
+
+
+        }
+
+        //THIRD CONDITION
+        //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== '1' && $this->allOrSome($category) == Utility::ALL_DATA && $this->valReqType($type) == '1'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
+            }
+            //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialColumnsPageDate('req_type',$type,$dateArray);
+            }
+
+            //DEPARTMENT,CATEGORY ALL,TYPE SELECTED
+            if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'proj_id',$project,$dateArray);
+                }
+            }
+
+            //DEPARTMENT IS ALL,CATEGORY ALL,TYPE SELECTED
+            if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY ALL,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'proj_id',$project,$dateArray);
+                }
+            }
+
+        }
+
+        //FOURTH CONDITION
+        //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::ALL_DATA && $this->valReqType($type) == '1'){
+
+            //DEPARTMENT,CATEGORY ALL, TYPE IS ALL
+            if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+                $query = Requisition::specialColumnsPageDate2('req_user',$user,'req_type',$type,$dateArray);
+            }
+
+            //USER,CATEGORY,TYPE SELECTED
+            if($this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
+
+                //PROJECT IS ALL,CATEGORY IS ALL,USER SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                    $query = Requisition::specialColumnsPageDate2('req_user',$user,'req_type',$type,$dateArray);
+                }
+                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+                    $query = Requisition::specialArrayColumnsPageDate3('req_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
+                }
+            }
+
+
+        }
+
+        //FIFTH CONDITION
+        //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== '1' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '0'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::SELECTED){
+                $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'dept_id',$dept,$dateArray);
+            }
+
+            //DEPARTMENT IS ALL,CATEGORY ALL, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::ALL_DATA){
+                $query = Requisition::specialArrayColumnsPageDate('req_cat',$category,$dateArray);
+            }
+
+        }
+
+        //SIXTH CONDITION
+        //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
+        if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '0'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($category) == Utility::SELECTED){
+                $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'req_user',$user,$dateArray);
+            }
+
+        }
+
+        //SEVENTH CONDITION
+        //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS ALL, CATEGORY ALL
+        if($this->valdDeptUsers($dept,$user)== '1' && $this->allOrSome($category) == Utility::ALL_DATA && $this->valReqType($type) == '0'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::SELECTED){
+                $query = Requisition::specialArrayColumnsPageDate('dept_id',$dept,$dateArray);
+            }
+
+            //DEPARTMENT IS ALL,CATEGORY ALL, TYPE IS ALL
+            if($this->allOrSome($dept) == Utility::ALL_DATA){
+                $query = Requisition::paginateAllDataDate($dateArray);
+            }
+
+        }
+
+        //EIGHT CONDITION
+        //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS ALL, CATEGORY ALL
+        if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::ALL_DATA && $this->valReqType($type) == '0'){
+
+            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            if($this->allOrSome($category) == Utility::SELECTED){
+                $query = Requisition::specialColumnsPageDate('req_user',$user,$dateArray);
+            }
+
+        }
+
+        if(!empty($query)){
+            return view::make('requisition.table_request_report')->with('mainData',$query);
+        }else{
+            return 'Match not found';
+        }
+
 
     }
 

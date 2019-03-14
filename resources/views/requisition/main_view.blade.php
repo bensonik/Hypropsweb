@@ -60,7 +60,7 @@
                                             <select  class="form-control"  id="" name="project" >
                                                 <option value="">Select Project</option>
                                                 @foreach($project as $ap)
-                                                    <option value="{{$ap->id}}">{{$ap->project->project_name}}</option>
+                                                    <option value="{{$ap->project->id}}">{{$ap->project->project_name}}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -210,6 +210,7 @@
                             <th>Manage</th>
                             <th>Attachment</th>
                             <th>Description</th>
+                            <th>Edited</th>
                             <th>Request Category</th>
                             <th>Request Type</th>
                             <th>Project Category</th>
@@ -240,6 +241,14 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->req_desc}}</td>
+                            <td>
+                                @if($data->edit_request != '')
+                                    <?php $edited = json_decode($data->edit_request,true); ?>
+                                    @foreach($edited as $key => $val)
+                                        {{$key}} : {{$val}}<br>
+                                    @endforeach
+                                @endif
+                            </td>
                             <td>{{$data->requestCat->request_name}}</td>
                             <td>{{$data->requestType->request_type}}</td>
                             <td>
@@ -265,7 +274,7 @@
                                 @if($data->finance_status === 0)
                                     Processing
                                 @endif
-                                @if($data->approval_status === 1)
+                                @if($data->finance_status === 1)
                                     Complete and Ready for Print
                                 @endif
                             </td>
@@ -291,6 +300,10 @@
                                     </tr>
                                     </tbody>
                                 </table>
+                                @else
+                                    @if($data->approval_status === 1)
+                                        {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+                                    @endif
                                 @endif
                             </td>
                             <td>

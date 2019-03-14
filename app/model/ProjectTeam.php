@@ -37,11 +37,11 @@ class ProjectTeam extends Model
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept','id');
+        return $this->belongsTo('App\model\Department','dept','id')->withDefault();
 
     }
     public function member(){
-        return $this->belongsTo('App\User','user_id','id');
+        return $this->belongsTo('App\User','user_id','id')->withDefault();
 
     }
 
@@ -51,7 +51,7 @@ class ProjectTeam extends Model
     }
 
     public function project(){
-        return $this->belongsTo('App\model\Project','project_id','id');
+        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
 
     }
 

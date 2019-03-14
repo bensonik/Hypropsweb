@@ -37,16 +37,16 @@ class RequestCategory extends Model
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
     public function hod(){
-        return $this->belongsTo('App\User','dept_head','id');
+        return $this->belongsTo('App\User','dept_head','id')->withDefault();
 
     }
 
     public function account_cat(){
-        return $this->belongsTo('App\model\AccountCategory','acct_id','id');
+        return $this->belongsTo('App\model\AccountCategory','acct_id','id')->withDefault();
 
     }
 

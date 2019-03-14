@@ -72,15 +72,7 @@
                         Payroll
                     </h2>
                     <ul class="header-dropdown m-r--5">
-                        <!--<li>
-                            <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
-                        </li>-->
-                        {{--<li>
-                            <button type="button" onclick="processPayroll('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
-                                    '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','1','payrollForm');" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i>Process Payment
-                            </button>
-                        </li>--}}
+
                         <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
                                     '<?php echo url('delete_payroll'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
@@ -323,71 +315,33 @@
         /*==================== PAGINATION =========================*/
 
         $(window).on('hashchange',function(){
-            //page = window.location.hash.replace('#','');
-            //getProducts(page);
+            page = window.location.hash.replace('#','');
+            getData(page);
         });
 
         $(document).on('click','.pagination a', function(e){
             e.preventDefault();
             var page = $(this).attr('href').split('page=')[1];
-            getProducts(page);
+            getData(page);
             //location.hash = page;
         });
 
-        function getProducts(page){
+        function getData(page){
 
-            var searchVar = $('#search_user').val();
-            var searchPage = document.getElementsByClassName('search_user_page');
-            var targetPage = '';
-            if (searchPage.length > 0) {
-                targetPage = '<?php echo url('search_payroll_user'); ?>?searchVar='+searchVar+'&page='+page
-                console.log(targetPage);
+            var searchVal = $('#search_user').val();
+            var pageData = '';
+            if(searchVal == ''){
+                pageData = '?page=' + page;
             }else{
-                targetPage = '?page=' + page;
+                pageData = '<?php echo url('search_payroll_user') ?>?page=' + page+'&searchVar='+searchVal;
             }
 
             $.ajax({
-                url: targetPage
+                url: pageData
             }).done(function(data){
                 $('#reload_data').html(data);
             });
         }
-
-    </script>
-
-    <script>
-        /*==================== PAGINATION =========================*/
-
-        /*$(window).on('hashchange',function(){
-            //page = window.location.hash.replace('#','');
-            //getSearchData(page);
-        });
-
-        $(document).on('click','.pagination a', function(event){
-            event.preventDefault();
-
-            /!* $('li').removeClass('active');
-
-             $(this).parent('li').addClass('active');
-
-             var myurl = $(this).attr('href');*!/
-
-            var page=$(this).attr('href').split('page=')[1];
-            getSearchData(page);
-            //location.hash = page;
-        });
-
-        function getSearchData(page){
-            var searchVar = $('#search_user').val();
-            console.log(searchVar+'slkds');
-
-            $.ajax({
-                url: '<?php echo url('search_payroll_user'); ?>?searchVar='+searchVar+'&page='+page
-            }).done(function(data){
-                $('#reload_data').html(data);
-            });
-        }
-*/
     </script>
 
     <script>

@@ -23,7 +23,7 @@ class Utility
 
     const DEFAULT_LOGO = 'logo.jpg';
     const STATUS_INACTIVE = 2, STATUS_ACTIVE = 1, STATUS_DELETED = 0;
-    const USER_ROLES_ARRAY = [4,5,6,7,8];
+    const USER_ROLES_ARRAY = [2,3,4,5,6,7,8,9,10];
     const PROCESSING = 0, APPROVED = 1, DENIED = 2, COMPLETED = 1;
     const USUAL_REQUEST_TYPE = 1, PROJECT_REQUEST_TYPE = 2;
     const TOP_USERS = [1,2,3], ACCOUNTANTS = 5, HR_MANAGEMENT = [1,2,3,6], ACCOUNT_MANAGEMENT = [1,2,3,5],

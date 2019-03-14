@@ -214,35 +214,81 @@ class Requisition extends Model
 
     ///////////////////////////////
 
-    public static function specialArrayColumnsPage2($column, $post, $column2, $post2)
+    public static function specialArrayColumnsPageDate($column, $post,$dateArray)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2,$post2)->orderBy('id','DESC')->paginate(Utility::P50);
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->paginate(Utility::P50);
 
     }
 
-    public static function specialArrayColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
+    public static function specialArrayColumnsPageDate2($column, $post, $column2, $post2,$dateArray)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2, $post2)->whereIn($column3, $post3)->orderBy('id','DESC')->paginate(Utility::P50);
+            ->whereIn($column2,$post2)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P50);
 
     }
 
-    public static function specialArraySingleColumnsPage2($column, $post, $column2, $post2)
+    public static function specialArrayColumnsPageDate3($column, $post, $column2, $post2, $column3, $post3,$dateArray)
     {
-
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->where($column2, '=',$post2)->orderBy('id','DESC')->paginate(Utility::P50);
+            ->whereIn($column2, $post2)->whereIn($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P50);
 
     }
 
-    public static function specialArraySingleColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
+    public static function specialArraySingleColumns1PageDate2($column, $post, $column2, $post2,$dateArray)
     {
 
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2, $post2)->where($column3, $post3)->orderBy('id','DESC')->paginate(Utility::P50);
+            ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
+    public static function specialArraySingleColumns2PageDate3($column, $post, $column2, $post2, $column3, $post3,$dateArray)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
+    public static function specialColumnsPageDate3($column, $post, $column2, $post2, $column3, $post3,$dateArray)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function specialColumnsPageDate($column, $post,$dateArray)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function specialColumnsPageDate2($column, $post, $column2, $post2,$dateArray)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function paginateAllDataDate($dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate('15');
+        //return Utility::paginateAllData(self::table());
 
     }
 

@@ -30,7 +30,7 @@ class UsersController extends Controller
         //
         //$req = new Request();
         $roles = Roles::getAllData();
-        $mainData =  (Auth::user()->id == 3 || Auth::user()->id == 6) ? User::massData('role', Utility::USER_ROLES_ARRAY) :User::paginateAllData();
+        $mainData =  User::paginateAllData();
         $position = Position::getAllData();
         $salary = SalaryStructure::getAllData();
         $department = Department::getAllData();
@@ -324,8 +324,7 @@ class UsersController extends Controller
         }*/
 
         $user_ids = array_unique($obtain_array);
-        $mainData =  (Auth::user()->id == 3) ? User::massDataMassConditionPaginate('uid',$user_ids,'role',Utility::USER_ROLES_ARRAY)
-                        :User::massDataPaginate('uid', $user_ids);
+        $mainData =  User::massDataPaginate('uid', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 
