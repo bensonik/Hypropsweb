@@ -894,12 +894,15 @@ class RequisitionController extends Controller
     public function allOrSome($array){
         $data = '';
         $mainData = '';
-        if(count($array) >0){
-        foreach($array as $var){
-            if($var == 0){
-                $data = 0;
-            }
+        if($array != ''){
+            if(count($array) >0){
+                foreach($array as $var){
+                    if($var == 0){
+                        $data = 0;
+                    }
+                }
         }
+
         if($data == 0 && count($array) >0){
             $mainData = Utility::ALL_DATA;
         }
@@ -916,21 +919,25 @@ class RequisitionController extends Controller
 
     }
 
-    public function valdDeptUsers($dept1,$users1){
+    public function valdDeptUsers($dept1,$users){
 
-        $users = count($users1);
-        $dept = count($dept1);
         $data = '';
+        if($dept1 != ''){
+            $dept = count($dept1);
+            if($dept > 0 && $users == ''){
+                $data = 1;
+            }
+            if($dept > 0 && $users != ''){
+                $data = 1;
+            }
+            if($dept < 1 && $users != ''){
+                $data = 0;
+            }
 
-        if($dept > 0 && $users == ''){
-            $data = 1;
-        }
-        if($dept > 0 && $users != ''){
-            $data = 1;
-        }
-        if($dept < 1 && $users != ''){
+        }else{
             $data = 0;
         }
+
         return $data;
 
     }
@@ -970,15 +977,18 @@ class RequisitionController extends Controller
         $fromDate = Utility::standardDate($request->input('from_date'));
         $toDate = Utility::standardDate($request->input('to_date'));
 
-        if($toDate < $fromDate){
-            return  response()->json([
-                'message2' => 'Please ensure that the start/from date is less than the end/to date',
-                'message' => 'warning'
-            ]);
-        }
-
         $dateArray = [$fromDate,$toDate];
         $query = [];
+
+        /*return  response()->json([
+            'message2' => json_encode($dateArray),
+            'message' => 'warning'
+        ]);*/
+        if($toDate < $fromDate){
+            return  'Please ensure that the start/from date is less than the end/to date';
+        }
+
+
 
         //FIRST CONDITION
         //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
@@ -986,7 +996,7 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-             $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
+             $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
             }
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
@@ -998,7 +1008,7 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
+                    $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
@@ -1011,7 +1021,7 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
+                    $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
@@ -1027,7 +1037,7 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-                $query = Requisition::specialArraySingleColumns2PageDate3('req_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
+                $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
             }
 
             //USER,CATEGORY,TYPE SELECTED
@@ -1035,11 +1045,11 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,USER SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialArraySingleColumns2PageDate3('req_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
+                    $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
-                    $query = Requisition::specialArrayColumnsPageDate3('req_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
+                    $query = Requisition::specialArrayColumnsPageDate3('request_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
 
@@ -1093,7 +1103,7 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY ALL, TYPE IS ALL
             if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-                $query = Requisition::specialColumnsPageDate2('req_user',$user,'req_type',$type,$dateArray);
+                $query = Requisition::specialColumnsPageDate2('request_user',$user,'req_type',$type,$dateArray);
             }
 
             //USER,CATEGORY,TYPE SELECTED
@@ -1101,11 +1111,11 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY IS ALL,USER SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialColumnsPageDate2('req_user',$user,'req_type',$type,$dateArray);
+                    $query = Requisition::specialColumnsPageDate2('request_user',$user,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
-                    $query = Requisition::specialArrayColumnsPageDate3('req_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
+                    $query = Requisition::specialArrayColumnsPageDate3('request_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
 
@@ -1134,7 +1144,7 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($category) == Utility::SELECTED){
-                $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'req_user',$user,$dateArray);
+                $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'request_user',$user,$dateArray);
             }
 
         }
@@ -1161,12 +1171,13 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($category) == Utility::SELECTED){
-                $query = Requisition::specialColumnsPageDate('req_user',$user,$dateArray);
+                $query = Requisition::specialColumnsPageDate('request_user',$user,$dateArray);
             }
 
         }
 
         if(!empty($query)){
+            $this->filterData($query);
             return view::make('requisition.table_request_report')->with('mainData',$query);
         }else{
             return 'Match not found';

@@ -6,6 +6,7 @@ use App\model\RequestCategory;
 use App\model\AccountCategory;
 use App\model\Department;
 use App\Helpers\Utility;
+use App\model\Requisition;
 use App\User;
 use Auth;
 use View;
@@ -194,6 +195,8 @@ class RequestCategoryController extends Controller
 
         $in_use = [];
         $unused = [];
+        $inactiveCat = [];
+        $activeCat = [];
         for($i=0;$i<count($all_id);$i++){
             if(in_array($all_id[$i],Utility::DEFAULT_REQUEST_CATEGORIES)){
                 $unused[$i] = $all_id[$i];
@@ -201,10 +204,22 @@ class RequestCategoryController extends Controller
                 $in_use[$i] = $all_id[$i];
             }
         }
-        $message = (count($unused) > 0) ? ' and '.count($unused).
+
+        foreach($in_use as $var){
+            $request = Requisition::firstRow('req_cat',$var);
+            if(empty($request)){
+                $inactiveCat[] = $var;
+            }else{
+                $activeCat[] = $var;
+            }
+        }
+
+        $message = (count($inactiveCat) < 1) ? ' and '.count($activeCat).
             ' category(ies) has been used in another module and cannot be deleted' : '';
-        if(count($in_use) > 0){
-            $delete = RequestCategory::massUpdate('id',$in_use,$dbData);
+        if(count($inactiveCat) > 0){
+
+
+            $delete = RequestCategory::massUpdate('id',$inactiveCat,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -213,7 +228,7 @@ class RequestCategoryController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'The '.count($unused).' category(ies) has been used in another module and cannot be deleted',
+                'message2' => 'The '.count($activeCat).' category(ies) has been used in another module and cannot be deleted',
                 'message' => 'warning'
             ]);
 

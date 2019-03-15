@@ -240,6 +240,15 @@ class Requisition extends Model
 
     }
 
+    public static function specialArraySingleColumnsPageDate3($column, $post, $column2, $post2, $column3, $post3,$dateArray)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->paginate(Utility::P50);
+
+    }
+
     public static function specialArraySingleColumns1PageDate2($column, $post, $column2, $post2,$dateArray)
     {
 
@@ -270,8 +279,8 @@ class Requisition extends Model
     public static function specialColumnsPageDate($column, $post,$dateArray)
     {
         //Utility::specialColumns(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 
