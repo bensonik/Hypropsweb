@@ -302,7 +302,7 @@
                                 </table>
                                 @else
                                     @if($data->approval_status === 1)
-                                        {{Auth::user()->firstname}} {{Auth::user()->lastname}}
+                                        Management
                                     @endif
                                 @endif
                             </td>

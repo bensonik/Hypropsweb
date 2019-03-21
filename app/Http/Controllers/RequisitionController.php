@@ -221,18 +221,53 @@ class RequisitionController extends Controller
         $currSymbol = session('currency')['symbol'];
         $dept = Department::getAllData();
 
+        $detectHod = Utility::detectHOD(Auth::user()->id);
         $requestAccess = RequestAccess::getAllData();
         $access = Utility::detectRequestAccess($requestAccess);
 
         if ($request->ajax()) {
             return \Response::json(view::make('requisition.approved_requests_reload',array('mainData' => $mainData,
                 'reqType' => $requestType,'project' => $project, 'reqCat' => $reqCat, 'appAccess' => $approveAccess,
-                'curr_symbol' => $currSymbol,'access' => $access,'dept'=>$dept))->render());
+                'curr_symbol' => $currSymbol,'access' => $access,'dept'=>$dept,'detectHod'=>$detectHod))->render());
 
         }else{
             return view::make('requisition.approved_requests')->with('mainData',$mainData)->with('reqType',$requestType)
                 ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
-                ->with('curr_symbol',$currSymbol)->with('access',$access)->with('dept',$dept);
+                ->with('curr_symbol',$currSymbol)->with('access',$access)->with('dept',$dept)
+                ->with('detectHod',$detectHod);
+        }
+
+    }
+
+    public function chartApprovedRequests(Request $request)
+    {
+        //
+        //$req = new Request();
+        $approveSys = ApprovalSys::getAllData();
+        $approveAccess = Approve::approveAccess($approveSys);
+        $mainData = (in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT)) ? Requisition::paginateAllData() : Requisition::specialColumnsPageOr2('request_user',Auth::user()->id,'created_by',Auth::user()->id);
+
+        $this->filterData($mainData);
+        $reqCat = RequestCategory::getAllData();
+        $requestType = RequestType::getAllData();
+        $project = ProjectTeam::specialColumns('user_id',Auth::user()->id);
+        $currSymbol = session('currency')['symbol'];
+        $dept = Department::getAllData();
+
+        $detectHod = Utility::detectHOD(Auth::user()->id);
+        $requestAccess = RequestAccess::getAllData();
+        $access = Utility::detectRequestAccess($requestAccess);
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('requisition.approved_requests_reload',array('mainData' => $mainData,
+                'reqType' => $requestType,'project' => $project, 'reqCat' => $reqCat, 'appAccess' => $approveAccess,
+                'curr_symbol' => $currSymbol,'access' => $access,'dept'=>$dept,'detectHod'=>$detectHod))->render());
+
+        }else{
+            return view::make('requisition.chart_approved_requests')->with('mainData',$mainData)->with('reqType',$requestType)
+                ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
+                ->with('curr_symbol',$currSymbol)->with('access',$access)->with('dept',$dept)
+                ->with('detectHod',$detectHod);
         }
 
     }
@@ -894,7 +929,7 @@ class RequisitionController extends Controller
     public function allOrSome($array){
         $data = '';
         $mainData = '';
-        if($array != ''){
+        if(is_array($array)){
             if(count($array) >0){
                 foreach($array as $var){
                     if($var == 0){
@@ -906,11 +941,11 @@ class RequisitionController extends Controller
         if($data == 0 && count($array) >0){
             $mainData = Utility::ALL_DATA;
         }
-        if($data == '' && count($array) >0){
+        if($data != '0' && count($array) >0){
             $mainData = Utility::SELECTED;
         }
 
-            $mainData = Utility::SELECTED;
+
         }else{
             $mainData = Utility::ALL_DATA;
         }
@@ -922,7 +957,7 @@ class RequisitionController extends Controller
     public function valdDeptUsers($dept1,$users){
 
         $data = '';
-        if($dept1 != ''){
+        if(is_array($dept1)){
             $dept = count($dept1);
             if($dept > 0 && $users == ''){
                 $data = 1;
@@ -935,7 +970,11 @@ class RequisitionController extends Controller
             }
 
         }else{
-            $data = 0;
+            if($dept1 == '' && $users == ''){
+                $data = 1;
+            }else{
+                $data = 0;
+            }
         }
 
         return $data;
@@ -969,6 +1008,7 @@ class RequisitionController extends Controller
 
     public function tableRequestReport(Request $request){
 
+        $reportType = $request->input('report_type');
         $dept = $request->input('department');
         $user = $request->input('user');
         $category = $request->input('request_category');
@@ -976,7 +1016,8 @@ class RequisitionController extends Controller
         $project = $request->input('project');
         $fromDate = Utility::standardDate($request->input('from_date'));
         $toDate = Utility::standardDate($request->input('to_date'));
-
+        $code = $this->valdDeptUsers($dept,$user).$this->allOrSome($category).$this->valReqType($type);
+        //return $this->valdDeptUsers($dept,$user).$this->allOrSome($category).$this->valReqType($type);
         $dateArray = [$fromDate,$toDate];
         $query = [];
 
@@ -1021,11 +1062,11 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
+                    $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
-                    $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'proj_id',$project,$dateArray);
+                    $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
 
@@ -1035,7 +1076,7 @@ class RequisitionController extends Controller
         //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
         if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
 
-            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
+            //USER,CATEGORY SELECTED, TYPE IS ALL
             if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
                 $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
             }
@@ -1044,11 +1085,11 @@ class RequisitionController extends Controller
             if($this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
                 //PROJECT IS ALL,CATEGORY,USER SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                if($this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
                     $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
                 }
-                //PROJECT,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+                //PROJECT,CATEGORY,USER SELECTED
+                if($this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
                     $query = Requisition::specialArrayColumnsPageDate3('request_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
@@ -1169,16 +1210,30 @@ class RequisitionController extends Controller
         //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS ALL, CATEGORY ALL
         if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::ALL_DATA && $this->valReqType($type) == '0'){
 
-            //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
-            if($this->allOrSome($category) == Utility::SELECTED){
+            //DEPARTMENT,CATEGORY ALL, TYPE IS ALL
+            if($this->allOrSome($category) == Utility::ALL_DATA){
                 $query = Requisition::specialColumnsPageDate('request_user',$user,$dateArray);
             }
 
         }
 
         if(!empty($query)){
-            $this->filterData($query);
-            return view::make('requisition.table_request_report')->with('mainData',$query);
+
+            $sumAmount = $this->sumReportAmount($query);
+            //CHECK THE REPORT TYPE IS TABLE OR CHART
+            if($reportType == 'table'){
+                $this->filterData($query);
+                return view::make('requisition.table_request_report')->with('mainData',$query)
+                    ->with('sumAmount',$sumAmount)->with('from_date',$request->input('from_date'))
+                    ->with('to_date',$request->input('to_date'));
+            }
+
+            if($reportType == 'chart'){
+                return view::make('requisition.chart_request_report')->with('mainData',$query)
+                    ->with('sumAmount',$sumAmount)->with('from_date',$request->input('from_date'))
+                    ->with('to_date',$request->input('to_date'));
+            }
+
         }else{
             return 'Match not found';
         }
@@ -1272,5 +1327,18 @@ class RequisitionController extends Controller
         }
         return $dbData;
     }   //END OF FILTERING DATA
+
+    public function sumReportAmount($query){
+        $ammountArray = [];
+        $sum = 0.00;
+        if(!empty($query)){
+            foreach($query as $val){
+                $ammountArray[] = $val->amount;
+            }
+            $sum = array_sum($ammountArray);
+        }
+
+        return number_format($sum);
+    }
 
 }

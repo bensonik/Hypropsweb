@@ -218,7 +218,7 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->paginate(Utility::P50);
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
 
@@ -227,7 +227,7 @@ class Requisition extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->whereIn($column2,$post2)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P50);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -236,7 +236,7 @@ class Requisition extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->whereIn($column2, $post2)->whereIn($column3, $post3)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P50);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -245,7 +245,7 @@ class Requisition extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P50);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -254,7 +254,7 @@ class Requisition extends Model
 
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
             ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P50);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -263,7 +263,7 @@ class Requisition extends Model
 
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
             ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P50);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -272,7 +272,7 @@ class Requisition extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->where($column3, '=',$post3)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -280,7 +280,7 @@ class Requisition extends Model
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->paginate(Utility::P35);
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
 
@@ -289,14 +289,14 @@ class Requisition extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+            ->orderBy('id','DESC')->get();
 
     }
 
     public static function paginateAllDataDate($dateArray)
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereBetween('created_at',$dateArray)
-            ->orderBy('id','DESC')->paginate('15');
+            ->orderBy('id','DESC')->get();
         //return Utility::paginateAllData(self::table());
 
     }

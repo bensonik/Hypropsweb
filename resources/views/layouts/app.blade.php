@@ -503,26 +503,23 @@
                 </li>
 
 
-                @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_SCM_WHSE_MANAGEMENT))
-                    <li>
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">view_quilt</i>
-                            <span>PO/RFQ/Quotes</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li>
-                                <a href="{{url('rfq')}}">Request for Quote (RFQ)</a>
-                            </li>
-                            <li>
-                                <a href="{{url('quote')}}">Create Quote for Customer</a>
-                            </li>
-                            <li>
-                                <a href="{{url('purchase_order')}}">Purchase Order</a>
-                            </li>
-                        </ul>
-                    </li>
-                @endif
-
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">view_quilt</i>
+                        <span>PO/RFQ/Quotes</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('rfq')}}">Request for Quote (RFQ)</a>
+                        </li>
+                        <li>
+                            <a href="{{url('quote')}}">Create Quote for Customer</a>
+                        </li>
+                        <li>
+                            <a href="{{url('purchase_order')}}">Purchase Order</a>
+                        </li>
+                    </ul>
+                </li>
 
             @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
                     <li>
@@ -733,15 +730,19 @@
                         <li>
                             <a href="{{url('my_requests')}}">Requisition Approval</a>
                         </li>
-                        <li>
-                            <a href="{{url('approved_requests')}}">Requisition Reports</a>
-                        </li>
                         @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
                             <li>
                                 <a href="{{url('finance_requests')}}">Finance Request Approval</a>
                             </li>
 
                         @endif
+                        <li>
+                            <a href="{{url('approved_requests')}}">Requisition Reports</a>
+                        </li>
+                        <li>
+                            <a href="{{url('chart_approved_requests')}}">Requisition Chart Reports</a>
+                        </li>
+
                     </ul>
                 </li>
 
