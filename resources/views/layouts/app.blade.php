@@ -1431,6 +1431,11 @@
 <!-- Demo Js -->
 <script src="{{ asset('js/demo.js') }}"></script>
 
+<!-- High Chart Js -->
+<script src="{{ asset('js/high_chart.js') }}"></script>
+<script src="{{ asset('js/highchartTable.js') }}"></script>
+
+
 <!-- Sweet Alert -->
 
 <script src="{{ asset('sweetalert/dist/sweetalert.js') }}"></script>

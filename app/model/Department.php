@@ -61,6 +61,13 @@ class Department extends Model
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->get();
 
     }
+
+    public static function specialColumnsMass($column, $post)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->orderBy('id','DESC')->get();
+
+    }
 	
 	public static function specialColumnsPage($column, $post)
     {

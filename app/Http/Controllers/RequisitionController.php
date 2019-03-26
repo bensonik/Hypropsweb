@@ -1014,6 +1014,13 @@ class RequisitionController extends Controller
         $category = $request->input('request_category');
         $type = $request->input('request_type');
         $project = $request->input('project');
+
+        $deptN = '';
+        $userN = (!empty($dept)) ? '' :$request->input('user');
+        $categoryN = '';
+        $typeN = '';
+        $projectN = '';
+
         $fromDate = Utility::standardDate($request->input('from_date'));
         $toDate = Utility::standardDate($request->input('to_date'));
         $code = $this->valdDeptUsers($dept,$user).$this->allOrSome($category).$this->valReqType($type);
@@ -1021,10 +1028,6 @@ class RequisitionController extends Controller
         $dateArray = [$fromDate,$toDate];
         $query = [];
 
-        /*return  response()->json([
-            'message2' => json_encode($dateArray),
-            'message' => 'warning'
-        ]);*/
         if($toDate < $fromDate){
             return  'Please ensure that the start/from date is less than the end/to date';
         }
@@ -1037,10 +1040,22 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-             $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'Usual Requisition';
+                $projectN = 'None';
+
+                $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
             }
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'Usual Requisition';
+                $projectN = 'None';
+
                 $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'req_type',$type,$dateArray);
             }
 
@@ -1219,6 +1234,7 @@ class RequisitionController extends Controller
 
         if(!empty($query)){
 
+
             $sumAmount = $this->sumReportAmount($query);
             //CHECK THE REPORT TYPE IS TABLE OR CHART
             if($reportType == 'table'){
@@ -1229,9 +1245,11 @@ class RequisitionController extends Controller
             }
 
             if($reportType == 'chart'){
+                $chartData = $this->arrangeMonth($query,$fromDate,$toDate);
+                $this->filterData($query);
                 return view::make('requisition.chart_request_report')->with('mainData',$query)
                     ->with('sumAmount',$sumAmount)->with('from_date',$request->input('from_date'))
-                    ->with('to_date',$request->input('to_date'));
+                    ->with('to_date',$request->input('to_date'))->with('chart_data',$chartData);
             }
 
         }else{
@@ -1339,6 +1357,33 @@ class RequisitionController extends Controller
         }
 
         return number_format($sum);
+    }
+
+    public function arrangeMonth($query,$start,$end){
+       $startDate = Utility::standardDate($start);
+       $endDate = Utility::standardDate($end);
+       $startYear =  date('Y',strtotime($startDate));
+       $endYear = date('Y',strtotime($endDate));
+        $monthYear = [];
+        for($y=$startYear;$y<=$endYear;$y++){
+            for($m=1;$m<=12;$m++){
+                $monthName = date("F", mktime(0, 0, 0, $m, 10));
+                $calcMonthAmtArray = [];
+                foreach($query as $val){
+
+                    $stdDate = Utility::standardDate($val->created_at);
+                    $getM = date('m',strtotime($stdDate)); $getY = date('Y',strtotime($stdDate));
+                    if($getM == $m && $getY == $y){
+                        $calcMonthAmtArray[] = $val->amount;
+                    }
+
+                }
+                $monthYear[$monthName.'-'.$y] = array_sum($calcMonthAmtArray);
+
+            }
+        }
+        return $monthYear;
+
     }
 
 }
