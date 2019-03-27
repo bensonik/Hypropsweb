@@ -218,6 +218,8 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
             ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
@@ -226,7 +228,10 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2,$post2)->whereBetween('created_at',$dateArray)
+            ->whereIn($column2,$post2)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -235,7 +240,10 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2, $post2)->whereIn($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->whereIn($column2, $post2)->whereIn($column3, $post3)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -244,7 +252,10 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->whereIn($column2, $post2)->where($column3, $post3)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -253,7 +264,10 @@ class Requisition extends Model
     {
 
         return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
+            ->where($column2, '=',$post2)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -262,7 +276,10 @@ class Requisition extends Model
     {
 
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
-            ->whereIn($column2, $post2)->where($column3, $post3)->whereBetween('created_at',$dateArray)
+            ->whereIn($column2, $post2)->where($column3, $post3)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -271,7 +288,10 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->where($column3, '=',$post3)->whereBetween('created_at',$dateArray)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
@@ -280,6 +300,8 @@ class Requisition extends Model
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
             ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
@@ -288,14 +310,20 @@ class Requisition extends Model
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)
+            ->where($column2, '=',$post2)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
 
     public static function paginateAllDataDate($dateArray)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereBetween('created_at',$dateArray)
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->where('approval_status', '=',Utility::STATUS_ACTIVE)
+            ->where('complete_status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
         //return Utility::paginateAllData(self::table());
 

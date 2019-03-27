@@ -9,6 +9,7 @@ use App\model\LoanRates;
 use App\model\Requisition;
 use App\model\RequestCategory;
 use App\model\ProjectTeam;
+use App\model\Project;
 use App\model\Department;
 use App\model\ApprovalSys;
 use App\model\ApprovalDept;
@@ -1016,7 +1017,7 @@ class RequisitionController extends Controller
         $project = $request->input('project');
 
         $deptN = '';
-        $userN = (!empty($dept)) ? '' :$request->input('user');
+        $userN = (!empty($dept)) ? '' : ($user == '')? '' : User::firstRow('id',$request->input('user'));
         $categoryN = '';
         $typeN = '';
         $projectN = '';
@@ -1051,12 +1052,12 @@ class RequisitionController extends Controller
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
 
-                $deptN = Department::specialColumnsMass('id',$dept);
+                $deptN = 'All';
                 $categoryN = RequestCategory::specialColumnsMass('id',$category);
                 $typeN = 'Usual Requisition';
                 $projectN = 'None';
 
-                $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'req_type',$type,$dateArray);
+                $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'req_type',$type,$dateArray);
             }
 
             //DEPARTMENT,CATEGORY,TYPE SELECTED
@@ -1064,10 +1065,22 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+
+                    $deptN = Department::specialColumnsMass('id',$dept);
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Requisition';
+                    $projectN = 'All';
+
                     $query = Requisition::specialArraySingleColumnsPageDate3('dept_id',$dept,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+
+                    $deptN = Department::specialColumnsMass('id',$dept);
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Requisition';
+                    $projectN = Project::specialColumnsMass('id',$project);
+
                     $query = Requisition::specialArrayColumnsPageDate3('dept_id',$dept,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
@@ -1077,10 +1090,22 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
+
+                    $deptN = 'All';
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Requisition';
+                    $projectN = 'All';
+
                     $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
+
+                    $deptN = 'All';
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Requisition';
+                    $projectN = Project::specialColumnsMass('id',$project);
+
                     $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
@@ -1091,20 +1116,38 @@ class RequisitionController extends Controller
         //SELECT FROM WHEN USER IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL
         if($this->valdDeptUsers($dept,$user)== '0' && $this->allOrSome($category) == Utility::SELECTED && $this->valReqType($type) == '1'){
 
-            //USER,CATEGORY SELECTED, TYPE IS ALL
+            //USER,CATEGORY SELECTED, TYPE IS USUAL REQUEST TYPE
             if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
-                $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
-            }
+
+                $deptN = 'None';
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'Usual Request';
+                $projectN = 'None';
+
+            $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
+        }
 
             //USER,CATEGORY,TYPE SELECTED
             if($this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
                 //PROJECT IS ALL,CATEGORY,USER SELECTED
                 if($this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+
+                    $deptN = 'None';
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Request';
+                    $projectN = 'All';
+
                     $query = Requisition::specialArraySingleColumns2PageDate3('request_user',$user,'req_cat',$category,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,USER SELECTED
                 if($this->allOrSome($category) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+
+                    $deptN = 'None';
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Request';
+                    $projectN = Project::specialColumnsMass('id',$project);
+
                     $query = Requisition::specialArrayColumnsPageDate3('request_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
                 }
             }
@@ -1118,10 +1161,22 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::SELECTED && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'Usual Request';
+                $projectN = 'None';
+
                 $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
             }
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'Usual Request';
+                $projectN = 'None';
+
                 $query = Requisition::specialColumnsPageDate('req_type',$type,$dateArray);
             }
 
@@ -1130,10 +1185,22 @@ class RequisitionController extends Controller
 
                 //PROJECT IS ALL,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+
+                    $deptN = Department::specialColumnsMass('id',$dept);
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Request';
+                    $projectN = 'All';
+
                     $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
                 if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
+
+                    $deptN = Department::specialColumnsMass('id',$dept);
+                    $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                    $typeN = 'Project Request';
+                    $projectN = Project::specialColumnsMass('id',$project);
+
                     $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'proj_id',$project,$dateArray);
                 }
             }
@@ -1141,13 +1208,26 @@ class RequisitionController extends Controller
             //DEPARTMENT IS ALL,CATEGORY ALL,TYPE SELECTED
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
-                //PROJECT IS ALL,CATEGORY ALL,DEPARTMENT SELECTED
+                //PROJECT IS ALL,CATEGORY ALL,DEPARTMENT ALL
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::ALL_DATA){
-                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'req_type',$type,$dateArray);
+
+                    $deptN = 'All';
+                    $categoryN = 'All';
+                    $typeN = 'Project Request';
+                    $projectN = 'All';
+
+                    $query = Requisition::specialColumnsPageDate('req_type',$type,$dateArray);
                 }
-                //PROJECT,CATEGORY,DEPARTMENT SELECTED
+                //PROJECT,CATEGORY,DEPARTMENT ALL
                 if($this->allOrSome($dept) == Utility::ALL_DATA && $this->allOrSome($project) == Utility::SELECTED){
-                    $query = Requisition::specialArrayColumnsPageDate2('dept_id',$dept,'proj_id',$project,$dateArray);
+
+                    $deptN = 'All';
+                    $categoryN = 'All';
+                    $typeN = 'Project Request';
+                    $projectN = Project::specialColumnsMass('id',$project);
+
+                    $query = Requisition::specialColumnsPageDate('proj_id',$project,$dateArray);
+
                 }
             }
 
@@ -1159,6 +1239,12 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY ALL, TYPE IS ALL
             if($this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
+
+                $deptN = 'None';
+                $categoryN = 'All';
+                $typeN = 'Usual Requisition';
+                $projectN = 'None';
+
                 $query = Requisition::specialColumnsPageDate2('request_user',$user,'req_type',$type,$dateArray);
             }
 
@@ -1166,12 +1252,23 @@ class RequisitionController extends Controller
             if($this->valSelType($type) == Utility::PROJECT_REQUEST_TYPE){
 
                 //PROJECT IS ALL,CATEGORY IS ALL,USER SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::ALL_DATA){
+                if($this->allOrSome($project) == Utility::ALL_DATA){
+
+                    $deptN = 'None';
+                    $categoryN = 'All';
+                    $typeN = 'Project Requisition';
+                    $projectN = 'All';
+
                     $query = Requisition::specialColumnsPageDate2('request_user',$user,'req_type',$type,$dateArray);
                 }
                 //PROJECT,CATEGORY,DEPARTMENT SELECTED
-                if($this->allOrSome($dept) == Utility::SELECTED && $this->allOrSome($project) == Utility::SELECTED){
-                    $query = Requisition::specialArrayColumnsPageDate3('request_user',$user,'req_cat',$category,'proj_id',$project,$dateArray);
+                if($this->allOrSome($project) == Utility::SELECTED){
+
+                    $deptN = 'None';
+                    $categoryN = 'All';
+                    $typeN = 'Project Requisition';
+                    $projectN = Project::specialColumnsMass('id',$project);
+                    $query = Requisition::specialArraySingleColumns1PageDate2('proj_id',$project,'request_user',$user,$dateArray);
                 }
             }
 
@@ -1184,11 +1281,23 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::SELECTED){
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::specialArrayColumnsPageDate2('req_cat',$category,'dept_id',$dept,$dateArray);
             }
 
             //DEPARTMENT IS ALL,CATEGORY ALL, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA){
+
+                $deptN = 'All';
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::specialArrayColumnsPageDate('req_cat',$category,$dateArray);
             }
 
@@ -1200,6 +1309,12 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($category) == Utility::SELECTED){
+
+                $deptN = 'None';
+                $categoryN = RequestCategory::specialColumnsMass('id',$category);
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::specialArraySingleColumns1PageDate2('req_cat',$category,'request_user',$user,$dateArray);
             }
 
@@ -1211,11 +1326,23 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::SELECTED){
+
+                $deptN = Department::specialColumnsMass('id',$dept);
+                $categoryN = 'All';
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::specialArrayColumnsPageDate('dept_id',$dept,$dateArray);
             }
 
             //DEPARTMENT IS ALL,CATEGORY ALL, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA){
+
+                $deptN = 'All';
+                $categoryN = 'All';
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::paginateAllDataDate($dateArray);
             }
 
@@ -1227,13 +1354,56 @@ class RequisitionController extends Controller
 
             //DEPARTMENT,CATEGORY ALL, TYPE IS ALL
             if($this->allOrSome($category) == Utility::ALL_DATA){
+
+                $deptN = 'None';
+                $categoryN = 'All';
+                $typeN = 'All';
+                $projectN = 'All';
+
                 $query = Requisition::specialColumnsPageDate('request_user',$user,$dateArray);
             }
 
         }
 
-        if(!empty($query)){
+        $newDept = '';
+        $newCat = '';
+        $newProj = '';
+        //return $deptN;
+        if(is_object($deptN) && !empty($deptN)){
+            $dep = [];
+            foreach($deptN as $val){
+                $dep[] = $val->dept_name;
+            }
+            $newDept = implode(',',$dep);
+        }else{
+            $newDept = $deptN;
+        }
 
+        //return json_encode($categoryN);
+        if(is_object($categoryN) && !empty($categoryN)){
+            $cat = [];
+            foreach($categoryN as $val){
+                $cat[] = $val->request_name;
+            }
+            $newCat = implode(',',$cat);
+        }else{
+            $newCat = $categoryN;
+        }
+
+        if(is_object($projectN) && !empty($projectN)){
+            $proj = [];
+            foreach($projectN as $val){
+                $proj[] = $val->project_name;
+            }
+            $newProj = implode(',',$proj);
+        }else{
+            $newProj = $projectN;
+        }
+        $newDept = ($newDept == 'None') ? '': $newDept;
+        if(!empty($query)){
+            $userN = (!empty($userN)) ? $userN->firstname.' '.$userN->lastname: '';
+            $categoryN = (is_array($category)) ? json_encode($category) : $categoryN;
+            $projectN = (is_array($project)) ? json_encode($project) : $projectN;
 
             $sumAmount = $this->sumReportAmount($query);
             //CHECK THE REPORT TYPE IS TABLE OR CHART
@@ -1241,7 +1411,9 @@ class RequisitionController extends Controller
                 $this->filterData($query);
                 return view::make('requisition.table_request_report')->with('mainData',$query)
                     ->with('sumAmount',$sumAmount)->with('from_date',$request->input('from_date'))
-                    ->with('to_date',$request->input('to_date'));
+                    ->with('to_date',$request->input('to_date'))->with('deptN',$newDept)
+                    ->with('userN',$userN)->with('categoryN',$newCat)->with('typeN',$typeN)
+                    ->with('projectN',$newProj);
             }
 
             if($reportType == 'chart'){
@@ -1249,7 +1421,9 @@ class RequisitionController extends Controller
                 $this->filterData($query);
                 return view::make('requisition.chart_request_report')->with('mainData',$query)
                     ->with('sumAmount',$sumAmount)->with('from_date',$request->input('from_date'))
-                    ->with('to_date',$request->input('to_date'))->with('chart_data',$chartData);
+                    ->with('to_date',$request->input('to_date'))->with('chart_data',$chartData)
+                    ->with('deptN',$newDept)->with('userN',$userN)->with('categoryN',$newCat)
+                    ->with('typeN',$typeN)->with('projectN',$newProj);
             }
 
         }else{
