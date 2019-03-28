@@ -2,6 +2,7 @@
 
 @section('content')
 
+
     <!-- Default Size -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -161,6 +162,9 @@
             </div>
         </div>
     </div>
+
+    <!-- Print Transact Default Size -->
+    @include('includes.print_preview')
 
 
     <!-- Bordered Table -->
