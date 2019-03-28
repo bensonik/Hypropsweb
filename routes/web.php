@@ -89,6 +89,8 @@ Route::post('/change_user_status', 'UsersController@changeStatus')->name('change
 // -------------CURRENCY UNIT ROUTES FOR FUNCTIONS-----------
 Route::any('/currencies', 'CurrencyController@index')->name('currencies')->middleware('auth');
 Route::any('/currency_status', 'CurrencyController@currencyStatus')->name('currency_status');
+Route::any('/default_currency', 'CurrencyController@defaultCurrency')->name('default_currency');
+Route::any('/edit_currency_form', 'CurrencyController@editForm')->name('edit_currency_form');
 
 // -------------GENERAL UNIT ROUTES FOR FUNCTIONS-----------
 Route::any('/add_more', 'GeneralController@addMore')->name('add_more');

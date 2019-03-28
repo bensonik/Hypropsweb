@@ -80,4 +80,41 @@ class CurrencyController extends Controller
 
     }
 
+    public function editForm(Request $request)
+    {
+        //
+        $dept = Currency::firstRow('id',$request->input('dataId'));
+        return view::make('currency.edit_form')->with('edit',$dept);
+
+    }
+
+    public function defaultCurrency(Request $request)
+    {
+        //
+        $validator = Validator::make($request->all(),Currency::$mainRules);
+        if($validator->passes()) {
+
+            $dbDATA = [
+                'default_currency' => $request->input('default_rate'),
+                'default_curr_status' => $request->input('status')
+            ];
+
+                Currency::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'saved'
+                ]);
+
+        }
+        $errors = $validator->errors();
+        return response()->json([
+            'message2' => 'fail',
+            'message' => $errors
+        ]);
+
+
+    }
+
+
 }

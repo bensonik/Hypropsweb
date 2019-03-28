@@ -8,7 +8,10 @@
         </th>
 
         <th>Currency</th>
+        <th>Default Rate</th>
+        <th>Default Rate Status</th>
         <th>Currency Code</th>
+        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
@@ -24,9 +27,19 @@
             @else
                 <td >{{$data->currency}}</td>
             @endif
+            <td>{{$data->default_currency}}</td>
+            <td>
+            @if($data->default_curr_status == 1)
+                Active
+            @else
+                Inactive
+            @endif
+            </td>
             <td>{{$data->code}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-
+            <td>
+                <a style="cursor: pointer;" class="btn btn-info" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_currency_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o "></i></a>
+            </td>
         </tr>
     @endforeach
     </tbody>

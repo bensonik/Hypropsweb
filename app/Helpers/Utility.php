@@ -17,6 +17,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Session;
 use Psy\Exception\ErrorException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\RedirectResponse;
 
 class Utility
 {
@@ -904,10 +905,10 @@ class Utility
     public static function checkCurrencyActiveStatus(){
         $data = self::firstRow('currency','active_status',self::STATUS_ACTIVE);
         if(empty($data)){
-            return response()->json([
+            exit(json_encode([
                 'message2' => 'Please, navigate to the configuration to activate system default currency',
                 'message' => 'currency inactive'
-            ]);
+            ]));
         }
     }
 
@@ -923,10 +924,10 @@ class Utility
     public static function checkFinYearActiveStatus(){
         $checkFinYear = self::firstRow('financial_year','active_status',self::STATUS_ACTIVE);
         if(empty($checkFinYear)){
-            return response()->json([
+            exit(json_encode([
                 'message2' => 'Please,create and activate a financial year to continue this process',
                 'message' => 'warning'
-            ]);
+            ]));
         }
     }
 
@@ -937,10 +938,10 @@ class Utility
             ->where('status', self::STATUS_ACTIVE)->first();
 
         if(!empty($checkLedgerTrans)) {
-            return response()->json([
+            exit(json_encode([
                 'message2' => 'Currency cannot be changed, the general ledger already has existing transaction linked to this data',
                 'message' => 'rejected'
-            ]);
+            ]));
         }
     }
 
@@ -952,10 +953,10 @@ class Utility
             ->where('status', self::STATUS_ACTIVE)->first();
 
         if(!empty($checkLedgerTrans)) {
-            return response()->json([
+            exit(json_encode([
                 'message2' => 'Currency cannot be changed, the general ledger already has existing transaction linked to this data',
                 'message' => 'rejected'
-            ]);
+            ]));
         }
     }
 

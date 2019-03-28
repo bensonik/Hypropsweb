@@ -21,7 +21,8 @@ class Currency extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'currency' => 'required'
+        'default_rate' => 'required',
+        'status' => 'required'
     ];
 
     public static function paginateAllData()
