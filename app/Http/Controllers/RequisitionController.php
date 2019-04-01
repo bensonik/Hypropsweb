@@ -471,6 +471,15 @@ class RequisitionController extends Controller
 
     }
 
+    public function printPreview(Request $request)
+    {
+        //
+        $request = Requisition::firstRow('id',$request->input('dataId'));
+        $this->filterItemData($request);
+        return view::make('requisition.print_preview')->with('data',$request);
+
+    }
+
     public function attachmentForm(Request $request)
     {
         //
@@ -1518,6 +1527,32 @@ class RequisitionController extends Controller
 
         }
         return $dbData;
+    }   //END OF FILTERING DATA
+
+    public function filterItemData($data){
+
+            if ($data->approved_users != '') {
+                $jsonUsers = json_decode($data->approved_users,true);
+                if (count($jsonUsers) > 0) {
+                    $data->approved_by = User::massData('id', $jsonUsers);
+                }
+            }
+
+            if ($data->complete_status != 1){
+                $jsonLevels = json_decode($data->approval_level, true);
+                $jsonApp = json_decode($data->approval_json, true);
+                $leastLevel = min($jsonLevels);
+                $nextUser = $jsonApp[$leastLevel];
+                $data->next_user = $nextUser.Auth::user()->id;
+                if ($nextUser == Auth::user()->id) {
+                    $data->approval_view = 1;
+                } else {
+                    $data->approval_view = 0;
+                }
+            }
+
+
+        return $data;
     }   //END OF FILTERING DATA
 
     public function sumReportAmount($query){

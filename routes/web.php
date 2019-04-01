@@ -128,6 +128,7 @@ Route::any('/chart_approved_requests', 'RequisitionController@chartApprovedReque
 Route::any('/table_request_report', 'RequisitionController@tableRequestReport')->name('table_request_report')->middleware('auth');
 Route::any('/print_request', 'RequisitionController@searchRequests')->name('print_request')->middleware('auth');
 Route::any('/loan_requests', 'RequisitionController@loanRequests')->name('loan_requests')->middleware('auth');
+Route::post('/request_print_preview', 'RequisitionController@printPreview')->name('request_print_preview');
 Route::post('/create_requisition', 'RequisitionController@create')->name('create_requisition');
 Route::post('/approve_requisition', 'RequisitionController@approval')->name('approve_requisition');
 Route::post('/approve_finance_requests', 'RequisitionController@approveFinanceRequests')->name('approve_finance_requests');
@@ -447,6 +448,7 @@ Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_
 Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
 Route::post('/post_create_receipt', 'PurchaseOrderController@postCreateReceipt')->name('post_create_receipt');
 Route::post('/edit_po', 'PurchaseOrderController@edit')->name('edit_po');
+Route::post('/po_print_preview', 'PurchaseOrderController@printPreview')->name('po_print_preview');
 Route::post('/convert_quote_form', 'PurchaseOrderController@convertQuoteForm')->name('convert_quote_form');
 Route::post('/convert_rfq_form', 'PurchaseOrderController@convertRfqForm')->name('convert_rfq_form');
 Route::post('/convert_rfq', 'PurchaseOrderController@convertRfq')->name('convert_rfq');
@@ -485,6 +487,7 @@ Route::post('/delete_put_away', 'WhsePickPutAwayController@destroy')->name('dele
 // -------------REQUEST FOR QUOTE (RFQ) MODULE-----------
 Route::any('/rfq', 'RFQController@index')->name('rfq')->middleware('auth');
 Route::post('/edit_rfq_form', 'RFQController@editForm')->name('edit_rfq_form');
+Route::post('/rfq_print_preview', 'RFQController@printPreview')->name('rfq_print_preview');
 Route::post('/create_rfq', 'RFQController@create')->name('create_rfq');
 Route::post('/edit_rfq', 'RFQController@edit')->name('edit_rfq');
 Route::any('/search_rfq', 'RFQController@searchRfq')->name('search_rfq');
@@ -497,6 +500,7 @@ Route::any('/rfq_download_attachment', 'RFQController@downloadAttachment')->name
 // -------------QUOTE MODULE-----------
 Route::any('/quote', 'QuoteController@index')->name('quote')->middleware('auth');
 Route::post('/edit_quote_form', 'QuoteController@editForm')->name('edit_quote_form');
+Route::post('/quote_print_preview', 'QuoteController@printPreview')->name('quote_print_preview');
 Route::post('/create_quote', 'QuoteController@create')->name('create_quote');
 Route::post('/edit_quote', 'QuoteController@edit')->name('edit_quote');
 Route::any('/search_quote', 'QuoteController@searchQuote')->name('search_quote');

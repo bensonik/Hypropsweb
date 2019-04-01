@@ -22,14 +22,14 @@
 </head>
 
 <body class="four-zero-four">
-<div class="body table-responsive" id="reload_data">
+<div class="body table-responsive" id="print_preview_data">
     <table class="table table-bordered table-hover table-striped" id="payslip_table">
         <thead>
         </thead>
         <tbody>
         <tr>
             <?php $companyInfo = \App\Helpers\Utility::companyInfo(); ?>
-            @if(count($companyInfo) >0)
+            @if(!empty($companyInfo))
                 <td>
                     <table>
                         <tbody>
@@ -76,9 +76,9 @@
         </tbody>
     </table>
 
-    <section class="content">
+    <section class="">
         <div class="container-fluid">
-            <div class="block-header">
+            <div class="">
                 @yield('content')
             </div>
         </div>

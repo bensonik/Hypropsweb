@@ -264,6 +264,7 @@ class PurchaseOrderController extends Controller
                         $poId = $mainPo->id;
                         $getPo = PoExtension::firstRow('id',$poId);
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                        $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                         $mailContent = [];
 
@@ -272,6 +273,7 @@ class PurchaseOrderController extends Controller
                         $mailContent['po']= $getPo;
                         $mailContent['poData'] = $getPoData;
                         $mailContent['attachment'] = $mailFiles;
+                        $mailContent['currency'] = $currencyData->currency;
 
                         //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                         if($emails != ''){
@@ -323,6 +325,25 @@ class PurchaseOrderController extends Controller
         $po = PoExtension::firstRow('id',$request->input('dataId'));
         $poData = PurchaseOrder::specialColumns('po_id',$po->id);
         return view::make('purchase_order.edit_form')->with('edit',$po)->with('poData',$poData);
+
+    }
+
+    public function printPreview(Request $request)
+    {
+        //
+        $currency = Utility::defaultCurrency();
+        $type = $request->input('type');
+        $po = PoExtension::firstRow('id',$request->input('dataId'));
+        $poData = PurchaseOrder::specialColumns('po_id',$po->id);
+        if($type == 'vendor' && !empty($po)){
+            $data = Currency::firstRow('id',$po->trans_curr);
+            $currency = $data->code;
+
+            return view::make('purchase_order.print_preview_vendor')->with('po',$po)->with('poData',$poData)
+                ->with('currency',$currency);
+        }
+        return view::make('purchase_order.print_preview_default')->with('po',$po)->with('poData',$poData)
+            ->with('currency',$currency);
 
     }
 
@@ -651,13 +672,16 @@ class PurchaseOrderController extends Controller
                         $poId = $editId;
                         $getPo = PoExtension::firstRow('id',$poId);
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                        $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                         $mailContent = [];
+
                         $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                         $mailContent['copy'] = $mailCopyContent;
                         $mailContent['po']= $getPo;
                         $mailContent['poData'] = $getPoData;
                         $mailContent['attachment'] = $mailFiles;
+                        $mailContent['currency'] = $currencyData->currency;
 
                         //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                         if($emails != ''){
@@ -996,13 +1020,16 @@ class PurchaseOrderController extends Controller
                 $poId = $mainPo->id;
                 $getPo = PoExtension::firstRow('id',$poId);
                 $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                 $mailContent = [];
+
                 $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                 $mailContent['copy'] = $mailCopyContent;
                 $mailContent['po']= $getPo;
                 $mailContent['poData'] = $getPoData;
                 $mailContent['attachment'] = $mailFiles;
+                $mailContent['currency'] = $currencyData->currency;
 
                 //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                 if($emails != ''){
@@ -1341,13 +1368,16 @@ class PurchaseOrderController extends Controller
                 $poId = $mainPo->id;
                 $getPo = PoExtension::firstRow('id',$poId);
                 $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                 $mailContent = [];
+
                 $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                 $mailContent['copy'] = $mailCopyContent;
                 $mailContent['po']= $getPo;
                 $mailContent['poData'] = $getPoData;
                 $mailContent['attachment'] = $mailFiles;
+                $mailContent['currency'] = $currencyData->currency;
 
                 //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                 if($emails != ''){

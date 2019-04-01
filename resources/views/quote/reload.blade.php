@@ -7,6 +7,8 @@
 
         </th>
         <th>Manage</th>
+        <th>Vendor Preview</th>
+        <th>Default Preview</th>
         <th>Quote Number</th>
         <th>Customer</th>
         <th>Post Date</th>
@@ -30,6 +32,12 @@
             <td>
                 <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_quote_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay','billing_address_edit','curr_rate_edit','','')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
+            <td>
+                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('quote_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
+            </td>
+            <td>
+                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('quote_print_preview') ?>','<?php echo csrf_token(); ?>','default')"><i class="fa fa-pencil-square-o"></i>Default Preview</a>
+            </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->quote_number}}</td>
             <td>{{$data->vendorCon->name}}</td>
@@ -37,7 +45,7 @@
             <td>{{$data->ship_to_contact}}</td>
             <td>{{$data->quote_status}}</td>
             <td>{{$data->UserDetail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
-            <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{$data->sum_total}}</td>
+            <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{number_format($data->sum_total)}}</td>
             <td>{{number_format($data->trans_total)}}</td>
             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>

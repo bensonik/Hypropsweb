@@ -29,18 +29,18 @@
         </thead>
         <tbody>
 
-        @foreach($data['poData'] as $data)
+        @foreach($data['rfqData'] as $data)
 
             @if($data->account_id != '')
                 <tr>
                     <td>{{$data->account->acct_name}}</td>
-                    <td>{{$data->po_desc}}</td>
-                    <td>{{$data->unit_cost_trans}}</td>
-                    <td>{{$data->tax_perct}}</td>
-                    <td>{{$data->tax_amount_trans}}</td>
-                    <td>{{$data->discount_perct}}</td>
-                    <td>{{$data->discount_amount_trans}}</td>
-                    <td>{{$data->extended_amount_trans}}</td>
+                    <td>{{$data->rfq_desc}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             @endif
 
@@ -63,19 +63,19 @@
         <td>Sub Total</td>
         </thead>
         <tbody>
-        @foreach($data['poData'] as $data)
+        @foreach($data['rfqData'] as $data)
 
-            @if($data->account_id != '')
+            @if($data->item_id != '')
                 <tr>
-                    <td>{{$data->inventory->acct_name}}</td>
-                    <td>{{$data->po_desc}}</td>
+                    <td>{{$data->inventory->item_name}} (</td>
+                    <td>{{$data->rfq_desc}}</td>
                     <td>{{$data->quantity}}</td>
-                    <td>{{$data->unit_cost_trans}}</td>
-                    <td>{{$data->tax_perct}}</td>
-                    <td>{{$data->tax_amount_trans}}</td>
-                    <td>{{$data->discount_perct}}</td>
-                    <td>{{$data->discount_amount_trans}}</td>
-                    <td>{{$data->extended_amount_trans}}</td>
+                    <td>{{$data->unit_measurement}}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
             @endif
 

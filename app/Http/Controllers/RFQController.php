@@ -186,6 +186,7 @@ class RFQController extends Controller
                     $rfqId = $mainRfq->id;
                     $getRfq = RFQExtension::firstRow('id',$rfqId);
                     $getRfqData = RFQ::specialColumns('uid',$getRfq->uid);
+                    $currencyData = Currency::firstRow('id',$getRfq->trans_curr);
 
                     $mailContent = [];
 
@@ -194,6 +195,7 @@ class RFQController extends Controller
                     $mailContent['rfq']= $getRfq;
                     $mailContent['rfqData'] = $getRfqData;
                     $mailContent['attachment'] = $mailFiles;
+                    $mailContent['currency'] = $currencyData->currency;
 
                     //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                     if($emails != ''){
@@ -247,6 +249,19 @@ class RFQController extends Controller
         $unitMeasure = UnitMeasure::paginateAllData();
         return view::make('rfq.edit_form')->with('edit',$rfq)->with('rfqData',$rfqData)
             ->with('unitMeasure',$unitMeasure);
+
+    }
+
+    public function printPreview(Request $request)
+    {
+        //
+        $currency = Utility::defaultCurrency();
+        $type = $request->input('type');
+        $rfq = RFQExtension::firstRow('id',$request->input('dataId'));
+        $rfqData = RFQ::specialColumns('rfq_id',$rfq->id);
+
+        return view::make('rfq.print_preview_default')->with('po',$rfq)->with('poData',$rfqData)
+            ->with('currency',$currency);
 
     }
 
@@ -431,13 +446,16 @@ class RFQController extends Controller
                 $rfqId = $editId;
                 $getRfq = RFQExtension::firstRow('id',$rfqId);
                 $getRfqData = RFQ::specialColumns('uid',$getRfq->uid);
+                $currencyData = Currency::firstRow('id',$getRfq->trans_curr);
 
                 $mailContent = [];
+
                 $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                 $mailContent['copy'] = $mailCopyContent;
                 $mailContent['rfq']= $getRfq;
                 $mailContent['rfqData'] = $getRfqData;
                 $mailContent['attachment'] = $mailFiles;
+                $mailContent['currency'] = $currencyData->currency;
 
                 //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                 if($emails != ''){

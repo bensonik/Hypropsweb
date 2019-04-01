@@ -233,6 +233,7 @@ class QuoteController extends Controller
                     $QuoteId = $mainQuote->id;
                     $getQuote = QuoteExtension::firstRow('id',$QuoteId);
                     $getQuoteData = Quote::specialColumns('uid',$getQuote->uid);
+                    $currencyData = Currency::firstRow('id',$getQuote->trans_curr);
 
                     $mailContent = [];
 
@@ -241,6 +242,7 @@ class QuoteController extends Controller
                     $mailContent['quote']= $getQuote;
                     $mailContent['quoteData'] = $getQuoteData;
                     $mailContent['attachment'] = $mailFiles;
+                    $mailContent['currency'] = $currencyData->currency;
 
                     //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                     if($emails != ''){
@@ -295,6 +297,25 @@ class QuoteController extends Controller
 
     }
 
+
+    public function printPreview(Request $request)
+    {
+        //
+        $currency = Utility::defaultCurrency();
+        $type = $request->input('type');
+        $quote = QuoteExtension::firstRow('id',$request->input('dataId'));
+        $poData = Quote::specialColumns('quote_id',$quote->id);
+        if($type == 'vendor' && !empty($quote)){
+            $data = Currency::firstRow('id',$quote->trans_curr);
+            $currency = $data->code;
+
+            return view::make('quote.print_preview_vendor')->with('po',$quote)->with('poData',$poData)
+                ->with('currency',$currency);
+        }
+        return view::make('quote.print_preview_default')->with('po',$quote)->with('poData',$poData)
+            ->with('currency',$currency);
+
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -551,13 +572,16 @@ class QuoteController extends Controller
                 $QuoteId = $editId;
                 $getQuote = QuoteExtension::firstRow('id',$QuoteId);
                 $getQuoteData = Quote::specialColumns('uid',$getQuote->uid);
+                $currencyData = Currency::firstRow('id',$getQuote->trans_curr);
 
                 $mailContent = [];
+
                 $mailCopyContent = ($mailCopy != '') ? explode(',',$mailCopy) : [];
                 $mailContent['copy'] = $mailCopyContent;
-                $mailContent['Quote']= $getQuote;
-                $mailContent['QuoteData'] = $getQuoteData;
+                $mailContent['quote']= $getQuote;
+                $mailContent['quoteData'] = $getQuoteData;
                 $mailContent['attachment'] = $mailFiles;
+                $mailContent['currency'] = $currencyData->currency;
 
                 //CHECK IF MAIL IS EMPTY ELSE CONTINUE TO SEND MAIL
                 if($emails != ''){

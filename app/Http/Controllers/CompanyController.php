@@ -73,7 +73,7 @@ class CompanyController extends Controller
                     $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
                     $path = Utility::IMG_URL().$filename;
 
-                    Image::make($image->getRealPath())->resize(160,75)->save($path);
+                    Image::make($image->getRealPath())->resize(160,160)->save($path);
                     $photo = $filename;
 
                 }

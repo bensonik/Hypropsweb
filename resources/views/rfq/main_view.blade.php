@@ -270,6 +270,8 @@
         </div>
     </div>
 
+    <!-- Print Transact Default Size -->
+    @include('includes.print_preview')
 
     <!-- Bordered Table -->
     <div class="row clearfix">
@@ -335,6 +337,7 @@
 
                             </th>
                             <th>Manage</th>
+                            <th>Default Preview</th>
                             <th>RFQ Number</th>
                             <th>Assigned User</th>
                             <th>Due date</th>
@@ -353,6 +356,9 @@
                             </td>
                             <td>
                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_rfq_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('rfq_print_preview') ?>','<?php echo csrf_token(); ?>','default')"><i class="fa fa-pencil-square-o"></i>Default Preview</a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->rfq_no}}</td>

@@ -1155,6 +1155,23 @@
 
     }
 
+    function fetchHtml2(dataId,displayId,modalId,submitUrl,token,type){
+
+        var postVars = "dataId="+dataId+"&type="+type;
+        $('#'+modalId).modal('show');
+        sendRequest(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                var ajaxData = ajax.responseText;
+                $('#'+displayId).html(ajaxData);
+
+            }
+        }
+        $('#'+displayId).html('LOADING DATA');
+
+    }
+
     function searchItem(inputId,displayId,submitUrl,defaultUrl,token){
 
         var searchInput = $('#'+inputId).val();

@@ -6,9 +6,9 @@
         <thead></thead>
         <tbody>
         <tr>
-            <td>Vendor: {{$data['po']->vendor->name}}</td>
+            <td>Vendor: {{$data['po']->vendorCon->name}}</td>
             <td>Vendor Invoice No.:{{$data['po']->vendor_invoice_no}}</td>
-            <td>Billing Address: {{$data['po']->vendor->address}}</td>
+            <td>Billing Address: {{$data['po']->vendorCon->address}}</td>
         </tr>
         <tr>
             <td>PO Number: {{$data['po']->po_number}}</td>
@@ -27,12 +27,12 @@
         <thead>
             <td>Account Name</td>
             <td>Description</td>
-            <td>Rate</td>
+            <td>Rate {{$data['currency']}}</td>
             <td>Tax(%):</td>
-            <td>Tax Amount</td>
+            <td>Tax Amount {{$data['currency']}}</td>
             <td>Discount(%):</td>
-            <td>Discount Amount</td>
-            <td>Sub Total</td>
+            <td>Discount Amount {{$data['currency']}}</td>
+            <td>Sub Total {{$data['currency']}}</td>
         </thead>
         <tbody>
 
@@ -62,19 +62,19 @@
         <td>Description</td>
         <td>Quantity</td>
         <td>Unit Measure</td>
-        <td>Rate</td>
+        <td>Rate {{$data['currency']}}</td>
         <td>Tax(%):</td>
-        <td>Tax Amount</td>
+        <td>Tax Amount {{$data['currency']}}</td>
         <td>Discount(%):</td>
-        <td>Discount Amount</td>
-        <td>Sub Total</td>
+        <td>Discount Amount {{$data['currency']}}</td>
+        <td>Sub Total {{$data['currency']}}</td>
         </thead>
         <tbody>
         @foreach($data['poData'] as $data)
 
-            @if($data->account_id != '')
+            @if($data->item_id != '')
                 <tr>
-                    <td>{{$data->inventory->acct_name}}</td>
+                    <td>{{$data->inventory->item_name}} ({{$data->inventory->item_no}})</td>
                     <td>{{$data->po_desc}}</td>
                     <td>{{$data->quantity}}</td>
                     <td>{{$data->unit_cost_trans}}</td>
@@ -89,7 +89,7 @@
         @endforeach
         </tbody>
     </table><hr/>
-    <?php $totalExclTax =  $data['po']->trans_total - $data['po']->tax_trans; ?>
+    <?php $totalExclTax =  $data['po']->trans_total + $data['po']->tax_trans; ?>
     <table class="table table-responsive">
         <thead>
 
@@ -100,7 +100,7 @@
             <td>{{$data['po']->tax_perct}}</td>
         </tr>
         <tr>
-            <td>Total Tax Amount</td>
+            <td>Total Tax Amount {{$data['currency']}}</td>
             <td>{{$data['po']->tax_trans}}</td>
         </tr>
         <tr>
@@ -108,15 +108,15 @@
             <td>{{$data['po']->discount_perct}}</td>
         </tr>
         <tr>
-            <td>Total Discount Amount</td>
+            <td>Total Discount Amount {{$data['currency']}}</td>
             <td>{{$data['po']->discount_trans}}</td>
         </tr>
         <tr>
-            <td>Grand Total (Excl. Tax)</td>
+            <td>Grand Total (Excl. Tax) {{$data['currency']}}</td>
             <td>{{$totalExclTax}}</td>
         </tr>
         <tr>
-            <td>Grand Total</td>
+            <td>Grand Total {{$data['currency']}}</td>
             <td>{{$data['po']->trans_total}}</td>
         </tr>
         </tbody>

@@ -9,6 +9,7 @@
 
         <th>Manage</th>
         <th>Attachment</th>
+        <th>Preview</th>
         <th>Description</th>
         <th>Edited</th>
         <th>Request Category</th>
@@ -38,6 +39,11 @@
             </td>
             <td>
                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+            </td>
+            <td>
+                @if($data->finance_status == \App\Helpers\Utility::STATUS_ACTIVE)
+                    <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('request_print_preview') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o"></i>Preview</a>
+                @endif
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->req_desc}}</td>

@@ -411,6 +411,9 @@
         </div>
     </div>
 
+    <!-- Print Transact Default Size -->
+    @include('includes.print_preview')
+
     <!-- Bordered Table -->
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -509,6 +512,8 @@
 
                             </th>
                             <th>Manage</th>
+                            <th>Vendor Preview</th>
+                            <th>Default Preview</th>
                             <th>PO Number</th>
                             <th>Vendor Invoice Number</th>
                             <th>Vendor</th>
@@ -533,6 +538,12 @@
                             </td>
                             <td>
                                 <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay','billing_address_edit','curr_rate_edit','convert_rfq_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('po_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('po_print_preview') ?>','<?php echo csrf_token(); ?>','default')"><i class="fa fa-pencil-square-o"></i>Default Preview</a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->po_number}}</td>
