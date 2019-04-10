@@ -166,7 +166,7 @@
                                     Preferred Vendor
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','search_vendor','user');" name="select_user" placeholder="Select User">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','search_vendor','user');" name="select_user" placeholder="Preferred Vendor">
 
                                             <input type="hidden" class="user_class" name="pref_vendor" id="user" />
                                         </div>

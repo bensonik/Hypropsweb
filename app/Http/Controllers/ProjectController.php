@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\model\BillMethod;
 use App\model\Project;
 use App\model\ProjectTeam;
 use App\Helpers\Utility;
@@ -30,12 +31,14 @@ class ProjectController extends Controller
         //
         //$req = new Request();
         $mainData = Project::paginateAllData();
+        $billMethod = BillMethod::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('project.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('project.reload',array('mainData' => $mainData,'billMethod' => $billMethod))
+                ->render());
 
         }else{
-            return view::make('project.main_view')->with('mainData',$mainData);
+            return view::make('project.main_view')->with('mainData',$mainData)->with('billMethod',$billMethod);
         }
 
     }
@@ -63,6 +66,11 @@ class ProjectController extends Controller
                 $dbDATA = [
                     'project_name' => ucfirst($request->input('project_name')),
                     'project_desc' => ucfirst($request->input('project_description')),
+                    'project_head' => $request->input('project_head'),
+                    'start_date' => Utility::standardDate($request->input('start_date')),
+                    'end_date' => Utility::standardDate($request->input('end_date')),
+                    'bill_id' => $request->input('bill_method'),
+                    'customer_id' => $request->input('customer'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -107,7 +115,8 @@ class ProjectController extends Controller
     {
         //
         $dept = Project::firstRow('id',$request->input('dataId'));
-        return view::make('project.edit_form')->with('edit',$dept);
+        $billMethod = BillMethod::getAllData();
+        return view::make('project.edit_form')->with('edit',$dept)->with('billMethod',$billMethod);
 
     }
 
@@ -126,6 +135,11 @@ class ProjectController extends Controller
             $dbDATA = [
                 'project_name' => ucfirst($request->input('project_name')),
                 'project_desc' => $request->input('project_description'),
+                'project_head' => $request->input('project_head'),
+                'start_date' => Utility::standardDate($request->input('start_date')),
+                'end_date' => Utility::standardDate($request->input('end_date')),
+                'bill_id' => $request->input('bill_method'),
+                'customer_id' => $request->input('customer'),
                 'updated_by' => Auth::user()->id
             ];
             $rowData = Project::specialColumns('project_name', $request->input('project_name'));

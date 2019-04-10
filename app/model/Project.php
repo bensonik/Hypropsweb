@@ -21,7 +21,10 @@ class Project extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'project_name' => 'required'
+        'project_name' => 'required',
+        'project_head' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date',
     ];
 
     public function user_c(){
@@ -44,7 +47,22 @@ class Project extends Model
     }
 
     public function project_team(){
-        return $this->belongsTo('App\model\ProjectTeam','project_id','id');
+        return $this->belongsTo('App\model\ProjectTeam','project_id','id')->withDefault();
+
+    }
+
+    public function pro_head(){
+        return $this->belongsTo('App\User','project_head','id')->withDefault();
+
+    }
+
+    public function customer(){
+        return $this->belongsTo('App\model\VendorCustomer','customer_id','id')->withDefault();
+
+    }
+
+    public function billing(){
+        return $this->belongsTo('App\model\BillMethod','bill_id','id')->withDefault();
 
     }
 

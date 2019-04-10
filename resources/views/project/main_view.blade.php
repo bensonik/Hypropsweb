@@ -4,7 +4,7 @@
 
     <!-- Default Size -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">New Project</h4>
@@ -15,6 +15,7 @@
                         <div class="body">
                             <div class="row clearfix">
                                 <div class="col-sm-4">
+                                    <b>Project Name</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="text" class="form-control" name="project_name" placeholder="Project Name">
@@ -23,6 +24,7 @@
                                 </div>
 
                                 <div class="col-sm-4">
+                                    <b>Project Description</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <textarea class="form-control" name="project_description" placeholder="Project Description"></textarea>
@@ -31,6 +33,77 @@
                                 </div>
 
                             </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <b>Start Date</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" name="start_date" placeholder="Start Date">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <b>End Date</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" name="end_date" placeholder="End Date">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <b>Budget</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" class="form-control" name="budget" placeholder="Budget">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    Customer/Client
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_customer" onkeyup="searchOptionList('select_customer','myUL2','{{url('default_select')}}','search_customer','customer');" name="select_user" placeholder="Select Customer">
+
+                                            <input type="hidden" class="user_class" name="customer" id="customer" />
+                                        </div>
+                                    </div>
+                                    <ul id="myUL2" class="myUL"></ul>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <b>Project Head</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Department Head">
+
+                                            <input type="hidden" class="user_class" name="project_head" id="user" />
+                                        </div>
+                                    </div>
+                                    <ul id="myUL1" class="myUL"></ul>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <b>Billing Method</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="bill_method" >
+                                                <option value="">Select Billing Method</option>
+                                                @foreach($billMethod as $bill)
+                                                    <option value="{{$bill->id}}">{{$bill->bill_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
                         </div>
 
 
@@ -50,7 +123,7 @@
 
     <!-- Default Size -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
@@ -116,7 +189,8 @@
                             </th>
 
                             <th>Project</th>
-                            <th>Project Description</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
                             <th>Created by</th>
                             <th>Updated by</th>
                             <th>Created at</th>
@@ -133,7 +207,8 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->project_name}}</td>
-                            <td>{{$data->project_desc}}</td>
+                            <td>{{$data->start_date}}</td>
+                            <td>{{$data->end_date}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

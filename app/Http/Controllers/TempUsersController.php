@@ -3,13 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\model\TempRoles;
+use App\model\TempUsers;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\model\Position;
 use App\model\Department;
-use App\model\SalaryStructure;
 use App\Helpers\Utility;
 use App\User;
-use App\model\Roles;
 use Auth;
 use View;
 use Validator;
@@ -22,27 +21,25 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class UsersController extends Controller
+class TempUsersController extends Controller
 {
     //
     public function index(Request $request)
     {
         //
         //$req = new Request();
-        $roles = Roles::getAllData();
-        $mainData =  User::paginateAllData();
-        $position = Position::getAllData();
-        $salary = SalaryStructure::getAllData();
+        $roles = TempRoles::getAllData();
+        $mainData =  TempUsers::paginateAllData();
         $department = Department::getAllData();
 
 
         if ($request->ajax()) {
-            return \Response::json(view::make('users.reload',array('mainData' => $mainData,'department' => $department,
-            'salary' => $salary,'position' => $position,'roles' => $roles))->render());
+            return \Response::json(view::make('temp_users.reload',array('mainData' => $mainData,'department' => $department,
+                'roles' => $roles))->render());
 
         }else{
-            return view::make('users.main_view')->with('mainData',$mainData)->with('position',$position)
-                ->with('salary',$salary)->with('department',$department)->with('roles',$roles);
+            return view::make('temp_users.main_view')->with('mainData',$mainData)->with('department',$department)
+                ->with('roles',$roles);
         }
 
     }
@@ -55,10 +52,10 @@ class UsersController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),User::$mainRules);
+        $validator = Validator::make($request->all(),TempUsers::$mainRules);
         if($validator->passes()){
 
-            $countData = User::countData('email',$request->input('email'));
+            $countData = TempUsers::countData('email',$request->input('email'));
             if($countData > 0){
 
                 return response()->json([
@@ -69,29 +66,29 @@ class UsersController extends Controller
             }else{
 
                 $photo = 'user.png';
-                $sign = '';
+                $cv = '';
                 if($request->hasFile('photo')){
 
                     $image = $request->file('photo');
                     $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
-                      $path = Utility::IMG_URL().$filename;
+                    $path = Utility::IMG_URL().$filename;
 
                     Image::make($image->getRealPath())->resize(72,72)->save($path);
                     $photo = $filename;
 
                 }
-                if($request->hasFile('sign')){
+                if($request->hasFile('cv')){
 
-                    $image = $request->file('sign');
+                    $image = $request->file('cv');
                     $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
-                    $path = Utility::IMG_URL().$filename;
+                    $path = Utility::FILE_URL().$filename;
 
                     Image::make($image->getRealPath())->resize(65,50)->save($path);
-                    $sign = $filename;
+                    $cv = $filename;
 
                 }
 
-                $uid = Utility::generateUID('users');
+                $uid = Utility::generateUID('temp_users');
 
                 $dbDATA = [
                     'uid' => $uid,
@@ -105,32 +102,28 @@ class UsersController extends Controller
                     'sex' => ucfirst($request->input('gender')),
                     'dob' => ucfirst($request->input('birthdate')),
                     'phone' => ucfirst($request->input('phone')),
-                    'job_role' => ucfirst($request->input('job_role')),
+                    'discipline' => ucfirst($request->input('discipline')),
+                    'experience' => ucfirst($request->input('experience')),
                     'address' => ucfirst($request->input('home_address')),
-                    'employ_type' => ucfirst($request->input('employ_type')),
-                    'position_id' => $request->input('position'),
+                    'rate_type' => ucfirst($request->input('rate_type')),
+                    'rate' => $request->input('rate'),
                     'dept_id' => $request->input('department'),
-                    'salary_id' => $request->input('salary'),
+                    'cv' => $cv,
                     'nationality' => ucfirst($request->input('nationality')),
-                    'marital' => ucfirst($request->input('marital_status')),
-                    'blood_group' => ucfirst($request->input('blood_group')),
-                    'next_kin' => ucfirst($request->input('next_of_kin')),
-                    'next_kin_phone' => ucfirst($request->input('next_of_kin_phone')),
-                    'state' => ucfirst($request->input('state')),
-                    'local_govt' => ucfirst($request->input('local_govt')),
-                    'guarantor' => ucfirst($request->input('guarantor')),
-                    'guarantor_phone' => ucfirst($request->input('guarantor_phone')),
+                    'qualification' => ucfirst($request->input('marital_status')),
+                    'cert' => ucfirst($request->input('cert')),
+                    'cert_expiry_date' => Utility::standardDate($request->input('cert_expiry_date')),
+                    'cert_issue_date' => Utility::standardDate($request->input('cert_issue_date')),
                     'photo' => $photo,
-                    'sign' => $sign,
                     'title' => ucfirst($request->input('title')),
-                    'qualification' => ucfirst($request->input('qualification')),
-                    'employ_date' => ucfirst($request->input('employ_date')),
+                    'bupa_hmo_expiry_date' => Utility::standardDate($request->input('bupa_hmo_expiry_date')),
+                    'green_card_expiry_date' => Utility::standardDate($request->input('green_card_expiry_date')),
                     'created_by' => Auth::user()->firstname.' '.Auth::user()->lastname,
                     'remember_token' => $request->input('_token'),
                     'active_status' => Utility::STATUS_ACTIVE,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                User::create($dbDATA);
+                TempUsers::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -158,13 +151,10 @@ class UsersController extends Controller
     public function editForm(Request $request)
     {
         //
-        $roles = Roles::getAllData();
-        $position = Position::getAllData();
-        $salary = SalaryStructure::getAllData();
+        $roles = TempRoles::getAllData();
         $department = Department::getAllData();
-        $user = User::firstRow('id',$request->input('dataId'));
-        return view::make('users.edit_form')->with('edit',$user)->with('salary',$salary)->with('position',$position)
-            ->with('department',$department)->with('roles',$roles);
+        $user = TempUsers::firstRow('id',$request->input('dataId'));
+        return view::make('temp_users.edit_form')->with('edit',$user)->with('department',$department)->with('roles',$roles);
 
     }
 
@@ -177,11 +167,11 @@ class UsersController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),User::$mainRulesEdit);
+        $validator = Validator::make($request->all(),TempUsers::$mainRulesEdit);
         if($validator->passes()) {
 
             $photo = $request->get('prev_photo');
-            $sign = $request->get('prev_sign');
+            $cv = $request->get('prev_sign');
 
             $new_password = Hash::make($request->input('password'));
             if($request->get('password') == ""){
@@ -197,18 +187,18 @@ class UsersController extends Controller
                 $photo = $filename;
                 if($request->get('prev_photo') != 'user.png'){
                     if(file_exists(Utility::IMG_URL().$request->get('prev_photo')))
-                    unlink(Utility::IMG_URL().$request->get('prev_photo'));
+                        unlink(Utility::IMG_URL().$request->get('prev_photo'));
                 }
 
             }
-            if($request->hasFile('sign')){
+            if($request->hasFile('cv')){
 
-                $image = $request->file('sign');
+                $image = $request->file('cv');
                 $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
                 $path = Utility::IMG_URL().$filename;
 
                 Image::make($image->getRealPath())->resize(65,65)->save($path);
-                $sign = $filename;
+                $cv = $filename;
                 if($request->get('prev_sign') != ''){
                     unlink($request->get('prev_sign'));
                 }
@@ -218,43 +208,38 @@ class UsersController extends Controller
             $dbDATA = [
                 'email' => ucfirst($request->input('email')),
                 'password' => $new_password,
-                'other_email' => ucfirst($request->input('other_email')),
-                'role' => ucfirst($request->input('role')),
+                'role' => $request->input('role'),
                 'firstname' => ucfirst($request->input('firstname')),
                 'lastname' => ucfirst($request->input('lastname')),
                 'othername' => ucfirst($request->input('othername')),
                 'sex' => ucfirst($request->input('gender')),
                 'dob' => ucfirst($request->input('birthdate')),
                 'phone' => ucfirst($request->input('phone')),
-                'job_role' => ucfirst($request->input('job_role')),
+                'discipline' => ucfirst($request->input('discipline')),
+                'experience' => ucfirst($request->input('experience')),
                 'address' => ucfirst($request->input('home_address')),
-                'employ_type' => ucfirst($request->input('employ_type')),
-                'position_id' => $request->input('position'),
+                'rate_type' => ucfirst($request->input('rate_type')),
+                'rate' => $request->input('rate'),
                 'dept_id' => $request->input('department'),
-                'salary_id' => $request->input('salary'),
+                'cv' => $cv,
                 'nationality' => ucfirst($request->input('nationality')),
-                'marital' => ucfirst($request->input('marital_status')),
-                'blood_group' => ucfirst($request->input('blood_group')),
-                'next_kin' => ucfirst($request->input('next_of_kin')),
-                'next_kin_phone' => ucfirst($request->input('next_of_kin_phone')),
-                'state' => ucfirst($request->input('state')),
-                'local_govt' => ucfirst($request->input('local_govt')),
-                'guarantor' => ucfirst($request->input('guarantor')),
-                'guarantor_phone' => ucfirst($request->input('guarantor_phone')),
+                'qualification' => ucfirst($request->input('marital_status')),
+                'cert' => ucfirst($request->input('cert')),
+                'cert_expiry_date' => Utility::standardDate($request->input('cert_expiry_date')),
+                'cert_issue_date' => Utility::standardDate($request->input('cert_issue_date')),
                 'photo' => $photo,
-                'sign' => $sign,
                 'title' => ucfirst($request->input('title')),
-                'qualification' => ucfirst($request->input('qualification')),
-                'employ_date' => ucfirst($request->input('employ_date')),
+                'bupa_hmo_expiry_date' => Utility::standardDate($request->input('bupa_hmo_expiry_date')),
+                'green_card_expiry_date' => Utility::standardDate($request->input('green_card_expiry_date')),
                 'updated_by' => Auth::user()->firstname.' '.Auth::user()->lastname,
                 'active_status' => Utility::STATUS_ACTIVE,
                 'status' => Utility::STATUS_ACTIVE
             ];
-            $rowData = User::specialColumns('email', $request->input('email'));
+            $rowData = TempUsers::specialColumns('email', $request->input('email'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    User::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    TempUsers::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -270,7 +255,7 @@ class UsersController extends Controller
                 }
 
             } else{
-                User::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                TempUsers::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -297,13 +282,10 @@ class UsersController extends Controller
     public function userProfile($uid,Request $request)
     {
         //
-        $roles = Roles::getAllData();
-        $position = Position::getAllData();
-        $salary = SalaryStructure::getAllData();
+        $roles = TempRoles::getAllData();
         $department = Department::getAllData();
-        $user = User::firstRow('uid',$uid);
-        return view::make('users.single_user')->with('edit',$user)->with('salary',$salary)->with('position',$position)
-            ->with('department',$department)->with('roles',$roles);
+        $user = TempUsers::firstRow('uid',$uid);
+        return view::make('temp_users.single_user')->with('edit',$user)->with('department',$department)->with('roles',$roles);
 
 
     }
@@ -312,7 +294,7 @@ class UsersController extends Controller
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = User::searchUser($_GET['searchVar']);
+        $search = TempUsers::searchUser($_GET['searchVar']);
         $obtain_array = [];
 
         foreach($search as $data){
@@ -324,17 +306,24 @@ class UsersController extends Controller
         }*/
 
         $user_ids = array_unique($obtain_array);
-        $mainData =  User::massDataPaginate('uid', $user_ids);
+        $mainData =  TempUsers::massDataPaginate('uid', $user_ids);
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 
-            return view::make('users.user_search')->with('mainData',$mainData);
+            return view::make('temp_users.user_search')->with('mainData',$mainData);
         }else{
             return 'No match found, please search again with sensitive words';
         }
 
     }
 
+
+    public function downloadAttachment(){
+        $file = $_GET['file'];
+        $download = Utility::FILE_URL($file);
+        return response()->download($download);
+        //return $file;
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -349,7 +338,7 @@ class UsersController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = User::massUpdate('id',$idArray,$dbData);
+        $delete = TempUsers::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',
@@ -366,7 +355,7 @@ class UsersController extends Controller
         $dbData = [
             'active_status' => $status
         ];
-        $delete = user::massUpdate('id',$idArray,$dbData);
+        $delete = TempUsers::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'changed successfully',

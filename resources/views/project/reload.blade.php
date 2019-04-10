@@ -8,7 +8,8 @@
         </th>
 
         <th>Project</th>
-        <th>Project Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -25,7 +26,8 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project_name}}</td>
-            <td>{{$data->project_desc}}</td>
+            <td>{{$data->start_date}}</td>
+            <td>{{$data->end_date}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

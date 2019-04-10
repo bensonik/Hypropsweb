@@ -510,6 +510,16 @@ Route::post('/change_quote_status', 'QuoteController@changeStatus')->name('chang
 Route::any('/quote_remove_attachment', 'QuoteController@removeAttachment')->name('quote_remove_attachment');
 Route::any('/quote_download_attachment', 'QuoteController@downloadAttachment')->name('quote_download_attachment');
 
+// -------------TEMP USER MODULE-----------
+Route::any('/temp_user', 'TempUsersController@index')->name('user')->middleware('auth.admin');
+Route::post('/create_temp_user', 'TempUsersController@create')->name('create_temp_user');
+Route::post('/edit_temp_user_form', 'TempUsersController@editForm')->name('edit_temp_user_form');
+Route::post('/edit_temp_user', 'TempUsersController@edit')->name('edit_temp_user');
+Route::get('/temp_user_profile/{uid}', 'TempUsersController@userProfile')->name('temp_profile');
+Route::any('/search_temp_user', 'TempUsersController@searchUser')->name('temp_user_search');
+Route::post('/delete_temp_user', 'TempUsersController@destroy')->name('delete_temp_user');
+Route::post('/change_temp_user_status', 'TempUsersController@changeStatus')->name('change_temp_user_status');
+Route::any('/temp_user_cv', 'TempUserController@downloadAttachment')->name('temp_user_cv');
 
 
 
