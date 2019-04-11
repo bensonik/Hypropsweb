@@ -40,6 +40,7 @@
                                 </div>
 
                             </div>
+                            <hr/>
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
@@ -68,6 +69,7 @@
                                 </div>
 
                             </div>
+                            <hr/>
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
@@ -107,6 +109,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <hr/>
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
@@ -155,8 +159,7 @@
                                 </div>
 
                             </div>
-
-                        </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -185,6 +188,7 @@
                             </div>
 
                         </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -213,6 +217,7 @@
                             </div>
 
                         </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -246,6 +251,7 @@
                             </div>
 
                         </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -274,6 +280,7 @@
                             </div>
 
                         </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -301,6 +308,7 @@
                                 </div>
                             </div>
                         </div>
+                            <hr/>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">

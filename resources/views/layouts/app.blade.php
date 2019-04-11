@@ -760,6 +760,9 @@
                     </a>
                     <ul class="ml-menu">
                             <li>
+                                <a href="{{url('temp_user')}}">Temporary Users</a>
+                            </li>
+                            <li>
                                 <a href="{{url('idp')}}">Individual Development Plan</a>
                             </li>
                             <li>

@@ -511,7 +511,7 @@ Route::any('/quote_remove_attachment', 'QuoteController@removeAttachment')->name
 Route::any('/quote_download_attachment', 'QuoteController@downloadAttachment')->name('quote_download_attachment');
 
 // -------------TEMP USER MODULE-----------
-Route::any('/temp_user', 'TempUsersController@index')->name('user')->middleware('auth.admin');
+Route::any('/temp_user', 'TempUsersController@index')->name('user')->middleware('auth');
 Route::post('/create_temp_user', 'TempUsersController@create')->name('create_temp_user');
 Route::post('/edit_temp_user_form', 'TempUsersController@editForm')->name('edit_temp_user_form');
 Route::post('/edit_temp_user', 'TempUsersController@edit')->name('edit_temp_user');

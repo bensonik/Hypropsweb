@@ -40,6 +40,7 @@
                                 </div>
 
                             </div>
+                            <hr/>
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
@@ -61,6 +62,7 @@
 
                             </div>
 
+                            <hr/>
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <b>Gender*</b>
@@ -97,14 +99,9 @@
                                         <div class="form-line">
                                             <select type="text" class="form-control" name="role"  required>
                                                 <option value="" selected>Select</option>
-                                                @if(Auth::user()->role == '1' || Auth::user()->role == '2')
                                                     @foreach($roles as $role)
-                                                        @if($role->id != 1)
-
                                                         <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                                        @endif
                                                     @endforeach
-                                                @endif
                                             </select>
                                         </div>
                                     </div>
@@ -114,6 +111,7 @@
 
                         </div>
 
+                            <hr/>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <b>Date of Birth</b>
@@ -142,6 +140,7 @@
 
                         </div>
 
+                            <hr/>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <b>Nationality</b>
@@ -170,6 +169,7 @@
 
                         </div>
 
+                            <hr/>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <b>Rate Type</b>
@@ -203,6 +203,7 @@
 
                         </div>
 
+                            <hr/>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <b>Certificate Expiry Date</b>
@@ -231,6 +232,7 @@
 
                         </div>
 
+                            <hr/>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <b>Green Card Expiry Date</b>
@@ -315,7 +317,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Users
+                        Temporary Users
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
@@ -335,7 +337,7 @@
                         </li>
                         <li>
                             <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('temp_user'); ?>',
-                                    '<?php echo url('change_user_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
+                                    '<?php echo url('change_temp_user_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
                                 <i class="fa fa-close"></i>Disable User
                             </button>
                         </li>
@@ -406,9 +408,10 @@
 
                             </td>
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_user_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_temp_user_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <td>{{$data->updated_at}}</td>
+                            <td>
                             @if($data->cv != '')
                                 <a target="_blank" href="<?php echo URL::to('temp_user_cv?file='); ?>{{$data->cv}}">
                                     <i class="fa fa-files-o fa-2x"></i>
@@ -420,7 +423,7 @@
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
                                 @if($data->active_status == 1)
-                                <a href="{{route('profile', ['uid' => $data->uid])}}">{{$data->title}}&nbsp;{{$data->firstname}}&nbsp;{{$data->othername}}&nbsp;{{$data->lastname}}</a>
+                                <a href="{{route('temp_profile', ['uid' => $data->uid])}}">{{$data->title}}&nbsp;{{$data->firstname}}&nbsp;{{$data->othername}}&nbsp;{{$data->lastname}}</a>
                                 @else
                                     <a href="{{route('temp_profile', ['uid' => $data->uid])}}">
                                         <span class="alert-warning">{{$data->title}}&nbsp;{{$data->firstname}}&nbsp;{{$data->othername}}&nbsp;{{$data->lastname}}</span>
@@ -445,6 +448,7 @@
                             <td>{{$data->created_by}}</td>
                             <td>{{$data->updated_by}}</td>
                             <td>{{$data->created_at}}</td>
+                            <td>{{$data->updated_at}}</td>
 
                             <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="User" /></td>
 

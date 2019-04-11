@@ -27,8 +27,6 @@
     </thead>
     <tbody>
     @foreach($mainData as $data)
-        @if($data->id == Auth::user()->id)
-        @else
             <tr>
                 <td scope="row">
                     <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
@@ -38,6 +36,7 @@
                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_user_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
                 <td>{{$data->updated_at}}</td>
+                <td>
                 @if($data->cv != '')
                     <a target="_blank" href="<?php echo URL::to('temp_user_cv?file='); ?>{{$data->cv}}">
                         <i class="fa fa-files-o fa-2x"></i>
@@ -80,7 +79,6 @@
                     <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
             </tr>
-        @endif
     @endforeach
     </tbody>
 </table>

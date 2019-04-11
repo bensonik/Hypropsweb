@@ -223,23 +223,17 @@ class TempUsers extends Authenticatable
     }
 
     public static function searchUser($value){
-        return static::join('department', 'department.id', '=', 'users.dept_id')
-            ->join('salary', 'salary.id', '=', 'users.salary_id')
-            ->join('position', 'position.id', '=', 'users.position_id')
-            ->join('roles', 'roles.id', '=', 'users.role')
-            ->where('users.status', '=','1')
+        return static::join('department', 'department.id', '=', 'temp_users.dept_id')
+            ->join('roles', 'roles.id', '=', 'temp_users.role')
+            ->where('temp_users.status', '=','1')
             ->where(function ($query) use($value){
-                $query->where('users.lastname','LIKE','%'.$value.'%')
-                    ->orWhere('users.firstname','LIKE','%'.$value.'%') ->orWhere('users.phone','LIKE','%'.$value.'%')
-                    ->orWhere('users.address','LIKE','%'.$value.'%')->orWhere('users.blood_group','LIKE','%'.$value.'%')
-                    ->orWhere('users.employ_date','LIKE','%'.$value.'%')->orWhere('users.employ_type','LIKE','%'.$value.'%')
-                    ->orWhere('users.employ_type','LIKE','%'.$value.'%')->orWhere('users.email','LIKE','%'.$value.'%')
-                    ->orWhere('users.state','LIKE','%'.$value.'%')->orWhere('users.local_govt','LIKE','%'.$value.'%')
-                    ->orWhere('users.sex','LIKE','%'.$value.'%')->orWhere('users.active_status','LIKE','%'.$value.'%')
-                    ->orWhere('users.nationality','LIKE','%'.$value.'%')->orWhere('users.othername','LIKE','%'.$value.'%')
-                    ->orWhere('users.other_email','LIKE','%'.$value.'%')->orWhere('users.marital','LIKE','%'.$value.'%')
-                    ->orWhere('users.next_kin','LIKE','%'.$value.'%')->orWhere('users.guarantor','LIKE','%'.$value.'%')
-                    ->orWhere('salary.salary_name','LIKE','%'.$value.'%')->orWhere('position.position_name','LIKE','%'.$value.'%')
+                $query->where('temp_users.lastname','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.firstname','LIKE','%'.$value.'%') ->orWhere('temp_users.phone','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.address','LIKE','%'.$value.'%')->orWhere('temp_users.qualification','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.email','LIKE','%'.$value.'%')->orWhere('temp_users.discipline','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.experience','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.sex','LIKE','%'.$value.'%')->orWhere('temp_users.active_status','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.nationality','LIKE','%'.$value.'%')->orWhere('temp_users.othername','LIKE','%'.$value.'%')
                     ->orWhere('department.dept_name','LIKE','%'.$value.'%')->orWhere('roles.role_name','LIKE','%'.$value.'%');
             })->get();
     }

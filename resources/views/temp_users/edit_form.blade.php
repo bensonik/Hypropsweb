@@ -28,6 +28,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -48,6 +49,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -81,32 +83,26 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <b>Permission Role*</b>
+                <div class="form-group">
+                    <div class="form-line">
+                        <select type="text" class="form-control" name="role"  required>
+                            <option value="{{$edit->role}}" selected>{{$edit->roles->role_name}}</option>
+                            @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                                @foreach($roles as $role)
+                                    @if($role->id != 1)
 
-            <div class="row clearfix">
-
-
-                <div class="col-sm-4">
-                    <b>Permission Role*</b>
-                    <div class="form-group">
-                        <div class="form-line">
-                            <select type="text" class="form-control" name="role"  required>
-                                <option value="{{$edit->role}}" selected>{{$edit->roles->role_name}}</option>
-                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
-                                    @foreach($roles as $role)
-                                        @if($role->id != 1)
-
-                                            <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                        @endif
-                                    @endforeach
-                                @endif
-                            </select>
-                        </div>
+                                        <option value="{{$role->id}}">{{$role->role_name}}</option>
+                                    @endif
+                                @endforeach
+                            @endif
+                        </select>
                     </div>
                 </div>
-
             </div>
-
-        </div>
+           </div>
+            <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -135,6 +131,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -163,6 +160,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -197,6 +195,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -225,6 +224,7 @@
             </div>
 
         </div>
+        <hr/>
 
         <div class="row clearfix">
             <div class="col-sm-4">
@@ -243,9 +243,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="row clearfix">
             <div class="col-sm-4">
                 <b>Photo</b>
                 <div class="form-group">
@@ -254,6 +251,11 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <hr/>
+
+        <div class="row clearfix">
+
             <div class="col-sm-4">
                 <b>CV (Curriculum Vitae)</b>
                 <div class="form-group">
@@ -270,10 +272,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-
-        <div class="row clearfix">
             <div class="col-sm-4">
                 <b>Password Confirm</b>
                 <div class="form-group">
@@ -283,6 +281,7 @@
                 </div>
             </div>
         </div>
+
 
     </div>
     <input type="hidden" name="prev_password" value="{{$edit->password}}" >
