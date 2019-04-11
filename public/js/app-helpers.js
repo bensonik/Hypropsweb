@@ -473,7 +473,6 @@
         });
     }
 
-
     function dropdownItem(valDisplayId,val,hiddenValId,hiddenVal,dropdownId) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
