@@ -24,6 +24,11 @@ Route::get('/dashboard', 'HomeController@index')->name('dashboard')->middleware(
 Route::post('/login', 'Auth\LoginController@login')->name('login_user');
 Route::any('/logout', 'Auth\LoginController@signout')->name('logout');
 
+Route::get('/external', 'Auth\TempUserLoginController@signin')->name('temp_user_login');
+Route::get('/temp_user_dashboard', 'Auth\TempUserHomeController@index')->name('temp_user_dashboard')->middleware('auth:temp_user');
+Route::post('/login_temp_user', 'Auth\TempUserLoginController@login')->name('login_temp_user');
+Route::any('/temp_user_logout', 'Auth\TempUserLoginController@signout')->name('temp_user_logout');
+
 // -------------USER MODULE-----------
 Route::post('/create_user', 'UsersController@createUser')->name('create_user');
 

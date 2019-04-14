@@ -23,6 +23,7 @@ use Illuminate\Routing\Redirector;
 
 class TempUsersController extends Controller
 {
+
     //
     public function index(Request $request)
     {

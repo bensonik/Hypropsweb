@@ -45,6 +45,17 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'temp_user' => [
+            'driver' => 'session',
+            'provider' => 'temp_users',
+        ],
+
+        'temp_user-api' => [
+            'driver' => 'token',
+            'provider' => 'temp_user',
+        ],
+
     ],
 
     /*
@@ -68,6 +79,11 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\User::class,
+        ],
+
+        'temp_users' => [
+            'driver' => 'eloquent',
+            'model' => App\Model\TempUsers::class,
         ],
 
         // 'users' => [
@@ -97,6 +113,13 @@ return [
             'table' => 'password_resets',
             'expire' => 60,
         ],
+
+        'temp_user' => [
+            'provider' => 'temp_users',
+            'table' => 'password_resets',
+            'expire' => 60,
+        ],
+
     ],
 
 ];

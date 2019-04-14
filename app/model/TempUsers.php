@@ -11,6 +11,8 @@ class TempUsers extends Authenticatable
 {
     //
     use Notifiable;
+    protected $guard = 'admin';
+
     protected  $table = 'temp_users';
 
     private static function table(){
