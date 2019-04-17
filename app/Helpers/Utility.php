@@ -78,6 +78,8 @@ class Utility
     const POST_RECEIPT = 1, CREATE_RECEIPT = 2;
     const PUT_AWAY = 1, PICK = 2;
     const ALL_DATA = 0, SELECTED = 1;
+    const TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];
+    const TASK_PRIORITY = ['None','Low','Medium','High'];
 
 
     public static function IMG_URL(){
@@ -348,6 +350,17 @@ class Utility
     {
         return DB::table($table)
             ->where($column, $post)
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->count();
+
+    }
+
+    public static function countDataOr3($table,$column1, $post1,$column2, $post2, $column3, $post3)
+    {
+        return DB::table($table)
+            ->where($column1, $post1)
+            ->where($column2, $post2)
+            ->orWhere($column3, $post3)
             ->where('status', self::STATUS_ACTIVE)
             ->orderBy('id','DESC')->count();
 

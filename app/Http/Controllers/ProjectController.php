@@ -2,11 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\model\AssumpConstraint;
 use App\model\BillMethod;
+use App\model\ChangeLog;
+use App\model\Decision;
+use App\model\Deliverable;
+use App\model\Issues;
+use App\model\LessonsLearnt;
+use App\model\Milestone;
 use App\model\Project;
+use App\model\ProjectDocs;
+use App\model\ProjectMemberRequest;
 use App\model\ProjectTeam;
 use App\Helpers\Utility;
+use App\model\Risk;
+use App\model\TaskList;
+use App\model\Timesheet;
 use App\User;
+use App\model\Task;
 use Auth;
 use View;
 use Validator;
@@ -180,15 +193,17 @@ class ProjectController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     PROJECT ITEM
      */
-    public function update(Request $request, $id)
+    public function projectItem(Request $request, $id)
     {
         //
+        $project = Project::firstRow('id',$id);
+        $billMethod = BillMethod::getAllData();
+        //print_r($project);exit();
+        $this->processProjectItem($project);
+        return view::make('project.project_item')->with('item',$project)->with('billMethod',$billMethod);
+
     }
 
     /**
@@ -210,6 +225,27 @@ class ProjectController extends Controller
             'message2' => 'deleted',
             'message' => 'Data deleted successfully'
         ]);
+
+    }
+
+    public function processProjectItem($project){
+
+        $project->task = Task::countDataOr3('project_id',$project->id,'assigned_user',Auth::user()->id,'temp_user',Auth::user()->id);
+        $project->milestone = Milestone::countData('project_id',$project->id);
+        $project->task_list = TaskList::countData('project_id',$project->id);
+        $project->change_log = ChangeLog::countData('project_id',$project->id);
+        $project->decision = Decision::countData('project_id',$project->id);
+        $project->deliverables = Deliverable::countData('project_id',$project->id);
+        $project->risk = Risk::countData('project_id',$project->id);
+        $project->assump = AssumpConstraint::countData('project_id',$project->id);
+        $project->issues = Issues::countData('project_id',$project->id);
+        $project->lesson_learnt = LessonsLearnt::countData('project_id',$project->id);
+        $project->documents = ProjectDocs::countData('project_id',$project->id);
+        $project->requests = ProjectMemberRequest::countData('project_id',$project->id);
+        $project->members = ProjectTeam::countData('project_id',$project->id);
+        $project->timesheet = Timesheet::countDataOr3('project_id',$project->id,'assigned_user',Auth::user()->id,'temp_user',Auth::user()->id);
+
+        return $project;
 
     }
 

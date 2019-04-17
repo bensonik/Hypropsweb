@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\model\TempUsers;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use View;
 use Validator;
@@ -14,7 +14,7 @@ use DB;
 use App\model\Currency;
 use App\Helpers\Utility;
 use Intervention\Image\Facades\Image;
-use Request;
+use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Auth\Authenticatable;
 
@@ -41,6 +41,15 @@ class TempUserHomeController extends Controller
         session(['currency' => $holdArr]);
 
         return view::make('auth.temp_user_dashboard');
+    }
+
+    public function signout(Request $request){
+        session()->forget('currency');
+        //Auth::logout();
+        Auth::guard('temp_user')->logout();
+
+
+        return redirect()->route('temp_user_login')->with('message','You\'ve signed out');
     }
 
 }

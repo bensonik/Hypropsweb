@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class Task extends Model
+class Timesheet extends Model
 {
     //
-    protected  $table = 'tasks';
+    protected  $table = 'timesheet';
 
     private static function table(){
-        return 'tasks';
+        return 'timesheet';
     }
     /**
      * The attributes that are mass assignable.

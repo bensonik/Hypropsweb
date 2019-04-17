@@ -8,10 +8,10 @@ use App\Helpers\Utility;
 class LessonsLearnt extends Model
 {
     //
-    protected  $table = 'lesson_learnt';
+    protected  $table = 'lessons_learnt';
 
     private static function table(){
-        return 'lesson_learnt';
+        return 'lessons_learnt';
     }
     /**
      * The attributes that are mass assignable.

@@ -633,12 +633,7 @@
 
         }
 
-        function appendClassToPost(classList,PostVar){
-            for(var i=0; i<classList.length;i++){
-                var classValue = sanitizeData(classList[i]);
-                PostVar.append(classList[i],classValue);
-            }
-        }
+        //appendClassToPost(classList,PostVar);
 
     </script>
 

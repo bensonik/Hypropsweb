@@ -43,12 +43,12 @@ class IndiGoal extends Model
     }
 
     public function indi_user(){
-        return $this->belongsTo('App\User','user_id','id');
+        return $this->belongsTo('App\User','user_id','id')->withDefault();
 
     }
 
     public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
+        return $this->belongsTo('App\User','supervisor_id','id')->withDefault();
 
     }
 

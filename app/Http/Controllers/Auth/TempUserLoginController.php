@@ -24,7 +24,7 @@ class TempUserLoginController extends Controller
 
     public function __construct()
     {
-        $this->middleware('guest:temp_user', ['except' => ['logout']]);
+        $this->middleware('guest:temp_user', ['except' => ['logout', 'temp_user_logout']]);
     }
 
 
@@ -52,16 +52,6 @@ class TempUserLoginController extends Controller
             ->with('message','**Incorrect Email/Password, please try again**');
 
 
-    }
-
-    public function signout(Request $request){
-        session()->forget('currency');
-        //Auth::logout();
-        Auth::guard('temp_user')->logout();
-
-        //$request->session()->invalidate();
-
-        return redirect()->route('temp_user_login')->with('message','You\'ve signed out');
     }
 
 

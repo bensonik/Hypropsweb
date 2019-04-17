@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class Task extends Model
+class ProjectMemberRequest extends Model
 {
     //
-    protected  $table = 'tasks';
+    protected  $table = 'project_member_request';
 
     private static function table(){
-        return 'tasks';
+        return 'project_member_request';
     }
     /**
      * The attributes that are mass assignable.

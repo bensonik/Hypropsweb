@@ -1137,6 +1137,13 @@
 
     }
 
+    function appendClassToPost(classList,PostVar){
+        for(var i=0; i<classList.length;i++){
+            var classValue = sanitizeData(classList[i]);
+            PostVar.append(classList[i],classValue);
+        }
+    }
+
     function fetchHtml(dataId,displayId,modalId,submitUrl,token){
 
         var postVars = "dataId="+dataId;
@@ -1159,6 +1166,22 @@
         var postVars = "dataId="+dataId+"&type="+type;
         $('#'+modalId).modal('show');
         sendRequest(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                var ajaxData = ajax.responseText;
+                $('#'+displayId).html(ajaxData);
+
+            }
+        }
+        $('#'+displayId).html('LOADING DATA');
+
+    }
+
+    function fetchHtml3(dataId,displayId,submitUrl,token,type){
+
+        var postVars = "dataId="+dataId+"&type="+type;
+        sendRequest(submitUrl,token,postVars);
         ajax.onreadystatechange = function(){
             if(ajax.readyState == 4 && ajax.status == 200) {
 

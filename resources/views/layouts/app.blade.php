@@ -40,6 +40,7 @@
     <!-- Custom Css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/my_style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/tabs.css') }}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{ asset('css/themes/all-themes.css') }}" rel="stylesheet">
@@ -747,10 +748,22 @@
                 </li>
 
                 <li>
-                    <a href="{{url('project')}}">
+                    <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">view_carousel</i>
                         <span class="icon-name">Project Management</span>
                     </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('project')}}">Projects</a>
+                        </li>
+                        <li>
+                            <a href="{{url('project')}}">Report Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{url('temp_user')}}">Contract/External Users</a>
+                        </li>
+
+                    </ul>
                 </li>
 
                 <li>
@@ -760,7 +773,7 @@
                     </a>
                     <ul class="ml-menu">
                             <li>
-                                <a href="{{url('temp_user')}}">Temporary Users</a>
+                                <a href="{{url('temp_user')}}">Contract/External Users</a>
                             </li>
                             <li>
                                 <a href="{{url('idp')}}">Individual Development Plan</a>
@@ -1438,6 +1451,8 @@
 <script src="{{ asset('js/high_chart.js') }}"></script>
 <script src="{{ asset('js/highchartTable.js') }}"></script>
 
+<!-- TAB JS -->
+<script src="{{ asset('js/tabs.js') }}"></script>
 
 <!-- Sweet Alert -->
 
