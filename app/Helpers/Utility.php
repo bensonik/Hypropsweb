@@ -9,7 +9,7 @@
 namespace App\Helpers;
 
 use DB;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use view;
 use mail;
 use Illuminate\Http\Request;
@@ -708,13 +708,13 @@ class Utility
 
     public static function loanMonthlyDeduction($amount,$interestRATE){
 
-        /*$data = DB::table('salary')
+        $data = DB::table('loan')
             ->where('status', self::STATUS_ACTIVE)
-            ->where('id', Auth::user()->salary_id)->first();*/
+            ->where('loan_status', self::STATUS_ACTIVE)->first();
 
         $interestAmount = $amount*($interestRATE/100);
         $totalPayBackAmount = $amount+$interestAmount;
-        $monthPayBackAmount = $totalPayBackAmount/12;
+        $monthPayBackAmount = $totalPayBackAmount/$data->duration;
         return $monthPayBackAmount;
     }
 
@@ -1118,6 +1118,43 @@ class Utility
         }
         $attachJson = json_encode($oldAttachment);
         return $attachJson;
+
+    }
+
+    public static function checkAuth($guard){
+        if(Auth::guard($guard)->check()){
+            return Auth::guard($guard)->user();
+        }else{
+            return Auth::user();
+        }
+    }
+
+    public static function authBlade($guard,$mainBlade,$otherBlade){
+        if(Auth::guard($guard)->check()){
+            return $otherBlade;
+        }else{
+            return $mainBlade;
+        }
+    }
+
+    public static function processProjectItem($project){
+
+        $project->task = self::countDataOr3('tasks','project_id',$project->id,'assigned_user',self::checkAuth('temp_user')->id,'temp_user',self::checkAuth('temp_user')->id);
+        $project->milestone = self::countData('milestones','project_id',$project->id);
+        $project->task_list = self::countData('task_lists','project_id',$project->id);
+        $project->change_log = self::countData('change_logs','project_id',$project->id);
+        $project->decision = self::countData('decisions','project_id',$project->id);
+        $project->deliverables = self::countData('deliverables','project_id',$project->id);
+        $project->risk = self::countData('risks','project_id',$project->id);
+        $project->assump = self::countData('assump_constraints','project_id',$project->id);
+        $project->issues = self::countData('issues','project_id',$project->id);
+        $project->lesson_learnt = self::countData('lessons_learnt','project_id',$project->id);
+        $project->documents = self::countData('project_docs','project_id',$project->id);
+        $project->requests = self::countData('project_member_request','project_id',$project->id);
+        $project->members = self::countData('project_team','project_id',$project->id);
+        $project->timesheet = self::countDataOr3('timesheet','project_id',$project->id,'assigned_user',self::checkAuth('temp_user')->id,'temp_user',self::checkAuth('temp_user')->id);
+
+        return $project;
 
     }
 

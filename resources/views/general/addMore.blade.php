@@ -2352,6 +2352,130 @@
 @endif
 <!-- END OF INVENTORY ITEM TEMPLATE EDIT -->
 
+<!-- BEGIN OF TASK -->
+@if($type == 'task')
+
+    <div class="row clearfix new_task remove_task{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control task_title" name="task_title" placeholder="Task title">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea type="text" class="form-control task_details" name="task" placeholder="Task Details"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4" id="normal_user{{$num2}}">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionList('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search','user{{$num2}}');" name="select_user" placeholder="Select User">
+
+                        <input type="hidden" class="user_class" name="user" id="user{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL1{{$num2}}" class="myUL"></ul>
+            </div>
+            <div class="col-sm-4" id="temp_user{{$num2}}" style="display:none;">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_users{{$num2}}" onkeyup="searchOptionList('select_users{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','default_search_temp','users{{$num2}}');" name="select_user" placeholder="Select External/Contract User">
+
+                        <input type="hidden" class="user_class" name="user" id="users{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL{{$num2}}" class="myUL"></ul>
+            </div>
+        </div>
+        <input type="checkbox" value="1" onclick="changeUserT('normal_user{{$num2}}','temp_user{{$num2}}','change_user{{$num2}}');" id="change_user{{$num2}}" />Check to select contract/external user
+        <hr/>
+
+        <div class="row clearfix">
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control task_status" name="task_status" placeholder="Task Status">
+                            <option value="">Select Status</option>
+                            @foreach(\App\Helpers\Utility::TASK_STATUS as $task)
+                                <option value="{{$task}}">{{$task}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control task_priority" name="task_priority" >
+                            <option value="">Select Priority</option>
+                            @foreach(\App\Helpers\Utility::TASK_PRIORITY as $task)
+                                <option value="{{$task}}">{{$task}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class="form-control time_planned" name="time_planned" placeholder="Time(hrs) Planned">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control start_date datepicker2" name="start_date" placeholder="Start Date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control end_date datepicker2" name="end_date" placeholder="End Date">
+                    </div>
+                </div>
+            </div>
+
+            <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task','{{$hide_id}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_task{{$more}}','{{url('add_more')}}','task','new_task','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF TASK -->
+
 <script>
     $(function() {
         $( ".datepicker2" ).datepicker({

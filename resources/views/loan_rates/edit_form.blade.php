@@ -22,7 +22,15 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea type="text" class="form-control" name="loan_description" placeholder="Description">{{$edit->loan_desc}}</textarea>
+                        <textarea class="form-control" name="loan_description" placeholder="Description">{{$edit->loan_desc}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" value="{{$edit->duration}}" name="duration" placeholder="Duration">
                     </div>
                 </div>
             </div>

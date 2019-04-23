@@ -40,6 +40,7 @@
     <!-- Custom Css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/my_style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/tabs.css') }}" rel="stylesheet">
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="{{ asset('css/themes/all-themes.css') }}" rel="stylesheet">
@@ -299,16 +300,16 @@
         <!-- User Info -->
         <div class="user-info">
             <div class="image">
-                <img src="{{ asset('images/'.Auth::user()->photo) }}" width="62" height="50" alt="User" />
+                <img src="{{ asset('images/'.APP\Helpers\Utility::checkAuth('temp_user')->photo) }}" width="62" height="50" alt="User" />
 
             </div>
             <div class="info-container">
-                <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{Auth::user()->firstname}} &nbsp {{Auth::user()->lastname}}</div>
-                <div class="email">{{Auth::user()->email}}</div>
+                <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{APP\Helpers\Utility::checkAuth('temp_user')->firstname}} &nbsp {{Auth::guard('temp_user')->user()->lastname}}</div>
+                <div class="email">{{Auth::guard('temp_user')->user()->email}}</div>
                 <div class="btn-group user-helper-dropdown">
                     <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                     <ul class="dropdown-menu pull-right">
-                        <li><a href="{{route('profile', ['uid' => Auth::user()->uid])}}"><i class="material-icons">person</i>Profile</a></li>
+                        <li><a href="{{route('profile', ['uid' => Auth::guard('temp_user')->user()->uid])}}"><i class="material-icons">person</i>Profile</a></li>
                         <li role="seperator" class="divider"></li>
                         <li><a href="javascript:void(0);"><i class="material-icons">group</i>Language</a></li>
                         <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Stock</a></li>
@@ -882,6 +883,9 @@
 
 <!-- Demo Js -->
 <script src="{{ asset('js/demo.js') }}"></script>
+
+<!-- TAB JS -->
+<script src="{{ asset('js/tabs.js') }}"></script>
 
 <!-- High Chart Js -->
 <script src="{{ asset('js/high_chart.js') }}"></script>

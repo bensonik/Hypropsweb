@@ -40,17 +40,36 @@ class TaskController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request,$id)
     {
 
-        $dataId = $request->input('dataId');
-        $mainData = Task::specialColumnsPage('project_id',$dataId);
+
+        $mainData = Task::specialColumnsPage('project_id',$id);
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('task.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('task.main_view',array('mainData' => $mainData,
+                'project' => project))->render());
 
         }
-        return view::make('task.main_view')->with('mainData',$mainData);
+        return view::make('task.main_view')->with('mainData',$mainData)->with('item',$project);
+
+    }
+
+    public function index_temp(Request $request,$id)
+    {
+
+        $mainData = Task::specialColumnsPage('project_id',$id);
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('task.main_view',array('mainData' => $mainData,
+                'project' => project))->render());
+
+        }
+        return view::make('task.main_view')->with('mainData',$mainData)->with('item',$project);
 
     }
 

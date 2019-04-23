@@ -22,6 +22,7 @@ class LoanRates extends Model
 
     public static $mainRules = [
         'loan_name' => 'required',
+        'duration' => 'required|numeric',
         'interest_rate' => 'required|numeric',
     ];
 

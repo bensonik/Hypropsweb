@@ -302,7 +302,7 @@ class RequisitionController extends Controller
                     $hrAccessible = Utility::LOAN_REQUEST;
                     $accessibleStatus = Utility::STATUS_ACTIVE;
                     $loanId = $rowData[0]->id;
-                    $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*12;
+                    $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*$rowData[0]->duration;
                     $loanMonthlyDeduction = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate);
                 }else{
                     return response()->json([
@@ -527,7 +527,7 @@ class RequisitionController extends Controller
                     $hrAccessible = Utility::LOAN_REQUEST;
                     $accessibleStatus = Utility::STATUS_ACTIVE;
                     $loanId = $rowData[0]->id;
-                    $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*12;
+                    $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*$rowData[0]->duration;
                     $loanMonthlyDeduction = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate);
                 }else{
                     return response()->json([
@@ -581,7 +581,8 @@ class RequisitionController extends Controller
                 } else {
 
                 //CHECK IF REQUEST IS LOAN AND WHETHER MONTHLY DEDUCTION HAS STARTED
-                $totalPayBackAmount = $previousData->loan_monthly_deduc*12;
+                $rowData = LoanRates::specialColumns('loan_status', Utility::STATUS_ACTIVE);
+                $totalPayBackAmount = $previousData->loan_monthly_deduc*$rowData[0]->duration;
                 if($request->input('request_category') == Utility::EMPLOYEE_LOAN_ID && $totalPayBackAmount != $previousData->loan_balance ) {
 
                     return response()->json([

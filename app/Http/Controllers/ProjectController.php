@@ -39,6 +39,12 @@ class ProjectController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    function __contstuct(){
+        $this->middleware('auth');
+        $this->middleware('auth:temp_user');
+    }
+
     public function index(Request $request)
     {
         //
@@ -47,11 +53,12 @@ class ProjectController extends Controller
         $billMethod = BillMethod::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('project.reload',array('mainData' => $mainData,'billMethod' => $billMethod))
-                ->render());
+            return \Response::json(view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'),
+                array('mainData' => $mainData,'billMethod' => $billMethod))->render());
 
         }else{
-            return view::make('project.main_view')->with('mainData',$mainData)->with('billMethod',$billMethod);
+            return view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'))
+                ->with('mainData',$mainData)->with('billMethod',$billMethod);
         }
 
     }
@@ -201,8 +208,8 @@ class ProjectController extends Controller
         $project = Project::firstRow('id',$id);
         $billMethod = BillMethod::getAllData();
         //print_r($project);exit();
-        $this->processProjectItem($project);
-        return view::make('project.project_item')->with('item',$project)->with('billMethod',$billMethod);
+        Utility::processProjectItem($project);
+        return view::make(Utility::authBlade('temp_user','project.project_item','project.project_item_temp'))->with('item',$project)->with('billMethod',$billMethod);
 
     }
 
@@ -225,27 +232,6 @@ class ProjectController extends Controller
             'message2' => 'deleted',
             'message' => 'Data deleted successfully'
         ]);
-
-    }
-
-    public function processProjectItem($project){
-
-        $project->task = Task::countDataOr3('project_id',$project->id,'assigned_user',Auth::user()->id,'temp_user',Auth::user()->id);
-        $project->milestone = Milestone::countData('project_id',$project->id);
-        $project->task_list = TaskList::countData('project_id',$project->id);
-        $project->change_log = ChangeLog::countData('project_id',$project->id);
-        $project->decision = Decision::countData('project_id',$project->id);
-        $project->deliverables = Deliverable::countData('project_id',$project->id);
-        $project->risk = Risk::countData('project_id',$project->id);
-        $project->assump = AssumpConstraint::countData('project_id',$project->id);
-        $project->issues = Issues::countData('project_id',$project->id);
-        $project->lesson_learnt = LessonsLearnt::countData('project_id',$project->id);
-        $project->documents = ProjectDocs::countData('project_id',$project->id);
-        $project->requests = ProjectMemberRequest::countData('project_id',$project->id);
-        $project->members = ProjectTeam::countData('project_id',$project->id);
-        $project->timesheet = Timesheet::countDataOr3('project_id',$project->id,'assigned_user',Auth::user()->id,'temp_user',Auth::user()->id);
-
-        return $project;
 
     }
 

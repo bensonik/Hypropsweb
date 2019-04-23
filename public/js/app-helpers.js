@@ -1194,6 +1194,29 @@
 
     }
 
+    function navigatePage(pageUrl){
+        window.location.replace(pageUrl);
+    }
+
+    function changeUserT(normal_user1,temp_user1,change_user1){
+        var changeUserT = $('#'+change_user1);
+
+        if(changeUserT.val() == '1'){
+
+            $('#'+normal_user1).css("display", "none");
+
+            $('#'+temp_user1).css("display", "block");
+            changeUserT.val('0');
+        }else{
+
+            $('#'+temp_user1).css("display", "none");
+
+            $('#'+normal_user1).css("display", "block");
+            changeUserT.val('1');
+        }
+
+    }
+
     function searchItem(inputId,displayId,submitUrl,defaultUrl,token){
 
         var searchInput = $('#'+inputId).val();

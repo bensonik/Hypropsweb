@@ -12,6 +12,7 @@ use App\model\PoExtension;
 use App\model\Quote;
 use App\model\QuoteExtension;
 use App\model\RFQExtension;
+use App\model\TempUsers;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
@@ -78,6 +79,35 @@ class GeneralController extends Controller
             }else{
 
                 $fetchData = User::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH TEMP USER
+        if($type == 'default_search_temp'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = TempUsers::searchUser($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = (Auth::user()->id == 3) ? TempUsers::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
+                    : TempUsers::massData('uid', $user_ids);
+            }else{
+
+                $fetchData = TempUsers::getAllData();
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
             }
@@ -634,12 +664,23 @@ class GeneralController extends Controller
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
+        //END OF ADDING BILL OF MATERIALS
+
+        //START OF ASSIGN INVENTORY
         if($type == 'assign_inv'){
 
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
-        //END OF ADDING BILL OF MATERIALS
+        //END OF ASSIGN INVENTORY
+
+        //START OF TASK
+        if($type == 'task'){
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF TASK
 
         //START OF ADDING PURCHASE ORDER
         if($type == 'po'){

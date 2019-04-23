@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\model\LoanRates;
 use App\Helpers\Utility;
+use App\model\Requisition;
 use App\User;
 use Auth;
 use View;
@@ -62,6 +63,7 @@ class LoanRatesController extends Controller
                 $dbDATA = [
                     'loan_name' => ucfirst($request->input('loan_name')),
                     'interest_rate' => $request->input('interest_rate'),
+                    'duration' => $request->input('duration'),
                     'loan_desc' => ucfirst($request->input('leave_description')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
@@ -111,9 +113,21 @@ class LoanRatesController extends Controller
         $validator = Validator::make($request->all(),LoanRates::$mainRules);
         if($validator->passes()) {
 
+            //CHECK IF LOAN CONFIG ITEM IS ACTIVELY RUNNING AN EMPLOYEE LOAN
+            $checkRequisition = Requisition::firstRow('loan_id',$request->input('edit_id'));
+            if(!empty($checkRequisition)){
+                if($checkRequisition->loan_balance > 0){
+                    return response()->json([
+                        'message' => 'warning',
+                        'message2' => 'some loans are currently active with this Loan Config, ensure there are no employee loans active'
+                    ]);
+
+                }
+            }
             $dbDATA = [
                 'loan_name' => ucfirst($request->input('loan_name')),
                 'interest_rate' => $request->input('interest_rate'),
+                'duration' => $request->input('duration'),
                 'loan_desc' => ucfirst($request->input('loan_description')),
             ];
             $rowData = LoanRates::specialColumns('loan_name', $request->input('loan_name'));
@@ -129,7 +143,7 @@ class LoanRatesController extends Controller
 
                 } else {
                     return response()->json([
-                        'message' => 'good',
+                        'message' => 'warning',
                         'message2' => 'Entry already exist, please try another entry'
                     ]);
 
