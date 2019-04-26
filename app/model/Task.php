@@ -21,14 +21,14 @@ class Task extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'goal_set' => 'required'
+        'task_title' => 'required',
+        'task_status' => 'required',
+        'user' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date',
     ];
 
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
-    ];
+
 
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id')->withDefault();
@@ -46,7 +46,7 @@ class Task extends Model
     }
 
     public function extUser(){
-        return $this->belongsTo('App\model\TempUser','temp_user','id')->withDefault();
+        return $this->belongsTo('App\model\TempUsers','temp_user','id')->withDefault();
 
     }
 

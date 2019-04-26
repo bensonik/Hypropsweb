@@ -1198,21 +1198,52 @@
         window.location.replace(pageUrl);
     }
 
-    function changeUserT(normal_user1,temp_user1,change_user1){
+    function changeUserT(normal_user1,temp_user1,change_user1,input_id,temp_input_id){
         var changeUserT = $('#'+change_user1);
+        var normalUser = $('#'+normal_user1);
+        var tempUser = $('#'+temp_user1);
+        var inputId = $('#'+input_id);
+        var tempInputId = $('#'+temp_input_id);
 
         if(changeUserT.val() == '1'){
 
-            $('#'+normal_user1).css("display", "none");
-
-            $('#'+temp_user1).css("display", "block");
             changeUserT.val('0');
+            inputId.removeClass( "user_class" );
+            normalUser.css("display", "none");
+
+            tempUser.css("display", "block");
+            tempInputId.addClass( "user_class" );
+
         }else{
 
-            $('#'+temp_user1).css("display", "none");
-
-            $('#'+normal_user1).css("display", "block");
             changeUserT.val('1');
+            tempInputId.removeClass( "user_class" );
+            tempUser.css("display", "none");
+
+            normalUser.css("display", "block");
+            inputId.addClass( "user_class" );
+
+        }
+
+    }
+
+    function swithInputs(normal_user1,temp_user1,change_user1){
+        var changeUserT = $('#'+change_user1);
+        var normalUser = $('#'+normal_user1);
+        var tempUser = $('#'+temp_user1);
+
+        if(changeUserT.val() == '1'){
+
+            changeUserT.val('0');
+            normalUser.css("display", "none");
+
+            tempUser.css("display", "block");
+        }else{
+
+            changeUserT.val('1');
+            tempUser.css("display", "none");
+            normalUser.css("display", "block");
+
         }
 
     }

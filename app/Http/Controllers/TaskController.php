@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\Inventory;
 use Illuminate\Http\Request;
 use App\model\AssumpConstraint;
@@ -35,6 +36,11 @@ use Illuminate\Routing\Redirector;
 
 class TaskController extends Controller
 {
+
+    function __contstuct(){
+        $this->middleware('auth');
+        $this->middleware('auth:temp_user');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -49,11 +55,11 @@ class TaskController extends Controller
         Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('task.main_view',array('mainData' => $mainData,
+            return \Response::json(view::make(Utility::authBlade('temp_user','task.main_view','task.main_view_temp'),array('mainData' => $mainData,
                 'project' => project))->render());
 
         }
-        return view::make('task.main_view')->with('mainData',$mainData)->with('item',$project);
+        return view::make(Utility::authBlade('temp_user','task.main_view','task.main_view_temp'))->with('mainData',$mainData)->with('item',$project);
 
     }
 
@@ -81,42 +87,57 @@ class TaskController extends Controller
     public function create(Request $request)
     {
         //
-        $item = json_decode($request->input('item'));
-        $user= json_decode($request->input('user'));
-        $location = json_decode($request->input('location'));
-        $qty = json_decode($request->input('qty'));
-        $desc = json_decode($request->input('desc'));
+        $taskTitle = Utility::jsonUrlDecode($request->input('task_title'));
+        $user= Utility::jsonUrlDecode($request->input('user_class'));
+        $taskDetails = Utility::jsonUrlDecode($request->input('task_details'));
+        $taskStatus = Utility::jsonUrlDecode($request->input('task_status'));
+        $startDate = Utility::jsonUrlDecode($request->input('start_date'));
+        $endDate = Utility::jsonUrlDecode($request->input('end_date'));
+        $taskPriority = Utility::jsonUrlDecode($request->input('task_priority'));
+        $timePlanned = Utility::jsonUrlDecode($request->input('time_planned'));
+        $changeUser = Utility::jsonUrlDecode($request->input('change_user'));
+        $projectId = $request->input('project_id');
 
-        $rule = [];
+        /*return response()->json([
+            'message' => 'warning',
+            'message2' => json_encode($user).'taskTitle='.json_encode($changeUser)
+        ]);*/
 
-        $validator = Validator::make($request->all(),$rule);
-        if(count($item) == count($qty)){
+        if(!empty($taskTitle) && !empty($taskDetails) && !empty($taskStatus) && !empty($startDate) && !empty($endDate)){
 
-            for($i=0;$i<count($item);$i++) {
-                if(empty($user[$i])) {
-                    $user[$i] = '';
-                }
-                if(empty($location[$i])) {
-                    $location[$i] = '';
-                }
-                if(empty($desc[$i])) {
-                    $desc[$i] = '';
-                }
+            for($i=0;$i<count($taskTitle);$i++) {
+                $changeUserTbl = ($changeUser[$i] == '1') ? 'assigned_user' : 'temp_user' ;
+                $changeUserDbTbl = ($changeUser[$i] == '1') ? 'users' : 'temp_users' ;
                 $dbDATA = [
-                    'item_id' => $item[$i],
-                    'user_id' => $user[$i],
-                    'qty' => $qty[$i],
-                    'location' => $location[$i],
-                    'item_desc' => $desc[$i],
+                    'project_id' => $projectId,
+                    'task' => $taskTitle[$i],
+                    'task_desc' => $taskDetails[$i],
+                    $changeUserTbl => Utility::checkEmptyArrayItem($user,$i,''),
+                    'task_status' => $taskStatus[$i],
+                    'start_date' => Utility::standardDate($startDate[$i]),
+                    'end_date' => Utility::standardDate($endDate[$i]),
+                    'task_priority' => Utility::checkEmptyArrayItem($taskPriority,$i,''),
+                    'work_hours' => Utility::checkEmptyArrayItem($timePlanned,$i,''),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
-                InventoryAssign::create($dbDATA);
-                /*$itemData = Inventory::firstRow('id',$item[$i]);
-                $newQty = $itemData->qty - $qty[$i];
-                $dataUpdate = ['qty' => $newQty];
-                $itemUpdate = Inventory::defaultUpdate('id',$item[$i],$dataUpdate);*/
+                Task::create($dbDATA);
+                $projDetails = Project::firstRow('id',$projectId);
+                if(Utility::checkEmptyArrayItem($taskPriority,$i,'0') != '0'){
+                    $userData = Utility::firstRow($changeUserDbTbl,'id',$user[$i]);
+                    $userEmail = $userData->email;
+
+                    $mailContent = [];
+
+                    $messageBody = "Hello '.$userData->firstname.', a task ".$taskTitle[$i]." have been
+                    assigned to you on the project ".$projDetails->project_name." please visit the portal to view";
+
+                    $mailContent['message'] = $messageBody;
+                    Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+
+                }
+
 
             }
 
@@ -126,12 +147,14 @@ class TaskController extends Controller
             ]);
 
 
+        }else{
+            return response()->json([
+                'message' => 'warning',
+                'message2' => 'Please fill in all required fields, only task priority and time planned are optional'
+            ]);
         }
 
-        return response()->json([
-            'message' => 'warning',
-            'message2' => 'Please fill in all required fields'
-        ]);
+
         /* $errors = $validator->errors();
          return response()->json([
              'message2' => 'fail',
@@ -151,8 +174,8 @@ class TaskController extends Controller
     public function editForm(Request $request)
     {
         //
-        $skill = InventoryAssign::firstRow('id',$request->input('dataId'));
-        return view::make('inventory_assign.edit_form')->with('edit',$skill);
+        $skill = Task::firstRow('id',$request->input('dataId'));
+        return view::make('task.edit_form')->with('edit',$skill);
 
     }
 
@@ -166,18 +189,35 @@ class TaskController extends Controller
     {
         //
 
-        $validator = Validator::make($request->all(),InventoryAssign::$mainRules);
+        $validator = Validator::make($request->all(),Task::$mainRules);
         if($validator->passes()) {
 
+            $taskTitle = $request->input('task_title');
+            $user= $request->input('user');
+            $taskDetails = $request->input('task_details');
+            $taskStatus = $request->input('task_status');
+            $startDate = $request->input('start_date');
+            $endDate = $request->input('end_date');
+            $taskPriority = $request->input('task_priority');
+            $timePlanned = $request->input('time_planned');
+            $changeUser = $request->input('change_user');
 
+            $changeUserTbl = ($changeUser == 1) ? 'assigned_user' : 'temp_user' ;
+            $changeUserDbTbl = ($changeUser == 1) ? 'users' : 'temp_users' ;
             $dbDATA = [
-                'qty' => $request->input('quantity'),
-                'location' => $request->input('location'),
-                'item_desc' => $request->input('description'),
-                'updated_by' => Auth::user()->id
+                'task' => $taskTitle,
+                'task_desc' => $taskDetails,
+                $changeUserTbl => $user,
+                'task_status' => $taskStatus,
+                'start_date' => Utility::standardDate($startDate),
+                'end_date' => Utility::standardDate($endDate),
+                'work_hours' => $timePlanned,
+                'task_priority' => $taskPriority,
+                'updated_by' => Auth::user()->id,
             ];
 
-            InventoryAssign::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+            Task::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
             return response()->json([
                 'message' => 'good',
@@ -220,7 +260,7 @@ class TaskController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = InventoryAssign::massUpdate('id',$idArray,$dbData);
+        $delete = Task::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',

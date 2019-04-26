@@ -7,11 +7,17 @@
 
         </th>
 
-        <th>Inventory Item</th>
-        <th>Assigned To</th>
-        <th>Quantity Assigned</th>
-        <th>location</th>
-        <th>Description</th>
+        <th>Project</th>
+        <th>Task</th>
+        <th>Details</th>
+        <th>Assigned User</th>
+        <th>Status</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <th>Duration</th>
+        <th>Priority</th>
+        <th>Time Planned(hrs)</th>
+        <th>Time Log(hrs)</th>
         <th>Created by</th>
         <th>Created at</th>
         <th>Updated by</th>
@@ -27,11 +33,22 @@
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->inventory->item_name}}</td>
-            <td>{{$data->assignee->firstname}}&nbsp;{{$data->assignee->lastname}}</td>
-            <td>{{$data->qty}}</td>
-            <td>{{$data->location}}</td>
-            <td>{{$data->item_desc}}</td>
+            <td>{{$data->project->project_name}}</td>
+            <td>{{$data->task}}</td>
+            <td>{{$data->task_desc}}</td>
+            <td>
+                @if(!empty($data->assigned_user))
+                    {{$data->assignee->firstname}}&nbsp;{{$data->assignee->lastname}}
+                @else
+                    {{$data->extUser->firstname}}&nbsp;{{$data->extUser->lastname}}
+                @endif
+            </td>
+            <td>{{$data->task_status}}</td>
+            <td>{{$data->start_date}}</td>
+            <td>{{$data->end_date}}</td>
+            <td></td>
+            <td>{{$data->work_hours}}</td>
+            <td></td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -48,13 +65,13 @@
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_inv_assign_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
         </tr>
     @endforeach
     </tbody>
 </table>
 
-<div class=" pagination pull-right">
+<div class="task pagination pull-right">
     {!! $mainData->render() !!}
 </div>

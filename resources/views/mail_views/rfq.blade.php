@@ -10,7 +10,7 @@
             <td>RFQ Due Date: {{$data['rfq']->due_date}}</td>
         </tr>
         <tr>
-            <td>Message:  {{$data['rfq']->message}}</td>
+            <td>Message:  {!!$data['rfq']->message!!}</td>
             <td></td>
         </tr>
         </tbody>

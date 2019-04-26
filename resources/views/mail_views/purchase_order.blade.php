@@ -17,7 +17,7 @@
 
         </tr>
         <tr>
-            <td>Message: {{$data['po']->message}}</td>
+            <td>Message: {!!$data['po']->message!!}</td>
             <td></td>
         </tr>
         </tbody>

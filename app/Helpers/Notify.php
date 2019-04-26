@@ -69,4 +69,9 @@ class Notify
         //Mail::to($email)->send(new quoteMail($objContent));
     }
 
+    public static function GeneralMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+
+        //Mail::to($email)->send(new GeneralMail($objContent));
+    }
+
 }

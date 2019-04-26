@@ -2389,13 +2389,13 @@
                     <div class="form-line">
                         <input type="text" class="form-control" autocomplete="off" id="select_users{{$num2}}" onkeyup="searchOptionList('select_users{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','default_search_temp','users{{$num2}}');" name="select_user" placeholder="Select External/Contract User">
 
-                        <input type="hidden" class="user_class" name="user" id="users{{$num2}}" />
+                        <input type="hidden" class="" name="user_temp" id="users{{$num2}}" />
                     </div>
                 </div>
                 <ul id="myUL{{$num2}}" class="myUL"></ul>
             </div>
         </div>
-        <input type="checkbox" value="1" onclick="changeUserT('normal_user{{$num2}}','temp_user{{$num2}}','change_user{{$num2}}');" id="change_user{{$num2}}" />Check to select contract/external user
+        <input type="checkbox" value="1" class="change_user" onclick="changeUserT('normal_user{{$num2}}','temp_user{{$num2}}','change_user{{$num2}}','user{{$num2}}','users{{$num2}}');" id="change_user{{$num2}}" />Check to select contract/external user
         <hr/>
 
         <div class="row clearfix">
@@ -2440,7 +2440,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control start_date datepicker2" name="start_date" placeholder="Start Date">
+                        <input type="text" class="form-control start_date datepicker2" autocomplete="off" name="start_date" placeholder="Start Date">
                     </div>
                 </div>
             </div>
@@ -2448,7 +2448,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control end_date datepicker2" name="end_date" placeholder="End Date">
+                        <input type="text" class="form-control end_date datepicker2" autocomplete="off" name="end_date" placeholder="End Date">
                     </div>
                 </div>
             </div>
