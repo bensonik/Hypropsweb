@@ -1,5 +1,5 @@
 <ul  class="nav nav-tabs col-md-2 ">
-    <li  class="active" onclick="navigatePage('<?php echo url('project_item/'.$item->id) ?>')">
+    <li  class="active" onclick="navigatePage('<?php echo url('project_item/'.$item->id.\App\Helpers\Utility::authLink('temp_user')) ?>')">
         <div data-target="#overview" data-toggle="tab">
             <div>
                 <span class="account-type">Overview</span><br/>
@@ -16,7 +16,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#milestone" data-toggle="tab">
+        <div data-target="#milestone" onclick="navigatePage('<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Milestone</span><br/>
                 <span class="account-amount">{{$item->milestone}}</span><br/>
@@ -24,7 +24,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#task_list" data-toggle="tab">
+        <div data-target="#task_list" onclick="navigatePage('<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Task List</span><br/>
                 <span class="account-amount">{{$item->task_list}}</span><br/>
@@ -32,7 +32,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#task" onclick="navigatePage('<?php echo url('project/'.$item->id.'/task') ?>')" data-toggle="tab">
+        <div data-target="#task" onclick="navigatePage('<?php echo url('project/'.$item->id.'/task'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Task</span><br/>
                 <span class="account-amount">{{$item->task}}</span><br/>
@@ -41,7 +41,7 @@
         </div>
     </li>
     <li class="">
-        <div data-target="#team_members" data-toggle="tab">
+        <div data-target="#team_members" onclick="navigatePage('<?php echo url('project/'.$item->id.'/team-'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div class="ellipsis">
                 <span class="account-type">Team Members</span><br/>
                 <span class="account-amount">{{$item->members}}</span><br/>

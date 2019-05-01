@@ -202,7 +202,7 @@
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td><a href="{{route('project_item', ['id' => $data->id])}}">{{$data->project_name}}</a></td>
+                            <td><a href="{{url('project_item/'.$data->id.\App\Helpers\Utility::authLink('temp_user'))}}">{{$data->project_name}}</a></td>
                             <td>{{$data->start_date}}</td>
                             <td>{{$data->end_date}}</td>
                             <td>

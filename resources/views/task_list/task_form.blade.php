@@ -1,13 +1,12 @@
-<table class="table table-bordered table-hover table-striped" id="main_table">
+<table class="table table-bordered table-hover table-striped" id="main_table_task">
     <thead>
     <tr>
         <th>
-            <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                   name="check_all" class="" />
+            <input type="checkbox" onclick="toggleme(this,'kid_checkbox_task');" id="parent_check_task"
+                   name="check_all_task" class="" />
 
         </th>
 
-        <th>Manage</th>
         <th>Project</th>
         <th>Task</th>
         <th>Details</th>
@@ -27,14 +26,12 @@
     </thead>
     <tbody>
     @foreach($mainData as $data)
-        <tr>
+        <tr id="tr_item_{{$data->id}}">
             <td scope="row">
-                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                <input value="{{$data->id}}" type="checkbox" id="item_{{$data->id}}" class="kid_checkbox_task" />
 
             </td>
-            <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-            </td>
+
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project->project_name}}</td>
             <td>{{$data->task}}</td>
@@ -74,6 +71,3 @@
     </tbody>
 </table>
 
-<div class="task pagination pull-left">
-    {!! $mainData->render() !!}
-</div>

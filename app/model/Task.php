@@ -23,7 +23,7 @@ class Task extends Model
     public static $mainRules = [
         'task_title' => 'required',
         'task_status' => 'required',
-        'user' => 'required',
+        //'user' => 'required',
         'start_date' => 'required|date',
         'end_date' => 'required|date',
     ];

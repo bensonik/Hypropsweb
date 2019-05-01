@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\Inventory;
 use Illuminate\Http\Request;
 use App\model\AssumpConstraint;
@@ -19,10 +20,11 @@ use App\model\ProjectTeam;
 use App\Helpers\Utility;
 use App\model\Risk;
 use App\model\TaskList;
+use App\model\TaskItems;
 use App\model\Timesheet;
 use App\User;
 use App\model\Task;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use View;
 use Validator;
 use Input;
@@ -35,26 +37,56 @@ use Illuminate\Routing\Redirector;
 
 class MilestoneController extends Controller
 {
+
+    function __contstuct(){
+        $this->middleware('auth');
+        $this->middleware('auth:temp_user');
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index(Request $request,$id)
     {
 
-        $dataId = $request->input('dataId');
-        $mainData = Milestone::specialColumnsPage('project_id',$dataId);
-        $taskList = TaskList::specialColumns('project_id',$dataId);
-        $task = Task::specialColumns('project_id',$dataId);
+
+        $mainData = Milestone::specialColumnsPage('project_id',$id);
+        $milestone = Milestone::specialColumns('project_id',$id);
+        $taskList = TaskList::specialColumns('project_id',$id);
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
+        $this->countTask($mainData);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('milestone.reload',array('mainData' => $mainData,
-            'taskList' => $taskList,'task' => $task))->render());
+            return \Response::json(view::make(Utility::authBlade('temp_user','task_list.reload','task_list.reload'),array('mainData' => $mainData,
+                'item' => $project,'taskList',$taskList,'milestone',$milestone))->render());
 
         }
-                return view::make('milestone.main_view')->with('mainData',$mainData)
-                    ->with('taskList',$taskList)->with('task',$task);
+        return view::make(Utility::authBlade('temp_user','task_list.main_view','task_list.main_view_temp'))
+            ->with('mainData',$mainData)->with('item',$project)->with('taskList',$taskList)
+            ->with('milestone',$milestone);
+
+    }
+
+    public function indexTemp(Request $request,$id)
+    {
+
+        $mainData = Milestone::specialColumnsPage('project_id',$id);
+        $milestone = Milestone::specialColumns('project_id',$id);
+        $taskList = TaskList::specialColumns('project_id',$id);
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
+        $this->countTask($mainData);
+
+        if ($request->ajax()) {
+            return \Response::json(view::make(Utility::authBlade('temp_user','task_list.reload','task_list.reload'),array('mainData' => $mainData,
+                'item' => $project,'taskList',$taskList,'milestone',$milestone))->render());
+
+        }
+        return view::make(Utility::authBlade('temp_user','task_list.main_view','task_list.main_view_temp'))
+            ->with('mainData',$mainData)->with('item',$project)->with('taskList',$taskList)
+            ->with('milestone',$milestone);
 
     }
 
@@ -66,62 +98,118 @@ class MilestoneController extends Controller
     public function create(Request $request)
     {
         //
-        $item = json_decode($request->input('item'));
-        $user= json_decode($request->input('user'));
-        $location = json_decode($request->input('location'));
-        $qty = json_decode($request->input('qty'));
-        $desc = json_decode($request->input('desc'));
+        $taskTitle = Utility::jsonUrlDecode($request->input('task_title'));
+        $user= Utility::jsonUrlDecode($request->input('user_class'));
+        $taskDetails = Utility::jsonUrlDecode($request->input('task_details'));
+        $taskStatus = Utility::jsonUrlDecode($request->input('task_status'));
+        $startDate = Utility::jsonUrlDecode($request->input('start_date'));
+        $endDate = Utility::jsonUrlDecode($request->input('end_date'));
+        $taskPriority = Utility::jsonUrlDecode($request->input('task_priority'));
+        $timePlanned = Utility::jsonUrlDecode($request->input('time_planned'));
+        $changeUser = Utility::jsonUrlDecode($request->input('change_user'));
+        $projectId = $request->input('project_id');
+        $changeTask = $request->input('change_task');
+        $listDesc = $request->input('list_desc');
+        $listTitle = $request->input('list_title');
 
-        $rule = [];
+        /*return response()->json([
+            'message' => 'warning',
+            'message2' => 'changeTask='.$changeTask.'list_name='.$listTitle
+        ]);*/
+        $validator = Validator::make($request->all(),TaskList::$mainRules);
+        if($validator->passes()) {
 
-        $validator = Validator::make($request->all(),$rule);
-        if(count($item) == count($qty)){
+            if (!empty($taskTitle) && !empty($taskDetails) && !empty($taskStatus) && !empty($startDate) && !empty($endDate)) {
 
-            for($i=0;$i<count($item);$i++) {
-                if(empty($user[$i])) {
-                    $user[$i] = '';
+                $taskNewId = [];
+
+                for ($i = 0; $i < count($taskTitle); $i++) {
+                    $changeUserTbl = ($changeUser[$i] == Utility::P_USER) ? 'assigned_user' : 'temp_user';
+                    $changeUserDbTbl = ($changeUser[$i] == Utility::P_USER) ? 'users' : 'temp_users';
+
+                    $userType = ($user[$i] == '') ? '' : $changeUser[$i];
+                    $dbDATA = [
+                        'project_id' => $projectId,
+                        'task' => $taskTitle[$i],
+                        'task_desc' => $taskDetails[$i],
+                        $changeUserTbl => Utility::checkEmptyArrayItem($user, $i, ''),
+                        'task_status' => $taskStatus[$i],
+                        'start_date' => Utility::standardDate($startDate[$i]),
+                        'end_date' => Utility::standardDate($endDate[$i]),
+                        'task_priority' => Utility::checkEmptyArrayItem($taskPriority, $i, ''),
+                        'work_hours' => Utility::checkEmptyArrayItem($timePlanned, $i, ''),
+                        'user_type' => $userType,
+                        'created_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+
+                    $task = Task::create($dbDATA);
+                    $taskNewId[] = $task->id;
+                    $projDetails = Project::firstRow('id', $projectId);
+                    if (Utility::checkEmptyArrayItem($taskPriority, $i, '') != '') {
+                        $userData = Utility::firstRow($changeUserDbTbl, 'id', $user[$i]);
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', a task " . $taskTitle[$i] . " have been
+                    assigned to you on the project " . $projDetails->project_name . " please visit the portal to view";
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+
+                    }
+
+
                 }
-                if(empty($location[$i])) {
-                    $location[$i] = '';
+                $createUpdate = ($changeTask == '2') ? 'updated_by' : 'created_by';
+                if($changeTask == '2'){
+                    $listData = TaskList::firstRow('id',$listTitle);
+                    $listTitle = $listData->list_name;
                 }
-                if(empty($desc[$i])) {
-                    $desc[$i] = '';
-                }
-                $dbDATA = [
-                    'item_id' => $item[$i],
-                    'user_id' => $user[$i],
-                    'qty' => $qty[$i],
-                    'location' => $location[$i],
-                    'item_desc' => $desc[$i],
-                    'created_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
+
+                $dbDATAList = [
+                    'list_name' => $listTitle,
+                    'list_desc' => $listDesc,
+                    'project_id' => $projectId,
+                    'status' => Utility::STATUS_ACTIVE,
+                    $createUpdate => Auth::user()->id,
                 ];
 
-                InventoryAssign::create($dbDATA);
-                /*$itemData = Inventory::firstRow('id',$item[$i]);
-                $newQty = $itemData->qty - $qty[$i];
-                $dataUpdate = ['qty' => $newQty];
-                $itemUpdate = Inventory::defaultUpdate('id',$item[$i],$dataUpdate);*/
+                $taskList = ($changeTask == '2') ? TaskList::defaultUpdate('id',$listTitle,$dbDATAList) : TaskList::create($dbDATAList);
+                $listId = ($changeTask == '2') ? $request->input('list_title') : $taskList->id;
 
+                foreach ($taskNewId as $taskId) {
+                    $dbDATAList = [
+                        'list_id' => $listId,
+                        'task_id' => $taskId,
+                        'status' => Utility::STATUS_ACTIVE,
+                        'created_by' => Auth::user()->id,
+                    ];
+
+                }
+                TaskItems::create($dbDATAList);
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'saved'
+                ]);
+
+
+            } else {
+                return response()->json([
+                    'message' => 'warning',
+                    'message2' => 'Please fill in all required fields, only task priority and time planned are optional'
+                ]);
             }
-
-            return response()->json([
-                'message' => 'good',
-                'message2' => 'saved'
-            ]);
-
 
         }
 
+        $errors = $validator->errors();
         return response()->json([
-            'message' => 'warning',
-            'message2' => 'Please fill in all required fields'
+            'message2' => 'fail',
+            'message' => $errors
         ]);
-        /* $errors = $validator->errors();
-         return response()->json([
-             'message2' => 'fail',
-             'message' => $errors
-         ]);*/
 
 
     }
@@ -136,8 +224,21 @@ class MilestoneController extends Controller
     public function editForm(Request $request)
     {
         //
-        $skill = InventoryAssign::firstRow('id',$request->input('dataId'));
-        return view::make('inventory_assign.edit_form')->with('edit',$skill);
+        $tasks = TaskList::firstRow('list_id',$request->input('dataId'));
+        return view::make('task_list.edit_form')->with('edit',$tasks);
+
+    }
+
+    public function taskForm(Request $request)
+    {
+        //
+        $tasks = TaskItems::specialColumns('list_id',$request->input('dataId'));
+        $taskIds = [];
+        foreach($tasks as $t){
+            $taskIds[] = $t->task_id;
+        }
+        $mainData = Task::massData('id',$taskIds);
+        return view::make('task_list.task_form')->with('mainData',$mainData);
 
     }
 
@@ -151,18 +252,19 @@ class MilestoneController extends Controller
     {
         //
 
-        $validator = Validator::make($request->all(),InventoryAssign::$mainRules);
+        $validator = Validator::make($request->all(),TaskList::$mainRules);
         if($validator->passes()) {
 
+            $taskTitle = $request->input('list_title');
+            $taskDetails = $request->input('list_desc');
 
             $dbDATA = [
-                'qty' => $request->input('quantity'),
-                'location' => $request->input('location'),
-                'item_desc' => $request->input('description'),
-                'updated_by' => Auth::user()->id
+                'list_name' => $taskTitle,
+                'list_desc' => $taskDetails,
+                'updated_by' => Auth::user()->id,
             ];
 
-            InventoryAssign::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+            TaskList::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
             return response()->json([
                 'message' => 'good',
@@ -205,11 +307,50 @@ class MilestoneController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = InventoryAssign::massUpdate('id',$idArray,$dbData);
+
+
+
+        $taskItems = TaskItems::massData('list_id',$idArray);
+        $taskArray = [];
+        foreach ($taskItems as $task){
+            $taskArray[] = $task->task_id;
+        }
+
+        $delete1 = TaskList::massUpdate('task_id',$idArray,$dbData);
+        $delete2 = TaskItems::massUpdate('task_id',$taskArray,$dbData);
+        $delete3 = Task::massUpdate('id',$taskArray,$dbData);
+        $delete4 = Timesheet::massUpdate('task_id',$taskArray,$dbData);
+
+        return response()->json([
+            'message2' => 'deleted',
+            'message' => 'Data deleted successfully'
+        ]);
+
+    }
+
+    public function destroyListItem(Request $request)
+    {
+        //
+        $idArray = json_decode($request->input('all_data'));
+        $dbData = [
+            'status' => Utility::STATUS_DELETED
+        ];
+
+        $delete2 = TaskItems::massUpdate('task_id',$idArray,$dbData);
+        $delete3 = Task::massUpdate('id',$idArray,$dbData);
+        $delete4 = Timesheet::massUpdate('task_id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',
             'message' => 'Data deleted successfully'
         ]);
     }
+
+    public function countTask($data){
+        foreach($data as $d){
+            $countTask = TaskItems::countData('list_id',$d->id);
+            $d->count_task = $countTask;
+        }
+    }
+
 }

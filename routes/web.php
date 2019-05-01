@@ -146,12 +146,13 @@ Route::any('/download_attachment', 'RequisitionController@downloadAttachment')->
 Route::post('/delete_requisition', 'RequisitionController@destroy')->name('delete_requisition');
 
 // -------------PROJECT MODULE-----------
-Route::any('/project', 'ProjectController@index')->name('project');
+Route::any('/project', 'ProjectController@index')->name('project')->middleware('auth');
 Route::any('/project_report', 'ProjectController@project_report')->name('project_report')->middleware('auth');
-Route::any('/project_item/{id}', 'ProjectController@projectItem')->name('project_item');
+Route::any('/project_item/{id}', 'ProjectController@projectItem')->name('project_item')->middleware('auth');
 
-Route::any('/project_temp', 'ProjectController@index_temp')->name('project')->middleware('auth:temp_user');
-Route::any('/project_item_temp', 'ProjectController@projectItem')->name('project_item_temp')->middleware('auth:temp_user');
+Route::any('/project/temp', 'ProjectController@indexTemp')->name('project_temp')->middleware('auth:temp_user');
+Route::any('/project_item/{id}/temp', 'ProjectController@projectItemTemp')->name('project_item_temp')->middleware('auth:temp_user');
+
 
 Route::post('/create_project', 'ProjectController@create')->name('create_project');
 Route::post('/edit_project_form', 'ProjectController@editForm')->name('edit_project_form');
@@ -159,23 +160,28 @@ Route::post('/edit_project', 'ProjectController@edit')->name('edit_project');
 Route::post('/delete_project', 'ProjectController@destroy')->name('delete_project');
 
 // ------------PROJECT MILESTONE MODULE---------------
-Route::any('/milestone', 'MilestoneController@index')->name('milestone');
-Route::any('/milestone_reload', 'MilestoneController@index_reload')->name('milestone_reload');
+Route::any('/milestone', 'MilestoneController@index')->name('milestone')->middleware('auth');
+Route::any('/milestone/temp', 'MilestoneController@indexTemp')->name('milestone_temp')->middleware('auth:temp_user');
 Route::post('/create_milestone', 'MilestoneController@create')->name('create_milestone');
 Route::post('/edit_milestone_form', 'MilestoneController@editForm')->name('edit_milestone_form');
+Route::any('/milestone_task_form', 'MilestoneController@taskForm')->name('milestone_task_form');
+Route::any('/task_list_form', 'MilestoneController@taskListForm')->name('task_list_form');
 Route::post('/edit_milestone', 'MilestoneController@edit')->name('edit_milestone');
 Route::post('/delete_milestone', 'MilestoneController@destroy')->name('delete_milestone');
 
 // ------------PROJECT TASK LIST MODULE---------------
-Route::any('/task_list', 'TaskListController@index')->name('task_list');
-Route::any('/task_list_reload', 'TaskListController@index_reload')->name('task_list_reload');
+Route::any('/project/{id}/task_list', 'TaskListController@index')->name('task_list')->middleware('auth');
+Route::any('/project/{id}/task/temp', 'TaskListController@indexTemp')->name('task_list_temp')->middleware('auth:temp_user');
 Route::post('/create_task_list', 'TaskListController@create')->name('create_task_list');
 Route::post('/edit_task_list_form', 'TaskListController@editForm')->name('edit_task_list_form');
+Route::any('/task_form', 'TaskListController@taskForm')->name('task_form');
 Route::post('/edit_task_list', 'TaskListController@edit')->name('edit_task_list');
+Route::any('/delete_task_list_item', 'TaskListController@destroyListItem')->name('delete_task_list_item');
 Route::post('/delete_task_list', 'TaskListController@destroy')->name('delete_task_list');
 
 // ------------PROJECT TASK MODULE---------------
 Route::any('/project/{id}/task', 'TaskController@index')->name('task')->middleware('auth');
+Route::any('/project/{id}/task/temp', 'TaskController@indexTemp')->name('task_temp')->middleware('auth:temp_user');
 Route::any('/task_reload', 'TaskController@index_reload')->name('task_reload');
 Route::post('/create_task', 'TaskController@create')->name('create_task');
 Route::post('/edit_task_form', 'TaskController@editForm')->name('edit_task_form');
@@ -183,8 +189,8 @@ Route::post('/edit_task', 'TaskController@edit')->name('edit_task');
 Route::post('/delete_task', 'TaskController@destroy')->name('delete_task');
 
 // ------------PROJECT TIMESHEET MODULE---------------
-Route::any('/timesheet', 'TimesheetController@index_reload')->name('timesheet_reload');
-Route::any('/timesheet_reload', 'TimesheetController@index')->name('timesheet');
+Route::any('/timesheet', 'TimesheetController@index')->name('timesheet')->middleware('auth');
+Route::any('/timesheet/temp', 'TimesheetController@indexTemp')->name('timesheet_temp')->middleware('auth:temp_user');
 Route::post('/create_timesheet', 'TimesheetController@create')->name('create_timesheet');
 Route::post('/edit_timesheet_form', 'TimesheetController@editForm')->name('edit_timesheet_form');
 Route::post('/edit_timesheet', 'TimesheetController@edit')->name('edit_timesheet');

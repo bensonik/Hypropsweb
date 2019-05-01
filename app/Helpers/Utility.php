@@ -34,6 +34,7 @@ class Utility
     const P25 = '25', P20 = '20', P15 = '15', P50 = '50', P100 = '100', P35 = '35';
     const HOD_DETECTOR = 1, DETECT = 1;
     const REVIEW_RATE = [1 => 'None', 2 => 'Exceeded Expectations', 3 => 'Met expectations', 4 => 'Did not meet expectations'];
+    const REVIEW_COMP = [1 => 'None', 2 => '5', 3 => '4', 4 => '3', 5 => '2', 6 => '1'];
     const REVIEW_RATE2 = [1,2,3,4,5,'Nil'];
     const REVIEW_LEVEL = [1,2,3,4,5,'Nil'];
     const OVERALL_RATING = [1 => 'None', 2 => 'O - Outstanding', 3 => 'H - High performer', 4 => 'P - Performing as expected',
@@ -80,6 +81,7 @@ class Utility
     const ALL_DATA = 0, SELECTED = 1;
     const TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];
     const TASK_PRIORITY = ['None','Low','Medium','High'];
+    const T_USER = '2', P_USER = '1';
 
 
     public static function IMG_URL(){
@@ -1129,11 +1131,35 @@ class Utility
         }
     }
 
+    public static function authColumn($guard){
+        if(Auth::guard($guard)->check()){
+            return 'temp_user';
+        }else{
+            return 'assigned_user';
+        }
+    }
+
+    public static function authTable($guard){
+        if(Auth::guard($guard)->check()){
+            return 'temp_users';
+        }else{
+            return 'users';
+        }
+    }
+
     public static function authBlade($guard,$mainBlade,$otherBlade){
         if(Auth::guard($guard)->check()){
             return $otherBlade;
         }else{
             return $mainBlade;
+        }
+    }
+
+    public static function authLink($guard){
+        if(Auth::guard($guard)->check()){
+            return '/temp';
+        }else{
+            return '';
         }
     }
 
@@ -1156,6 +1182,54 @@ class Utility
 
         return $project;
 
+    }
+
+    public static function taskVal($statusInt){
+        $status = '';
+        foreach(self::TASK_STATUS as $key => $val){
+            if($statusInt == $key){
+                $status = $val;
+            }
+        }
+        return $status;
+    }
+
+    //TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];
+
+    public static function taskColor($statusInt){
+        $status = '';
+        ;
+        switch ($statusInt) {
+            case '0':
+                $status = '';
+                break;
+            case '1':
+                $status = 'btn-primary';
+                break;
+            case '2':
+                $status = 'btn-warning';
+                break;
+            case '3':
+                $status = 'btn-success';
+                break;
+            case '4':
+                $status = 'btn-danger';
+                break;
+            case '5':
+                $status = 'btn-info';
+                break;
+
+            default:
+                $status = '';
+                break;
+        }
+        return $status;
+    }
+
+    public static function daysDuration($start,$end){
+        $dateDiff = strtotime($end) - strtotime($start);
+        $duration = round($dateDiff/(60*60*24));
+        return $duration.' day(s)';
     }
 
 }

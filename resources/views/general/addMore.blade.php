@@ -2405,8 +2405,8 @@
                     <div class="form-line">
                         <select class="form-control task_status" name="task_status" placeholder="Task Status">
                             <option value="">Select Status</option>
-                            @foreach(\App\Helpers\Utility::TASK_STATUS as $task)
-                                <option value="{{$task}}">{{$task}}</option>
+                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                <option value="{{$key}}">{{$task}}</option>
                             @endforeach
                         </select>
                     </div>

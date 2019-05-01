@@ -1,15 +1,49 @@
-<!-- Default Size -->
+<!-- Default Size Create Modal -->
 <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">Task(s)</h4>
+                <h4 class="modal-title" id="defaultModalLabel">Task List(s)</h4>
             </div>
             <div class="modal-body" style="height:400px; overflow:scroll;">
 
                 <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                     <div class="body">
 
+                        <div class="row clearfix">
+                            <div class="col-sm-4" id="currentTList">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control" id="task_input" name="list_title" placeholder="Task List title">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4" id="formerTList" style="display:none;">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control " id="task_dropdown" name="list_title" placeholder="Task List">
+                                            <option value="">Select Task List</option>
+                                            @foreach($taskList as $task)
+                                                <option value="{{$task->id}}">{{$task->list_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <textarea class="form-control" id="" name="list_desc" placeholder="Task List Details"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input type="checkbox" class="change_task" name="change_task" value="1" onclick="changeUserT('currentTList','formerTList','change_task','task_input','task_dropdown');" id="change_task" />Check to task(s) to existing task list
+                        <hr/>
+                        <h4>Add task(s) to list</h4>
                         <div class="row clearfix">
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -127,8 +161,8 @@
 
             </div>
             <div class="modal-footer">
-                <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_task'); ?>','reload_data',
-                        '<?php echo url('project/'.$item->id.'/task'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>',['task_title','task_details','user_class','task_status','start_date','end_date','task_priority','time_planned','change_user'])" type="button" class="btn btn-link waves-effect">
+                <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_task_list'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>',['task_title','task_details','user_class','task_status','start_date','end_date','task_priority','time_planned','change_user'])" type="button" class="btn btn-link waves-effect">
                     SAVE
                 </button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -137,7 +171,7 @@
     </div>
 </div>
 
-<!-- Default Size -->
+<!-- Default Size Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -148,10 +182,38 @@
 
             </div>
             <div class="modal-footer">
-                <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_task'); ?>','reload_data',
-                        '<?php echo url('project/'.$item->id.'/task'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_task_list'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                     SAVE
                 </button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Default Size Tasks Modal -->
+<div class="modal fade" id="taskModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Tasks</h4>
+                <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
+                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                        <li>
+                            <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                    '<?php echo url('delete_task_list_item'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                <i class="fa fa-trash-o"></i>Delete
+                            </button>
+                        </li>
+                @endif
+                </ul>
+            </div>
+            <div class="modal-body" id="task_form" style="overflow-x:scroll; ">
+
+            </div>
+            <div class="modal-footer">
+
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
@@ -179,7 +241,7 @@
                                         <div class="card">
                                             <div class="header">
                                                 <h2>
-                                                    Task(s)
+                                                    Task List(s)
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
                                                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
@@ -187,8 +249,8 @@
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
                                                     <li>
-                                                        <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/task'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                                '<?php echo url('delete_task'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                                        <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                                                '<?php echo url('delete_task_list'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                                             <i class="fa fa-trash-o"></i>Delete
                                                         </button>
                                                     </li>
@@ -221,16 +283,9 @@
 
                                                         <th>Manage</th>
                                                         <th>Project</th>
-                                                        <th>Task</th>
-                                                        <th>Details</th>
-                                                        <th>Assigned User</th>
-                                                        <th>Status</th>
-                                                        <th>Start Date</th>
-                                                        <th>End Date</th>
-                                                        <th>Duration</th>
-                                                        <th>Priority</th>
-                                                        <th>Time Planned(hrs)</th>
-                                                        <th>Time Log(hrs)</th>
+                                                        <th>Task List</th>
+                                                        <th>Description</th>
+                                                        <th>No. of Task(s)</th>
                                                         <th>Created by</th>
                                                         <th>Created at</th>
                                                         <th>Updated by</th>
@@ -246,29 +301,18 @@
                                                             </td>
                                                             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                             <td>
-                                                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>
                                                             @else
                                                              <td></td>
                                                             @endif
                                                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                             <td>{{$data->project->project_name}}</td>
-                                                            <td>{{$data->task}}</td>
-                                                            <td>{{$data->task_desc}}</td>
-                                                            <td>
-                                                                @if(!empty($data->assigned_user))
-                                                                    {{$data->assignee->firstname}}&nbsp;{{$data->assignee->lastname}}
-                                                                @else
-                                                                    {{$data->extUser->firstname}}&nbsp;{{$data->extUser->lastname}}
-                                                                @endif
+                                                            <td>{{$data->list_name}}</td>
+                                                            <td>{{$data->list_desc}}</td>
+                                                            <td class="btn-link">
+                                                                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
                                                             </td>
-                                                            <td class="{{\App\Helpers\Utility::taskColor($data->task_status)}}">{{\App\Helpers\Utility::taskVal($data->task_status)}}</td>
-                                                            <td>{{$data->start_date}}</td>
-                                                            <td>{{$data->end_date}}</td>
-                                                            <td class="btn-link">{{\App\Helpers\Utility::daysDuration($data->start_date,$data->end_date)}}</td>
-                                                            <td>{{$data->task_priority}}</td>
-                                                            <td>{{$data->work_hours}}</td>
-                                                            <td></td>
                                                             <td>
                                                                 @if($data->created_by != '0')
                                                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -367,6 +411,36 @@
 
     }
 
+    function deleteTaskItems(klass,reloadId,reloadUrl,submitUrl,token) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                        title: "Are you sure you want to delete?",
+                        text: "You will not be able to recover this data entry!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "No, cancel delete!",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            deleteEntry(klass, reloadId, reloadUrl, submitUrl, token);
+                            hideCheckedClassItems(klass);
+                            swal("Deleted!", "Your item(s) has been deleted.", "success");
+                        } else {
+                            swal("Delete Cancelled", "Your data is safe :)", "error");
+                        }
+                    });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
 
 </script>
 
@@ -378,12 +452,12 @@
         //getProducts(page);
     });
 
-    $(document).on('click','#task .pagination a', function(e){
+    /*$(document).on('click','#task .pagination a', function(e){
         e.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
         getProducts(page);
         location.hash = page;
-    });
+    });*/
 
     function getProducts(page){
 

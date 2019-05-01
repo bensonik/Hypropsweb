@@ -23,7 +23,7 @@ use App\model\TaskList;
 use App\model\Timesheet;
 use App\User;
 use App\model\Task;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use View;
 use Validator;
 use Input;
@@ -50,32 +50,35 @@ class TaskController extends Controller
     {
 
 
-        $mainData = Task::specialColumnsPage('project_id',$id);
+        $mainData = Task::specialColumnsPage2('project_id',$id,Utility::authColumn('temp_user'),Utility::checkAuth('temp_user')->id);
+        //$mainData = Task::specialColumnsPage('project_id',$id);
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','task.main_view','task.main_view_temp'),array('mainData' => $mainData,
-                'project' => project))->render());
+            return \Response::json(view::make(Utility::authBlade('temp_user','task.reload','task.reload'),array('mainData' => $mainData,
+                'item' => $project))->render());
 
         }
         return view::make(Utility::authBlade('temp_user','task.main_view','task.main_view_temp'))->with('mainData',$mainData)->with('item',$project);
 
     }
 
-    public function index_temp(Request $request,$id)
+    public function indexTemp(Request $request,$id)
     {
 
-        $mainData = Task::specialColumnsPage('project_id',$id);
+        $mainData = Task::specialColumnsPage2('project_id',$id,Utility::authColumn('temp_user'),Utility::checkAuth('temp_user')->id);
+        //$mainData = Task::specialColumnsPage('project_id',$id);
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('task.main_view',array('mainData' => $mainData,
-                'project' => project))->render());
+            return \Response::json(view::make(Utility::authBlade('temp_user','task.reload','task.reload'),array('mainData' => $mainData,
+                'item' => $project))->render());
 
         }
-        return view::make('task.main_view')->with('mainData',$mainData)->with('item',$project);
+        return view::make(Utility::authBlade('temp_user','task.main_view','task.main_view_temp'))->with('mainData',$mainData)->with('item',$project);
+
 
     }
 
@@ -100,14 +103,16 @@ class TaskController extends Controller
 
         /*return response()->json([
             'message' => 'warning',
-            'message2' => json_encode($user).'taskTitle='.json_encode($changeUser)
+            'message2' => json_encode($user).'changeUser='.json_encode($changeUser)
         ]);*/
 
         if(!empty($taskTitle) && !empty($taskDetails) && !empty($taskStatus) && !empty($startDate) && !empty($endDate)){
 
             for($i=0;$i<count($taskTitle);$i++) {
-                $changeUserTbl = ($changeUser[$i] == '1') ? 'assigned_user' : 'temp_user' ;
-                $changeUserDbTbl = ($changeUser[$i] == '1') ? 'users' : 'temp_users' ;
+                $changeUserTbl = ($changeUser[$i] == Utility::P_USER) ? 'assigned_user' : 'temp_user' ;
+                $changeUserDbTbl = ($changeUser[$i] == Utility::P_USER) ? 'users' : 'temp_users' ;
+
+                $userType = ($user[$i] == '' ) ? '' : $changeUser[$i];
                 $dbDATA = [
                     'project_id' => $projectId,
                     'task' => $taskTitle[$i],
@@ -118,13 +123,14 @@ class TaskController extends Controller
                     'end_date' => Utility::standardDate($endDate[$i]),
                     'task_priority' => Utility::checkEmptyArrayItem($taskPriority,$i,''),
                     'work_hours' => Utility::checkEmptyArrayItem($timePlanned,$i,''),
+                    'user_type' => $userType,
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
                 Task::create($dbDATA);
                 $projDetails = Project::firstRow('id',$projectId);
-                if(Utility::checkEmptyArrayItem($taskPriority,$i,'0') != '0'){
+                if(Utility::checkEmptyArrayItem($taskPriority,$i,'') != ''){
                     $userData = Utility::firstRow($changeUserDbTbl,'id',$user[$i]);
                     $userEmail = $userData->email;
 
@@ -201,21 +207,88 @@ class TaskController extends Controller
             $taskPriority = $request->input('task_priority');
             $timePlanned = $request->input('time_planned');
             $changeUser = $request->input('change_user');
+            $changeUser = ($changeUser != '') ? Utility::T_USER : Utility::P_USER ;
 
-            $changeUserTbl = ($changeUser == 1) ? 'assigned_user' : 'temp_user' ;
-            $changeUserDbTbl = ($changeUser == 1) ? 'users' : 'temp_users' ;
+            $userType = ($user == '' ) ? '' : $changeUser ;
+            $taskTbl = Task::firstRow('id',$request->input('edit_id'));
+            $changeUserCol = ($changeUser != Utility::P_USER) ? 'temp_user' : 'assigned_user' ;
+            $changeUserDbTbl = ($changeUser != Utility::P_USER) ? 'temp_users' : 'users' ;
+
             $dbDATA = [
                 'task' => $taskTitle,
                 'task_desc' => $taskDetails,
-                $changeUserTbl => $user,
+                $changeUserCol => $user,
                 'task_status' => $taskStatus,
                 'start_date' => Utility::standardDate($startDate),
                 'end_date' => Utility::standardDate($endDate),
                 'work_hours' => $timePlanned,
                 'task_priority' => $taskPriority,
+                'user_type' => $userType,
                 'updated_by' => Auth::user()->id,
             ];
 
+            $formUserColumn = ($taskTbl->user_type == '') ? '': ($taskTbl->user_type == Utility::P_USER) ? 'assigned_user' : 'temp_user';
+            $formUserDbTbl = ($taskTbl->user_type == '') ? '': ($taskTbl->user_type == Utility::P_USER) ? 'users' : 'temp_users';
+
+            /*return response()->json([
+            'message' => 'warning',
+            'message2' => 'userType='.$userType.'userId='.$user.'changeUser='.$changeUser.'column='.$formUserColumn
+        ]);*/
+            if($user != ''){
+
+                $projDetails = Project::firstRow('id',$taskTbl->project_id);
+                $userData = Utility::firstRow($changeUserDbTbl,'id',$user);
+                $userEmail = $userData->email;
+
+                $mailContentNew = [];
+                $mailContentOld = [];
+                $mailContentWithdraw = [];
+
+                $messageBodyNew = "Hello '.$userData->firstname.', a task ".$taskTitle." have been
+                    assigned to you on the project ".$projDetails->project_name." please visit the portal to view";
+
+                $messageBodyOld = "Hello '.$userData->firstname.', a task ".$taskTitle." have been withdrawn from a staff and
+                    assigned to you on the project ".$projDetails->project_name." please visit the portal to view";
+
+                $mailContentNew['message'] = $messageBodyNew;
+                $mailContentOld['message'] = $messageBodyOld;
+                $mailContent = ($taskTbl->user_type == '') ? $mailContentNew : $mailContentOld;
+
+                //IF TASK WAS ASSIGNED TO A DIFFERENT USER AND NOW ASSIGNED TO A NEW USER, SEND MAIL TO OLD USER THAT TASK HAVE BEEN WITHDRAWN FROM HE/SHE
+                if($taskTbl->user_type != ''){
+                    $userDataOld = Utility::firstRow($formUserDbTbl,'id',$user);
+                    $userEmailOld= $userDataOld->email;
+
+                    $messageWithdraw = "Hello '.$userDataOld->firstname.', a task ".$taskTitle.
+                        " on the project ".$projDetails->project_name." have been withdrawn from you
+                         and assigned to another staff, your timesheet on the task remains recorded and saved";
+
+                    $mailContentWithdraw['message'] = $messageWithdraw;
+
+                }
+
+
+                if($changeUserCol == $formUserColumn ){ //CHECK IF TASK HAS BEEN SWITCHED FROM TEMP/EXTERNAL USER TO A PERMANENT USER
+                    if($taskTbl->user_type == Utility::P_USER) {
+                        if ($taskTbl->assigned_user != $user) { //IF ASSIGNED TO A DIFFERENT USER SEND A MAIL
+                            Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                            if($taskTbl->user_type != ''){ Notify::GeneralMail('mail_views.general', $mailContentWithdraw, $userEmailOld); }
+
+                        }
+                    }else{
+                        if ($taskTbl->temp_user != $user) { //IF ASSIGNED TO A DIFFERENT USER SEND A MAIL
+                            Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                            if($taskTbl->user_type != ''){ Notify::GeneralMail('mail_views.general', $mailContentWithdraw, $userEmailOld); }
+
+                        }
+                    }
+                }else{
+                    Task::defaultUpdate('id',$request->input('edit_id'),[$formUserColumn => '']);
+                }
+
+            }else{
+                $update = ($formUserColumn == '') ? '' : Task::defaultUpdate('id',$request->input('edit_id'),[$formUserColumn => '']);
+            }
 
             Task::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
@@ -260,7 +333,8 @@ class TaskController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = Task::massUpdate('id',$idArray,$dbData);
+        $deleteTask = Task::massUpdate('id',$idArray,$dbData);
+        $deleteOther = Timesheet::massUpdate('task_id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',

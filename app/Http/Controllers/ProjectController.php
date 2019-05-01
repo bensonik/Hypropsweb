@@ -63,6 +63,24 @@ class ProjectController extends Controller
 
     }
 
+    public function indexTemp(Request $request)
+    {
+        //
+        //$req = new Request();
+        $mainData = Project::paginateAllData();
+        $billMethod = BillMethod::getAllData();
+
+        if ($request->ajax()) {
+            return \Response::json(view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'),
+                array('mainData' => $mainData,'billMethod' => $billMethod))->render());
+
+        }else{
+            return view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'))
+                ->with('mainData',$mainData)->with('billMethod',$billMethod);
+        }
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -203,6 +221,17 @@ class ProjectController extends Controller
      PROJECT ITEM
      */
     public function projectItem(Request $request, $id)
+    {
+        //
+        $project = Project::firstRow('id',$id);
+        $billMethod = BillMethod::getAllData();
+        //print_r($project);exit();
+        Utility::processProjectItem($project);
+        return view::make(Utility::authBlade('temp_user','project.project_item','project.project_item_temp'))->with('item',$project)->with('billMethod',$billMethod);
+
+    }
+
+    public function projectItemTemp(Request $request, $id)
     {
         //
         $project = Project::firstRow('id',$id);

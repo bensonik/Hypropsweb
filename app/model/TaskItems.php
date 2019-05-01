@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class TaskList extends Model
+class TaskItems extends Model
 {
     //
-    protected  $table = 'task_lists';
+    protected  $table = 'task_items';
 
     private static function table(){
-        return 'task_lists';
+        return 'task_items';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,14 +21,10 @@ class TaskList extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        //'list_title' => 'required'
+
     ];
 
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
-    ];
+
 
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id')->withDefault();
@@ -40,20 +36,49 @@ class TaskList extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+    public function assignee(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
 
     }
 
+    public function extUser(){
+        return $this->belongsTo('App\model\TempUsers','temp_user','id')->withDefault();
+
+    }
+
+    public function temp_user(){
+        return $this->belongsTo('App\User','temp_user','id')->withDefault();
+
+    }
+
+    public function department(){
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
+
+    }
     public function project(){
-        return $this->belongsTo('App\model\Project','project_id','id');
+        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
+
+    }
+
+    public function milestone(){
+        return $this->belongsTo('App\model\Milestone','milestone_id','id')->withDefault();
+
     }
 
     public function taskItem(){
-        return $this->hasMany('App\model\TaskItems','list_id','id');
+        return $this->belongsTo('App\model\TaskItems','task_id','id')->withDefault();
 
     }
 
+    public function behavCompetency(){
+        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
+
+    }
+
+    public function compAssess(){
+        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
+
+    }
 
     public static function digitalSign($column){
         return Utility::digitalSign(self::table(), $column, $limit = 8);
@@ -87,6 +112,12 @@ class TaskList extends Model
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);
+
+    }
+
+    public static function countDataOr3($column, $post, $column2, $post2, $column3, $post3)
+    {
+        return Utility::countData3(self::table(),$column, $post, $column2, $post2, $column3, $post3);
 
     }
 

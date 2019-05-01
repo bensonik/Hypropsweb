@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('project.page',['item'=>$item,'mainData'=>$mainData])
+    @include('task.page',['item'=>$item,'mainData'=>$mainData])
 
 @endsection

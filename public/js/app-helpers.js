@@ -216,6 +216,22 @@
         return newStr;
     }
 
+    function hideCheckedClassItems(getclass){
+
+        var approve = document.getElementsByClassName(getclass);
+        var values = [];
+        var trId = '';
+        for(var i=0; i < approve.length; i++){
+            if(approve[i].checked){
+                //approve[i].id.style.visibility = 'hidden';
+                trId = 'tr_'+approve[i].id;
+                var itemId = document.getElementById(trId);
+                itemId.style.visibility = 'hidden';
+            }
+        }
+
+    }
+
     function hideClassItems(getclass){
         var objects = document.getElementsByClassName(getclass);
         for(var i=0; i<objects.length;i++){
@@ -609,7 +625,8 @@
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                reloadContent(reloadId,reloadUrl);
+                    reloadContent(reloadId,reloadUrl);
+
             }
         }
 
@@ -1207,21 +1224,25 @@
 
         if(changeUserT.val() == '1'){
 
-            changeUserT.val('0');
+            changeUserT.val('2');
             inputId.removeClass( "user_class" );
+            inputId.prop("disabled",true);
             normalUser.css("display", "none");
 
             tempUser.css("display", "block");
             tempInputId.addClass( "user_class" );
+            tempInputId.prop("disabled",false);
 
         }else{
 
             changeUserT.val('1');
             tempInputId.removeClass( "user_class" );
+            tempInputId.prop("disabled",true);
             tempUser.css("display", "none");
 
             normalUser.css("display", "block");
             inputId.addClass( "user_class" );
+            inputId.prop("disabled",false);
 
         }
 
@@ -1234,7 +1255,7 @@
 
         if(changeUserT.val() == '1'){
 
-            changeUserT.val('0');
+            changeUserT.val('2');
             normalUser.css("display", "none");
 
             tempUser.css("display", "block");

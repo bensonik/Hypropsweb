@@ -335,7 +335,7 @@
                 </li>
 
                 <li>
-                    <a href="{{url('project')}}">
+                    <a href="{{url('project'.\App\Helpers\Utility::authLink('temp_user'))}}">
                         <i class="material-icons">view_carousel</i>
                         <span class="icon-name">Project Management</span>
                     </a>
