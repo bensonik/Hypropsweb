@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class TaskList extends Model
+class MilestoneItems extends Model
 {
     //
-    protected  $table = 'task_lists';
+    protected  $table = 'milestone_items';
 
     private static function table(){
-        return 'task_lists';
+        return 'milestone_items';
     }
     /**
      * The attributes that are mass assignable.
@@ -25,7 +25,9 @@ class TaskList extends Model
     ];
 
     public static $searchRules = [
-
+        'goal_set' => 'required',
+        'department' => 'required',
+        'user' => 'required',
     ];
 
     public function user_c(){
@@ -38,13 +40,13 @@ class TaskList extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+    public function milestone(){
+        return $this->belongsTo('App\model\Milestone','milestone_id','id')->withDefault();
 
     }
 
     public function project(){
-        return $this->belongsTo('App\model\Project','project_id','id');
+        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
     }
 
     public function taskItem(){

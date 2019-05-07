@@ -5,7 +5,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control " value="{{$edit->list_name}}" name="list_title" placeholder="Task List title">
+                        <input type="text" class="form-control " value="{{$edit->milestone_name}}" name="milestone_title" placeholder="Task List title">
                     </div>
                 </div>
             </div>
@@ -13,12 +13,31 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea type="text" class="form-control " name="list_desc" placeholder="Task List Details">{{$edit->list_desc}}</textarea>
+                        <textarea type="text" class="form-control " name="milestone_desc" placeholder="Milestone Details">{{$edit->milestone_desc}}</textarea>
                     </div>
                 </div>
             </div>
 
         </div>
+        <div class="row clearfix">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control datepicker1" autocomplete="off" value="{{$edit->start_date}}" name="milestone_start_date" placeholder="Milestone Start Date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control datepicker1" autocomplete="off" value="{{$edit->end_date}}" name="milestone_end_date" placeholder="Milestone End Date">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
 
     </div>
     <input type="hidden" name="edit_id" value="{{$edit->id}}" >

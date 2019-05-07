@@ -232,6 +232,23 @@
 
     }
 
+    function hideCheckedClassItemsUnique(getclass){
+
+        var approve = document.getElementsByClassName(getclass);
+        var values = [];
+        var trId = '';
+        for(var i=0; i < approve.length; i++){
+            if(approve[i].checked){
+                //approve[i].id.style.visibility = 'hidden';
+                trId = 'tr_'+approve[i].id;
+                var itemId = document.getElementById(trId);
+                //onsole.log(itemId);
+                itemId.style.visibility = 'hidden';
+            }
+        }
+
+    }
+
     function hideClassItems(getclass){
         var objects = document.getElementsByClassName(getclass);
         for(var i=0; i<objects.length;i++){

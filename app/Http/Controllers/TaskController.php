@@ -116,7 +116,7 @@ class TaskController extends Controller
                 $dbDATA = [
                     'project_id' => $projectId,
                     'task' => $taskTitle[$i],
-                    'task_desc' => $taskDetails[$i],
+                    'task_desc' => Utility::checkEmptyArrayItem($taskDetails,$i,''),
                     $changeUserTbl => Utility::checkEmptyArrayItem($user,$i,''),
                     'task_status' => $taskStatus[$i],
                     'start_date' => Utility::standardDate($startDate[$i]),
@@ -156,7 +156,7 @@ class TaskController extends Controller
         }else{
             return response()->json([
                 'message' => 'warning',
-                'message2' => 'Please fill in all required fields, only task priority and time planned are optional'
+                'message2' => 'Please fill in all required task fields, Title,Status,Start date, End date'
             ]);
         }
 

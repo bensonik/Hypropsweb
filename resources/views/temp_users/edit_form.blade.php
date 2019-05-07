@@ -89,14 +89,13 @@
                     <div class="form-line">
                         <select type="text" class="form-control" name="role"  required>
                             <option value="{{$edit->role}}" selected>{{$edit->roles->role_name}}</option>
-                            @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+
                                 @foreach($roles as $role)
-                                    @if($role->id != 1)
 
                                         <option value="{{$role->id}}">{{$role->role_name}}</option>
-                                    @endif
+
                                 @endforeach
-                            @endif
+
                         </select>
                     </div>
                 </div>

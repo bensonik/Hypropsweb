@@ -71,7 +71,7 @@ class TempUsers extends Authenticatable
     }
 
     public function roles(){
-        return $this->belongsTo('App\model\Roles','role','id');
+        return $this->belongsTo('App\model\TempRoles','role','id');
     }
 
     public static function paginateAllData()

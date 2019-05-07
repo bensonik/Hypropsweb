@@ -1165,7 +1165,7 @@ class Utility
 
     public static function processProjectItem($project){
 
-        $project->task = self::countDataOr3('tasks','project_id',$project->id,'assigned_user',self::checkAuth('temp_user')->id,'temp_user',self::checkAuth('temp_user')->id);
+        $project->task = self::countData2('tasks','project_id',$project->id,self::authColumn('temp_user'),self::checkAuth('temp_user')->id);
         $project->milestone = self::countData('milestones','project_id',$project->id);
         $project->task_list = self::countData('task_lists','project_id',$project->id);
         $project->change_log = self::countData('change_logs','project_id',$project->id);
@@ -1178,7 +1178,7 @@ class Utility
         $project->documents = self::countData('project_docs','project_id',$project->id);
         $project->requests = self::countData('project_member_request','project_id',$project->id);
         $project->members = self::countData('project_team','project_id',$project->id);
-        $project->timesheet = self::countDataOr3('timesheet','project_id',$project->id,'assigned_user',self::checkAuth('temp_user')->id,'temp_user',self::checkAuth('temp_user')->id);
+        $project->timesheet = self::countData2('timesheet','project_id',$project->id,self::authColumn('temp_user'),self::checkAuth('temp_user')->id);
 
         return $project;
 

@@ -12,6 +12,7 @@ use App\model\PoExtension;
 use App\model\Quote;
 use App\model\QuoteExtension;
 use App\model\RFQExtension;
+use App\model\TaskList;
 use App\model\TempUsers;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
@@ -674,14 +675,6 @@ class GeneralController extends Controller
         }
         //END OF ASSIGN INVENTORY
 
-        //START OF TASK
-        if($type == 'task'){
-
-            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
-                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
-        }
-        //END OF TASK
-
         //START OF ADDING PURCHASE ORDER
         if($type == 'po'){
             $warehouse = Warehouse::getAllData();
@@ -747,6 +740,24 @@ class GeneralController extends Controller
                 ->with('tax',$tax);
         }
         //END OF ADDING INVENTORY ITEM
+
+        //START OF TASK
+        if($type == 'task'){
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF TASK
+
+        //START OF TASK LIST
+        if($type == 'task_list'){
+
+            $taskList = TaskList::specialColumns('project_id',$num1);
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('taskList',$taskList);
+        }
+        //END OF TASK LIST
 
     }
     /**

@@ -1490,6 +1490,15 @@
     //exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
 </script>
 
+<script>
+    $(function() {
+        $( ".datepicker1" ).datepicker({
+            /*changeMonth: true,
+             changeYear: true*/
+        });
+    });
+</script>
+
 </body>
 
 </html>

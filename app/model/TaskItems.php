@@ -65,20 +65,16 @@ class TaskItems extends Model
 
     }
 
+    public function listItem(){
+        return $this->belongsTo('App\model\TaskList','list_id','id')->withDefault();
+
+    }
+
     public function taskItem(){
         return $this->belongsTo('App\model\TaskItems','task_id','id')->withDefault();
 
     }
 
-    public function behavCompetency(){
-        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
-
-    }
-
-    public function compAssess(){
-        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
-
-    }
 
     public static function digitalSign($column){
         return Utility::digitalSign(self::table(), $column, $limit = 8);

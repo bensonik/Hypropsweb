@@ -9,9 +9,12 @@
 
         <th>Manage</th>
         <th>Project</th>
-        <th>Task List</th>
+        <th>Milestone</th>
         <th>Description</th>
+        <th>Start Date</th>
+        <th>End Date</th>
         <th>No. of Task(s)</th>
+        <th>No. of Task List</th>
         <th>Created by</th>
         <th>Created at</th>
         <th>Updated by</th>
@@ -27,17 +30,22 @@
             </td>
             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                 <td>
-                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_milestone_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
             @else
                 <td></td>
         @endif
         <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project->project_name}}</td>
-            <td>{{$data->list_name}}</td>
-            <td>{{$data->list_desc}}</td>
+            <td>{{$data->milestone_name}}</td>
+            <td>{{$data->milestone_desc}}</td>
+            <td>{{$data->start_date}}</td>
+            <td>{{$data->end_date}}</td>
             <td class="btn-link">
-                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
+                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('milestone_task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
+            </td>
+            <td class="btn-link">
+                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_list_form','taskListModal','<?php echo url('milestone_task_list_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task_list}} task list(s)</span> <span class="btn-link">View</span></a>
             </td>
             <td>
                 @if($data->created_by != '0')

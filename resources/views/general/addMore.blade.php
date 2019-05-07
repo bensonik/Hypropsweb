@@ -2476,6 +2476,49 @@
 @endif
 <!-- END OF TASK -->
 
+<!-- BEGIN OF TASK LIST -->
+@if($type == 'task_list')
+
+    <div class="row clearfix new_task_list remove_task_list{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control task_list" id="" name="task_list" >
+                            <option value="">Select Task List</option>
+                            @foreach($taskList as $task)
+                                <option value="{{$task->id}}">{{$task->list_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task_list','{{$hide_id}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_task_list{{$more}}','{{url('add_more')}}','task_list','new_task_list','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF TASK LIST -->
+
 <script>
     $(function() {
         $( ".datepicker2" ).datepicker({

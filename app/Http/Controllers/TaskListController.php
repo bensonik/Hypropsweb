@@ -106,7 +106,7 @@ class TaskListController extends Controller
         $projectId = $request->input('project_id');
         $changeTask = $request->input('change_task');
         $listDesc = $request->input('list_desc');
-        $listTitle = $request->input('list_title');
+        $listTitle = ($changeTask != 2) ? $request->input('list_title'):$request->input('task_list');
 
         /*return response()->json([
             'message' => 'warning',
@@ -127,7 +127,7 @@ class TaskListController extends Controller
                     $dbDATA = [
                         'project_id' => $projectId,
                         'task' => $taskTitle[$i],
-                        'task_desc' => $taskDetails[$i],
+                        'task_desc' => Utility::checkEmptyArrayItem($taskDetails,$i,''),
                         $changeUserTbl => Utility::checkEmptyArrayItem($user, $i, ''),
                         'task_status' => $taskStatus[$i],
                         'start_date' => Utility::standardDate($startDate[$i]),
@@ -173,7 +173,7 @@ class TaskListController extends Controller
                 ];
 
                 $taskList = ($changeTask == '2') ? TaskList::defaultUpdate('id',$listTitle,$dbDATAList) : TaskList::create($dbDATAList);
-                $listId = ($changeTask == '2') ? $request->input('list_title') : $taskList->id;
+                $listId = ($changeTask == '2') ? $request->input('task_list') : $taskList->id;
 
                 foreach ($taskNewId as $taskId) {
                     $dbDATAList = [
@@ -195,7 +195,7 @@ class TaskListController extends Controller
             } else {
                 return response()->json([
                     'message' => 'warning',
-                    'message2' => 'Please fill in all required fields, only task priority and time planned are optional'
+                    'message2' => 'Please fill in all required task fields, Title,Status,Start date, End date'
                 ]);
             }
 
@@ -220,7 +220,7 @@ class TaskListController extends Controller
     public function editForm(Request $request)
     {
         //
-        $tasks = TaskList::firstRow('list_id',$request->input('dataId'));
+        $tasks = TaskList::firstRow('id',$request->input('dataId'));
         return view::make('task_list.edit_form')->with('edit',$tasks);
 
     }
@@ -312,9 +312,9 @@ class TaskListController extends Controller
             $taskArray[] = $task->task_id;
         }
 
-        $delete1 = TaskList::massUpdate('task_id',$idArray,$dbData);
+        $delete1 = TaskList::massUpdate('id',$idArray,$dbData);
         $delete2 = TaskItems::massUpdate('task_id',$taskArray,$dbData);
-        $delete3 = Task::massUpdate('id',$taskArray,$dbData);
+        $delete3 = Task::massUpdate('task_id',$taskArray,$dbData);
         $delete4 = Timesheet::massUpdate('task_id',$taskArray,$dbData);
 
         return response()->json([

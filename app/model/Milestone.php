@@ -21,51 +21,34 @@ class Milestone extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'goal_set' => 'required'
+        'milestone_list' => 'sometimes|nullable|integer',
+        'milestone_start_date' => 'sometimes|nullable|date',
+        'milestone_end_date' => 'sometimes|nullable|date',
     ];
 
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
-    ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
-    public function indi_user(){
-        return $this->belongsTo('App\User','user_id','id');
+    public function project(){
+        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
 
     }
 
-    public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
+    public function milestone(){
+        return $this->belongsTo('App\model\Milestone','milestone_id','id')->withDefault();
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
-
-    }
-    public function hod(){
-        return $this->belongsTo('App\User','dept_head','id');
-
-    }
-
-    public function goal_set(){
-        return $this->belongsTo('App\model\UnitGoalSeries','goal_set_id','id');
-
-    }
-
-    public function i_goal_cat(){
-        return $this->belongsTo('App\model\IndiGoalCat','indi_goal_cat','id');
+    public function taskList(){
+        return $this->belongsTo('App\model\TaskList','list_id','id')->withDefault();
 
     }
 

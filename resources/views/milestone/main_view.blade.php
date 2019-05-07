@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('task_list.page',['item'=>$item,'mainData'=>$mainData,'taskList'=>$taskList])
+    @include('milestone.page',['item'=>$item,'mainData'=>$mainData,'taskList'=>$taskList,'milestone'=>$milestone])
 
 @endsection

@@ -3,26 +3,73 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">Task List(s)</h4>
+                <h4 class="modal-title" id="defaultModalLabel">Milestone</h4>
             </div>
-            <div class="modal-body" style="height:400px; overflow:scroll;">
+            <div class="modal-body" style="height:450px; overflow:scroll;">
 
                 <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                     <div class="body">
 
                         <div class="row clearfix">
-                            <div class="col-sm-4" id="currentTList">
+                            <div class="col-sm-4" id="currentMilestone">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" id="task_input" name="list_title" placeholder="Task List title">
+                                        <input type="text" class="form-control" id="milestone_input" name="milestone_title" placeholder="Milestone title">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4" id="formerTList" style="display:none;">
+                            <div class="col-sm-4" id="formerMilestone" style="display:none;">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <select class="form-control " id="task_dropdown" name="list_title" placeholder="Task List">
+                                        <select class="form-control " id="milestone_dropdown" name="milestone_list" >
+                                            <option value="">Select Milestone</option>
+                                            @foreach($milestone as $task)
+                                                <option value="{{$task->id}}">{{$task->milestone_name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <textarea class="form-control" id="" name="milestone_desc" placeholder="Milestone Details"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <input type="checkbox" class="change_milestone" name="change_milestone" value="1" onclick="changeUserT('currentMilestone','formerMilestone','change_milestone','milestone_input','milestone_dropdown');" id="change_milestone" />Check to task(s) to existing task list
+                        <hr/>
+
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control datepicker" autocomplete="off" name="milestone_start_date" placeholder="Milestone Start Date">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <input type="text" class="form-control datepicker" autocomplete="off" name="milestone_end_date" placeholder="Milestone End Date">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <hr/>
+
+                        <h4>Add task list(s) to milestone</h4>
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control task_list" id="" name="task_list" >
                                             <option value="">Select Task List</option>
                                             @foreach($taskList as $task)
                                                 <option value="{{$task->id}}">{{$task->list_name}}</option>
@@ -32,119 +79,9 @@
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-4" id="hide_button_list">
                                 <div class="form-group">
-                                    <div class="form-line">
-                                        <textarea class="form-control" id="" name="list_desc" placeholder="Task List Details"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <input type="checkbox" class="change_task" name="change_task" value="1" onclick="changeUserT('currentTList','formerTList','change_task','task_input','task_dropdown');" id="change_task" />Check to task(s) to existing task list
-                        <hr/>
-                        <h4>Add task(s) to list</h4>
-                        <div class="row clearfix">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control task_title" name="task_title" placeholder="Task title">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <textarea type="text" class="form-control task_details" name="task" placeholder="Task Details"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4" id="normal_user">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
-
-                                        <input type="hidden" class="user_class" name="user" id="user" />
-                                    </div>
-                                </div>
-                                <ul id="myUL1" class="myUL"></ul>
-                            </div>
-
-                            <div class="col-sm-4" id="temp_user" style="display:none;">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control" autocomplete="off" id="select_users" onkeyup="searchOptionList('select_users','myUL','{{url('default_select')}}','default_search_temp','users');" name="select_user" placeholder="Select External/Contract User">
-
-                                        <input type="hidden" class="" name="user" id="users" />
-                                    </div>
-                                </div>
-                                <ul id="myUL" class="myUL"></ul>
-                            </div>
-                        </div>
-                        <input type="checkbox" class="change_user" value="1" onclick="changeUserT('normal_user','temp_user','change_user','user','users');" id="change_user" />Check to select contract/external user
-                        <hr/>
-
-                        <div class="row clearfix">
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <select class="form-control task_status" name="task_status" placeholder="Task Status">
-                                            <option value="">Select Status</option>
-                                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
-                                                <option value="{{$key}}">{{$task}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <select class="form-control task_priority" name="task_priority" >
-                                            <option value="">Select Priority</option>
-                                            @foreach(\App\Helpers\Utility::TASK_PRIORITY as $task)
-                                                <option value="{{$task}}">{{$task}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="number" class="form-control time_planned" name="time_planned" placeholder="Time(hrs) Planned">
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <hr/>
-
-                        <div class="row clearfix">
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control start_date datepicker" autocomplete="off" name="start_date" placeholder="Start Date">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <input type="text" class="form-control end_date datepicker" autocomplete="off" name="end_date" placeholder="End Date">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-4" id="hide_button">
-                                <div class="form-group">
-                                    <div onclick="addMore('add_more','hide_button','1','<?php echo URL::to('add_more'); ?>','task','hide_button');">
+                                    <div onclick="addMore('add_more_list','hide_button_list','{{$item->id}}','<?php echo URL::to('add_more'); ?>','task_list','hide_button_list');">
                                         <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -152,7 +89,12 @@
                         </div>
                         <hr/>
 
-                        <div id="add_more"></div>
+                        <div id="add_more_list"></div>
+
+                        <hr/>
+
+                        <h4>Add task(s) to Milestone</h4>
+                        @include('includes.task_form')
 
                     </div>
 
@@ -161,8 +103,8 @@
 
             </div>
             <div class="modal-footer">
-                <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_task_list'); ?>','reload_data',
-                        '<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>',['task_title','task_details','user_class','task_status','start_date','end_date','task_priority','time_planned','change_user'])" type="button" class="btn btn-link waves-effect">
+                <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_milestone'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>',['task_title','task_details','user_class','task_status','start_date','end_date','task_priority','time_planned','change_user','task_list'])" type="button" class="btn btn-link waves-effect">
                     SAVE
                 </button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -178,12 +120,12 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
             </div>
-            <div class="modal-body" id="edit_content">
+            <div class="modal-body" id="edit_content" style="height:450px; overflow:scroll;">
 
             </div>
             <div class="modal-footer">
-                <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_task_list'); ?>','reload_data',
-                        '<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_milestone'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                     SAVE
                 </button>
                 <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -197,19 +139,75 @@
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="defaultModalLabel">Tasks</h4>
+                <h4 class="modal-title" id="defaultModalLabel">Task(s)</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                         <li>
-                            <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                    '<?php echo url('delete_task_list_item'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                    '<?php echo url('delete_milestone_task'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
                 @endif
                 </ul>
             </div>
-            <div class="modal-body" id="task_form" style="overflow-x:scroll; ">
+            <div class="modal-body" id="task_form" style=" height:450px; overflow:scroll;">
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Default Size Task List Modal -->
+<div class="modal fade" id="taskListModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Task List</h4>
+                <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
+                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                        <li>
+                            <button type="button" onclick="deleteTaskItems('kid_checkbox_task_list','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                    '<?php echo url('delete_milestone_list'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                <i class="fa fa-trash-o"></i>Delete
+                            </button>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+            <div class="modal-body" id="task_list_form" style=" height:450px; overflow:scroll;">
+
+            </div>
+            <div class="modal-footer">
+
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Default Size Task List Item Modal -->
+<div class="modal fade" id="taskListItemModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Task(s)</h4>
+                <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
+                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                        <li>
+                            <button type="button" onclick="deleteTaskItems('kid_checkbox_task_list_item','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                    '<?php echo url('delete_task_list_item'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                <i class="fa fa-trash-o"></i>Delete
+                            </button>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+            <div class="modal-body" id="task_list_item" style=" height:450px; overflow:scroll;">
 
             </div>
             <div class="modal-footer">
@@ -241,7 +239,7 @@
                                         <div class="card">
                                             <div class="header">
                                                 <h2>
-                                                    Task List(s)
+                                                    Milestone
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
                                                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
@@ -249,8 +247,8 @@
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
                                                     <li>
-                                                        <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                                '<?php echo url('delete_task_list'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                                        <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                                                '<?php echo url('delete_milestone'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                                             <i class="fa fa-trash-o"></i>Delete
                                                         </button>
                                                     </li>
@@ -283,9 +281,12 @@
 
                                                         <th>Manage</th>
                                                         <th>Project</th>
-                                                        <th>Task List</th>
+                                                        <th>Milestone</th>
                                                         <th>Description</th>
+                                                        <th>Start Date</th>
+                                                        <th>End Date</th>
                                                         <th>No. of Task(s)</th>
+                                                        <th>No. of Task List</th>
                                                         <th>Created by</th>
                                                         <th>Created at</th>
                                                         <th>Updated by</th>
@@ -301,17 +302,22 @@
                                                             </td>
                                                             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                             <td>
-                                                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_milestone_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>
                                                             @else
                                                              <td></td>
                                                             @endif
                                                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                             <td>{{$data->project->project_name}}</td>
-                                                            <td>{{$data->list_name}}</td>
-                                                            <td>{{$data->list_desc}}</td>
+                                                            <td>{{$data->milestone_name}}</td>
+                                                            <td>{{$data->milestone_desc}}</td>
+                                                            <td>{{$data->start_date}}</td>
+                                                            <td>{{$data->end_date}}</td>
                                                             <td class="btn-link">
-                                                                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
+                                                                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('milestone_task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
+                                                            </td>
+                                                            <td class="btn-link">
+                                                                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_list_form','taskListModal','<?php echo url('milestone_task_list_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task_list}} task list(s)</span> <span class="btn-link">View</span></a>
                                                             </td>
                                                             <td>
                                                                 @if($data->created_by != '0')
