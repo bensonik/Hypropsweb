@@ -218,9 +218,13 @@
                             <td>{{$data->created_at}}</td>
                             <td>{{$data->updated_at}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            @if(in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::HR_MANAGEMENT) || $data->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                             <td>
                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_project_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
+                            @else
+                            <td></td>
+                            @endif
                         </tr>
                     @endforeach
                     </tbody>

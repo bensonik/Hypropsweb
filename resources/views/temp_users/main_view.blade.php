@@ -400,8 +400,6 @@
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
-                        @if($data->id == Auth::user()->id)
-                        @else
                         <tr>
                             <td scope="row">
                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
@@ -455,7 +453,6 @@
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
                         </tr>
-                        @endif
                         @endforeach
                         </tbody>
                     </table>

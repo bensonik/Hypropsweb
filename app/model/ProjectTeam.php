@@ -21,9 +21,7 @@ class ProjectTeam extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'department' => 'required',
-        'dept_head' => 'required',
-        'approval_system' => 'required',
+
     ];
 
     public function user_c(){
@@ -36,10 +34,11 @@ class ProjectTeam extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept','id')->withDefault();
+    public function extUser(){
+        return $this->belongsTo('App\model\TempUsers','temp_user','id')->withDefault();
 
     }
+
     public function member(){
         return $this->belongsTo('App\User','user_id','id')->withDefault();
 
@@ -140,9 +139,11 @@ class ProjectTeam extends Model
 
     }
 
-    public static function massData($column, $post)
+    public static function massData($column, $post = [])
     {
-        return Utility::massData(self::table(),$column, $post);
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->get();
 
     }
     public static function massDataCondition($column, $post, $column2, $post2)
@@ -176,6 +177,17 @@ class ProjectTeam extends Model
 
     }
 
-
+    public static function searchProjectTeam($value,$projectId,$table,$column,$userType){
+        return static::join($table, $table.'.id', '=', 'project_team.'.$column)
+            ->where($table.'.status', '=','1')
+            ->where('project_team.project_id', '=',$projectId)
+            ->where('project_team.user_type', '=',$userType)
+            ->where(function ($query) use($value,$table){
+                $query->where($table.'.othername','LIKE','%'.$value.'%')
+                    ->orWhere($table.'.email','LIKE','%'.$value.'%')
+                    ->orWhere($table.'.firstname','LIKE','%'.$value.'%')
+                    ->orWhere($table.'.lastname','LIKE','%'.$value.'%');
+            })->get();
+    }
 
 }

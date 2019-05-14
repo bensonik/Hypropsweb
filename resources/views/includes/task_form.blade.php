@@ -18,7 +18,7 @@
     <div class="col-sm-4" id="normal_user">
         <div class="form-group">
             <div class="form-line">
-                <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL1','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+                <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionListParam('select_user','myUL1','{{url('default_select')}}','default_search_param','user','{{$item->id}}');" name="select_user" placeholder="Select User">
 
                 <input type="hidden" class="user_class" name="user" id="user" />
             </div>
@@ -29,7 +29,7 @@
     <div class="col-sm-4" id="temp_user" style="display:none;">
         <div class="form-group">
             <div class="form-line">
-                <input type="text" class="form-control" autocomplete="off" id="select_users" onkeyup="searchOptionList('select_users','myUL','{{url('default_select')}}','default_search_temp','users');" name="select_user" placeholder="Select External/Contract User">
+                <input type="text" class="form-control" autocomplete="off" id="select_users" onkeyup="searchOptionListParam('select_users','myUL','{{url('default_select')}}','default_search_temp_param','users','{{$item->id}}');" name="select_user" placeholder="Select External/Contract User">
 
                 <input type="hidden" class="" name="user" id="users" />
             </div>
@@ -98,7 +98,7 @@
 
     <div class="col-sm-4" id="hide_button">
         <div class="form-group">
-            <div onclick="addMore('add_more','hide_button','1','<?php echo URL::to('add_more'); ?>','task','hide_button');">
+            <div onclick="addMoreParam('add_more','hide_button','1','<?php echo URL::to('add_more'); ?>','task','hide_button','{{$itemId}}');">
                 <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
             </div>
         </div>

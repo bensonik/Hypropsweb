@@ -369,6 +369,7 @@
         postVars.append('token',token);
         $('#loading_modal').modal('show');
         $('#'+formModal).modal('hide');
+
         sendRequestMediaForm(submitUrl,token,postVars);
         ajax.onreadystatechange = function(){
             if(ajax.readyState == 4 && ajax.status == 200) {
@@ -472,20 +473,20 @@
     }
 
     function fillNextInput(value_id,displayId,page,moduleType){
-            var pickedVal = $('#'+value_id).val();
+            //var pickedVal = $('#'+value_id).val();
 
             $.ajax({
-                url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
+                url:  page+'?pickedVal='+value_id+'&type='+moduleType
             }).done(function(data){
                 $('#'+displayId).html(data);
             });
         }
 
     function fillNextInputParam(value_id,displayId,page,moduleType,param){
-        var pickedVal = $('#'+value_id).val();
+        //var pickedVal = $('#'+value_id).val();
 
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
+            url:  page+'?pickedVal='+value_id+'&type='+moduleType+'&param='+param
         }).done(function(data){
             $('#'+displayId).html(data);
         });
@@ -506,6 +507,36 @@
         });
     }
 
+    function searchOptionListParam(searchId,listId,page,moduleType,hiddenId,param){
+        var pickedValGet = $('#'+searchId);
+        var pickedVal = pickedValGet.val();
+        var hiddenValGet = $('#'+hiddenId);
+        if(pickedVal == ''){
+            hiddenValGet.val('');
+        }
+        $('#'+listId).show();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&param1='+param
+        }).done(function(data){
+            $('#'+listId).html(data);
+        });
+    }
+
+    function searchOptionListParamCheck(searchId,listId,page,moduleType,hiddenId,param,newInputId,moduleType2,newInputPage){
+        var pickedValGet = $('#'+searchId);
+        var pickedVal = pickedValGet.val();
+        var hiddenValGet = $('#'+hiddenId);
+        if(pickedVal == ''){
+            hiddenValGet.val('');
+        }
+        $('#'+listId).show();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&hiddenId='+hiddenId+'&listId='+listId+'&searchId='+searchId+'&param1='+param+'&newInputId='+newInputId+'&moduleType2='+moduleType2+'&newInputPage='+newInputPage
+        }).done(function(data){
+            $('#'+listId).html(data);
+        });
+    }
+
     function dropdownItem(valDisplayId,val,hiddenValId,hiddenVal,dropdownId) {
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
@@ -519,12 +550,32 @@
         fillNextInput(hiddenVal,newDisplayId,page,moduleType)
     }
 
+    function dropdownItemRepParam(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,newDisplayId,moduleType,page,param) {
+        $("#"+valDisplayId).val(val);
+        $("#"+hiddenValId).val(hiddenVal);
+        $("#"+dropdownId).hide();
+        fillNextInputParam(hiddenVal,newDisplayId,page,moduleType,param)
+    }
+
     function addMore(more_id,hide_button,num,page,type,hideButtonId){
 
         var hide_id = document.getElementById(hide_button);
         //alert(page+'?num='+num+'&type='+type+'&add_id='+addButtonId+'&hide_id='+hideButtonId);
         $.ajax({
             url:  page+'?num='+num+'&type='+type+'&add_id='+more_id+'&hide_id='+hideButtonId
+        }).done(function(data){
+
+            hide_id.style.display = 'none';
+            $('#'+more_id).append(data);
+        });
+    }
+
+    function addMoreParam(more_id,hide_button,num,page,type,hideButtonId,param1){
+
+        var hide_id = document.getElementById(hide_button);
+        //alert(page+'?num='+num+'&type='+type+'&add_id='+addButtonId+'&hide_id='+hideButtonId);
+        $.ajax({
+            url:  page+'?num='+num+'&type='+type+'&add_id='+more_id+'&hide_id='+hideButtonId+'&param1='+param1
         }).done(function(data){
 
             hide_id.style.display = 'none';
@@ -565,6 +616,40 @@
         show_all.style.display = 'block';
         }
     }
+
+    function removeInputParam(show_id,ghost_class,addUrl,type,all_new_fields_class,unique_num,addButtonId,hideButtonId,param1) {
+    var get_class = document.getElementsByClassName(all_new_fields_class);
+    //var currAddId = _('hide_button'+unique_num);
+    //var prevNum = unique_num - 1;
+    //var prevAddId = _('hide_button'+prevNum);
+    var addButtons = document.getElementsByClassName('addButtons');
+    if(addButtons.length < 1 ) {
+
+        if (addButtons.length < 1) {
+            prevAddId.style.display = 'block';
+        }
+    }
+    $('.' + ghost_class).remove();
+    /*for (var i = 0; i < get_class.length; i++) {
+     //get_class[i].parentNode.removeChild(get_class[i]);
+     }*/
+    //var show_all = document.getElementById(show_id);
+    var show_all = document.getElementById(hideButtonId);
+    var show_button = '';
+
+    show_button += '<tr><td></td><td></td><td></td><td>';
+    show_button += '<div style="cursor: pointer;" onclick="addMoreParam(';
+
+    show_button += "'"+addButtonId+"','"+hideButtonId+"','1','" + addUrl + "','"+type+"','"+hideButtonId+"','"+param1+"');";
+    show_button += '">';
+    show_button += '<i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></div>';
+    show_button += '</tr>';
+    if (get_class.length === 0) {
+
+        show_all.innerHTML =show_button;
+        show_all.style.display = 'block';
+    }
+}
 
     function hideAddedInputs(getclass,addButtonId,hideButtonId,addUrl,type,hideButtonId){
         var objects = document.getElementsByClassName(getclass);
@@ -693,6 +778,7 @@
         var data_string = group_val(klass);
         var all_data = JSON.stringify(data_string);
         var postVars = "all_data="+all_data+"&status="+status;
+
         $('#loading_modal').modal('show');
         sendRequestForm(submitUrl,token,postVars)
         ajax.onreadystatechange = function(){
@@ -943,7 +1029,7 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
-                        swal("Deleted!", "Status of selected item(s) have been changed.", "success");
+                        swal("Changed!", "Status of selected item(s) have been changed.", "success");
                     } else {
                         swal("Status change Cancelled", "Status remains the same :)", "error");
                     }
@@ -1003,7 +1089,37 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
-                        swal("Deleted!", "Status of selected item(s) have been changed.", "success");
+                        swal("Changed!", "Status of selected item(s) have been changed.", "success");
+                    } else {
+                        swal("Status change Cancelled", "Status remains the same :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
+    function timesheetApproval(klass,reloadId,reloadUrl,submitUrl,token,status) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to continue ?",
+                    text: "This will change the status of the selected item(s)!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
+                        swal("Completed!", "Status of selected item(s) have been changed.", "success");
+                        //$('#search_user_timesheet_btn').trigger('click');
                     } else {
                         swal("Status change Cancelled", "Status remains the same :)", "error");
                     }
@@ -1032,7 +1148,7 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
-                        swal("Deleted!", "Status of selected item(s) have been changed.", "success");
+                        swal("Changed!", "Status of selected item(s) have been changed.", "success");
                     } else {
                         swal("Status change Cancelled", "Status remains the same :)", "error");
                     }

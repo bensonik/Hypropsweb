@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Helpers\Utility;
+use Illuminate\Support\Facades\Auth;
 
 class TempUsers extends Authenticatable
 {
@@ -83,7 +84,7 @@ class TempUsers extends Authenticatable
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
     public static function paginateData($column, $post)
@@ -228,6 +229,23 @@ class TempUsers extends Authenticatable
         return static::join('department', 'department.id', '=', 'temp_users.dept_id')
             ->join('roles', 'roles.id', '=', 'temp_users.role')
             ->where('temp_users.status', '=','1')
+            ->where(function ($query) use($value){
+                $query->where('temp_users.lastname','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.firstname','LIKE','%'.$value.'%') ->orWhere('temp_users.phone','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.address','LIKE','%'.$value.'%')->orWhere('temp_users.qualification','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.email','LIKE','%'.$value.'%')->orWhere('temp_users.discipline','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.experience','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.sex','LIKE','%'.$value.'%')->orWhere('temp_users.active_status','LIKE','%'.$value.'%')
+                    ->orWhere('temp_users.nationality','LIKE','%'.$value.'%')->orWhere('temp_users.othername','LIKE','%'.$value.'%')
+                    ->orWhere('department.dept_name','LIKE','%'.$value.'%')->orWhere('roles.role_name','LIKE','%'.$value.'%');
+            })->get();
+    }
+
+    public static function searchUserDept($value){
+        return static::join('department', 'department.id', '=', 'temp_users.dept_id')
+            ->join('roles', 'roles.id', '=', 'temp_users.role')
+            ->where('temp_users.status', '=','1')
+            ->where('temp_users.dept_id', '=',Auth::user()->dept_id)
             ->where(function ($query) use($value){
                 $query->where('temp_users.lastname','LIKE','%'.$value.'%')
                     ->orWhere('temp_users.firstname','LIKE','%'.$value.'%') ->orWhere('temp_users.phone','LIKE','%'.$value.'%')

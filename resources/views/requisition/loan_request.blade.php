@@ -250,8 +250,8 @@
                                 {{$data->project->project_name}}
                                 @endif
                             </td>
-                            <td>{{number_format($data->amount)}}</td>
-                            <td>
+                            <td >{{number_format($data->amount)}}</td>
+                            <td class="btn-link">
                                 @if($data->accessible_status == '0')
                                     Cleared
                                 @else
@@ -264,7 +264,7 @@
 
                             <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>
                             <td>{{$data->department->dept_name}}</td>
-                            <td>
+                            <td class="{{\App\Helpers\Utility::statusIndicator($data->approval_status)}}">
                                 @if($data->approval_status === 1)
                                     Request Approved
                                 @endif

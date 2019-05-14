@@ -27,14 +27,14 @@
                     <div class="form-line">
                         @if($edit->user_type == \App\Helpers\Utility::P_USER)
                             <input type="text" class="form-control" value="{{$edit->assignee->firstname}} {{$edit->assignee->lastname}}" autocomplete="off" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL1_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Select User">
-                            <input type="hidden" value="{{$edit->assigned_user}}" class="user_class" name="user" id="user_edit" />
+                            <input type="hidden" value="{{$edit->assigned_user}}" class="" name="user" id="user_edit" />
                     </div>
                 </div>
                     <ul id="myUL1_edit" class="myUL"></ul>
 
                         @elseif($edit->user_type == \App\Helpers\Utility::T_USER)
                             <input type="text" class="form-control" value="{{$edit->extUser->firstname}} {{$edit->extUser->lastname}}" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user_edit','myUL_edit','{{url('default_select')}}','default_search_temp','user_edit');" name="select_user" placeholder="Select External/Contract User">
-                            <input type="hidden" value="{{$edit->temp_user}}" class="user_class" name="user" id="user_edit" />
+                            <input type="hidden" value="{{$edit->temp_user}}" class="" name="user" id="user_edit" />
                     </div>
                 </div>
                     <ul id="myUL_edit" class="myUL"></ul>

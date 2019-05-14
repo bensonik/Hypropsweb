@@ -9,9 +9,12 @@ use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\Currency;
 use App\model\PoExtension;
+use App\model\Project;
+use App\model\ProjectTeam;
 use App\model\Quote;
 use App\model\QuoteExtension;
 use App\model\RFQExtension;
+use App\model\Task;
 use App\model\TaskList;
 use App\model\TempUsers;
 use App\model\WarehouseEmployee;
@@ -75,8 +78,7 @@ class GeneralController extends Controller
                     $obtain_array[] = $data->uid;
                 }
                 $user_ids = array_unique($obtain_array);
-                $fetchData = (Auth::user()->id == 3) ? User::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
-                    : User::massData('uid', $user_ids);
+                $fetchData =  User::massData('uid', $user_ids);
             }else{
 
                 $fetchData = User::getAllData();
@@ -104,8 +106,7 @@ class GeneralController extends Controller
                     $obtain_array[] = $data->uid;
                 }
                 $user_ids = array_unique($obtain_array);
-                $fetchData = (Auth::user()->id == 3) ? TempUsers::massDataMassCondition('uid', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
-                    : TempUsers::massData('uid', $user_ids);
+                $fetchData = TempUsers::massData('uid', $user_ids);
             }else{
 
                 $fetchData = TempUsers::getAllData();
@@ -115,6 +116,180 @@ class GeneralController extends Controller
 
             return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH TEMP USER FOR YOUR DEPARTMENT EXCEPT FOR HR/MANAGEMENT
+        if($type == 'default_search_temp_dept'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ? TempUsers::searchUser($pickedVal) : TempUsers::searchUserDept($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = TempUsers::massData('uid', $user_ids);
+            }else{
+
+                $fetchData = (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ? TempUsers::getAllData() : TempUsers::specialColumns('dept_id',Auth::user()->dept_id);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH PROJECT TEAM EXTERNAL USER
+        if($type == 'default_search_temp_param'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+            $projectId = $_GET['param1'];
+
+            if($pickedVal != '') {
+                $search = ProjectTeam::searchProjectTeam($pickedVal,$projectId,'temp_users','temp_user',Utility::T_USER);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->unique_id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = ProjectTeam::massData('unique_id', $user_ids);
+            }else{
+
+                $fetchData = ProjectTeam::specialColumns2('project_id',$projectId,'',Utility::T_USER);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH PROJECT EXTERNAL TEAM TO DISPLAY MEMBER TASK
+        if($type == 'default_search_temp_param_check'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+            $projectId = $_GET['param1'];
+            $newInputId = $_GET['newInputId'];
+            $moduleType2 = $_GET['moduleType2'];
+            $newInputPage = $_GET['newInputPage'];
+
+            if($pickedVal != '') {
+                $search = ProjectTeam::searchProjectTeam($pickedVal,$projectId,'temp_users','temp_user',Utility::T_USER);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->unique_id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = ProjectTeam::massData('unique_id', $user_ids);
+            }else{
+
+                $fetchData = ProjectTeam::specialColumns2('project_id',$projectId,'',Utility::T_USER);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                    ->with('projectId',$projectId)->with('newInputId',$newInputId)
+                    ->with('moduleType2',$moduleType2)->with('newInputPage',$newInputPage);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                ->with('projectId',$projectId)->with('newInputId',$newInputId)
+                ->with('moduleType2',$moduleType2)->with('newInputPage',$newInputPage);
+        }
+
+        //FETCH EXTERNAL/TEMPORARY USER TASKS
+        if($type == 'fetch_user_temp_tasks'){
+            $projectId = $_GET['param'];
+            $userTasks = Task::specialColumns2('project_id',$projectId,'temp_user',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$userTasks)->with('type',$type);
+
+        }
+
+        //SEARCH PROJECT TEAM PERMANENT USER
+        if($type == 'default_search_param'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+            $projectId = $_GET['param1'];
+
+            if($pickedVal != '') {
+                $search = ProjectTeam::searchProjectTeam($pickedVal,$projectId,'users','user_id',Utility::P_USER);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->unique_id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = ProjectTeam::massData('unique_id', $user_ids);
+            }else{
+
+                $fetchData = ProjectTeam::specialColumns2('project_id',$projectId,'user_type',Utility::P_USER);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH PROJECT PERMANENT TEAM TO DISPLAY MEMBER TASK
+        if($type == 'default_search_param_check'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+            $projectId = $_GET['param1'];
+            $newInputId = $_GET['newInputId'];
+            $moduleType2 = $_GET['moduleType2'];
+            $newInputPage = $_GET['newInputPage'];
+
+            if($pickedVal != '') {
+                $search = ProjectTeam::searchProjectTeam($pickedVal,$projectId,'users','user_id',Utility::P_USER);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->unique_id;
+                }
+                $user_ids = array_unique($obtain_array);
+                $fetchData = ProjectTeam::massData('unique_id', $user_ids);
+            }else{
+
+                $fetchData = ProjectTeam::specialColumns2('project_id',$projectId,'user_type',Utility::P_USER);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                    ->with('projectId',$projectId)->with('newInputId',$newInputId)
+                    ->with('moduleType2',$moduleType2)->with('newInputPage',$newInputPage);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type)
+                ->with('projectId',$projectId)->with('newInputId',$newInputId)
+                ->with('moduleType2',$moduleType2)->with('newInputPage',$newInputPage);
+        }
+
+        //FETCH PERMANENT USER TASKS
+        if($type == 'fetch_user_tasks'){
+            $projectId = $_GET['param'];
+            $userTasks = Task::specialColumns2('project_id',$projectId,'assigned_user',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$userTasks)->with('type',$type);
+
         }
 
         if($type == 'warehouse_employee'){
@@ -743,21 +918,31 @@ class GeneralController extends Controller
 
         //START OF TASK
         if($type == 'task'){
-
+            $projectId = $_GET['param1'];
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
-                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('projectId',$projectId);
         }
         //END OF TASK
 
         //START OF TASK LIST
         if($type == 'task_list'){
-
-            $taskList = TaskList::specialColumns('project_id',$num1);
+            $projectId = $_GET['param1'];
+            $taskList = TaskList::specialColumns('project_id',$projectId);
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
-                ->with('taskList',$taskList);
+                ->with('taskList',$taskList)->with('projectId',$projectId);
         }
         //END OF TASK LIST
+
+        //START OF TEAM MEMBER
+        if($type == 'team_member'){
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+
+        }
+        //END OF TEAM MEMBER
 
     }
     /**

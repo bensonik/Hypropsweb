@@ -81,7 +81,7 @@
 
                             <div class="col-sm-4" id="hide_button_list">
                                 <div class="form-group">
-                                    <div onclick="addMore('add_more_list','hide_button_list','{{$item->id}}','<?php echo URL::to('add_more'); ?>','task_list','hide_button_list');">
+                                    <div onclick="addMoreParam('add_more_list','hide_button_list','1','<?php echo URL::to('add_more'); ?>','task_list','hide_button_list','{{$item->id}}');">
                                         <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -94,7 +94,7 @@
                         <hr/>
 
                         <h4>Add task(s) to Milestone</h4>
-                        @include('includes.task_form')
+                        @include('includes.task_form',['itemId' => $item->id])
 
                     </div>
 
@@ -141,7 +141,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Task(s)</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
-                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                         <li>
                             <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
                                     '<?php echo url('delete_milestone_task'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
@@ -169,7 +169,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Task List</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
-                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                         <li>
                             <button type="button" onclick="deleteTaskItems('kid_checkbox_task_list','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
                                     '<?php echo url('delete_milestone_list'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
@@ -197,7 +197,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Task(s)</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
-                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                         <li>
                             <button type="button" onclick="deleteTaskItems('kid_checkbox_task_list_item','reload_data','<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')); ?>',
                                     '<?php echo url('delete_task_list_item'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
@@ -242,7 +242,7 @@
                                                     Milestone
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
-                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
@@ -300,7 +300,7 @@
                                                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                                             </td>
-                                                            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                            @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                                                             <td>
                                                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_milestone_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>
@@ -399,7 +399,7 @@
 
                     var successMessage = swalSuccess('Data saved successfully');
                     swal("Success!", successMessage, "success");
-                    //location.reload();
+                    location.reload();
 
                 }else{
 

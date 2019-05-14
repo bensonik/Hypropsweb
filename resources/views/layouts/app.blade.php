@@ -382,19 +382,19 @@
                             <a href="javascript:void(0);" class="menu-toggle">
                                 <span>Approval Configuration</span>
                             </a>
-                            <ul class="ml-menu">
+                            <ul class="ml-menu"><hr/>
                                 <li>
-                                    <a href="{{url('approval_system')}}">Approval System</a>
+                                    <a href="{{url('approval_system')}}">Requisition Approval System</a>
                                 </li>
                                 <li>
                                     <a href="{{url('approval_dept')}}">Departmental Approval</a>
-                                </li>
+                                </li><hr/>
                                 <li>
                                     <a href="{{url('leave_approval_system')}}">HRIS Leave Approval System</a>
                                 </li>
                                 <li>
                                     <a href="{{url('leave_approval')}}">HRIS Leave Departmental Approval</a>
-                                </li>
+                                </li><hr/>
                             </ul>
                         </li>
                     </ul>

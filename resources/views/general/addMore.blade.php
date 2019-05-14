@@ -2377,7 +2377,7 @@
             <div class="col-sm-4" id="normal_user{{$num2}}">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionList('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search','user{{$num2}}');" name="select_user" placeholder="Select User">
+                        <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionListParam('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search_param','user{{$num2}}','{{$projectId}}');" name="select_user" placeholder="Select User">
 
                         <input type="hidden" class="user_class" name="user" id="user{{$num2}}" />
                     </div>
@@ -2387,7 +2387,7 @@
             <div class="col-sm-4" id="temp_user{{$num2}}" style="display:none;">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" autocomplete="off" id="select_users{{$num2}}" onkeyup="searchOptionList('select_users{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','default_search_temp','users{{$num2}}');" name="select_user" placeholder="Select External/Contract User">
+                        <input type="text" class="form-control" autocomplete="off" id="select_users{{$num2}}" onkeyup="searchOptionListParam('select_users{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','default_search_temp_param','users{{$num2}}','{{$projectId}}');" name="select_user" placeholder="Select External/Contract User">
 
                         <input type="hidden" class="" name="user_temp" id="users{{$num2}}" />
                     </div>
@@ -2455,7 +2455,7 @@
 
             <div class=" addButtons" id="{{$hide_id}}{{$more}}">
                 <div class="form-group">
-                    <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task','{{$hide_id}}');">
+                    <div onclick="addMoreParam('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task','{{$hide_id}}','{{$projectId}}');">
                         <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2463,7 +2463,7 @@
 
             <div class="" id="">
                 <div class="form-group">
-                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_task{{$more}}','{{url('add_more')}}','task','new_task','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <div style="cursor: pointer;" onclick="removeInputParam('{{$add_id}}','remove_task{{$more}}','{{url('add_more')}}','task','new_task','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$projectId}}');">
                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2498,7 +2498,7 @@
 
             <div class=" addButtons" id="{{$hide_id}}{{$more}}">
                 <div class="form-group">
-                    <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task_list','{{$hide_id}}');">
+                    <div onclick="addMoreParam('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','task_list','{{$hide_id}}','{{$projectId}}');">
                         <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2506,7 +2506,7 @@
 
             <div class="" id="">
                 <div class="form-group">
-                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_task_list{{$more}}','{{url('add_more')}}','task_list','new_task_list','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <div style="cursor: pointer;" onclick="removeInputParam('{{$add_id}}','remove_task_list{{$more}}','{{url('add_more')}}','task_list','new_task_list','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$projectId}}');">
                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2518,6 +2518,60 @@
 
 @endif
 <!-- END OF TASK LIST -->
+
+
+<!-- BEGIN OF TEAM MEMBER -->
+@if($type == 'team_member')
+
+    <div class="row clearfix new_team_member remove_team_member{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-4" id="normal_user{{$num2}}">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionList('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search','user{{$num2}}');" name="select_user" placeholder="Select User">
+
+                        <input type="hidden" class="user_class" name="user" id="user{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL1{{$num2}}" class="myUL"></ul>
+            </div>
+
+            <div class="col-sm-4" id="temp_user{{$num2}}" style="display:none;">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_users{{$num2}}" onkeyup="searchOptionList('select_users{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','default_search_temp_dept','users{{$num2}}');" name="select_user" placeholder="Select External/Contract User">
+
+                        <input type="hidden" class="" name="user" id="users{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL{{$num2}}" class="myUL"></ul>
+            </div>
+
+            <input type="checkbox" class="change_user" value="1" onclick="changeUserT('normal_user{{$num2}}','temp_user{{$num2}}','change_user{{$num2}}','user{{$num2}}','users{{$num2}}');" id="change_user{{$num2}}" />Check to select contract/external user
+
+            <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','team_member','{{$hide_id}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_team_member{{$more}}','{{url('add_more')}}','task_list','new_team_member','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF TEAM MEMBER -->
 
 <script>
     $(function() {

@@ -68,7 +68,7 @@
                 <b>Project Head</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" autocomplete="off" value="{{$edit->pro_head->firstname}}{{$edit->pro_head->lastname}}" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL1_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Department Head">
+                        <input type="text" class="form-control" autocomplete="off" value="{{$edit->pro_head->firstname}} {{$edit->pro_head->lastname}}" id="select_user_edit" onkeyup="searchOptionList('select_user_edit','myUL1_edit','{{url('default_select')}}','default_search','user_edit');" name="select_user" placeholder="Department Head">
 
                         <input type="hidden" class="user_class" value="{{$edit->project_head}}" name="project_head" id="user_edit" />
                     </div>

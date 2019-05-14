@@ -186,21 +186,48 @@ Route::post('/delete_task_list', 'TaskListController@destroy')->name('delete_tas
 // ------------PROJECT TASK MODULE---------------
 Route::any('/project/{id}/task', 'TaskController@index')->name('task')->middleware('auth');
 Route::any('/project/{id}/task/temp', 'TaskController@indexTemp')->name('task_temp')->middleware('auth:temp_user');
-Route::any('/task_reload', 'TaskController@index_reload')->name('task_reload');
+
 Route::post('/create_task', 'TaskController@create')->name('create_task');
 Route::post('/edit_task_form', 'TaskController@editForm')->name('edit_task_form');
 Route::post('/edit_task', 'TaskController@edit')->name('edit_task');
 Route::post('/delete_task', 'TaskController@destroy')->name('delete_task');
 
+// ------------PROJECT TEAM MODULE---------------
+Route::any('/project/{id}/project_team', 'ProjectTeamController@index')->name('project_team')->middleware('auth');
+Route::any('/project/{id}/project_team/temp', 'ProjectTeamController@indexTemp')->name('project_team_temp')->middleware('auth:temp_user');
+
+Route::post('/create_project_team', 'ProjectTeamController@create')->name('create_project_team');
+Route::post('/edit_project_team_form', 'ProjectTeamController@editForm')->name('edit_project_team_form');
+Route::post('/edit_project_team', 'ProjectTeamController@edit')->name('edit_project_team');
+Route::post('/delete_project_team', 'ProjectTeamController@destroy')->name('delete_project_team');
+
 // ------------PROJECT TIMESHEET MODULE---------------
-Route::any('/timesheet', 'TimesheetController@index')->name('timesheet')->middleware('auth');
-Route::any('/timesheet/temp', 'TimesheetController@indexTemp')->name('timesheet_temp')->middleware('auth:temp_user');
+Route::any('/project/{id}/timesheet', 'TimesheetController@index')->name('timesheet')->middleware('auth');
+Route::any('/project/{id}/timesheet_approval', 'TimesheetController@approval')->name('timesheet_approval')->middleware('auth');
+Route::any('/project/{id}/timesheet/temp', 'TimesheetController@indexTemp')->name('timesheet_temp')->middleware('auth:temp_user');
 Route::post('/create_timesheet', 'TimesheetController@create')->name('create_timesheet');
+Route::any('/search_timesheet_approval', 'TimesheetController@searchTimesheet')->name('search_timesheet_approval');
+Route::any('/approve_timesheet', 'TimesheetController@approveTimesheet')->name('approve_timesheet');
 Route::post('/edit_timesheet_form', 'TimesheetController@editForm')->name('edit_timesheet_form');
 Route::post('/edit_timesheet', 'TimesheetController@edit')->name('edit_timesheet');
 Route::post('/delete_timesheet', 'TimesheetController@destroy')->name('delete_timesheet');
+Route::any('/download_timesheet_attachment', 'TimesheetController@downloadAttachment')->name('download_timesheet_attachment');
+Route::any('/edit_timesheet_attachment_form', 'TimesheetController@attachmentForm')->name('edit_timesheet_attachment_form');
+Route::any('/edit_timesheet_attachment', 'TimesheetController@editAttachment')->name('edit_timesheet_attachment');
+Route::any('/remove_timesheet_attachment', 'TimesheetController@removeAttachment')->name('remove_timesheet_attachment');
 
-// -------------REQUEST CATEGORY MODULE-----------
+// ------------PROJECT MEMBER REQUEST MODULE---------------
+Route::any('/project/{id}/project_request', 'ProjectMemberRequestController@index')->name('project_request')->middleware('auth');
+Route::any('/project/{id}/all_request', 'ProjectMemberRequestController@allRequests')->name('all_request')->middleware('auth');
+Route::any('/project/{id}/project_request/temp', 'ProjectMemberRequestController@indexTemp')->name('project_request_temp')->middleware('auth:temp_user');
+Route::any('/project_request_response_form', 'ProjectMemberRequestController@requestResponseForm')->name('project_request_response_form');
+Route::any('/project_request_response', 'ProjectMemberRequestController@requestResponse')->name('project_request_response');
+Route::post('/create_project_request', 'ProjectMemberRequestController@create')->name('create_project_request');
+Route::post('/edit_project_request_form', 'ProjectMemberRequestController@editForm')->name('edit_project_request_form');
+Route::post('/edit_project_request', 'ProjectMemberRequestController@edit')->name('edit_project_request');
+Route::post('/delete_project_request', 'ProjectMemberRequestController@destroy')->name('delete_project_request');
+
+// -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------
 Route::any('/request_category', 'RequestCategoryController@index')->name('request_category')->middleware('auth');
 Route::post('/create_request_cat', 'RequestCategoryController@create')->name('create_request_cat');
 Route::post('/edit_request_cat_form', 'RequestCategoryController@editForm')->name('edit_request_cat_form');

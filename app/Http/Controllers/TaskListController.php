@@ -142,7 +142,7 @@ class TaskListController extends Controller
                     $task = Task::create($dbDATA);
                     $taskNewId[] = $task->id;
                     $projDetails = Project::firstRow('id', $projectId);
-                    if (Utility::checkEmptyArrayItem($taskPriority, $i, '') != '') {
+                    if (Utility::checkEmptyArrayItem($user, $i, '') != '') {
                         $userData = Utility::firstRow($changeUserDbTbl, 'id', $user[$i]);
                         $userEmail = $userData->email;
 

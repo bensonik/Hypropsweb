@@ -10,7 +10,7 @@
                 <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                     <div class="body">
 
-                        @include('includes.task_form')
+                        @include('includes.task_form',['itemId' => $item->id])
 
                     </div>
 
@@ -74,7 +74,7 @@
                                                     Task(s)
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
-                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
@@ -136,7 +136,7 @@
                                                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                                             </td>
-                                                            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                            @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                                                             <td>
                                                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>

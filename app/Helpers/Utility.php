@@ -96,6 +96,25 @@ class Utility
         return public_path() . '/audio/';
     }
 
+    public static function generateUniqueId($table = null, $column, $limit = 12) {
+        $uid = "";
+        $array = array_merge(range(0, 1), range(7, 9));
+        for ($i = 0; $i < $limit; $i++) {
+            $uid.=$array[array_rand($array)];
+        }
+        if($table === null){
+            return $uid;
+        }
+        else{
+            if(self::uniqueIdExists($column, $uid , $table)){
+                $uid =  self::generateUniqueId($table , $column, $limit);
+            }
+            return $uid;
+
+        }
+
+    }
+
     public static function generateUID($table = null, $limit = 12) {
         $uid = "";
         $array = array_merge(range(0, 1), range(7, 9));
@@ -171,6 +190,11 @@ class Utility
 
         }
 
+    }
+
+    public static function uniqueIdExists($column,$uid, $table){
+        $exists =  DB::table($table)->where($column , $uid)->count();
+        return $exists > 0 ? true : false;
     }
 
     public static function uidExists($uid, $table){
@@ -1177,6 +1201,7 @@ class Utility
         $project->lesson_learnt = self::countData('lessons_learnt','project_id',$project->id);
         $project->documents = self::countData('project_docs','project_id',$project->id);
         $project->requests = self::countData('project_member_request','project_id',$project->id);
+        $project->all_requests = self::countData2('project_member_request','project_id',$project->id,'response_status',self::ZERO);
         $project->members = self::countData('project_team','project_id',$project->id);
         $project->timesheet = self::countData2('timesheet','project_id',$project->id,self::authColumn('temp_user'),self::checkAuth('temp_user')->id);
 
@@ -1198,7 +1223,7 @@ class Utility
 
     public static function taskColor($statusInt){
         $status = '';
-        ;
+
         switch ($statusInt) {
             case '0':
                 $status = '';
@@ -1230,6 +1255,48 @@ class Utility
         $dateDiff = strtotime($end) - strtotime($start);
         $duration = round($dateDiff/(60*60*24));
         return $duration.' day(s)';
+    }
+
+    public static function approveStatus($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case '0':
+                $status = 'Processing';
+                break;
+            case '1':
+                $status = 'Approved';
+                break;
+            case '2':
+                $status = 'Denied';
+                break;
+
+            default:
+                $status = 'Processing';
+                break;
+        }
+        return $status;
+    }
+
+    public static function statusIndicator($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case '0':
+                $status = 'btn-primary';
+                break;
+            case '1':
+                $status = 'btn-success';
+                break;
+            case '2':
+                $status = 'btn-danger';
+                break;
+
+            default:
+                $status = 'btn-primary';
+                break;
+        }
+        return $status;
     }
 
 }

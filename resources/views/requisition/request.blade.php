@@ -108,7 +108,7 @@
                                 <td>{{number_format($data->amount)}}</td>
                                 <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>
                                 <td>{{$data->department->dept_id}}</td>
-                                <td>
+                                <td class="{{\App\Helpers\Utility::statusIndicator($data->approval_status)}}">
                                     @if($data->approval_status === 1)
                                         Request Approved
                                     @endif

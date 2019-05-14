@@ -82,8 +82,8 @@ class RequisitionController extends Controller
         $updateApproval = Requisition::massUpdate('id',$all_id,$dbData);
 
         return response()->json([
-            'message2' => 'saved',
-            'message' => 'Payment(s) has been processed'
+            'message' => 'saved',
+            'message2' => 'Payment(s) has been processed'
         ]);
 
 
@@ -699,7 +699,7 @@ class RequisitionController extends Controller
 
     public function editAttachment(Request $request){
         $files = $request->file('attachment');
-        //return $files;
+
         $attachment = [];
         $editId = $request->input('edit_id');
         $oldData = Requisition::firstRow('id',$editId);

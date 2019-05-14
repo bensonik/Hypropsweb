@@ -49,11 +49,20 @@ class ProjectController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Project::paginateAllData();
+        $projectId = [];
+        $checkUser = ProjectTeam::specialColumns('user_id',Utility::checkAuth('temp_user')->id);
+        if(!empty($checkUser)){
+            foreach($checkUser as $data){
+                $projectId[] = $data->project_id;
+            }
+        }
+
+
+        $mainData = (in_array(Utility::checkAuth('temp_user')->role,Utility::HR_MANAGEMENT)) ? Project::paginateAllData() : Project::massDataPaginate('id',$projectId) ;
         $billMethod = BillMethod::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'),
+            return \Response::json(view::make(Utility::authBlade('temp_user','project.reload','project.reload'),
                 array('mainData' => $mainData,'billMethod' => $billMethod))->render());
 
         }else{
@@ -67,11 +76,19 @@ class ProjectController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Project::paginateAllData();
+        $projectId = [];
+        $checkUser = ProjectTeam::specialColumns('user_id',Utility::checkAuth('temp_user')->id);
+        if(!empty($checkUser)){
+            foreach($checkUser as $data){
+                $projectId[] = $data->project_id;
+            }
+        }
+
+        $mainData = Project::massDataPaginate('id',$projectId);
         $billMethod = BillMethod::getAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','project.main_view','project.main_view_temp'),
+            return \Response::json(view::make(Utility::authBlade('temp_user','project.reload','project.reload'),
                 array('mainData' => $mainData,'billMethod' => $billMethod))->render());
 
         }else{
@@ -115,7 +132,9 @@ class ProjectController extends Controller
 
                 $pro = Project::create($dbDATA);
 
+                $uid = Utility::generateUniqueId('project_team','unique_id');
                 $dbDATA2 = [
+                    'unique_id' => $uid,
                     'project_id' => $pro->id,
                     'user_id' => Auth::user()->id,
                     'project_access' => Utility::STATUS_ACTIVE,
@@ -181,10 +200,27 @@ class ProjectController extends Controller
                 'updated_by' => Auth::user()->id
             ];
             $rowData = Project::specialColumns('project_name', $request->input('project_name'));
+            $teamAssoc = ProjectTeam::specialColumns2('project_id',$request->input('edit_id'),'user_id',$request->input('project_head'));
+
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
                     Project::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                    //CHECK WHEATHER PROJECT HEAD EXIST IN PROJECT TEAM, IF NOT ADD HIM/HER TO THE TEAM
+                    if(empty($teamAssoc)){
+                        $uid = Utility::generateUniqueId('project_team','unique_id');
+                        $dbDATA2 = [
+                            'unique_id' => $uid,
+                            'project_id' => $request->input('edit_id'),
+                            'user_id' => $request->input('project_head'),
+                            'project_access' => Utility::STATUS_ACTIVE,
+                            'team_lead' => 0,
+                            'created_by' => Auth::user()->id,
+                            'status' => Utility::STATUS_ACTIVE
+                        ];
+                        ProjectTeam::create($dbDATA2);
+                    }
 
                     return response()->json([
                         'message' => 'good',
@@ -201,6 +237,21 @@ class ProjectController extends Controller
 
             } else{
                 Project::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                //CHECK WHEATHER PROJECT HEAD EXIST IN PROJECT TEAM, IF NOT ADD HIM/HER TO THE TEAM
+                if(empty($teamAssoc)){
+                    $uid = Utility::generateUniqueId('project_team','unique_id');
+                    $dbDATA2 = [
+                        'unique_id' => $uid,
+                        'project_id' => $request->input('edit_id'),
+                        'user_id' => $request->input('project_head'),
+                        'project_access' => Utility::STATUS_ACTIVE,
+                        'team_lead' => 0,
+                        'created_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    ProjectTeam::create($dbDATA2);
+                }
 
                 return response()->json([
                     'message' => 'good',
@@ -255,11 +306,25 @@ class ProjectController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = Project::massUpdate('id',$idArray,$dbData);
+
+        $nonController = [];
+        foreach($idArray as $id){
+        $projHead = Project::specialColumns2('id',$id,'project_head',Auth::user()->id);
+            if(!empty($projHead)){
+                $delete = Project::massUpdate('id',$idArray,$dbData);
+
+            }else{
+                $nonController[] = $id;
+            }
+        }
+
+        $message = (count($nonController) < 1) ? 'Data deleted successfully' : 'Data deleted successfully, '.count($nonController).
+        ' projects are not under your control and can\'t be deleted by you as you are not the project leader';
+
 
         return response()->json([
             'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
+            'message' => $message
         ]);
 
     }

@@ -3,7 +3,7 @@
 @foreach($optionArray as $data)
 
 <li>
-    <a  onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}</a>
+    <a  onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}({{$data->email}})</a>
 </li>
 
 @endforeach
@@ -13,11 +13,92 @@
     @foreach($optionArray as $data)
 
         <li>
-            <a  onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}</a>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}({{$data->email}})</a>
         </li>
 
     @endforeach
 @endif
+
+@if($type == 'default_search_temp_dept')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->firstname}} {{$data->lastname}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->firstname}} &nbsp; {{$data->lastname}}({{$data->email}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'default_search_temp_param')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->extUser->firstname}} {{$data->extUser->lastname}}','{{$hiddenId}}','{{$data->temp_user}}','{{$listId}}');">{{$data->extUser->firstname}} &nbsp; {{$data->extUser->lastname}} ({{$data->extUser->email}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'default_search_temp_param_check')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItemRepParam('{{$searchId}}','{{$data->extUser->firstname}} {{$data->extUser->lastname}}','{{$hiddenId}}','{{$data->temp_user}}','{{$listId}}','{{$newInputId}}','{{$moduleType2}}','{{$newInputPage}}','{{$projectId}}');">{{$data->extUser->firstname}} &nbsp; {{$data->extUser->lastname}} ({{$data->extUser->email}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'fetch_user_temp_tasks')
+
+    <select name="task"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select Task</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->task}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Task found</option>
+        @endif
+    </select>
+@endif
+
+@if($type == 'default_search_param')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->member->firstname}} {{$data->member->lastname}}','{{$hiddenId}}','{{$data->user_id}}','{{$listId}}');">{{$data->member->firstname}} &nbsp; {{$data->member->lastname}} ({{$data->member->email}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'default_search_param_check')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItemRepParam('{{$searchId}}','{{$data->member->firstname}} {{$data->member->lastname}}','{{$hiddenId}}','{{$data->user_id}}','{{$listId}}','{{$newInputId}}','{{$moduleType2}}','{{$newInputPage}}','{{$projectId}}');">{{$data->member->firstname}} &nbsp; {{$data->member->lastname}} ({{$data->member->email}})</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'fetch_user_tasks')
+
+    <select name="task"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select Task</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->task}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Task found</option>
+        @endif
+    </select>
+@endif
+
 
 @if($type == 'warehouse_employee')
     @foreach($optionArray as $data)

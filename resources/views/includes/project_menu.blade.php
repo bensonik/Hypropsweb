@@ -7,7 +7,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#timesheet" onclick="fetchHtml3()" data-toggle="tab">
+        <div data-target="#timesheet" onclick="navigatePage('<?php echo url('project/'.$item->id.'/timesheet'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div class="ellipsis">
                 <span class="account-type">Timesheet</span><br/>
                 <span class="account-amount">{{$item->timesheet}}</span><br/>
@@ -15,6 +15,17 @@
             </div>
         </div>
     </li>
+    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+        <li>
+            <div data-target="#timesheet" onclick="navigatePage('<?php echo url('project/'.$item->id.'/timesheet_approval'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
+                <div class="ellipsis">
+                    <span class="account-type">Timesheet</span><br/>
+                    <span class="account-amount">Approval</span><br/>
+                    <a href="#" class="account-link"></a>
+                </div>
+            </div>
+        </li>
+    @endif
     <li>
         <div data-target="#milestone" onclick="navigatePage('<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
@@ -41,7 +52,7 @@
         </div>
     </li>
     <li class="">
-        <div data-target="#team_members" onclick="navigatePage('<?php echo url('project/'.$item->id.'/team-'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
+        <div data-target="#team_members" onclick="navigatePage('<?php echo url('project/'.$item->id.'/project_team'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div class="ellipsis">
                 <span class="account-type">Team Members</span><br/>
                 <span class="account-amount">{{$item->members}}</span><br/>
@@ -50,13 +61,24 @@
         </div>
     </li>
     <li>
-        <div data-target="#requests" data-toggle="tab">
+        <div data-target="#requests" onclick="navigatePage('<?php echo url('project/'.$item->id.'/project_request'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
-                <span class="account-type">Requests</span><br/>
+                <span class="account-type">My Requests</span><br/>
                 <span class="account-amount">{{$item->requests}}</span><br/>
             </div>
         </div>
     </li>
+    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+        <li>
+            <div data-target="#all_request" onclick="navigatePage('<?php echo url('project/'.$item->id.'/all_request'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
+                <div class="ellipsis">
+                    <span class="account-type">Request(s)</span><br/>
+                    <span class="account-amount">Awaiting Reply</span><br/>
+                    <a href="#" class="account-link">{{$item->all_requests}}</a>
+                </div>
+            </div>
+        </li>
+    @endif
     <li>
         <div data-target="#issues" data-toggle="tab">
             <div>

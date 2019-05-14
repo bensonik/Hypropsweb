@@ -30,7 +30,7 @@ class TempUsersController extends Controller
         //
         //$req = new Request();
         $roles = TempRoles::getAllData();
-        $mainData =  TempUsers::paginateAllData();
+        $mainData =  (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ? TempUsers::paginateAllData() : TempUsers::specialColumnsPage('dept_id',Auth::user()->dept_id);
         $department = Department::getAllData();
 
 
@@ -294,7 +294,7 @@ class TempUsersController extends Controller
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = TempUsers::searchUser($_GET['searchVar']);
+        $search = (in_array(Auth::user()->role,Utility::HR_MANAGEMENT)) ?  TempUsers::searchUser($_GET['searchVar']) : TempUsers::searchUserDept($_GET['searchVar']) ;
         $obtain_array = [];
 
         foreach($search as $data){
