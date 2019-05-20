@@ -21,12 +21,12 @@
 Route::get('/', 'HomeController@signin')->name('login');
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/dashboard', 'HomeController@index')->name('dashboard')->middleware('auth');
-Route::post('/login', 'Auth\LoginController@login')->name('login_user');
+Route::any('/login', 'Auth\LoginController@login')->name('login_user');
 Route::any('/logout', 'Auth\LoginController@signout')->name('logout');
 
 Route::get('/external', 'Auth\TempUserLoginController@signin')->name('temp_user_login');
 Route::get('/temp_user_dashboard', 'Auth\TempUserHomeController@index')->name('temp_user_dashboard')->middleware('auth:temp_user');
-Route::post('/login_temp_user', 'Auth\TempUserLoginController@login')->name('login_temp_user');
+Route::any('/login_temp_user', 'Auth\TempUserLoginController@login')->name('login_temp_user');
 Route::any('/temp_user_logout', 'Auth\TempUserHomeController@signout')->name('temp_user_logout');
 
 // -------------USER MODULE-----------
@@ -601,5 +601,33 @@ Route::post('/delete_temp_user', 'TempUsersController@destroy')->name('delete_te
 Route::post('/change_temp_user_status', 'TempUsersController@changeStatus')->name('change_temp_user_status');
 Route::any('/temp_user_cv', 'TempUserController@downloadAttachment')->name('temp_user_cv');
 
+// -------------SURVEY ANSWER CATEGORY MODULE FOR REQUISITION-----------
+Route::any('/survey_ans_category', 'SurveyAnsCatController@index')->name('survey_ans_category')->middleware('auth');
+Route::post('/create_survey_ans_category', 'SurveyAnsCatController@create')->name('create_survey_ans_category');
+Route::post('/edit_survey_ans_category_form', 'SurveyAnsCatController@editForm')->name('edit_survey_ans_category_form');
+Route::post('/edit_survey_ans_category', 'SurveyAnsCatController@edit')->name('edit_survey_ans_category');
+Route::post('/delete_survey_ans_category', 'SurveyAnsCatController@destroy')->name('delete_survey_ans_category');
 
+// -------------SURVEY QUESTION CATEGORY MODULE FOR REQUISITION-----------
+Route::any('/survey_quest_category', 'SurveyQuestCatController@index')->name('survey_quest_category')->middleware('auth');
+Route::post('/create_survey_quest_category', 'SurveyQuestCatController@create')->name('create_survey_quest_category');
+Route::post('/edit_survey_quest_category_form', 'SurveyQuestCatController@editForm')->name('edit_survey_quest_category_form');
+Route::post('/edit_survey_quest_category', 'SurveyQuestCatController@edit')->name('edit_survey_quest_category');
+Route::post('/delete_survey_quest_category', 'SurveyQuestCatController@destroy')->name('delete_survey_quest_category');
+
+// -------------SURVEY ACCESS MODULE-----------
+Route::any('/survey_access', 'SurveyAccessController@index')->name('survey_access')->middleware('auth.admin');
+Route::post('/create_survey_access', 'SurveyAccessController@create')->name('create_survey_access');
+Route::post('/edit_survey_access_form', 'SurveyAccessController@editForm')->name('edit_survey_access_form');
+Route::post('/edit_survey_access', 'SurveyAccessController@edit')->name('edit_survey_access');
+Route::post('/delete_survey_access', 'SurveyAccessController@destroy')->name('delete_survey_access');
+
+// -------------SURVEY MODULE-----------
+Route::any('/survey', 'SurveyController@index')->name('survey')->middleware('auth');
+Route::post('/create_survey', 'SurveyController@create')->name('create_survey');
+Route::post('/edit_survey_form', 'SurveyController@editForm')->name('edit_survey_form');
+Route::post('/edit_survey_dept_form', 'SurveyController@editDeptForm')->name('edit_survey_dept_form');
+Route::post('/edit_survey', 'SurveyController@edit')->name('edit_survey');
+Route::post('/modify_survey_dept', 'SurveyController@modifyDept')->name('modify_survey_dept');
+Route::post('/delete_survey', 'SurveyController@destroy')->name('delete_survey');
 

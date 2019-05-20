@@ -225,8 +225,9 @@
             if(approve[i].checked){
                 //approve[i].id.style.visibility = 'hidden';
                 trId = 'tr_'+approve[i].id;
-                var itemId = document.getElementById(trId);
-                itemId.style.visibility = 'hidden';
+                //var itemId = document.getElementById(trId);
+                //itemId.style.visibility = 'hidden';
+                $('#'+trId).remove();
             }
         }
 
@@ -814,6 +815,48 @@
 
     }
 
+    function changeStatusMethodParam(klass,reloadId,reloadUrl,submitUrl,token,status,paramId,modalId){
+        var param = $('#'+paramId).val();
+        var data_string = group_val(klass);
+        var all_data = JSON.stringify(data_string);
+        var postVars = "all_data="+all_data+"&status="+status+"&param="+param;
+
+        $('#'+modalId).modal('hide');
+        $('#loading_modal').modal('show');
+        sendRequestForm(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                $('#loading_modal').modal('hide');
+                var rollback = JSON.parse(ajax.responseText);
+                var message2 = rollback.message2;
+                if(message2 == 'fail'){
+
+                    //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                    var serverError = phpValidationError(rollback.message);
+
+                    var messageError = swalDefaultError(serverError);
+                    swal("Error",messageError, "error");
+
+                }else if(message2 == 'deleted'){
+
+                    var successMessage = swalSuccess(rollback.message);
+                    swal("Success!", successMessage, "success");
+
+                }else{
+
+                    var infoMessage = swalWarningError(message2);
+                    swal("Success!", infoMessage, "warning");
+
+                }
+
+                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                reloadContent(reloadId,reloadUrl);
+            }
+        }
+
+
+    }
+
     function changeStatusMethodForm(klass,reloadId,reloadUrl,submitUrl,token,status,formId){
         var inputVars = $('#'+formId).serialize();
         var data_string = group_val(klass);
@@ -1122,6 +1165,37 @@
                         //$('#search_user_timesheet_btn').trigger('click');
                     } else {
                         swal("Status change Cancelled", "Status remains the same :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
+        }
+
+    }
+
+    function removeAddItem(klass,reloadId,reloadUrl,submitUrl,token,status,category,paramId,modalId) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to "+category+" ?",
+                    text: "This will "+category+"!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, "+category+"!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: true,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+
+                        changeStatusMethodParam(klass, reloadId, reloadUrl, submitUrl, token,status,paramId,modalId);
+
+                        swal("Complete!", "modification complete.", "success");
+                    } else {
+                        swal(" Cancelled", "Modification cancelled", "error");
                     }
                 });
 

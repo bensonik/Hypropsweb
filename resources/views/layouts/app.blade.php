@@ -375,6 +375,9 @@
                                 <li>
                                     <a href="{{url('inventory_access')}}">Config Inventory System Access</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('survey_access')}}">Config Individual Survey Access</a>
+                                </li>
                             </ul>
                         </li>
 
@@ -410,20 +413,59 @@
                     </li>
                 @endif
 
-                    <li>
-                        <a href="{{url('vendor')}}">
-                            <i class="material-icons">people</i>
-                            <span class="icon-name">Manage Vendors</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{url('vendor')}}">
+                        <i class="material-icons">people</i>
+                        <span class="icon-name">Manage Vendors</span>
+                    </a>
+                </li>
 
-                    <li>
-                        <a href="{{url('customer')}}">
-                            <i class="material-icons">people</i>
-                            <span class="icon-name">Manage Customers</span>
-                        </a>
-                    </li>
+                <li>
+                    <a href="{{url('customer')}}">
+                        <i class="material-icons">people</i>
+                        <span class="icon-name">Manage Customers</span>
+                    </a>
+                </li>
 
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('survey_access'))
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">spellcheck</i>
+                        <span>Survey System</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('survey_ans_category')}}">Answer Category</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey_quest_category')}}">Question Category</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey')}}">Survey Config</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey_session')}}">Survey Session</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey_questions')}}">Survey Question(s)</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey_result')}}">Survey Result</a>
+                        </li>
+                        <li>
+                            <a href="{{url('survey_form')}}">Survey Form</a>
+                        </li>
+
+                    </ul>
+                </li>
+                    @else
+                <li>
+                    <a href="{{url('survey_form')}}">
+                        <i class="material-icons">people</i>
+                        <span class="icon-name">Survey Form</span>
+                    </a>
+                </li>
+                @endif
 
                 @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
                 <li>

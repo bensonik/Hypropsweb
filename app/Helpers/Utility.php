@@ -303,7 +303,7 @@ class Utility
         foreach($localArray as $item){
             $default[] = $item->id;
         }
-        $newArray = array_diff($localArray,$foreignArray);
+        $newArray = array_diff($default,$foreignArray);
         return $newArray;
     }
 
@@ -1297,6 +1297,14 @@ class Utility
                 break;
         }
         return $status;
+    }
+
+    public static function moduleAccessCheck($table){
+        $data = self::firstRow($table,'user_id',Auth::user()->id);
+        if(empty($data)){
+            return false;
+        }
+        return true;
     }
 
 }
