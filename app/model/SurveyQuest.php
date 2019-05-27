@@ -21,7 +21,14 @@ class SurveyQuest extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'answer_category' => 'required',
+        'survey' => 'required',
+        'department' => 'required',
+        'question' => 'required',
+        'question_category' => 'required',
+    ];
+
+    public static $searchRules = [
+        'survey' => 'required',
     ];
 
     public function user_c(){
@@ -38,13 +45,13 @@ class SurveyQuest extends Model
         return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
-    public function hod(){
-        return $this->belongsTo('App\User','dept_head','id')->withDefault();
+    public function survey(){
+        return $this->belongsTo('App\model\Survey','survey_id','id')->withDefault();
 
     }
 
-    public function account_cat(){
-        return $this->belongsTo('App\model\AccountCategory','acct_id','id')->withDefault();
+    public function questCat(){
+        return $this->belongsTo('App\model\SurveyQuestCat','cat_id','id')->withDefault();
 
     }
 
@@ -105,6 +112,14 @@ class SurveyQuest extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsAsc2($column, $post, $column2, $post2)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->orderBy('id','ASC')->get();
 
     }
 

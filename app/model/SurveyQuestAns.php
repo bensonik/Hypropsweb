@@ -21,7 +21,7 @@ class SurveyQuestAns extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'answer_category' => 'required',
+
     ];
 
     public function user_c(){
@@ -43,8 +43,8 @@ class SurveyQuestAns extends Model
 
     }
 
-    public function account_cat(){
-        return $this->belongsTo('App\model\AccountCategory','acct_id','id')->withDefault();
+    public function ansCat(){
+        return $this->belongsTo('App\model\SurveyAnsCat','ans_cat_id','id')->withDefault();
 
     }
 
@@ -83,6 +83,12 @@ class SurveyQuestAns extends Model
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->get();
+
+    }
+    public static function specialColumnsAsc($column, $post)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','ASC')->get();
 
     }
 

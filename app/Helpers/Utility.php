@@ -1171,6 +1171,14 @@ class Utility
         }
     }
 
+    public static function authSurveyTable($guard){
+        if(Auth::guard($guard)->check()){
+            return 'survey_temp_user_ans';
+        }else{
+            return 'survey_user_ans';
+        }
+    }
+
     public static function authBlade($guard,$mainBlade,$otherBlade){
         if(Auth::guard($guard)->check()){
             return $otherBlade;
@@ -1305,6 +1313,18 @@ class Utility
             return false;
         }
         return true;
+    }
+
+    public static function sessionStatusDisplay($statusInt){
+        if($statusInt == 1){
+            return 'Visible to participants';
+        }
+        return 'Invisible to participants';
+    }
+
+    public static function createData($table,$dataArray){
+        $insertData =DB::table($table)->insert($dataArray);
+        return $insertData;
     }
 
 }

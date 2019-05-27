@@ -326,6 +326,21 @@
     @endforeach
 @endif
 
+@if($type == 'survey_dept')
+
+    <select name="department"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select Department</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->dept_name}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Department found</option>
+        @endif
+    </select>
+@endif
+
 
 
 

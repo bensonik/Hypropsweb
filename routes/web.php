@@ -631,3 +631,24 @@ Route::post('/edit_survey', 'SurveyController@edit')->name('edit_survey');
 Route::post('/modify_survey_dept', 'SurveyController@modifyDept')->name('modify_survey_dept');
 Route::post('/delete_survey', 'SurveyController@destroy')->name('delete_survey');
 
+// -------------SURVEY QUESTIONS MODULE-----------
+Route::any('/survey_question', 'SurveyQuestController@index')->name('survey_question')->middleware('auth');
+Route::post('/create_survey_question', 'SurveyQuestController@create')->name('create_survey_question');
+Route::post('/edit_survey_question', 'SurveyQuestController@edit')->name('edit_survey');
+Route::post('/search_survey_question', 'SurveyQuestController@searchSurvey')->name('search_survey_question');
+Route::post('/delete_survey_question', 'SurveyQuestController@destroy')->name('delete_survey_question');
+
+
+// -------------SURVEY SESSION MODULE-----------
+Route::any('/survey_session', 'SurveySessionController@index')->name('survey_session')->middleware('auth');
+Route::any('/survey_list', 'SurveySessionController@surveyList')->name('survey_list')->middleware('auth');
+Route::any('/survey_list_temp', 'SurveySessionController@surveyListTemp')->name('survey_list_temp')->middleware('auth:temp_user');
+Route::any('/survey_form/{id}/{session}', 'SurveySessionController@surveyForm')->name('survey_form')->middleware('auth');
+Route::any('/survey_form/{id}/{session}/temp', 'SurveySessionController@surveyFormTemp')->name('survey_form_temp')->middleware('auth:temp_user');
+Route::post('/submit_survey_form', 'SurveySessionController@submitSurveyForm')->name('submit_survey_form');
+Route::post('/create_survey_session', 'SurveySessionController@create')->name('create_survey_session');
+Route::post('/edit_survey_session_form', 'SurveySessionController@editForm')->name('edit_survey_session_form');
+Route::post('/edit_survey_session', 'SurveySessionController@edit')->name('edit_survey_session');
+Route::post('/delete_survey_session', 'SurveySessionController@destroy')->name('delete_survey_session');
+
+

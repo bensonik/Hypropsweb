@@ -474,10 +474,10 @@
     }
 
     function fillNextInput(value_id,displayId,page,moduleType){
-            //var pickedVal = $('#'+value_id).val();
+            var pickedVal = $('#'+value_id).val();
 
             $.ajax({
-                url:  page+'?pickedVal='+value_id+'&type='+moduleType
+                url:  page+'?pickedVal='+pickedVal+'&type='+moduleType
             }).done(function(data){
                 $('#'+displayId).html(data);
             });
@@ -548,7 +548,7 @@
         $("#"+valDisplayId).val(val);
         $("#"+hiddenValId).val(hiddenVal);
         $("#"+dropdownId).hide();
-        fillNextInput(hiddenVal,newDisplayId,page,moduleType)
+        fillNextInput(hiddenValId,newDisplayId,page,moduleType)
     }
 
     function dropdownItemRepParam(valDisplayId,val,hiddenValId,hiddenVal,dropdownId,newDisplayId,moduleType,page,param) {
@@ -728,8 +728,9 @@
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                    reloadContent(reloadId,reloadUrl);
-
+                if(reloadUrl != '') {
+                    reloadContent(reloadId, reloadUrl);
+                }
             }
         }
 
@@ -956,7 +957,7 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         deleteEntry(klass, reloadId, reloadUrl, submitUrl, token);
-                        swal("Deleted!", "Your item(s) has been deleted.", "success");
+                        //swal("Deleted!", "Your item(s) has been deleted.", "success");
                     } else {
                         swal("Delete Cancelled", "Your data is safe :)", "error");
                     }
@@ -964,6 +965,36 @@
 
             }else{
                 alert('Please select an entry to continue');
+        }
+
+    }
+
+    function deleteItemsRemove(klass,reloadId,reloadUrl,submitUrl,token) {
+        var items = group_val(klass);
+        if (items.length > 0){
+            swal({
+                    title: "Are you sure you want to delete?",
+                    text: "You will not be able to recover this data entry!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel delete!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        deleteEntry(klass, reloadId, reloadUrl, submitUrl, token);
+                        hideCheckedClassItems(klass);
+                        //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                    } else {
+                        swal("Delete Cancelled", "Your data is safe :)", "error");
+                    }
+                });
+
+        }else{
+            alert('Please select an entry to continue');
         }
 
     }

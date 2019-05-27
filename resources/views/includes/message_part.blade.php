@@ -49,6 +49,6 @@
 
     <textarea id="mail_message" name="message" class="ckeditor" placeholder="Message">Message...</textarea>
     <script>
-        CKEDITOR.replace('message');
+        CKEDITOR.replace('mail_message');
     </script>
 </div>

@@ -14,6 +14,7 @@ use App\model\ProjectTeam;
 use App\model\Quote;
 use App\model\QuoteExtension;
 use App\model\RFQExtension;
+use App\model\Survey;
 use App\model\Task;
 use App\model\TaskList;
 use App\model\TempUsers;
@@ -681,6 +682,15 @@ class GeneralController extends Controller
             $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type)
                 ->with('param',$param);
+        }
+
+        //FOR COMPETENCY FRAMEWORK
+        if($type == 'survey_dept'){
+            $survey = Survey::firstRow('id',$pickedVal);
+            $surveyDept = json_decode($survey->all_dept,true);
+            $fetchDept = Department::massData('id',$surveyDept);
+            return view::make('general.selectOptions')->with('optionArray',$fetchDept)->with('type',$type);
+
         }
 
 

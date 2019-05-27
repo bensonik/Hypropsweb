@@ -447,13 +447,13 @@
                             <a href="{{url('survey_session')}}">Survey Session</a>
                         </li>
                         <li>
-                            <a href="{{url('survey_questions')}}">Survey Question(s)</a>
+                            <a href="{{url('survey_question')}}">Survey Question(s)</a>
                         </li>
                         <li>
                             <a href="{{url('survey_result')}}">Survey Result</a>
                         </li>
                         <li>
-                            <a href="{{url('survey_form')}}">Survey Form</a>
+                            <a href="{{url('survey_list')}}">Participate in Survey</a>
                         </li>
 
                     </ul>

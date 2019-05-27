@@ -340,6 +340,12 @@
                         <span class="icon-name">Project Management</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{url('survey_list_temp')}}">
+                        <i class="material-icons">view_carousel</i>
+                        <span class="icon-name">Participate in Survey</span>
+                    </a>
+                </li>
 
                 <li>
                     {{--<a href="javascript:void(0);" class="menu-toggle">
