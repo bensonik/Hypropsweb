@@ -31,6 +31,11 @@ class SurveyQuest extends Model
         'survey' => 'required',
     ];
 
+    public static $searchResultRules = [
+        'session' => 'required',
+        'participant' => 'required',
+    ];
+
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id')->withDefault();
 
@@ -147,6 +152,14 @@ class SurveyQuest extends Model
 
     }
 
+    public static function specialColumnsAsc3($column, $post, $column2, $post2, $column3, $post3)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->get();
+
+    }
+
     public static function specialColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
@@ -163,6 +176,14 @@ class SurveyQuest extends Model
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+
+    }
+
+    public static function massDataConditionAsc($column, $post, $column2, $post2)
+    {
+        return static::where($column, $post)->whereIn($column2, $post2)
+            ->where('status', Utility::STATUS_ACTIVE)
+            ->orderBy('id','ASC')->get();
 
     }
 

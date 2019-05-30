@@ -460,9 +460,9 @@
                 </li>
                     @else
                 <li>
-                    <a href="{{url('survey_form')}}">
+                    <a href="{{url('survey_list')}}">
                         <i class="material-icons">people</i>
-                        <span class="icon-name">Survey Form</span>
+                        <span class="icon-name">Participate in Survey</span>
                     </a>
                 </li>
                 @endif

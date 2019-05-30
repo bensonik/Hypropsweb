@@ -140,11 +140,14 @@ class SurveyQuestCat extends Model
 
     }
 
-    public static function massData($column, $post)
+    public static function massData($column, $post = [])
     {
-        return Utility::massData(self::table(),$column, $post);
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->get();
 
     }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);

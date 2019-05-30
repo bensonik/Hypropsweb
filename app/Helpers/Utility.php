@@ -413,6 +413,19 @@ class Utility
 
     }
 
+    public static function countData4($table,$column1, $post1,$column2, $post2,$column3, $post3,$column4, $post4)
+    {
+        return DB::table($table)
+            ->where($column1, $post1)
+            ->where($column2, $post2)
+            ->where($column3, $post3)
+            ->where($column4, $post4)
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->count();
+
+    }
+
+
     public static function specialColumns($table,$column, $post)
     {
         return DB::table($table)
@@ -1325,6 +1338,23 @@ class Utility
     public static function createData($table,$dataArray){
         $insertData =DB::table($table)->insert($dataArray);
         return $insertData;
+    }
+
+    public static function surveyPerctentClass($val){
+        $htmlClass = '';
+        if($val < 40){
+            $htmlClass = 'progress-bar-danger';
+        }
+        if($val > 39 && $val < 50){
+            $htmlClass = 'progress-bar-warning';
+        }
+        if($val > 49 && $val < 70){
+            $htmlClass = 'progress-bar-info';
+        }
+        if($val > 69){
+            $htmlClass = 'progress-bar-success';
+        }
+        return $htmlClass;
     }
 
 }

@@ -147,30 +147,31 @@ class SurveySessionController extends Controller
         $survey = $request->input('survey');
         $session = $request->input('session');
         $dept = $request->input('department');
-        /*return response()->json([
-            'message' => 'warning',
-            'message2' => $countQuest
-        ]);*/
+
         $mainRules = [];
         for($k=1;$k<=$countQuest;$k++){
             if ($request->input('text_type' . $k) != '1') {
                 $mainRules['answer' . $k] = 'required';
             }
         }
+
         $validator = Validator::make($request->all(),$mainRules);
         if($validator->passes()) {
 
             for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
                 if ($request->input('text_type' . $i) != '1') {
+                    $explodeAnswer = explode('|', $request->input('answer' . $i));
+                    $ansId = $explodeAnswer[0];
+                    $ansCatId = $explodeAnswer[1];
                     $dbDATANEW = [
                         'survey_id' => $survey,
                         'session_id' => $session,
                         'dept_id' => $dept,
                         'quest_id' => $request->input('question' . $i),
                         'text_type' => $request->input('text_type' . $i),
-                        'ans_id' => $request->input('answer' . $i),
+                        'ans_id' => $ansId,
                         'quest_cat_id' => $request->input('question_cat' . $i),
-                        'ans_cat_id' => $request->input('answer_cat' . $i),
+                        'ans_cat_id' => $ansCatId,
                         'user_id' => Utility::checkAuth('temp_user')->id,
                         'created_by' => Utility::checkAuth('temp_user')->id,
                         'status' => Utility::STATUS_ACTIVE

@@ -651,4 +651,9 @@ Route::post('/edit_survey_session_form', 'SurveySessionController@editForm')->na
 Route::post('/edit_survey_session', 'SurveySessionController@edit')->name('edit_survey_session');
 Route::post('/delete_survey_session', 'SurveySessionController@destroy')->name('delete_survey_session');
 
+// -------------SURVEY RESULT MODULE-----------
+Route::any('/survey_result', 'SurveyResultController@index')->name('survey_result')->middleware('auth');
+Route::any('/search_survey_result', 'SurveyResultController@searchSurvey')->name('search_survey_result');
+
+
 

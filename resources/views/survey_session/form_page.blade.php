@@ -95,8 +95,8 @@
                                             <?php $num = 0; ?>
                                             @foreach($quest->ans as $ans)
                                                 <?php $num++; ?>
-                                                <input type="hidden" value="{{$ans->ans_cat_id}}" name="answer_cat{{$quest->quest_number}}" >
-                                                <input type="radio" id="{{$dept->dept_name}}{{$ans->id}}" class="radio-col-green with-gap" value="{{$ans->id}}" name="answer{{$quest->quest_number}}" >
+
+                                                <input type="radio" id="{{$dept->dept_name}}{{$ans->id}}" class="radio-col-green with-gap" value="{{$ans->id}}|{{$ans->ans_cat_id}}" name="answer{{$quest->quest_number}}" >
                                                 <label for="{{$dept->dept_name}}{{$ans->id}}" >{{$ans->ansCat->category_name}}</label>
                                                 <div class="row">
                                                     <div class="col-sm-1 ">
@@ -228,8 +228,9 @@
                     location.reload();
 
                 }else {
-                    var infoMessage = swalWarningError(message2);
-                    swal("Warning!", infoMessage, "warning");
+                    //var infoMessage = swalWarningError(message2);
+                    swal("Warning!", message2, "warning");
+                    //console.log(message2);
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
