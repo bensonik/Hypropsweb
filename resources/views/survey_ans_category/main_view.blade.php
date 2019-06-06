@@ -21,6 +21,13 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="number" class="form-control" name="rating" placeholder="Score Rating">
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                         </div>
@@ -108,6 +115,7 @@
                             </th>
 
                             <th>Answer Category</th>
+                            <th>Score Rating</th>
                             <th>Created by</th>
                             <th>Updated by</th>
                             <th>Created at</th>
@@ -124,6 +132,7 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->category_name}}</td>
+                            <td>{{$data->rating}}</td>
 
                             <td>
                                 {{$data->user_c->firstname}} {{$data->user_c->lastname}}

@@ -8,6 +8,7 @@
         </th>
 
         <th>Answer Category</th>
+        <th>Score Rating</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -24,11 +25,10 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->category_name}}</td>
+            <td>{{$data->rating}}</td>
 
             <td>
-                @if($data->created_by != '0')
-                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                @endif
+                {{$data->user_c->firstname}} {{$data->user_c->lastname}}
             </td>
             <td>
                 {{$data->user_u->firstname}} {{$data->user_u->lastname}}

@@ -404,7 +404,7 @@
                 }else{
 
                     //alert(message2);
-                    console.log(message2)
+                    //console.log(message2)
                     var infoMessage = swalWarningError(message2);
                     swal("Warning!", infoMessage, "warning");
 

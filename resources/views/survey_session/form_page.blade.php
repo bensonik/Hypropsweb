@@ -161,8 +161,8 @@
 
                                 <div class="row">
                                     <div class="col-sm-11">
-                                        <button onclick="submitSurveyDefault('surveyForm{{$dept->id}}','<?php echo url('submit_survey_form'); ?>','reload_data',
-                                                '<?php echo url('survey_list'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
+                                        <button id="buttonId{{$dept->id}}" onclick="submitSurveyDefault('surveyForm{{$dept->id}}','<?php echo url('submit_survey_form'); ?>','reload_data',
+                                                '<?php echo url('survey_list'); ?>','<?php echo csrf_token(); ?>','buttonId{{$dept->id}}')" type="button" class="btn btn-info waves-effect pull-right">
                                             SAVE
                                         </button><hr/>
                                     </div>
@@ -197,11 +197,12 @@
 <!-- #END# Example Tab -->
 
 <script>
-    function submitSurveyDefault(formId,submitUrl,reload_id,reloadUrl,token){
+    function submitSurveyDefault(formId,submitUrl,reload_id,reloadUrl,token,buttonId){
         var inputVars = $('#'+formId).serialize();
         var postVars = inputVars+'';
-        //alert(postVars);
-        //$('#loading_modal').modal('show');
+
+        $("#"+buttonId).attr("disabled", true);
+
         sendRequestForm(submitUrl,token,postVars)
         ajax.onreadystatechange = function(){
             if(ajax.readyState == 4 && ajax.status == 200) {
@@ -210,7 +211,7 @@
                 var rollback = JSON.parse(ajax.responseText);
                 var message2 = rollback.message2;
                 if(message2 == 'fail'){
-
+                    $('#'+buttonId).removeAttr("disabled");
                     //OBTAIN ALL ERRORS FROM PHP WITH LOOP
                     var serverError = phpValidationError(rollback.message);
 
@@ -228,6 +229,7 @@
                     location.reload();
 
                 }else {
+                    $('#'+buttonId).removeAttr("disabled");
                     //var infoMessage = swalWarningError(message2);
                     swal("Warning!", message2, "warning");
                     //console.log(message2);

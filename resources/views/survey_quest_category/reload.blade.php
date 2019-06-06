@@ -8,6 +8,7 @@
         </th>
 
         <th>Question Category</th>
+        <th>Rating</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -24,6 +25,7 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->category_name}}</td>
+            <td>{{$data->rating}}</td>
 
             <td>
                 {{$data->user_c->firstname}} {{$data->user_c->lastname}}

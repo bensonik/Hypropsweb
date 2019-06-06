@@ -9,6 +9,13 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="number" class="form-control" value="{{$edit->rating}}" name="rating" placeholder="Score Rating">
+                    </div>
+                </div>
+            </div>
 
         </div>
     </div>

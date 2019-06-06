@@ -1340,7 +1340,7 @@ class Utility
         return $insertData;
     }
 
-    public static function surveyPerctentClass($val){
+    public static function surveyPercentClass($val){
         $htmlClass = '';
         if($val < 40){
             $htmlClass = 'progress-bar-danger';
@@ -1356,5 +1356,22 @@ class Utility
         }
         return $htmlClass;
     }
+
+    public static function arrHighestScoreSurvey($arr){
+        $val = '';
+        $largest = 0;
+        foreach($arr as $a){
+            if($largest < $a){
+                $largest = $a;
+            }
+        }
+        foreach($arr as $key => $var){
+            if($var == $largest){
+                $val = $key;
+            }
+        }
+        return $val;
+    }
+
 
 }

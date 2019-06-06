@@ -108,6 +108,14 @@ class SurveyUserAns extends Model
 
     }
 
+    public static function specialColumnsUserId($column, $post)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->orderBy('id','DESC')->get('user_id');
+
+    }
+
     public static function specialColumnsOr2($column, $post, $column2, $post2)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);

@@ -1494,7 +1494,7 @@
 <script src="{{ asset('js/highchartTable.js') }}"></script>
 
 <!-- TAB JS -->
-<script src="{{ asset('js/tabs.js') }}"></script>
+<script src="{{ asset('js/tabs2.js') }}"></script>
 
 <!-- Sweet Alert -->
 

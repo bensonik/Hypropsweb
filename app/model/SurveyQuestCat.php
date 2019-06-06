@@ -22,6 +22,7 @@ class SurveyQuestCat extends Model
 
     public static $mainRules = [
         'question_category' => 'required',
+        'rating' => 'required',
     ];
 
     public function user_c(){

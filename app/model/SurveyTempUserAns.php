@@ -86,6 +86,13 @@ class SurveyTempUserAns extends Model
 
     }
 
+    public static function specialColumnsUserId($column, $post)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->get('user_id');
+
+    }
+
     public static function specialColumnsMass($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);

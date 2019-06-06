@@ -67,6 +67,7 @@ class SurveyAnsCatController extends Controller
             }else{
                 $dbDATA = [
                     'category_name' => ucfirst($request->input('answer_category')),
+                    'rating' => $request->input('rating'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -117,6 +118,7 @@ class SurveyAnsCatController extends Controller
 
             $dbDATA = [
                 'category_name' => ucfirst($request->input('answer_category')),
+                'rating' => $request->input('rating'),
                 'updated_by' => Auth::user()->id,
             ];
             $rowData = SurveyAnsCat::specialColumns('category_name', $request->input('answer_category'));

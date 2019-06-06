@@ -38,6 +38,7 @@
                 @foreach($mainData->dept as $dept)
                         <li role="presentation" class=""><a href="#dept_tab{{$dept->id}}" data-toggle="tab">{{$dept->dept_name}}</a></li>
                 @endforeach
+                    <li role="presentation" class=""><a href="#participants" data-toggle="tab">Participants</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -45,9 +46,9 @@
                     <div role="tabpanel" class="tab-pane fade in active" id="report">
 
                         <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                            <li role="presentation" class="active"><a href="#report1" data-toggle="tab">Report 1</a></li>
-                            <li role="presentation" class=""><a href="#report2" data-toggle="tab">Report 2</a></li>
-                            <li role="presentation" class=""><a href="#report3" data-toggle="tab">Report 3</a></li>
+                            <li role="presentation" class="active"><a href="#report1" data-toggle="tab">Report 1(Option Score)</a></li>
+                            <li role="presentation" class=""><a href="#report2" data-toggle="tab">Report 2(Category Score)</a></li>
+                            <li role="presentation" class=""><a href="#report3" data-toggle="tab">Report 3(Total Score)</a></li>
 
                         </ul>
 
@@ -105,7 +106,7 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="progress ">
-                                                                <div class="progress-bar {{\App\Helpers\Utility::surveyPerctentClass($ans->ansCatPerct)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                                <div class="progress-bar {{\App\Helpers\Utility::surveyPercentClass($ans->ansCatPerct)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
                                                                      aria-valuemax="100" style="width: {{$ans->ansCatPerct}}%">
                                                                     <span >{{$ans->ansCatPerct}}% </span>
                                                                 </div>
@@ -132,10 +133,65 @@
                             </div><!-- END OF REPORT 1 TAB CONTENT -->
 
                             <div role="tabpanel" class="tab-pane fade in" id="report2">
-                                gfgfgf
+                                <b>{{$mainData->survey_name}}</b><hr/>
+                                <p>{{$mainData->survey_desc}}</p><hr/>
+
+                                @foreach($mainData->dept as $dept)
+                                    <div class="row">
+                                        <div class="col-sm-7">
+                                            <h3>
+                                                <span class=" label bg-black">{{$dept->dept_name}}</span>
+                                            </h3>
+                                        </div>
+                                        <div class="col-sm-4">
+                                        </div>
+                                    </div>
+                                    @foreach($dept->questionCategory as $category)
+                                        <div class="row">
+                                            <div class="col-sm-7">
+                                                <h5>
+
+                                                    <span class=" label bg-black">{{$category->category_name}}</span>
+                                                </h5>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="progress ">
+                                                    <div class="progress-bar {{\App\Helpers\Utility::surveyPercentClass($category->catScore)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                         aria-valuemax="100" style="width: {{$category->catScore}}%">
+                                                        <span >{{$category->catScore}}% </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+
+                                @endforeach
+
                             </div>
                             <div role="tabpanel" class="tab-pane fade in" id="report3">
-                                gbfmjhghg
+                                <b>{{$mainData->survey_name}}</b><hr/>
+                                <p>{{$mainData->survey_desc}}</p><hr/>
+
+                                @foreach($mainData->dept as $dept)
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <h4 class="">
+                                                <span class=" label bg-black">{{$dept->dept_name}}</span>
+                                            </h4>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="progress ">
+                                                <div class="progress-bar {{\App\Helpers\Utility::surveyPercentClass($dept->totalScore)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                     aria-valuemax="100" style="width: {{$dept->totalScore}}%">
+                                                    <span >{{$dept->totalScore}}% </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+
+                                        </div>
+                                    </div><hr/>
+                                @endforeach
                             </div>
 
                         </div>  <!-- END OF REPORT TAB CONTENT -->
@@ -226,7 +282,7 @@
                                                         </div>
                                                         <div class="col-md-4">
                                                             <div class="progress ">
-                                                                <div class="progress-bar {{\App\Helpers\Utility::surveyPerctentClass($ans->userAnsPerct)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
+                                                                <div class="progress-bar {{\App\Helpers\Utility::surveyPercentClass($ans->userAnsPerct)}} progress-bar-striped active" role="progressbar" aria-valuenow="40" aria-valuemin="0"
                                                                      aria-valuemax="100" style="width: {{$ans->userAnsPerct}}%">
                                                                     <span >{{$ans->userAnsPerct}}% </span>
                                                                 </div>
@@ -264,6 +320,38 @@
 
                         </div>
                     @endforeach
+
+                    <div role="tabpanel" class="tab-pane fade in " id="participants">
+
+                        <table class="table table-bordered table-hover table-striped" id="main_table">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
+                                           name="check_all" class="" />
+
+                                </th>
+                                <th>FullName</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach($mainData->participants as $data)
+
+                                    <tr>
+                                        <td scope="row">
+                                            <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                        </td>
+                                        <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                        <td>
+                                             {{$data->title}}&nbsp;{{$data->firstname}}&nbsp;{{$data->othername}}&nbsp;{{$data->lastname}}
+                                        </td>
+                                        <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+
+                    </div>
 
                 </div>
             </div>

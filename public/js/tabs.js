@@ -1,15 +1,15 @@
 //Load the graph with experimental data
 $(document).ready(function(){
-    
+
     $('.account-link').on('click', function(e){
-       
+
        if($(this).parents('li').hasClass('active')) {
             e.stopPropagation();
        }
-       
-       
+
+
     });
-    
+
     var canvas = $("#chart").get(0);
     var ctx = canvas.getContext('2d');
 

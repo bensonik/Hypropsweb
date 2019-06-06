@@ -194,13 +194,13 @@ class SurveyQuestController extends Controller
             $mainData = Survey::firstRow('id',$surveyId);
             $resultCheck = SurveyUserAns::firstRow('survey_id',$surveyId);
             $resultCheckTemp = SurveyTempUserAns::firstRow('survey_id',$surveyId);
-            $resultExist = (!empty($resultCheck) && !empty($resultCheckTemp)) ? 1 : 0;
+            $resultExist = (!empty($resultCheck) || !empty($resultCheckTemp)) ? '1' : '0';
             $this->processItemData($mainData);
             $questCat = SurveyQuestCat::getAllData();
             $ansCat = SurveyAnsCat::getAllData();
 
             return view::make('survey_questions.reload')->with('mainData',$mainData)
-                ->with('type','data')->with('resultCheck',$resultCheck)->with('ansCat',$ansCat)
+                ->with('type','data')->with('resultCheck',$resultExist)->with('ansCat',$ansCat)
                 ->with('questCat',$questCat);
 
         }else{

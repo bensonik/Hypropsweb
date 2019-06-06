@@ -22,6 +22,7 @@ class SurveyAnsCat extends Model
 
     public static $mainRules = [
         'answer_category' => 'required',
+        'rating' => 'required',
     ];
 
     public function user_c(){

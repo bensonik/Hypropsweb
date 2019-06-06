@@ -346,7 +346,7 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select  class="form-control " disabled name="rev_rate_edit{{$num}}" >
-                                                @foreach(APP\Helpers\Utility::REVIEW_RATE as $key => $val)
+                                                @foreach(APP\Helpers\Utility::REVIEW_COMP as $key => $val)
                                                     @if($data->reviewer_rating == $key)
                                                         <option value="{{$key}}" selected>{{$val}}</option>
                                                     @else
@@ -416,7 +416,7 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select  class="form-control " name="rev_rate_edit{{$num}}" >
-                                                @foreach(APP\Helpers\Utility::REVIEW_RATE as $key => $val)
+                                                @foreach(APP\Helpers\Utility::REVIEW_COMP as $key => $val)
                                                     @if($data->reviewer_rating == $key)
                                                         <option value="{{$key}}" selected>{{$val}}</option>
                                                     @else

@@ -183,7 +183,8 @@ class SurveyResultController extends Controller
     {
         //
        $searchResultRules = [
-
+            'session' => 'required',
+           'participant' => 'required',
     ];
         $validator = Validator::make($request->all(),$searchResultRules);
         if($validator->passes()) {
@@ -220,16 +221,22 @@ class SurveyResultController extends Controller
 
     public function processItemData($val,$session){
         $surveyDept = json_decode($val->all_dept,true);
-        $questCatArr = [];
-        $questCatArr2 = [];
-        $ansCatArr = [];
+
 
         if(!empty($surveyDept)){
             $fetchDept = Department::massData('id',$surveyDept);
             $fetchDept2 = Department::massData('id',$surveyDept);
+            $peopleId = [];
+            $peopleData = SurveyUserAns::specialColumnsUserId('session_id',$session);
+            foreach($peopleData as $p){
+                $peopleId[] = $p->user_id;
+            }
+            $uniqueUserId = array_unique($peopleId);
+            $sessionPeople = User::massData('id',$uniqueUserId);
 
             foreach($fetchDept as $dept){
-
+                $deptTotalScore = [];
+                $questCatArr = [];
                 $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$dept->id);
                 foreach($deptQuest as $questCat){
                     $questCatArr[] = $questCat->cat_id;
@@ -240,47 +247,65 @@ class SurveyResultController extends Controller
                 $questionCategory = SurveyQuestCat::massData('id',$questCatId);
                 foreach($questionCategory as $catId){
 
+                    $ansScoreCatArr = [];
                     $question = SurveyQuest::specialColumnsAsc3('survey_id',$val->id,'cat_id',$catId->id,'dept_id',$dept->id);
                     //LOOP THROUGH QUESTIONS TO GET ANSWERS
                     foreach($question as $quest){
 
+                        $ansScoreArr = [];
                         $questNum++;
 
                         $quest->quest_number = $questNum;   //GET THE QUESTION NUMBER FOR DISPLAY
                         //LOOP THROUGH ANSWERS AND CHECK FOR ADDITIONAL ANSWER COLUMNS BASED ON TEXT TYPE
                         $questAns = SurveyQuestAns::specialColumnsAsc('quest_id',$quest->id);
-
+                        $leadingScore = '';
 
                             if($quest->text_type == 0){
+
                                 $people = Utility::countData3('survey_user_ans','session_id',$session,'quest_id',$quest->id,'dept_id',$dept->id);
                                 $quest->countPeople = $people;
 
                                 foreach($questAns as $ans){
-                                $countUserAns = Utility::countData3(Utility::authSurveyTable('temp_user'),'ans_id',$ans->id,'session_id',$session,'dept_id',$dept->id);
+                                $countUserAns = Utility::countData3('survey_user_ans','ans_id',$ans->id,'session_id',$session,'dept_id',$dept->id);
                                 $userAnsPerct = ($people == 0) ? $countUserAns*100 : round(($countUserAns/$people)*100);
                                 $ans->userAnsPerct = $userAnsPerct;
                                 $ans->countUserAns = $countUserAns;
                                 $ans->userAnsRatioToPeople = $countUserAns.'/'.$people;
+                                    if($countUserAns >0){
+                                        $ansScoreArr[$ans->ansCat->rating] = $userAnsPerct;
+                                    }
+
                                 }
+                                $leadingScore = Utility::arrHighestScoreSurvey($ansScoreArr);
+
                             }else{
 
                             }
-
+                        $ansScoreCatArr [] = $leadingScore;
+                        $quest->leadingScore = $leadingScore;
                         $quest->ans = $questAns;    //ADD ANSWERS TO EACH QUESTION
 
                     }
 
+                    $score = (array_sum($ansScoreCatArr)*100);
+                    $catScore = ($score != 0) ? round(($score/(count($ansScoreCatArr)*100))) : 0;
+                    $catId->catScore = $catScore;
                     $catId->question = $question;
+                    $deptTotalScore[] = round(($catScore*$catId->rating)/100);
+
 
                 }
 
                 $dept->questionCategory = $questionCategory;  //ADD SELECTED PROCESSED QUESTIONS TO EACH DEPARTMENT
+                $dept->totalScore = array_sum($deptTotalScore);
 
             }
 
             $val->dept = $fetchDept;
 
             foreach($fetchDept2 as $deptAns){
+                $questCatArr2 = [];
+                $ansCatArr = [];
 
                 $deptQuest =  SurveyQuestAns::specialColumns2('survey_id',$val->id,'dept_id',$deptAns->id);
                 foreach($deptQuest as $questCat){
@@ -288,10 +313,10 @@ class SurveyResultController extends Controller
                 }
                 $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$deptAns->id);
                 foreach($deptQuest as $questCat){
-                    $questCatArr[] = $questCat->cat_id;
+                    $questCatArr2[] = $questCat->cat_id;
                 }
 
-                $questCatId = array_unique($questCatArr);
+                $questCatId = array_unique($questCatArr2);
                 $questionCategory = SurveyQuestCat::massData('id',$questCatId);
 
                 $ansCatId = array_unique($ansCatArr);
@@ -337,6 +362,7 @@ class SurveyResultController extends Controller
                 $deptAns->questionCategory = $questionCategory;  //ADD SELECTED PROCESSED QUESTION CATEGORIES TO EACH DEPARTMENT
             }
             $val->dept2 = $fetchDept2;
+            $val->participants = $sessionPeople;
 
         }else{
             $val->dept = [];
@@ -345,16 +371,22 @@ class SurveyResultController extends Controller
 
     public function processItemDataExt($val,$session){
         $surveyDept = json_decode($val->all_dept,true);
-        $questCatArr = [];
-        $questCatArr2 = [];
-        $ansCatArr = [];
+
 
         if(!empty($surveyDept)){
             $fetchDept = Department::massData('id',$surveyDept);
             $fetchDept2 = Department::massData('id',$surveyDept);
+            $peopleId = [];
+            $peopleData = SurveyTempUserAns::specialColumnsUserId('session_id',$session);
+            foreach($peopleData as $p){
+                $peopleId[] = $p->user_id;
+            }
+            $uniqueUserId = array_unique($peopleId);
+            $sessionPeople = User::massData('id',$uniqueUserId);
 
             foreach($fetchDept as $dept){
-
+                $deptTotalScore = [];
+                $questCatArr = [];
                 $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$dept->id);
                 foreach($deptQuest as $questCat){
                     $questCatArr[] = $questCat->cat_id;
@@ -365,54 +397,76 @@ class SurveyResultController extends Controller
                 $questionCategory = SurveyQuestCat::massData('id',$questCatId);
                 foreach($questionCategory as $catId){
 
-                    $question = SurveyQuest::massDataConditionAsc('survey_id',$val->id,'cat_id',$catId->id);
+                    $ansScoreCatArr = [];
+                    $question = SurveyQuest::specialColumnsAsc3('survey_id',$val->id,'cat_id',$catId->id,'dept_id',$dept->id);
                     //LOOP THROUGH QUESTIONS TO GET ANSWERS
                     foreach($question as $quest){
-                        $people = Utility::countData3(Utility::authSurveyTable('temp_user'),'session_id',$session,'quest_id',$quest->id,'dept_id',$dept->id);
 
+                        $ansScoreArr = [];
                         $questNum++;
-                        $quest->countPeople = $people;
+
                         $quest->quest_number = $questNum;   //GET THE QUESTION NUMBER FOR DISPLAY
                         //LOOP THROUGH ANSWERS AND CHECK FOR ADDITIONAL ANSWER COLUMNS BASED ON TEXT TYPE
                         $questAns = SurveyQuestAns::specialColumnsAsc('quest_id',$quest->id);
+                        $leadingScore = '';
 
-                        foreach($questAns as $ans){
-                            if($quest->text_type == 0){
-                                $countUserAns = Utility::countData3(Utility::authSurveyTable('temp_user'),'ans_id',$ans->id,'session_id',$session,'dept_id',$dept->id);
-                                $userAnsPerct = round(($countUserAns/$people)*100);
+                        if($quest->text_type == 0){
+
+                            $people = Utility::countData3('survey_temp_user_ans','session_id',$session,'quest_id',$quest->id,'dept_id',$dept->id);
+                            $quest->countPeople = $people;
+
+                            foreach($questAns as $ans){
+                                $countUserAns = Utility::countData3('survey_temp_user_ans','ans_id',$ans->id,'session_id',$session,'dept_id',$dept->id);
+                                $userAnsPerct = ($people == 0) ? $countUserAns*100 : round(($countUserAns/$people)*100);
                                 $ans->userAnsPerct = $userAnsPerct;
                                 $ans->countUserAns = $countUserAns;
                                 $ans->userAnsRatioToPeople = $countUserAns.'/'.$people;
-
-                            }else{
+                                if($countUserAns >0){
+                                    $ansScoreArr[$ans->ansCat->rating] = $userAnsPerct;
+                                }
 
                             }
+                            $leadingScore = Utility::arrHighestScoreSurvey($ansScoreArr);
+
+                        }else{
+
                         }
+                        $ansScoreCatArr [] = $leadingScore;
+                        $quest->leadingScore = $leadingScore;
                         $quest->ans = $questAns;    //ADD ANSWERS TO EACH QUESTION
 
                     }
 
+                    $score = (array_sum($ansScoreCatArr)*100);
+                    $catScore = ($score != 0) ? round(($score/(count($ansScoreCatArr)*100))) : 0;
+                    $catId->catScore = $catScore;
                     $catId->question = $question;
+                    $deptTotalScore[] = round(($catScore*$catId->rating)/100);
+
 
                 }
 
                 $dept->questionCategory = $questionCategory;  //ADD SELECTED PROCESSED QUESTIONS TO EACH DEPARTMENT
+                $dept->totalScore = array_sum($deptTotalScore);
+
             }
 
             $val->dept = $fetchDept;
 
             foreach($fetchDept2 as $deptAns){
+                $questCatArr2 = [];
+                $ansCatArr = [];
 
                 $deptQuest =  SurveyQuestAns::specialColumns2('survey_id',$val->id,'dept_id',$deptAns->id);
                 foreach($deptQuest as $questCat){
                     $ansCatArr[] = $questCat->ans_cat_id;
                 }
-                $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$dept->id);
+                $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$deptAns->id);
                 foreach($deptQuest as $questCat){
-                    $questCatArr[] = $questCat->cat_id;
+                    $questCatArr2[] = $questCat->cat_id;
                 }
 
-                $questCatId = array_unique($questCatArr);
+                $questCatId = array_unique($questCatArr2);
                 $questionCategory = SurveyQuestCat::massData('id',$questCatId);
 
                 $ansCatId = array_unique($ansCatArr);
@@ -420,14 +474,36 @@ class SurveyResultController extends Controller
                 foreach($questionCategory as $catId){
 
                     //$question = SurveyQuest::massDataConditionAsc('survey_id',$val->id,'cat_id',$catId->id);
-                    $countQuestCatAns = Utility::countData3(Utility::authSurveyTable('temp_user'),'session_id',$session,'quest_cat_id',$catId->id,'dept_id',$dept->id);
+                    //$countQuestCatAns = Utility::countData3(Utility::authSurveyTable('temp_user'),'session_id',$session,'quest_cat_id',$catId->id,'dept_id',$deptAns->id);
+                    $countQuestCat = Utility::specialColumns3('survey_temp_user_ans','session_id',$session,'quest_cat_id',$catId->id,'dept_id',$deptAns->id);
+                    //$countQuestCatAns = $countQuestCat->count();
+                    $quCat = [];
+                    $quCatOptionType = [];
+                    $quOptionType = [];
+                    foreach($countQuestCat as $qu){
+                        if($qu->text_type == '0'){
+                            $quCatOptionType[] = $qu->quest_id;
+                        }
+                        if($qu->text_type == '0'){
+                            $quOptionType[] = $qu->quest_id;
+                        }
+
+                        $quCat[] = $qu->quest_id;
+                    }
+                    $countQuestCatAns = count($quOptionType);  //COUNT ALL ANSWERS FROM USERS FOR THIS QUESTION CATEGORY WITH OPTION TYPE
+                    $questCatNum = array_unique($quCat);    //COUNT NUMBER OF QUESTIONS IN CATEGORY
+                    $questCatNumOption = array_unique($quCatOptionType);    //COUNT NUMBER OF QUESTIONS WITH OPTIONS IN CATEGORY
+
+                    $catId->questCatNum = count($questCatNum);
+                    $catId->questCatNumOption = count($questCatNumOption);
+                    $catId->countQuestCatAns = $countQuestCatAns;
 
                     //LOOP THROUGH QUESTIONS TO GET ANSWERS
                     foreach($answerCategory as $ansCat){
-                        $countQuestCatAnsCat = Utility::countData4(Utility::authSurveyTable('temp_user'),'session_id',$session,'quest_cat_id',$catId->id,'dept_id',$dept->id,'ans_cat_id',$ansCat->id);
+                        $countQuestCatAnsCat = Utility::countData4('survey_temp_user_ans','session_id',$session,'quest_cat_id',$catId->id,'dept_id',$deptAns->id,'ans_cat_id',$ansCat->id);
 
-                        $ansCat->ansCatPerct = round(($countQuestCatAnsCat/$countQuestCatAns)*100);
-
+                        $ansCat->ansCatPerct = ($countQuestCatAnsCat == 0) ? 0 : round(($countQuestCatAnsCat/$countQuestCatAns)*100);
+                        $ansCat->countQuestCatAnsCat = $countQuestCatAnsCat; //COUNT THE NUMBER OF ANSWER CATEGORY
                     }
 
                     $catId->answerCategory = $answerCategory;
@@ -436,6 +512,7 @@ class SurveyResultController extends Controller
                 $deptAns->questionCategory = $questionCategory;  //ADD SELECTED PROCESSED QUESTION CATEGORIES TO EACH DEPARTMENT
             }
             $val->dept2 = $fetchDept2;
+            $val->participants = $sessionPeople;
 
         }else{
             $val->dept = [];
