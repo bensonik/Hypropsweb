@@ -804,6 +804,9 @@
                         <li>
                             <a href="{{url('temp_user')}}">Contract/External Users</a>
                         </li>
+                        <li>
+                            <a href="{{url('user_pin_code')}}">External Signup Pin code</a>
+                        </li>
 
                     </ul>
                 </li>
@@ -816,6 +819,9 @@
                     <ul class="ml-menu">
                             <li>
                                 <a href="{{url('temp_user')}}">Contract/External Users</a>
+                            </li>
+                            <li>
+                                <a href="{{url('user_pin_code')}}">External Signup Pin code</a>
                             </li>
                             <li>
                                 <a href="{{url('idp')}}">Individual Development Plan</a>
@@ -1497,8 +1503,8 @@
 <script src="{{ asset('js/tabs2.js') }}"></script>
 
 <!-- Sweet Alert -->
-
 <script src="{{ asset('sweetalert/dist/sweetalert.js') }}"></script>
+
 <script src="{{ asset('summernote/dist/summernote.js') }}"></script>
 <script src="{{ asset('multiselect/dist/js/bootstrap-multiselect.js') }}"></script>
 <!-- Waves Effect Plugin Js -->

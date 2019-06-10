@@ -28,8 +28,8 @@
 <body class="login-page">
 <div class="login-box">
     <div class="logo">
-        <a href="javascript:void(0);"><b>Hyprops</b></a>
-        <small>Hyprops Nigeria Limited</small>
+        <a href="javascript:void(0);"><b>{{\App\Helpers\Utility::companyInfo()->name}}</b></a>
+        <small>{{\App\Helpers\Utility::companyInfo()->address}}</small>
     </div>
     <div class="card">
         <div class="body">

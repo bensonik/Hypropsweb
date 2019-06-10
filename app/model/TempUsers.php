@@ -41,7 +41,28 @@ class TempUsers extends Authenticatable
         'othername' => 'sometimes|nullable',
         'birthdate' => 'sometimes|nullable|date',
         'phone' => 'sometimes|nullable|numeric',
-        'department' => 'required',
+        'unit' => 'required',
+    ];
+
+    public static $signupRules = [
+        'email' => 'required|email|unique:temp_users,email',
+        'password' => 'nullable|between:3,30|confirmed',
+        'password_confirmation' => 'same:password',
+        'firstname' => 'required',
+        'lastname' => 'required',
+        'unit' => 'required',
+        'pin_code' => 'required',
+
+    ];
+
+    public static $clientRules = [
+        'email' => 'required|email|unique:temp_users,email',
+        'password' => 'nullable|between:3,30|confirmed',
+        'password_confirmation' => 'same:password',
+        'company_name' => 'required',
+        'country' => 'required',
+        'unit' => 'required',
+        'pin_code' => 'required',
     ];
 
     public static $mainRulesEdit = [
@@ -63,16 +84,8 @@ class TempUsers extends Authenticatable
         return $this->belongsTo('App\model\Department','dept_id','id');
     }
 
-    public function position(){
-        return $this->belongsTo('App\model\Position','position_id','id');
-    }
-
-    public function salary(){
-        return $this->belongsTo('App\model\SalaryStructure','salary_id','id');
-    }
-
     public function roles(){
-        return $this->belongsTo('App\model\TempRoles','role','id');
+        return $this->belongsTo('App\model\TempRoles','role','id')->withDefault();
     }
 
     public static function paginateAllData()

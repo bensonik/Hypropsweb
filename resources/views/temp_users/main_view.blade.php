@@ -358,6 +358,27 @@
                     </ul>
                 </div>
 
+                <div class="body">
+                    <table class="table">
+                        <thead>
+                        <th></th><th></th>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>External Staff Signup Link</td>
+                            <td class="btn-link">{{url('external/signup')}}</td>
+                        </tr>
+                        <tr>
+                            <td>Job Candidates Signup Link</td>
+                            <td class="btn-link">{{url('external/candidate')}}</td>
+                        </tr>
+                        <tr>
+                            <td>Clients (survey) Signup Link</td>
+                            <td class="btn-link">{{url('client/survey/signup')}}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="body ">
                     <div class="row">
                         <div class="col-sm-12 pull-right">

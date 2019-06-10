@@ -82,6 +82,7 @@ class Utility
     const TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];
     const TASK_PRIORITY = ['None','Low','Medium','High'];
     const T_USER = '2', P_USER = '1';
+    const TEMP_EXTERNAL_STAFF = 2, TEMP_JOB_CANDIDATE = 1, TEMP_CLIENT = 3;
 
 
     public static function IMG_URL(){
@@ -1371,6 +1372,16 @@ class Utility
             }
         }
         return $val;
+    }
+
+    public static function validatePinCode($pinCode){
+        $data = self::firstRow('user_pin_code','pin_code',$pinCode);
+        if(empty($data)){
+            exit(json_encode([
+                'message2' => 'Pin code incorrect, please contact the administrator',
+                'message' => 'incorrect'
+            ]));
+        }
     }
 
 

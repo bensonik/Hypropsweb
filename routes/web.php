@@ -592,7 +592,11 @@ Route::any('/quote_download_attachment', 'QuoteController@downloadAttachment')->
 
 // -------------TEMP USER MODULE-----------
 Route::any('/temp_user', 'TempUsersController@index')->name('user')->middleware('auth');
+Route::any('/external/signup', 'TempUsersController@externalSignup')->name('external_signup');
+Route::any('/external/candidate', 'TempUsersController@externalCandidate')->name('external_candidate');
+Route::any('/client/survey/signup', 'TempUsersController@clientSignup')->name('client_signup');
 Route::post('/create_temp_user', 'TempUsersController@create')->name('create_temp_user');
+Route::post('/external_sign_up', 'TempUsersController@createExternalSignup')->name('create_external_signup');
 Route::post('/edit_temp_user_form', 'TempUsersController@editForm')->name('edit_temp_user_form');
 Route::post('/edit_temp_user', 'TempUsersController@edit')->name('edit_temp_user');
 Route::get('/temp_user_profile/{uid}', 'TempUsersController@userProfile')->name('temp_profile');
@@ -655,5 +659,9 @@ Route::post('/delete_survey_session', 'SurveySessionController@destroy')->name('
 Route::any('/survey_result', 'SurveyResultController@index')->name('survey_result')->middleware('auth');
 Route::any('/search_survey_result', 'SurveyResultController@searchSurvey')->name('search_survey_result');
 
+// -------------USER PIN CODE MODULE-----------
+Route::any('/user_pin_code', 'UserPinCodeController@index')->name('user_pin_code')->middleware('auth');
+Route::post('/create_user_pin_code', 'UserPinCodeController@create')->name('create_user_pin_code');
+Route::post('/delete_user_pin_code', 'UserPinCodeController@destroy')->name('delete_user_pin_code');
 
 

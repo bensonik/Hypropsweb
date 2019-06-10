@@ -45,6 +45,39 @@ class TempUsersController extends Controller
 
     }
 
+    public function externalSignup(Request $request)
+    {
+        //
+        //$req = new Request();
+
+        $department = Department::getAllData();
+
+            return view::make('temp_users.external_signup')->with('department',$department);
+
+    }
+
+    public function externalCandidate(Request $request)
+    {
+        //
+        //$req = new Request();
+
+        $department = Department::getAllData();
+
+        return view::make('temp_users.external_candidate')->with('department',$department);
+
+    }
+
+    public function clientSignup(Request $request)
+    {
+        //
+        //$req = new Request();
+
+        $department = Department::getAllData();
+
+        return view::make('temp_users.client_signup')->with('department',$department);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -141,6 +174,65 @@ class TempUsersController extends Controller
 
     }
 
+    public function createExternalSignup(Request $request)
+    {
+        //
+
+
+        $rules = ($request->input('external_type') == 'client') ? TempUsers::$clientRules : TempUsers::$signupRules;
+
+        $firstname =  ucfirst($request->input('firstname'));
+        $lastname =   ucfirst($request->input('lastname'));
+        if($request->input('external_type') == 'client'){
+            $firstname =  ucfirst($request->input('company_name'));
+            $lastname =   ucfirst($request->input('country'));
+        }
+
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->passes()){
+            Utility::validatePinCode($request->input('pin_code'));
+            $countData = TempUsers::countData('email',$request->input('email'));
+            if($countData > 0){
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'Entry/Email already exist, please try another entry'
+                ]);
+
+            }else{
+
+
+                $uid = Utility::generateUID('temp_users');
+
+                $dbDATA = [
+                    'uid' => $uid,
+                    'email' => ucfirst($request->input('email')),
+                    'password' => Hash::make($request->input('password')),
+                    'role' => ucfirst($request->input('role')),
+                    'firstname' => $firstname,
+                    'lastname' => $lastname,
+                    'dept_id' => $request->input('unit'),
+                    'remember_token' => $request->input('_token'),
+                    'active_status' => Utility::STATUS_ACTIVE,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+                TempUsers::create($dbDATA);
+
+                return response()->json([
+                    'message' => 'good',
+                    'message2' => 'saved'
+                ]);
+
+            }
+        }
+        $errors = $validator->errors();
+        return response()->json([
+            'message2' => 'fail',
+            'message' => $errors
+        ]);
+
+
+    }
 
     /**
      * Display the specified resource.

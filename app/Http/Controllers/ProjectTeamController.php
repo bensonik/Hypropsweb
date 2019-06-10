@@ -334,7 +334,7 @@ class ProjectTeamController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $deleteTask = ProjectTeam::massUpdate('id',$idArray,$dbData);
+        $deleteTeam = ProjectTeam::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message2' => 'deleted',
