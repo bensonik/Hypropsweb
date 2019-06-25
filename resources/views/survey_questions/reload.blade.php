@@ -186,7 +186,7 @@
                                                     @if($resultCheck != '1')
                                                     <button onclick="submitQuestDefaultEdit('question{{$quest->id}}','questOptionForm{{$quest->id}}','<?php echo url('edit_survey_question'); ?>','reload_data',
                                                             '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
-                                                        SAVE{{$resultCheck}}
+                                                        SAVE
                                                     </button><hr/>
                                                     @endif
                                                 </div>

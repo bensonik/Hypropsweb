@@ -240,7 +240,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="form-group">
                                                         <div class="form-line">
-                                                            <p  class="btn-link" >{{$quest->question}}</p>
+                                                            <p  class="btn-link" >{!!$quest->question!!}</p>
                                                         </div>
                                                     </div>
                                                 </div>

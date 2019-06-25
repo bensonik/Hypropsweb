@@ -277,7 +277,7 @@
 
     function submitQuestDefault(questId,formId,submitUrl,reload_id,reloadUrl,token){
         var inputVars = $('#'+formId).serialize();
-        var quest = CKEDITOR.instances[questId].getData();
+        var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
         var postVars = inputVars+'&question='+quest;
         //alert(postVars);
         //$('#loading_modal').modal('show');
@@ -319,7 +319,7 @@
 
     function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token){
         var inputVars = $('#'+formId).serialize();
-        var quest = CKEDITOR.instances[questId].getData();
+        var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
         var postVars = inputVars+'&question='+quest;
         //alert(postVars);
         //$('#loading_modal').modal('show');

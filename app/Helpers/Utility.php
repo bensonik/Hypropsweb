@@ -1358,9 +1358,69 @@ class Utility
         return $htmlClass;
     }
 
+    public static function doubleItemsType2($arrOne=[]){
+        $objects = [];
+        foreach ($arrOne as $k => $v){
+            $objects[] = $v;
+        }
+        $hold_objects = [];
+        for($i=0; $i<count($objects);$i++){
+            for($j=$i+1; $j<count($objects); $j++){
+                if($objects[$j] == $objects[$i]){
+                    if(!in_array($objects[$i],$hold_objects)){
+                        $hold_objects[] = $objects[$j];
+                    }
+
+                }
+            }
+            }
+            return $hold_objects;
+        }
+
+    public static function doubleItems($objects=[]){
+        $hold_objects = [];
+        for($i=0; $i<count($objects);$i++){
+            for($j=$i+1; $j<count($objects); $j++){
+                if($objects[$j] == $objects[$i]){
+                    if(!in_array($objects[$i],$hold_objects)){
+                        $hold_objects[] = $objects[$j];
+                    }
+
+                }
+            }
+        }
+            return $hold_objects;
+    }
+
     public static function arrHighestScoreSurvey($arr){
+        $normArr = [];
+        $newArr = [];
+        $convertArr = [];
         $val = '';
         $largest = 0;
+
+            $twiceArr = self::doubleItemsType2($arr);
+        if(!empty($twiceArr)) {
+
+            foreach ($arr as $k => $v) {
+                foreach ($twiceArr as $t) {
+                    if ($t == $v) {
+                        $newArr[$k] = $v;
+                        unset($arr[$k]);
+                    }
+                }
+            }
+
+            foreach ($newArr as $k => $v) {
+                $convertArr[$v][] = $k;
+            }
+
+            foreach ($convertArr as $k => $v) {
+                $sum = round(array_sum($v) / count($v));
+                $arr[$sum] = $k;
+            }
+        }
+
         foreach($arr as $a){
             if($largest < $a){
                 $largest = $a;

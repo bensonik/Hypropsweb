@@ -395,7 +395,7 @@
         function submitMediaFormClass(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList,ckInputId){
             var form_get = $('#'+formId);
             var form = document.forms.namedItem(formId);
-            var ckInput = CKEDITOR.instances[ckInputId].getData();
+            var ckInput = encodeURIComponent(CKEDITOR.instances[ckInputId].getData());
 
             var postVars = new FormData(form);
             postVars.append('token',token);
