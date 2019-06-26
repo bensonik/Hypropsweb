@@ -47,130 +47,26 @@ class SurveyResultController extends Controller
 
     }
 
+    public function surveyStatements(Request $request)
+    {
+        //
+        $mainData = [];
+        if($request->input('param2') == 'temp_user'){
+            $mainData = SurveyTempUserAns::specialColumns2('quest_id',$request->input('dataId'),'session_id',$request->input('param1'));
+        }else{
+            $mainData = SurveyUserAns::specialColumns2('quest_id',$request->input('dataId'),'session_id',$request->input('param1'));
+        }
+
+        return view::make('survey_result.text_preview')->with('mainData',$mainData);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
-    {
-        //
-        $validator = Validator::make($request->all(),SurveyQuest::$mainRules);
-        if($validator->passes()){
 
-
-            $dbDATAQUEST = [
-                'survey_id' => $request->input('survey'),
-                'dept_id' => $request->input('department'),
-                'cat_id' => $request->input('question_category'),
-                'question' => $request->input('question'),
-                'text_type' => $request->input('text_type'),
-                'created_by' => Auth::user()->id,
-                'status' => Utility::STATUS_ACTIVE
-            ];
-            $saveQuest = SurveyQuest::create($dbDATAQUEST);
-
-            if($request->input('text_type') == '0') {   //DO FOLLOWING IF QUESTION HAVE ANSWER OPTIONS
-                for ($i = 0; $i <= 5; $i++) {
-                    if ($request->input('answer' . $i) != '') {
-                        $dbDATA = [
-                            'survey_id' => $request->input('survey'),
-                            'dept_id' => $request->input('department'),
-                            'quest_id' => $saveQuest->id,
-                            'ans_cat_id' => $request->input('answer' . $i),
-                            'created_by' => Auth::user()->id,
-                            'status' => Utility::STATUS_ACTIVE
-                        ];
-                        SurveyQuestAns::create($dbDATA);
-                    }
-                }
-            }
-            return response()->json([
-                'message' => 'good',
-                'message2' => 'saved'
-            ]);
-
-
-        }
-        $errors = $validator->errors();
-        return response()->json([
-            'message2' => 'fail',
-            'message' => $errors
-        ]);
-
-
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Request $request)
-    {
-        //
-        $validator = Validator::make($request->all(),SurveyQuestAns::$mainRules);
-        if($validator->passes()) {
-
-            $countAns = $request->input('countAns');
-            $countExtraAns = $request->input('countExtraAns');
-            $survey = $request->input('survey');
-            $questionId = $request->input('question_id');
-            $textType = $request->input('text_type');
-            $dept = $request->input('department');
-
-            $dbDATAQUEST = [
-                'cat_id' => $request->input('question_category'),
-                'question' => $request->input('question'),
-                'updated_by' => Auth::user()->id,
-            ];
-            $saveQuest = SurveyQuest::defaultUpdate('id', $questionId, $dbDATAQUEST);
-
-
-            if($textType == '0') {
-
-                for ($i = 0; $i <= $countAns; $i++) {   //DO FOLLOWING FOR EXISTING ANSWER OPTIONS
-                    if ($request->input('answer' . $i) != '') {
-                        $dbDATA = [
-                            'ans_cat_id' => $request->input('answer' . $i),
-                            'updated_by' => Auth::user()->id,
-                        ];
-                        SurveyQuestAns::defaultUpdate('id', $request->input('answer_id' . $i), $dbDATA);
-                    }else{
-                        SurveyQuestAns::destroy($request->input('answer_id' . $i));
-                    }
-                }
-
-                for ($i = 0; $i <= $countExtraAns; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
-                    if ($request->input('new_answer' . $i) != '') {
-                        $dbDATANEW = [
-                            'survey_id' => $survey,
-                            'dept_id' => $dept,
-                            'quest_id' => $request->input('question_id'),
-                            'ans_cat_id' => $request->input('new_answer' . $i),
-                            'created_by' => Auth::user()->id,
-                            'status' => Utility::STATUS_ACTIVE
-                        ];
-                        SurveyQuestAns::create($dbDATANEW);
-                    }
-                }
-            }
-
-            return response()->json([
-                'message' => 'good',
-                'message2' => 'saved'
-            ]);
-
-        }
-        $errors = $validator->errors();
-        return response()->json([
-            'message2' => 'fail',
-            'message' => $errors
-        ]);
-
-
-    }
 
     /**
      * ADD/REMOVE FOR SURVEY DEPARTMENTS the specified resource in storage.
@@ -302,6 +198,8 @@ class SurveyResultController extends Controller
             }
 
             $val->dept = $fetchDept;
+            $val->sessionId = $session;
+            $val->participantType = 'user';
 
             foreach($fetchDept2 as $deptAns){
                 $questCatArr2 = [];
@@ -452,6 +350,8 @@ class SurveyResultController extends Controller
             }
 
             $val->dept = $fetchDept;
+            $val->sessionId = $session;
+            $val->participantType = 'temp_user';
 
             foreach($fetchDept2 as $deptAns){
                 $questCatArr2 = [];

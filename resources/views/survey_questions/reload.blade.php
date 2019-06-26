@@ -146,6 +146,7 @@
                                                                             @foreach($ansCat as $cat)
                                                                                 <option value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                                             @endforeach
+                                                                            <option value="">Remove Answer</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>

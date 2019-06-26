@@ -658,6 +658,7 @@ Route::post('/delete_survey_session', 'SurveySessionController@destroy')->name('
 // -------------SURVEY RESULT MODULE-----------
 Route::any('/survey_result', 'SurveyResultController@index')->name('survey_result')->middleware('auth');
 Route::any('/search_survey_result', 'SurveyResultController@searchSurvey')->name('search_survey_result');
+Route::any('/survey_statements', 'SurveyResultController@surveyStatements')->name('survey_statements');
 
 // -------------USER PIN CODE MODULE-----------
 Route::any('/user_pin_code', 'UserPinCodeController@index')->name('user_pin_code')->middleware('auth');

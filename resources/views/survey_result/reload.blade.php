@@ -306,7 +306,9 @@
 
                                                     </div>
                                                     <div class="col-md-8">
-                                                        <span>Click Here to View Participant's statements</span>
+                                                        <span></span>
+                                                        <a style="cursor: pointer;" class="btn btn-info" onclick="fetchStatement('{{$quest->id}}','text_preview','textModal','<?php echo url('survey_statements') ?>','<?php echo csrf_token(); ?>','{{$mainData->sessionId}}','{{$mainData->participantType}}');">Click Here to View Participant statements</a>
+
                                                     </div>
 
                                                 </div>
@@ -361,6 +363,24 @@
 <!-- #END# Example Tab -->
 
 <script>
+
+    function fetchStatement(dataId,displayId,modalId,submitUrl,token,param1,param2){
+
+        var postVars = "dataId="+dataId+"&param1="+param1+"&param2="+param2;
+        $('#'+modalId).modal('show');
+        sendRequest(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                var ajaxData = ajax.responseText;
+                $('#'+displayId).html(ajaxData);
+
+            }
+        }
+        $('#'+displayId).html('LOADING DATA');
+
+    }
+
     $(document).ready(function() {
         $('table.highchart').highchartTable();
     });

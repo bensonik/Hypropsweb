@@ -62,6 +62,14 @@ class SurveyQuestController extends Controller
         $validator = Validator::make($request->all(),SurveyQuest::$mainRules);
         if($validator->passes()){
 
+            $surveyResultTemp = SurveyTempUserAns::firstRow('survey_id',$request->input('survey'));
+            $surveyResult = SurveyUserAns::firstRow('survey_id',$request->input('survey'));
+            if(!empty($surveyResult) || !empty($surveyResultTemp)){
+                return response()->json([
+                    'message' => 'warning',
+                    'message2' => 'This survey has already been used and cannot accept more questions'
+                ]);
+            }
 
             $dbDATAQUEST = [
                 'survey_id' => $request->input('survey'),

@@ -1449,6 +1449,23 @@
 
     }
 
+    function fetchHtml4(dataId,displayId,modalId,submitUrl,token,param1,param2){
+
+        var postVars = "dataId="+dataId+"&param1="+param1+"&param2="+param2;
+        $('#'+modalId).modal('show');
+        sendRequest(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                var ajaxData = ajax.responseText;
+                $('#'+displayId).html(ajaxData);
+
+            }
+        }
+        $('#'+displayId).html('LOADING DATA');
+
+    }
+
     function navigatePage(pageUrl){
         window.location.replace(pageUrl);
     }
