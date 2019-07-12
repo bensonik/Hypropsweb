@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\model\Department;
 use App\Helpers\Utility;
-use App\model\Survey;
-use App\model\SurveyTempUserAns;
-use App\model\SurveyUserAns;
+use App\model\Test;
+use App\model\TestCategory;
+use App\model\TestTempUserAns;
+use App\model\TestUserAns;
 use App\User;
 use Auth;
 use View;
@@ -19,7 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class SurveyController extends Controller
+class TestController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,16 +31,18 @@ class SurveyController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Survey::paginateAllData();
+        $mainData = Test::paginateAllData();
         $dept = Department::getAllData();
+        $testCategory = TestCategory::getAllData();
         $this->processData($mainData);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('survey.reload',array('mainData' => $mainData,
-                'dept' => $dept))->render());
+            return \Response::json(view::make('test.reload',array('mainData' => $mainData,
+                'dept' => $dept,'testCategory' => $testCategory))->render());
 
         }else{
-            return view::make('survey.main_view')->with('mainData',$mainData)->with('dept',$dept);
+            return view::make('test.main_view')->with('mainData',$mainData)->with('dept',$dept)
+                ->with('testCategory',$testCategory);
         }
 
     }
@@ -52,15 +55,21 @@ class SurveyController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Survey::$mainRules);
+        $validator = Validator::make($request->all(),Test::$mainRules);
         if($validator->passes()){
 
             $deptArr = [];
+            $categoryArr = [];
             $allDept = $request->input('department');
+            $allCategory = $request->input('test_category');
             foreach($allDept as $dept){
                 $deptArr[] = $dept;
             }
-            $countData = Survey::countData('survey_name',$request->input('survey_name'));
+
+            foreach($allCategory as $cat){
+                $categoryArr[] = $cat;
+            }
+            $countData = Test::countData('test_name',$request->input('test_name'));
             if($countData > 0){
 
                 return response()->json([
@@ -71,13 +80,14 @@ class SurveyController extends Controller
             }else{
 
                 $dbDATA = [
-                    'survey_name' => ucfirst($request->input('survey_name')),
-                    'survey_desc' => ucfirst($request->input('survey_details')),
+                    'test_name' => ucfirst($request->input('test_name')),
+                    'test_desc' => ucfirst($request->input('test_details')),
                     'all_dept' => json_encode($deptArr),
+                    'all_category' => json_encode($categoryArr),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                Survey::create($dbDATA);
+                Test::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -105,17 +115,26 @@ class SurveyController extends Controller
     public function editForm(Request $request)
     {
         //
-        $survey = Survey::firstRow('id',$request->input('dataId'));
-        return view::make('survey.edit_form')->with('edit',$survey);
+        $test = Test::firstRow('id',$request->input('dataId'));
+        return view::make('test.edit_form')->with('edit',$test);
 
     }
 
     public function editDeptForm(Request $request)
     {
         //
-        $survey = Survey::firstRow('id',$request->input('dataId'));
-        $this->processItemData($survey);
-        return view::make('survey.dept_form')->with('edit',$survey);
+        $test = Test::firstRow('id',$request->input('dataId'));
+        $this->processItemData($test);
+        return view::make('test.dept_form')->with('edit',$test);
+
+    }
+
+    public function editCatForm(Request $request)
+    {
+        //
+        $test = Test::firstRow('id',$request->input('dataId'));
+        $this->processItemData($test);
+        return view::make('test.cat_form')->with('edit',$test);
 
     }
 
@@ -128,19 +147,19 @@ class SurveyController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Survey::$mainRulesEdit);
+        $validator = Validator::make($request->all(),Test::$mainRulesEdit);
         if($validator->passes()) {
 
             $dbDATA = [
-                'survey_name' => ucfirst($request->input('survey_name')),
-                'survey_desc' => ucfirst($request->input('survey_details')),
+                'test_name' => ucfirst($request->input('test_name')),
+                'test_desc' => ucfirst($request->input('test_details')),
                 'updated_by' => Auth::user()->id,
             ];
-            $rowData = Survey::specialColumns('survey_name', $request->input('survey_name'));
+            $rowData = Test::specialColumns('test_name', $request->input('test_name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    Survey::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    Test::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -156,7 +175,7 @@ class SurveyController extends Controller
                 }
 
             } else{
-                Survey::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                Test::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -174,7 +193,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * ADD/REMOVE FOR SURVEY DEPARTMENTS the specified resource in storage.
+     * ADD/REMOVE FOR TEST DEPARTMENTS the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -186,16 +205,40 @@ class SurveyController extends Controller
         $idArray = json_decode($request->input('all_data'));
         $status = $request->input('status');
         $editId = $request->input('param');
-        $survey = Survey::firstRow('id',$editId);
-        $surveyDept = json_decode($survey->all_dept,true);
+        $test = Test::firstRow('id',$editId);
+        $testDept = json_decode($test->all_dept,true);
 
-        $newDept = ($status == '1') ? array_merge($surveyDept,$idArray) : array_diff($surveyDept,$idArray);
+        $newDept = ($status == '1') ? array_merge($testDept,$idArray) : array_diff($testDept,$idArray);
 
         $dbData = [
             'all_dept' => json_encode($newDept),
             'updated_by' => Auth::user()->id,
         ];
-        $delete = Survey::defaultUpdate('id',$editId,$dbData);
+        $delete = Test::defaultUpdate('id',$editId,$dbData);
+
+        return response()->json([
+            'message2' => 'department(s) modified Successfully',
+            'message' => 'saved'
+        ]);
+
+    }
+
+    public function modifyCat(Request $request)
+    {
+        //
+        $idArray = json_decode($request->input('all_data'));
+        $status = $request->input('status');
+        $editId = $request->input('param');
+        $test = Test::firstRow('id',$editId);
+        $testCat = json_decode($test->all_category,true);
+
+        $newCat = ($status == '1') ? array_merge($testCat,$idArray) : array_diff($testCat,$idArray);
+
+        $dbData = [
+            'all_category' => json_encode($newCat),
+            'updated_by' => Auth::user()->id,
+        ];
+        $delete = Test::defaultUpdate('id',$editId,$dbData);
 
         return response()->json([
             'message2' => 'department(s) modified Successfully',
@@ -221,8 +264,8 @@ class SurveyController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $request = SurveyUserAns::firstRow('survey_id',$all_id[$i]);
-            $requestTemp = SurveyTempUserAns::firstRow('survey_id',$all_id[$i]);
+            $request = TestUserAns::firstRow('test_id',$all_id[$i]);
+            $requestTemp = TestTempUserAns::firstRow('test_id',$all_id[$i]);
             if(empty($request) && empty($requestTemp)){
                 $unused[$i] = $all_id[$i];
             }else{
@@ -232,9 +275,9 @@ class SurveyController extends Controller
 
 
         $message = (count($in_use) > 0) ? ' and '.count($in_use).
-            ' survey(s) has been used for a survey session and cannot be deleted' : '';
+            ' test(s) has been used for a test session and cannot be deleted' : '';
 
-        $delete = Survey::massUpdate('id',$unused,$dbData);
+        $delete = Test::massUpdate('id',$unused,$dbData);
 
         return response()->json([
             'message2' => 'deleted',
@@ -247,28 +290,51 @@ class SurveyController extends Controller
     public function processData($data){
         foreach($data as $val){
             $allDept = json_decode($val->all_dept,true);
+            $allCategory = json_decode($val->all_category,true);
             if(!empty($allDept)){
                 $fetchDept = Department::massData('id',$allDept);
                 $val->dept = $fetchDept;
             }else{
                 $val->dept = '';
             }
+
+            if(!empty($allCategory)){
+                $fetchCategory = TestCategory::massData('id',$allCategory);
+                $val->testCategory = $fetchCategory;
+            }else{
+                $val->testCategory = '';
+            }
+
         }
     }
 
     public function processItemData($val){
-        $surveyDept = json_decode($val->all_dept,true);
-        if(!empty($surveyDept)){
-            $fetchDept = Department::massData('id',$surveyDept);
+        $testDept = json_decode($val->all_dept,true);
+        $testCategory = json_decode($val->all_category,true);
+        if(!empty($testDept)){
+            $fetchDept = Department::massData('id',$testDept);
             $val->dept = $fetchDept;
 
             $allDept = Department::getAllData();
-            $uniqueDept = Utility::arrayDiff($allDept,$surveyDept);
+            $uniqueDept = Utility::arrayDiff($allDept,$testDept);
             $extraDept = Department::massData('id',$uniqueDept);
             $val->extra_dept = $extraDept;
         }else{
             $val->dept = '';
         }
+
+        if(!empty($testCategory)){
+            $fetchCategory = TestCategory::massData('id',$testCategory);
+            $val->testCategory = $fetchCategory;
+
+            $allCategory = TestCategory::getAllData();
+            $uniqueCategory = Utility::arrayDiff($allCategory,$testCategory);
+            $extraCategory = TestCategory::massData('id',$uniqueCategory);
+            $val->extra_category = $extraCategory;
+        }else{
+            $val->extra_category = '';
+        }
+
     }
 
 }

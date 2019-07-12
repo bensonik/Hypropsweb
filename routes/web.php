@@ -665,4 +665,42 @@ Route::any('/user_pin_code', 'UserPinCodeController@index')->name('user_pin_code
 Route::post('/create_user_pin_code', 'UserPinCodeController@create')->name('create_user_pin_code');
 Route::post('/delete_user_pin_code', 'UserPinCodeController@destroy')->name('delete_user_pin_code');
 
+// -------------TEST CATEGORY MODULE-----------
+Route::any('/test_category', 'TestCategoryController@index')->name('department')->middleware('auth.admin');
+Route::post('/create_test_cat', 'TestCategoryController@create')->name('create_test_cat');
+Route::post('/edit_test_cat_form', 'TestCategoryController@editForm')->name('edit_test_cat');
+Route::post('/edit_test_cat', 'TestCategoryController@edit')->name('edit_test_cat');
+Route::post('/delete_test_cat', 'TestCategoryController@destroy')->name('delete_test_cat');
+
+// -------------TEST MODULE-----------
+Route::any('/test', 'TestController@index')->name('survey')->middleware('auth');
+Route::post('/create_test', 'TestController@create')->name('create_survey');
+Route::post('/edit_test_form', 'TestController@editForm')->name('edit_survey_form');
+Route::post('/edit_test_dept_form', 'TestController@editDeptForm')->name('edit_test_dept_form');
+Route::post('/edit_test_category_form', 'TestController@editCatForm')->name('edit_test_category_form');
+Route::post('/edit_test', 'TestController@edit')->name('edit_test');
+Route::post('/modify_test_dept', 'TestController@modifyDept')->name('modify_test_dept');
+Route::post('/modify_test_cat', 'TestController@modifyCat')->name('modify_test_cat');
+Route::post('/delete_test', 'TestController@destroy')->name('delete_test');
+
+// -------------TEST SESSION MODULE-----------
+Route::any('/test_session', 'TestSessionController@index')->name('test_session')->middleware('auth');
+Route::any('/test_list', 'TestSessionController@testList')->name('test_list')->middleware('auth');
+Route::any('/test_list_temp', 'TestSessionController@testListTemp')->name('test_list_temp')->middleware('auth:temp_user');
+Route::any('/test_form/{id}/{session}', 'TestSessionController@testForm')->name('test_form')->middleware('auth');
+Route::any('/test_form/{id}/{session}/temp', 'TestSessionController@testFormTemp')->name('test_form_temp')->middleware('auth:temp_user');
+Route::post('/submit_test_form', 'TestSessionController@submitTestForm')->name('submit_test_form');
+Route::post('/create_test_session', 'TestSessionController@create')->name('create_test_session');
+Route::post('/edit_test_session_form', 'TestSessionController@editForm')->name('edit_test_session_form');
+Route::post('/edit_test_session', 'TestSessionController@edit')->name('edit_test_session');
+Route::post('/delete_test_session', 'TestSessionController@destroy')->name('delete_test_session');
+
+// -------------TEST QUESTIONS MODULE-----------
+Route::any('/test_question', 'TestQuestController@index')->name('test_question')->middleware('auth');
+Route::post('/create_test_question', 'TestQuestController@create')->name('create_test_question');
+Route::post('/edit_test_question', 'TestQuestController@edit')->name('edit_test');
+Route::post('/search_test_question', 'TestQuestController@searchTest')->name('search_test_question');
+Route::post('/delete_test_question', 'TestQuestController@destroy')->name('delete_test_question');
+
+
 

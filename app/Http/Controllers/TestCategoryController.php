@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Helpers\Utility;
 use App\model\Department;
 
+use App\model\TestCategory;
+use App\model\TestUserAns;
 use App\User;
 use Auth;
 use View;
@@ -18,7 +20,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class DepartmentController extends Controller
+class TestCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -29,14 +31,14 @@ class DepartmentController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Department::paginateAllData();
+        $mainData = TestCategory::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('department.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('test_category.reload',array('mainData' => $mainData))->render());
 
         }else{
-        return view::make('department.main_view')->with('mainData',$mainData);
-            }
+            return view::make('test_category.main_view')->with('mainData',$mainData);
+        }
 
     }
 
@@ -48,10 +50,10 @@ class DepartmentController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Department::$mainRules);
+        $validator = Validator::make($request->all(),TestCategory::$mainRules);
         if($validator->passes()){
 
-            $countData = Department::countData('dept_name',$request->input('department_name'));
+            $countData = TestCategory::countData('category_name',$request->input('category_name'));
             if($countData > 0){
 
                 return response()->json([
@@ -61,10 +63,12 @@ class DepartmentController extends Controller
 
             }else{
                 $dbDATA = [
-                    'dept_name' => ucfirst($request->input('department_name')),
+                    'category_name' => ucfirst($request->input('category_name')),
+                    'duration' => $request->input('duration'),
+                    'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                Department::create($dbDATA);
+                TestCategory::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -92,8 +96,8 @@ class DepartmentController extends Controller
     public function editForm(Request $request)
     {
         //
-        $dept = Department::firstRow('id',$request->input('dataId'));
-        return view::make('department.edit_form')->with('edit',$dept);
+        $dept = TestCategory::firstRow('id',$request->input('dataId'));
+        return view::make('test_category.edit_form')->with('edit',$dept);
 
     }
 
@@ -106,19 +110,20 @@ class DepartmentController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),Department::$mainRules);
+        $validator = Validator::make($request->all(),TestCategory::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'dept_name' => ucfirst($request->input('department_name')),
-                'dept_hod' => $request->input('department_hod')
+                'category_name' => ucfirst($request->input('category_name')),
+                'duration' => $request->input('duration'),
+                'updated_by' => Auth::user()->id
             ];
-            $rowData = Department::specialColumns('dept_name', $request->input('department_name'));
-            			
-			if(count($rowData) > 0){
+            $rowData = TestCategory::specialColumns('category_name', $request->input('category_name'));
+
+            if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    Department::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    TestCategory::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -133,8 +138,8 @@ class DepartmentController extends Controller
 
                 }
 
-          } else{
-                Department::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+            } else{
+                TestCategory::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -181,7 +186,7 @@ class DepartmentController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = User::specialColumns('dept_id', $all_id[$i]);
+            $rowDataSalary = TestUserAns::specialColumns('cat_id', $all_id[$i]);
             if(count($rowDataSalary)>0){
                 $unused[$i] = $all_id[$i];
             }else{
@@ -189,9 +194,9 @@ class DepartmentController extends Controller
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' department(s) has been used in another module and cannot be deleted' : '';
+            ' category(ies) has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
-            $delete = Department::massUpdate('id',$in_use,$dbData);
+            $delete = TestCategory::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -200,7 +205,7 @@ class DepartmentController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'The '.count($unused).' department(s) has been used in another module and cannot be deleted',
+                'message2' => 'The '.count($unused).' category(ies) has been used in another module and cannot be deleted',
                 'message' => 'warning'
             ]);
 

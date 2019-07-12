@@ -10,7 +10,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Survey Questions and Answers
+                        Test Questions and Answers
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
@@ -33,14 +33,14 @@
                     </ul>
                 </div>
                 <div class="body row">
-                    <form name="import_excel" id="searchSurveyForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+                    <form name="import_excel" id="searchTestForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <select class="form-control" id="survey_id" name="survey" onchange="fillNextInput('survey_id','department','<?php echo url('default_select'); ?>','survey_dept')">
-                                        <option value="">Select Survey</option>
+                                    <select class="form-control" id="test_id" name="test" onchange="fillNextInput('test_id','test_category','<?php echo url('default_select'); ?>','test_cat')">
+                                        <option value="">Select Test</option>
                                         @foreach($mainData as $cat)
-                                            <option value="{{$cat->id}}">{{$cat->survey_name}}</option>
+                                            <option value="{{$cat->id}}">{{$cat->test_name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -49,9 +49,9 @@
 
                         <div class="col-sm-4" >
                             <div class="form-group">
-                                <div class="form-line" id="department">
-                                    <select class="form-control " name="department" >
-                                        <option value="">Select Department</option>
+                                <div class="form-line" id="test_category">
+                                    <select class="form-control " name="test_category" >
+                                        <option value="">Select Test Category</option>
                                     </select>
                                 </div>
                             </div>
@@ -59,9 +59,9 @@
 
                     </form>
 
-                    <button onclick="searchReport('searchSurveyForm','<?php echo url('search_survey_question'); ?>','reload_data',
-                            '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect">
-                        Search Survey
+                    <button onclick="searchReport('searchTestForm','<?php echo url('search_test_question'); ?>','reload_data',
+                            '<?php echo url('test_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect">
+                        Search Test Questions
                     </button>
                 </div>
                 <div class="body row">
@@ -83,10 +83,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <select class="form-control" id="survey_options" name="survey" onchange="fillNextInput('survey_options','department_options','<?php echo url('default_select'); ?>','survey_dept')">
-                                                    <option value="">Select Survey</option>
+                                                <select class="form-control" id="test_options" name="test" onchange="fillNextInput('test_options','category_options','<?php echo url('default_select'); ?>','test_cat')">
+                                                    <option value="">Select Test</option>
                                                     @foreach($mainData as $cat)
-                                                        <option value="{{$cat->id}}">{{$cat->survey_name}}</option>
+                                                        <option value="{{$cat->id}}">{{$cat->test_name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -95,9 +95,9 @@
 
                                     <div class="col-sm-4" >
                                         <div class="form-group">
-                                            <div class="form-line" id="department_options">
-                                                <select class="form-control " name="department" >
-                                                    <option value="">Select Department</option>
+                                            <div class="form-line" id="category_options">
+                                                <select class="form-control " name="test_category" >
+                                                    <option value="">Select Test Category</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -111,7 +111,6 @@
                                                 <textarea id="question_option" name="question" class="ckeditor" placeholder="Message">Question Here...</textarea>
                                                 <script>
                                                     CKEDITOR.replace('question_option');
-                                                    CKEDITOR.config.height = 100;     // 500 pixels tall.
                                                 </script>
                                             </div>
                                         </div>
@@ -119,47 +118,27 @@
 
                                 </div>
                                 <hr/>
-                                <div class="row">
-                                    <div class="col-sm-2 ">
-                                        <div class="form-group pull-right">
-                                            <div class="form-line">
-                                                <input type="text" class="form-control " value="Question Category" disabled name="" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 ">
-                                        <div class="form-group pull-right">
-                                            <div class="form-line">
-                                                <select class="form-control " name="question_category" >
-                                                    <option value="">Select Question Category</option>
-                                                    @foreach($questCat as $cat)
-                                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr/>
 
                                 @for($i=1; $i<=5;$i++)
                                     <div class="row">
-                                        <div class="col-sm-2 ">
+                                        <input type="radio" id="radio_id{{$i}}" class="radio-col-green with-gap" value="answer{{$i}}" name="correct_answer" >
+                                        <label for="radio_id{{$i}}" >Correct Answer</label>
+                                        <div class="col-sm-1 ">
                                             <div class="form-group pull-right">
                                                 <div class="form-line">
-                                                    <input type="text" class="form-control " value="Answer {{$i}}" disabled name="" >
+                                                    <input type="text" class="form-control " value="{{$i}}" disabled name="radio{{$i}}" >
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6 ">
+                                        <input type="hidden" value="answer{{$i}}" name="answer_type{{$i}}" />
+                                        <div class="col-sm-7 ">
                                             <div class="form-group pull-right">
                                                 <div class="form-line">
-                                                    <select class="form-control " name="answer{{$i}}" >
-                                                        <option value="">Select Answer Category</option>
-                                                        @foreach($ansCat as $cat)
-                                                            <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                                        @endforeach
-                                                    </select>
+                                                    <textarea id="answer{{$i}}" name="answers{{$i}}" class="ckeditor" placeholder="Answer Here..."></textarea>
+                                                    <script>
+                                                        CKEDITOR.replace('answer{{$i}}');
+                                                        CKEDITOR.config.height = 70;     // 500 pixels wide.
+                                                    </script>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,8 +149,8 @@
                             </form>
                             <div class="row">
                                 <div class="col-sm-11">
-                                    <button onclick="submitQuestDefault('question_option','questOptionForm','<?php echo url('create_survey_question'); ?>','reload_data',
-                                            '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
+                                    <button onclick="submitQuestDefault('question_option','questOptionForm','<?php echo url('create_test_question'); ?>','reload_data',
+                                            '<?php echo url('test_question'); ?>','<?php echo csrf_token(); ?>','answer1','answer2','answer3','answer4','answer5')" type="button" class="btn btn-info waves-effect pull-right">
                                         SAVE
                                     </button>
                                 </div>
@@ -186,10 +165,10 @@
                                     <div class="col-sm-4">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <select class="form-control" id="survey_text" name="survey" onchange="fillNextInput('survey_text','department_text','<?php echo url('default_select'); ?>','survey_dept')">
-                                                    <option value="">Select Survey</option>
+                                                <select class="form-control" id="test_text" name="test" onchange="fillNextInput('test_text','category_text','<?php echo url('default_select'); ?>','test_cat')">
+                                                    <option value="">Select Test</option>
                                                     @foreach($mainData as $cat)
-                                                        <option value="{{$cat->id}}">{{$cat->survey_name}}</option>
+                                                        <option value="{{$cat->id}}">{{$cat->test_name}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -198,9 +177,9 @@
 
                                     <div class="col-sm-4" >
                                         <div class="form-group">
-                                            <div class="form-line" id="department_text">
-                                                <select class="form-control " name="department" >
-                                                    <option value="">Select Department</option>
+                                            <div class="form-line" id="category_text">
+                                                <select class="form-control " name="test_category" >
+                                                    <option value="">Select Test Category</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -221,35 +200,16 @@
 
                                 </div>
                                 <hr/>
+                                @for($i=1; $i<=5;$i++)
+                                    <input type="hidden" id="answer{{$i}}" name="answers{{$i}}"/>
+                                @endfor
 
-                                <div class="row">
-                                    <div class="col-sm-2 ">
-                                        <div class="form-group pull-right">
-                                            <div class="form-line">
-                                                <input type="text" class="form-control " value="Question Category" disabled name="" >
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 ">
-                                        <div class="form-group pull-right">
-                                            <div class="form-line">
-                                                <select class="form-control " name="question_category" >
-                                                    <option value="">Select Question Category</option>
-                                                    @foreach($questCat as $cat)
-                                                        <option value="{{$cat->id}}">{{$cat->category_name}}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr/>
                                 <input type="hidden" value="1" name="text_type"/>
                             </form>
                             <div class="row">
                                 <div class="col-sm-11 ">
-                                    <button onclick="submitQuestDefault('question_text','questTextForm','<?php echo url('create_survey_question'); ?>','reload_data',
-                                            '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
+                                    <button onclick="submitQuestDefault('question_text','questTextForm','<?php echo url('create_test_question'); ?>','reload_data',
+                                            '<?php echo url('test_question'); ?>','<?php echo csrf_token(); ?>','answer1','answer2','answer3','answer4','answer5')" type="button" class="btn btn-info waves-effect pull-right">
                                         SAVE
                                     </button>
                                 </div>
@@ -276,10 +236,16 @@
 
 <script>
 
-    function submitQuestDefault(questId,formId,submitUrl,reload_id,reloadUrl,token){
+    function submitQuestDefault(questId,formId,submitUrl,reload_id,reloadUrl,token,id1,id2,id3,id4,id5){
         var inputVars = $('#'+formId).serialize();
         var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
-        var postVars = inputVars+'&question='+quest;
+        var ans1 = encodeURIComponent(CKEDITOR.instances[id1].getData());
+        var ans2 = encodeURIComponent(CKEDITOR.instances[id2].getData());
+        var ans3 = encodeURIComponent(CKEDITOR.instances[id3].getData());
+        var ans4 = encodeURIComponent(CKEDITOR.instances[id4].getData());
+        var ans5 = encodeURIComponent(CKEDITOR.instances[id5].getData());
+
+        var postVars = inputVars+'&question='+quest+'&answer1='+ans1+'&answer2='+ans2+'&answer3='+ans3+'&answer4='+ans4+'&answer5='+ans5;
         //alert(postVars);
         //$('#loading_modal').modal('show');
         sendRequestForm(submitUrl,token,postVars)
@@ -312,17 +278,29 @@
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                //searchReport(formId,'<?php echo url('search_survey_question'); ?>','reload_data','<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>');
+                //searchReport(formId,'<?php echo url('search_test_question'); ?>','reload_data','<?php echo url('test_question'); ?>','<?php echo csrf_token(); ?>');
             }
         }
 
     }
 
-    function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token){
+    function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token,id1,id2,id3,id4,id5,type){
         var inputVars = $('#'+formId).serialize();
+        var getType = $('#'+type).val();
+        var postVars = '';
         var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
-        var postVars = inputVars+'&question='+quest;
-        //alert(postVars);
+        if(getType == 0){
+            var ans1 = encodeURIComponent(CKEDITOR.instances[id1].getData());
+            var ans2 = encodeURIComponent(CKEDITOR.instances[id2].getData());
+            var ans3 = encodeURIComponent(CKEDITOR.instances[id3].getData());
+            var ans4 = encodeURIComponent(CKEDITOR.instances[id4].getData());
+            var ans5 = encodeURIComponent(CKEDITOR.instances[id5].getData());
+             postVars = inputVars+'&question='+quest+'&answer1='+ans1+'&answer2='+ans2+'&answer3='+ans3+'&answer4='+ans4+'&answer5='+ans5;
+
+        }else{
+             postVars = inputVars+'&question='+quest;
+        }
+
         //$('#loading_modal').modal('show');
         sendRequestForm(submitUrl,token,postVars)
         ajax.onreadystatechange = function(){

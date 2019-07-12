@@ -341,6 +341,21 @@
     </select>
 @endif
 
+@if($type == 'test_cat')
+
+    <select name="test_category"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select Test Category</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->category_name}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Test Category found</option>
+        @endif
+    </select>
+@endif
+
 
 
 

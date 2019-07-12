@@ -111,7 +111,6 @@
                                                 <textarea id="question_option" name="question" class="ckeditor" placeholder="Message">Question Here...</textarea>
                                                 <script>
                                                     CKEDITOR.replace('question_option');
-                                                    CKEDITOR.config.height = 100;     // 500 pixels tall.
                                                 </script>
                                             </div>
                                         </div>
@@ -278,7 +277,7 @@
 
     function submitQuestDefault(questId,formId,submitUrl,reload_id,reloadUrl,token){
         var inputVars = $('#'+formId).serialize();
-        var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
+        var quest = CKEDITOR.instances[questId].getData();
         var postVars = inputVars+'&question='+quest;
         //alert(postVars);
         //$('#loading_modal').modal('show');
@@ -312,7 +311,7 @@
                 }
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                //searchReport(formId,'<?php echo url('search_survey_question'); ?>','reload_data','<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>');
+                searchReport(formId,'<?php echo url('search_survey_question'); ?>','reload_data','<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>');
             }
         }
 
@@ -320,7 +319,7 @@
 
     function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token){
         var inputVars = $('#'+formId).serialize();
-        var quest = encodeURIComponent(CKEDITOR.instances[questId].getData());
+        var quest = CKEDITOR.instances[questId].getData();
         var postVars = inputVars+'&question='+quest;
         //alert(postVars);
         //$('#loading_modal').modal('show');

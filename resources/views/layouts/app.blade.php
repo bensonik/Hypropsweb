@@ -467,6 +467,43 @@
                 </li>
                 @endif
 
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">dvr</i>
+                            <span>CBT System</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="{{url('test_category')}}">Test Category</a>
+                            </li>
+                            <li>
+                                <a href="{{url('test')}}">Test Config</a>
+                            </li>
+                            <li>
+                                <a href="{{url('test_session')}}">Test Session</a>
+                            </li>
+                            <li>
+                                <a href="{{url('test_question')}}">Test Question(s)</a>
+                            </li>
+                            <li>
+                                <a href="{{url('test_result')}}">Test Result</a>
+                            </li>
+                            <li>
+                                <a href="{{url('test_list')}}">Take a Test</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @else
+                    <li>
+                        <a href="{{url('survey_list')}}">
+                            <i class="material-icons">people</i>
+                            <span class="icon-name">Participate in Survey</span>
+                        </a>
+                    </li>
+                @endif
+
                 @if(in_array(Auth::user()->role,\App\Helpers\Utility::SCM_MANAGEMENT))
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">

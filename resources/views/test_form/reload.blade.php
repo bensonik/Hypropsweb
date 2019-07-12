@@ -53,7 +53,7 @@
                                                    name="check_all{{$dept->id}}" class="" />
                                         </div>
                                         <div class="col-sm-4">
-                                            @if($resultCheck != '1')
+                                            @if($resultCheck != 1)
                                             <button type="button" onclick="deleteItemsRemove('kid_checkbox{{$dept->id}}','reload_data','<?php echo url('survey_question'); ?>',
                                                     '<?php echo url('delete_survey_question'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger pull-right">
                                                 <i class="fa fa-trash-o"></i>Delete
@@ -93,7 +93,6 @@
                                                                 <textarea id="question{{$quest->id}}" name="question" class="ckeditor" placeholder="Message">{{$quest->question}}</textarea>
                                                                 <script>
                                                                     CKEDITOR.replace('question{{$quest->id}}');
-                                                                    CKEDITOR.config.height = 100;     // 500 pixels tall.
                                                                 </script>
                                                             </div>
                                                         </div>
@@ -147,7 +146,6 @@
                                                                             @foreach($ansCat as $cat)
                                                                                 <option value="{{$cat->id}}">{{$cat->category_name}}</option>
                                                                             @endforeach
-                                                                            <option value="">Remove Answer</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -185,7 +183,7 @@
 
                                             <div class="row">
                                                 <div class="col-sm-11">
-                                                    @if($resultCheck != '1')
+                                                    @if($resultCheck != 1)
                                                     <button onclick="submitQuestDefaultEdit('question{{$quest->id}}','questOptionForm{{$quest->id}}','<?php echo url('edit_survey_question'); ?>','reload_data',
                                                             '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
                                                         SAVE

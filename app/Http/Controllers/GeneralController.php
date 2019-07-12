@@ -18,6 +18,8 @@ use App\model\Survey;
 use App\model\Task;
 use App\model\TaskList;
 use App\model\TempUsers;
+use App\model\Test;
+use App\model\TestCategory;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
@@ -689,6 +691,15 @@ class GeneralController extends Controller
             $survey = Survey::firstRow('id',$pickedVal);
             $surveyDept = json_decode($survey->all_dept,true);
             $fetchDept = Department::massData('id',$surveyDept);
+            return view::make('general.selectOptions')->with('optionArray',$fetchDept)->with('type',$type);
+
+        }
+
+        //FOR COMPETENCY FRAMEWORK
+        if($type == 'test_cat'){
+            $survey = Test::firstRow('id',$pickedVal);
+            $surveyDept = json_decode($survey->all_category,true);
+            $fetchDept = TestCategory::massData('id',$surveyDept);
             return view::make('general.selectOptions')->with('optionArray',$fetchDept)->with('type',$type);
 
         }
