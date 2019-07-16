@@ -67,4 +67,4 @@
     </tbody>
 </table>
 
-<input type="hidden" value="{{$edit->id}}" id="cat_test_id" name="test_id" />
+<input type="hidden" value="{{$edit->id}}" id="cat_test_id" name="cat_test_id" />

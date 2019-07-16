@@ -111,13 +111,13 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 3600,
         ],
 
         'temp_user' => [
             'provider' => 'temp_users',
             'table' => 'password_resets',
-            'expire' => 60,
+            'expire' => 3600,
         ],
 
     ],

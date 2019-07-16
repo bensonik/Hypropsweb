@@ -35,18 +35,21 @@
 
                             </th>
 
-                            <th>Test Session</th>
+                            <th>Choose Test Session</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
+                            <?php $dept = $data->test->all_dept; $catDecode = json_decode($dept,true); ?>
+                            @if(in_array(\App\Helpers\Utility::checkAuth('temp_user')->dept_id,$catDecode))
                             <tr>
                                 <td scope="row">
                                     <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td><a href="{{ url('test_form/'.$data->survey_id.'/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) }}">
+                                <td>
+                                    <a href="{{ url('test_form/'.$data->test_id.'/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) }}">
                                     {{$data->session_name}}
                                     </a>
                                 </td>
@@ -54,6 +57,7 @@
                                 <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
                             </tr>
+                            @endif
                         @endforeach
                         </tbody>
                     </table>

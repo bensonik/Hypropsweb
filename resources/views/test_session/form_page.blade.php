@@ -24,43 +24,44 @@
                     </li>
                 </ul>
             </div>
-            <?php $allDept = $mainData->dept; $firstId = $allDept[0]->id; ?>
+            <?php $allCat = $mainData->category; $firstId = $allCat[0]->id; ?>
             <div class="body" id="main_table">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                    @foreach($mainData->dept as $dept)
-                        @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
-                            <li role="presentation" class="<?php $active = ($dept->id == $firstId) ? 'active' : ''; echo $active; ?>"><a href="#dept_tab{{$dept->id}}" data-toggle="tab">{{$dept->dept_name}}</a></li>
-                        @else
-                            @if(\App\Helpers\Utility::checkAuth('temp_user')->dept_id == $dept->id)
-                                <li role="presentation" class="<?php $active = ($dept->id == $firstId) ? 'active' : ''; echo $active; ?> btn-link"><a href="#dept_tab{{$dept->id}}" data-toggle="tab">{{$dept->dept_name}}</a></li>
-                            @else
-
-                            @endif
-
-                        @endif
+                    @foreach($mainData->category as $cat)
+                            <li role="presentation" class="
+                            <?php
+                            $active = ($cat->id == $mainData->showCat) ? 'active' : ''; echo $active;
+                            $disabled = ($mainData->showCat == $cat->id ) ? '' : ($cat->resultCheck == 1) ? '' : 'disabled'; echo $disabled;
+                            ?>
+                                    ">
+                                <a href="#cat_tab{{$cat->id}}" data-toggle="tab">{{$cat->category_name}}</a>
+                            </li>
                     @endforeach
                 </ul>
 
                 <!-- Tab panes -->
                 <div class="tab-content">
-                @foreach($mainData->dept as $dept)
+                @foreach($mainData->category as $cat)
 
-                        <div role="tabpanel" class="tab-pane fade <?php $active = ($dept->id == $firstId) ? 'in active' : ''; echo $active; ?>" id="dept_tab{{$dept->id}}">
-                            <b>{{$mainData->survey_name}}</b><hr/>
-                            <p>{{$mainData->survey_desc}}</p><hr/>
+                        <div role="tabpanel" class="tab-pane fade <?php $active = ($cat->id == $mainData->showCat) ? 'in active' : ''; echo $active; ?>" id="cat_tab{{$cat->id}}">
+                            <h4>{{$mainData->test_name}} -- ({{$cat->category_name}})</h4>
+                            @if($cat->resultCheck == '0' && $mainData->showCat == $cat->id)
+                            &nbsp; <h3>Time Remaining:--   &nbsp;&nbsp;<span id="timing{{$mainData->showCat}}"></span></h3><hr/>
+                            @endif
+                            <p>{{$mainData->test_desc}}</p><hr/>
 
 
 
-                        @if($dept->resultCheck != '1')    <!-- IF LOGGED IN USER HAVE NOT TAKEN SURVEY SESSION FOR CURRENT DEPT, DISPLAY DEPT QUESTIONS  -->
-                            <form name="surveyForm{{$dept->id}}" id="surveyForm{{$dept->id}}" onsubmit="false;" class="form form-horizontal container" method="post" enctype="multipart/form-data">
-                                <input type="hidden" name="session" value="{{$surveySession->id}}" />
-                                <input type="hidden" name="survey" value="{{$surveySession->survey_id}}" />
-                                <input type="hidden" name="department" value="{{$dept->id}}" />
-                                <input type="hidden" name="countQuest" value="{{$dept->questCount}}" />
-                                <input type="hidden" name="resultCheck" value="{{$dept->resultCheck}}" />
+                        @if($cat->resultCheck != '1')    <!-- IF LOGGED IN USER HAVE NOT TAKEN TEST SESSION FOR CURRENT CATEGORY, DISPLAY CATEGORY QUESTIONS  -->
+                            <form name="testForm{{$cat->id}}" id="testForm{{$cat->id}}" onsubmit="false;" class="form form-horizontal container" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="session" value="{{$testSession->id}}" />
+                                <input type="hidden" name="test" value="{{$testSession->test_id}}" />
+                                <input type="hidden" name="test_category" value="{{$cat->id}}" />
+                                <input type="hidden" name="countQuest" value="{{$cat->questCount}}" />
+                                <input type="hidden" name="resultCheck" value="{{$cat->resultCheck}}" />
 
-                                @foreach($dept->questions as $quest)
+                                @foreach($cat->questions as $quest)
                                     <div class="row" id="tr_{{$quest->id}}">
 
                                         <input type="hidden" name="text_type{{$quest->quest_number}}" value="{{$quest->text_type}}" />
@@ -96,15 +97,15 @@
                                             @foreach($quest->ans as $ans)
                                                 <?php $num++; ?>
 
-                                                <input type="radio" id="{{$dept->dept_name}}{{$ans->id}}" class="radio-col-green with-gap" value="{{$ans->id}}|{{$ans->ans_cat_id}}" name="answer{{$quest->quest_number}}" >
-                                                <label for="{{$dept->dept_name}}{{$ans->id}}" >{{$ans->ansCat->category_name}}</label>
+                                                <input type="radio" id="{{$cat->category_name}}{{$ans->id}}" class="radio-col-green with-gap" value="{{$ans->id}}|{{$ans->correct_status}}" name="answer{{$quest->quest_number}}" >
+                                                <label for="{{$cat->category_name}}{{$ans->id}}" >{!!$ans->answer!!}</label>
                                                 <div class="row">
                                                     <div class="col-sm-1 ">
                                                         <div class="form-group pull-right">
                                                             <div class="form-line"></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-sm-6 ">
+                                                    <div class="col-sm-3 ">
                                                         <div class="form-group pull-right">
                                                             <div class="form-line"></div>
                                                         </div>
@@ -142,41 +143,25 @@
                                 @endforeach
                             </form><hr/>
 
-                            @if($dept->questCount > 0)
-                                @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')   <!-- IF LOGGED IN USER IS NOT EXTERNAL USER -->
-                                @if($dept->id == \App\Helpers\Utility::checkAuth('temp_user')->dept_id) <!-- IF DEPT IS SAME AS LOGGED IN USER'S DEPT, DO NOT DISPLAY SUBMIT BUTTON -->
-
-                                @else   <!-- IF DEPT IS NOT SAME AS LOGGED IN USER'S DEPT DISPLAY SUBMIT BUTTON -->
-                                <div class="row">
-                                    <div class="col-sm-11">
-                                        <button onclick="submitSurveyDefault('surveyForm{{$dept->id}}','<?php echo url('submit_survey_form'); ?>','reload_data',
-                                                '<?php echo url('survey_list'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
-                                            SAVE
-                                        </button><hr/>
-                                    </div>
-
-                                </div>
-                                @endif
-                                @else   <!-- IF LOGGED IN USER IS AN EXTERNAL USER DISPLAY SUBMIT BUTTON -->
+                            @if($cat->questCount > 0)
 
                                 <div class="row">
                                     <div class="col-sm-11">
-                                        <button id="buttonId{{$dept->id}}" onclick="submitSurveyDefault('surveyForm{{$dept->id}}','<?php echo url('submit_survey_form'); ?>','reload_data',
-                                                '<?php echo url('survey_list'); ?>','<?php echo csrf_token(); ?>','buttonId{{$dept->id}}')" type="button" class="btn btn-info waves-effect pull-right">
-                                            SAVE
+                                        <button id="buttonId{{$cat->id}}" onclick="submitTestDefault('testForm{{$cat->id}}','<?php echo url('submit_test_form'); ?>','reload_data',
+                                                '<?php echo url('test_list'); ?>','<?php echo csrf_token(); ?>','buttonId{{$cat->id}}')" type="button" class="btn btn-info waves-effect pull-right">
+                                            Submit Test Category
                                         </button><hr/>
                                     </div>
 
                                 </div>
 
-                                @endif
                             @endif
 
-                            @else   <!-- IF LOGGED IN USER HAVE TAKEN SURVEY SESSION FOR CURRENT DEPT, DO NOT DISPLAY DEPT QUESTIONS  -->
+                            @else   <!-- IF LOGGED IN USER HAVE TAKEN TEST SESSION FOR CURRENT CATEGORY, DO NOT DISPLAY CATEGORY QUESTIONS  -->
                             <div class="row">
                                 <div class="col-sm-1"></div>
                                 <div class="col-sm-7">
-                                    <p class="btn-link "> <i class="fa fa-check-circle fa-2x btn-success"></i> You have submitted your views/answers for this Department/Unit</p>
+                                    <p class="btn-link "> <i class="fa fa-check-circle fa-2x btn-success"></i> You have submitted your views/answers for this Test Category</p>
                                 </div>
                                 <div class="col-sm-4"></div>
                             </div>
@@ -197,7 +182,7 @@
 <!-- #END# Example Tab -->
 
 <script>
-    function submitSurveyDefault(formId,submitUrl,reload_id,reloadUrl,token,buttonId){
+    function submitTestDefault(formId,submitUrl,reload_id,reloadUrl,token,buttonId){
         var inputVars = $('#'+formId).serialize();
         var postVars = inputVars+'';
 
@@ -242,7 +227,43 @@
 
     }
 
-    $(document).ready(function() {
-        $('table.highchart').highchartTable();
-    });
+    function startTimer(duration, display,triggerB) {
+
+        var durationSecs = parseInt(duration*60);
+        var timed = durationSecs, hours, minutes, seconds;
+         //window.localStorage.setItem('currTime', '0');
+
+        var timer = (window.localStorage.getItem(triggerB) === null) ? timed : window.localStorage.getItem(triggerB);
+        console.log(timer);
+        setInterval(function () {
+            hours = parseInt((timer / 60)/60, 10);
+            minutes = parseInt(((timer/60) % 60), 10);
+            seconds = parseInt(timer % 60, 10);
+
+            hours = hours > 9 ? hours : "0" + hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = hours + "hr(s) :" +minutes + "mins :" + seconds + "secs";
+
+            //timer--
+            if (timer < 1) {
+                //timer = duration;
+                clearInterval(timer);
+                $("#"+triggerB).trigger('click');
+                window.localStorage.removeItem(triggerB);
+            }else{
+                timer--;
+                window.localStorage.setItem(triggerB, timer);
+            }
+        }, 1000);
+    }
+
+    window.onload = function () {
+        var timing = '{{$mainData->showDuration}}';
+        var triggerButton = 'buttonId{{$mainData->showCat}}';
+        var display = document.querySelector('#timing{{$mainData->showCat}}');
+        startTimer(timing, display,triggerButton);
+    };
+
 </script>

@@ -112,13 +112,13 @@
                 <ul class="header-dropdown m-r--5 " style="list-style-type: none;">
                     <li class="pull-right">
                             <button type="button" onclick="removeAddItem('kid_checkbox_add','reload_data','<?php echo url('test'); ?>',
-                                    '<?php echo url('modify_test_dept'); ?>','<?php echo csrf_token(); ?>','1','add selected Item(s)','test_id','editDeptModal');" class="btn btn-success">
+                                    '<?php echo url('modify_test_dept'); ?>','<?php echo csrf_token(); ?>','1','add selected Item(s)','dept_test_id','editDeptModal');" class="btn btn-success">
                                 <i class="fa fa-plus"></i>Add
                             </button>
                     </li>
                     <li>
                         <button type="button" onclick="removeAddItem('kid_checkbox_remove','reload_data','<?php echo url('test'); ?>',
-                                '<?php echo url('modify_test_dept'); ?>','<?php echo csrf_token(); ?>','0','remove selected Item(s)','test_id','editDeptModal');" class="btn btn-danger">
+                                '<?php echo url('modify_test_dept'); ?>','<?php echo csrf_token(); ?>','0','remove selected Item(s)','dept_test_id','editDeptModal');" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>Remove
                         </button>
                     </li>

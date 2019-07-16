@@ -1201,6 +1201,14 @@ class Utility
         }
     }
 
+    public static function authTestTable($guard){
+        if(Auth::guard($guard)->check()){
+            return 'test_temp_user_ans';
+        }else{
+            return 'test_user_ans';
+        }
+    }
+
     public static function authLink($guard){
         if(Auth::guard($guard)->check()){
             return '/temp';

@@ -1,5 +1,5 @@
 <p>
-    {{$edit->Survey_name}}
+    {{$edit->test_name}}
 </p>
 
 <table class="table table-bordered table-hover table-striped" id="">
@@ -11,7 +11,7 @@
 
         </th>
 
-        <th>Current Survey Department(s)</th>
+        <th>Current Test Department(s)</th>
     </tr>
     </thead>
     <tbody>
@@ -44,7 +44,7 @@
 
         </th>
 
-        <th>Non Survey Department(s)</th>
+        <th>Non Test Department(s)</th>
     </tr>
     </thead>
     <tbody>
@@ -67,4 +67,4 @@
     </tbody>
 </table>
 
-<input type="hidden" value="{{$edit->id}}" id="survey_id" name="survey_id" />
+<input type="hidden" value="{{$edit->id}}" id="dept_test_id" name="dept_test_id" />

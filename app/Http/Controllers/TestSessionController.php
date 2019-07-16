@@ -145,16 +145,16 @@ class TestSessionController extends Controller
     public function submitTestForm(Request $request){
 
         $countQuest = $request->input('countQuest');
-        $survey = $request->input('survey');
+        $test = $request->input('test');
         $session = $request->input('session');
-        $dept = $request->input('department');
+        $category = $request->input('test_category');
 
         $mainRules = [];
-        for($k=1;$k<=$countQuest;$k++){
+        /*for($k=1;$k<=$countQuest;$k++){
             if ($request->input('text_type' . $k) != '1') {
                 $mainRules['answer' . $k] = 'required';
             }
-        }
+        }*/
 
         $validator = Validator::make($request->all(),$mainRules);
         if($validator->passes()) {
@@ -163,38 +163,36 @@ class TestSessionController extends Controller
                 if ($request->input('text_type' . $i) != '1') {
                     $explodeAnswer = explode('|', $request->input('answer' . $i));
                     $ansId = $explodeAnswer[0];
-                    $ansCatId = $explodeAnswer[1];
+                    $correct = $explodeAnswer[1];
                     $dbDATANEW = [
-                        'survey_id' => $survey,
+                        'test_id' => $test,
                         'session_id' => $session,
-                        'dept_id' => $dept,
+                        'cat_id' => $category,
                         'quest_id' => $request->input('question' . $i),
                         'text_type' => $request->input('text_type' . $i),
                         'ans_id' => $ansId,
-                        'quest_cat_id' => $request->input('question_cat' . $i),
-                        'ans_cat_id' => $ansCatId,
+                        'correct_status' => $correct,
                         'user_id' => Utility::checkAuth('temp_user')->id,
                         'created_by' => Utility::checkAuth('temp_user')->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
 
-                    $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
+                    $create = Utility::createData(Utility::authTestTable('temp_user'),$dbDATANEW);
                 } else {
 
                     $dbDATANEW = [
-                        'survey_id' => $survey,
+                        'test_id' => $test,
                         'session_id' => $session,
-                        'dept_id' => $dept,
+                        'cat_id' => $category,
                         'quest_id' => $request->input('question' . $i),
                         'text_type' => $request->input('text_type' . $i),
                         'text_answer' => $request->input('answer' . $i),
-                        'quest_cat_id' => $request->input('question_cat' . $i),
                         'user_id' => Utility::checkAuth('temp_user')->id,
                         'created_by' => Utility::checkAuth('temp_user')->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
 
-                    $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
+                    $create = Utility::createData(Utility::authTestTable('temp_user'),$dbDATANEW);
 
                 }
             }
@@ -325,26 +323,29 @@ class TestSessionController extends Controller
     }
 
     public function processItemData($val,$session){
-        $surveyDept = json_decode($val->all_dept,true);
-        if(!empty($surveyDept)){
-            $fetchDept = Department::massData('id',$surveyDept);
+        $testCategory = json_decode($val->all_category,true);
+        if(!empty($testCategory)){
+            $fetchCat = TestCategory::massData('id',$testCategory);
 
-            foreach($fetchDept as $dept){
-                $deptQuest =  SurveyQuest::specialColumnsAsc2('survey_id',$val->id,'dept_id',$dept->id);
-                $questCount = $deptQuest->count();
-                $surveyAnsTable = Utility::authSurveyTable('temp_user');
-                $surveyResult = Utility::countData3($surveyAnsTable,'session_id',$session,'dept_id',$dept->id,'user_id',Utility::checkAuth('temp_user')->id);
-                $resultCheck = ($surveyResult >0) ? 1 : 0;
+            $catFree = [];
+            $duration = [];
+            foreach($fetchCat as $cat){
+                $catQuest =  TestQuest::specialColumnsAsc2('test_id',$val->id,'cat_id',$cat->id);
+                $questCount = $catQuest->count();
+                $testAnsTable = Utility::authTestTable('temp_user');
+                $testResult = Utility::countData3($testAnsTable,'session_id',$session,'cat_id',$cat->id,'user_id',Utility::checkAuth('temp_user')->id);
+                $resultCheck = ($testResult >0) ? 1 : 0;
+                if($resultCheck == 0){ $catFree[] = $cat->id; $duration[] = $cat->duration; }
                 $questNum = 0;
                 //LOOP THROUGH QUESTIONS TO GET ANSWERS AND NUMBER OF ADDITIONAL ANSWER COLUMNS NEEDED
-                foreach($deptQuest as $quest){
+                foreach($catQuest as $quest){
                     $questNum++;
                     $quest->quest_number = $questNum;   //GET THE QUESTION NUMBER FOR DISPLAY
                     //LOOP THROUGH ANSWERS AND CHECK FOR ADDITIONAL ANSWER COLUMNS BASED ON TEXT TYPE
-                    $questAns = SurveyQuestAns::specialColumnsAsc('quest_id',$quest->id);
+                    $questAns = TestQuestAns::specialColumnsAsc('quest_id',$quest->id);
 
                     if($quest->text_type == 0){
-                        //$countAns = SurveyQuestAns::countData('quest_id', $quest->id);
+                        //$countAns = TestQuestAns::countData('quest_id', $quest->id);
                         $countAns = $questAns->count();
                         $moreAnsColumnCount = ($countAns > 2) ? 2 : 3;
                         $quest->moreAnsColumnCount = $moreAnsColumnCount;   //ADD TO QUESTION NUMBER OF MORE ANSWER COLUMN OPTIONS
@@ -356,14 +357,19 @@ class TestSessionController extends Controller
                         $quest->moreAnsColumnCount = 0;
                     }
                 }
-                $dept->resultCheck = $resultCheck;
-                $dept->questCount = $questCount;
-                $dept->questions = $deptQuest;  //ADD SELECTED PROCESSED QUESTIONS TO EACH DEPARTMENT
+
+                $cat->resultCheck = $resultCheck;
+                $cat->questCount = $questCount;
+                $cat->questions = $catQuest;  //ADD SELECTED PROCESSED QUESTIONS TO EACH DEPARTMENT
             }
 
-            $val->dept = $fetchDept;
+            $showCat = (count($catFree) >0) ? $catFree[0] : 0;
+            $showDuration = (count($duration) >0) ? $duration[0] : 0;
+            $val->showDuration = $showDuration;
+            $val->showCat = $showCat;
+            $val->category = $fetchCat;
         }else{
-            $val->dept = '';
+            $val->category = '';
         }
     }
 
