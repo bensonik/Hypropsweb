@@ -150,25 +150,28 @@ class TestSessionController extends Controller
         $category = $request->input('test_category');
 
         $mainRules = [];
-        /*for($k=1;$k<=$countQuest;$k++){
-            if ($request->input('text_type' . $k) != '1') {
-                $mainRules['answer' . $k] = 'required';
+        $checkAns = [];
+        for($k=1;$k<=$countQuest;$k++){
+            if($request->input('answer' . $k) != ''){
+                $checkAns[] = $request->input('answer' . $k);
             }
-        }*/
+        }
 
-        $validator = Validator::make($request->all(),$mainRules);
-        if($validator->passes()) {
 
             for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
-                if ($request->input('text_type' . $i) != '1') {
-                    $explodeAnswer = explode('|', $request->input('answer' . $i));
-                    $ansId = $explodeAnswer[0];
-                    $correct = $explodeAnswer[1];
+                $ansId = '';
+                $correct = 0;
+                    if($request->input('answer' . $i) != '') {
+                        $explodeAnswer = explode('|', $request->input('answer' . $i));
+                        $ansId = $explodeAnswer[0];
+                        $correct = $explodeAnswer[1];
+                    }
                     $dbDATANEW = [
                         'test_id' => $test,
                         'session_id' => $session,
                         'cat_id' => $category,
                         'quest_id' => $request->input('question' . $i),
+                        'text_answer' => $request->input('answer' . $i),
                         'text_type' => $request->input('text_type' . $i),
                         'ans_id' => $ansId,
                         'correct_status' => $correct,
@@ -177,24 +180,9 @@ class TestSessionController extends Controller
                         'status' => Utility::STATUS_ACTIVE
                     ];
 
-                    $create = Utility::createData(Utility::authTestTable('temp_user'),$dbDATANEW);
-                } else {
+                    $create = Utility::createData(Utility::authTestTable('temp_user'), $dbDATANEW);
 
-                    $dbDATANEW = [
-                        'test_id' => $test,
-                        'session_id' => $session,
-                        'cat_id' => $category,
-                        'quest_id' => $request->input('question' . $i),
-                        'text_type' => $request->input('text_type' . $i),
-                        'text_answer' => $request->input('answer' . $i),
-                        'user_id' => Utility::checkAuth('temp_user')->id,
-                        'created_by' => Utility::checkAuth('temp_user')->id,
-                        'status' => Utility::STATUS_ACTIVE
-                    ];
 
-                    $create = Utility::createData(Utility::authTestTable('temp_user'),$dbDATANEW);
-
-                }
             }
 
             return response()->json([
@@ -202,13 +190,7 @@ class TestSessionController extends Controller
                 'message2' => 'saved'
             ]);
 
-        }
 
-        $errors = $validator->errors();
-        return response()->json([
-            'message2' => 'fail',
-            'message' => $errors
-        ]);
 
     }
 
@@ -335,7 +317,24 @@ class TestSessionController extends Controller
                 $testAnsTable = Utility::authTestTable('temp_user');
                 $testResult = Utility::countData3($testAnsTable,'session_id',$session,'cat_id',$cat->id,'user_id',Utility::checkAuth('temp_user')->id);
                 $resultCheck = ($testResult >0) ? 1 : 0;
-                if($resultCheck == 0){ $catFree[] = $cat->id; $duration[] = $cat->duration; }
+                $scorePerct = '';
+                $scoreAns = '';
+                $overallAns = '';
+                if($resultCheck == 0){
+                    $catFree[] = $cat->id; $duration[] = $cat->duration;
+                }else{
+                    $optQuest = Utility::specialColumns5($testAnsTable,'user_id',Utility::checkAuth('temp_user')->id,'session_id',$session,'test_id',$val->id,'cat_id',$cat->id,'text_type',0);
+                    $correctQuest = Utility::specialColumns6($testAnsTable,'user_id',Utility::checkAuth('temp_user')->id,'session_id',$session,'test_id',$val->id,'cat_id',$cat->id,'text_type',0,'correct_status',1);
+                    $overallAns = $optQuest->count();
+                    $scoreAns = $correctQuest->count();
+                    $scorePerct = round(($scoreAns*100)/$overallAns);
+
+                }
+
+                $cat->overallAns = $overallAns;
+                $cat->scoreAns = $scoreAns;
+                $cat->scorePerct =$scorePerct;
+
                 $questNum = 0;
                 //LOOP THROUGH QUESTIONS TO GET ANSWERS AND NUMBER OF ADDITIONAL ANSWER COLUMNS NEEDED
                 foreach($catQuest as $quest){

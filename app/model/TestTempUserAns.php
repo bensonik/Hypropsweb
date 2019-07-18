@@ -44,6 +44,16 @@ class TestTempUserAns extends Model
 
     }
 
+    public function category(){
+        return $this->belongsTo('App\model\TestCategory','cat_id','id')->withDefault();
+
+    }
+
+    public function question(){
+        return $this->belongsTo('App\model\TestQuest','quest_id','id')->withDefault();
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
@@ -135,11 +145,29 @@ class TestTempUserAns extends Model
 
     }
 
+    public static function specialColumns4($column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->where($column4, '=',$post4)
+            ->orderBy('id','DESC')->get();
+
+    }
+
     public static function specialColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function specialColumnsPage4($column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->where($column4, '=',$post4)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 

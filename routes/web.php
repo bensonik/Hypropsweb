@@ -702,5 +702,10 @@ Route::post('/edit_test_question', 'TestQuestController@edit')->name('edit_test'
 Route::post('/search_test_question', 'TestQuestController@searchTest')->name('search_test_question');
 Route::post('/delete_test_question', 'TestQuestController@destroy')->name('delete_test_question');
 
+// -------------TEST RESULT MODULE-----------
+Route::any('/test_result', 'TestResultController@index')->name('test_result')->middleware('auth');
+Route::any('/search_test_result', 'TestResultController@searchTest')->name('search_test_result');
+Route::any('/test_explanation', 'TestResultController@testExplanation')->name('test_explanation');
+
 
 

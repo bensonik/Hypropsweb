@@ -472,6 +472,35 @@ class Utility
 
     }
 
+    public static function specialColumns5($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5)
+    {
+        return DB::table($table)
+            ->where($column, $post)
+            ->where($column2, $post2)
+            ->where($column3, $post3)
+            ->where($column4, $post4)
+            ->where($column5, $post5)
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumns6($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5, $column6, $post6)
+    {
+        return DB::table($table)
+            ->where($column, $post)
+            ->where($column2, $post2)
+            ->where($column3, $post3)
+            ->where($column4, $post4)
+            ->where($column5, $post5)
+            ->where($column6, $post6)
+            ->where('status', self::STATUS_ACTIVE)
+            ->orderBy('id','DESC')
+            ->orderBy('id','DESC')->get();
+
+    }
+
     public static function massData($table,$column, $post)
     {
         return DB::table($table)

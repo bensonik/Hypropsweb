@@ -165,6 +165,18 @@
                                 </div>
                                 <div class="col-sm-4"></div>
                             </div>
+                            <div class="row">
+                                <table class="table table-responsive table-bordered table-hover table-striped">
+                                    <tr>
+                                        <td><h4>Percentage Score:--</h4></td>
+                                        <td><h4>{{$cat->scorePerct}}% out of 100%</h4></td>
+                                    </tr>
+                                    <tr>
+                                        <td><h4>Score:--</h4></td>
+                                        <td><h4>{{$cat->scoreAns}} out of {{$cat->overallAns}}</h4></td>
+                                    </tr>
+                                </table>
+                            </div>
                         @endif
 
 
@@ -247,10 +259,12 @@
             display.textContent = hours + "hr(s) :" +minutes + "mins :" + seconds + "secs";
 
             //timer--
-            if (timer < 1) {
+            var trigger = $("#"+triggerB);
+            if (timer < 1 && timer == 0) {
                 //timer = duration;
                 clearInterval(timer);
-                $("#"+triggerB).trigger('click');
+                trigger.trigger('click');
+                trigger.attr("disabled", true);
                 window.localStorage.removeItem(triggerB);
             }else{
                 timer--;
