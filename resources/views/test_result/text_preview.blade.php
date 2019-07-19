@@ -11,6 +11,7 @@
         <th>Category</th>
         <th>Question</th>
         <th>Explanation</th>
+        <th>Created At</th>
     </tr>
     </thead>
     <tbody>
@@ -25,6 +26,7 @@
             <td>{{$data->category->category_name}} </td>
             <td>{!!$data->question->question!!} </td>
             <td>{{$data->text_answer}}</td>
+            <td>{{$data->created_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
         </tr>

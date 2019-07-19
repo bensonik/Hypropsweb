@@ -154,6 +154,15 @@ class TestTempUserAns extends Model
 
     }
 
+    public static function specialColumnsDateDiff4($column, $post, $column2, $post2, $column3, $post3, $post4)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->whereBetween($column3, [$post3, $post4])
+            ->orderBy('id','DESC')->get();
+
+    }
+
     public static function specialColumnsPage3($column, $post, $column2, $post2, $column3, $post3)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);

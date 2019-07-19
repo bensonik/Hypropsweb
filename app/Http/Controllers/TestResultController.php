@@ -120,7 +120,7 @@ class TestResultController extends Controller
 
     public function processItemData($val,$session,$from,$to){
         $testCategory = json_decode($val->all_category,true);
-        $testUsers = TestUserAns::specialColumns2('test_id',$val->id,'session_id',$session);
+        $testUsers = TestUserAns::specialColumnsDateDiff4('test_id',$val->id,'session_id',$session,'created_at',$from,$to);
         $usersArr = [];
         foreach($testUsers as $user){
             $usersArr[] = $user->user_id;
@@ -176,7 +176,7 @@ class TestResultController extends Controller
 
     public function processItemDataExt($val,$session,$from,$to){
         $testCategory = json_decode($val->all_category,true);
-        $testUsers = TestTempUserAns::specialColumns2('test_id',$val->id,'session_id',$session);
+        $testUsers = TestTempUserAns::specialColumnsDateDiff4('test_id',$val->id,'session_id',$session,'created_at',$from,$to);
         $usersArr = [];
         foreach($testUsers as $user){
             $usersArr[] = $user->user_id;
@@ -195,7 +195,7 @@ class TestResultController extends Controller
                 $avgScorePerct = [];
                 foreach($fetchCat as $cat){
                     $testAnsTable = 'test_temp_user_ans';
-                    $testResult = Utility::countData3($testAnsTable,'session_id',$session,'cat_id',$cat->id,'user_id',Utility::checkAuth('temp_user')->id);
+                    $testResult = Utility::countData3($testAnsTable,'session_id',$session,'cat_id',$cat->id,'user_id',$user->id);
                     $resultCheck = ($testResult >0) ? 1 : 0;
                     $scorePerct = '';
                     $scoreAns = '';

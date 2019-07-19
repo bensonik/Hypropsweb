@@ -53,12 +53,11 @@
                                                    name="check_all{{$cat->id}}" class="" />
                                         </div>
                                         <div class="col-sm-4">
-                                            @if($resultCheck != '1')
                                             <button type="button" onclick="deleteItemsRemove('kid_checkbox{{$cat->id}}','reload_data','<?php echo url('test_question'); ?>',
                                                     '<?php echo url('delete_test_question'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger pull-right">
                                                 <i class="fa fa-trash-o"></i>Delete
                                             </button>
-                                            @endif
+
                                         </div>
                                     </div>
 
@@ -174,12 +173,10 @@
 
                                             <div class="row">
                                                 <div class="col-sm-11">
-                                                    @if($resultCheck != '1')
                                                     <button onclick="submitQuestDefaultEdit('question_edit{{$quest->id}}','questOptionForm{{$quest->id}}','<?php echo url('edit_test_question'); ?>','reload_data',
                                                             '<?php echo url('test_question'); ?>','<?php echo csrf_token(); ?>','answer_edit1{{$quest->id}}','answer_edit2{{$quest->id}}','answer_edit3{{$quest->id}}','answer_edit4{{$quest->id}}','answer_edit5{{$quest->id}}','text_type{{$quest->id}}')" type="button" class="btn btn-info waves-effect pull-right">
                                                         SAVE
                                                     </button><hr/>
-                                                    @endif
                                                 </div>
 
                                             </div>

@@ -67,14 +67,14 @@ class TestQuestController extends Controller
         $validator = Validator::make($request->all(),TestQuest::$mainRules);
         if($validator->passes()){
 
-            $testResultTemp = TestTempUserAns::firstRow('test_id',$request->input('test'));
+            /*$testResultTemp = TestTempUserAns::firstRow('test_id',$request->input('test'));
             $testResult = TestUserAns::firstRow('test_id',$request->input('test'));
             if(!empty($testResult) || !empty($testResultTemp)){
                 return response()->json([
                     'message' => 'warning',
-                    'message2' => 'This survey has already been used and cannot accept more questions'
+                    'message2' => 'This test has already been used and cannot accept more questions'
                 ]);
-            }
+            }*/
 
             $dbDATAQUEST = [
                 'test_id' => $request->input('test'),

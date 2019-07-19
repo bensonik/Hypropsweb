@@ -161,7 +161,7 @@ class TestSessionController extends Controller
             for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
                 $ansId = '';
                 $correct = 0;
-                    if($request->input('answer' . $i) != '') {
+                    if($request->input('answer' . $i) != '' && $request->input('text_type' . $i) != 1) {
                         $explodeAnswer = explode('|', $request->input('answer' . $i));
                         $ansId = $explodeAnswer[0];
                         $correct = $explodeAnswer[1];
@@ -177,6 +177,7 @@ class TestSessionController extends Controller
                         'correct_status' => $correct,
                         'user_id' => Utility::checkAuth('temp_user')->id,
                         'created_by' => Utility::checkAuth('temp_user')->id,
+                        'created_at' => date('Y-m-d H:i:s'),
                         'status' => Utility::STATUS_ACTIVE
                     ];
 
