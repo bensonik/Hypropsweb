@@ -227,6 +227,16 @@ Route::post('/edit_project_request_form', 'ProjectMemberRequestController@editFo
 Route::post('/edit_project_request', 'ProjectMemberRequestController@edit')->name('edit_project_request');
 Route::post('/delete_project_request', 'ProjectMemberRequestController@destroy')->name('delete_project_request');
 
+// ------------PROJECT CHANGE LOG MODULE---------------
+Route::any('/project/{id}/change_log', 'ChangeLogController@index')->name('change_log')->middleware('auth');
+Route::any('/project/{id}/change_log/temp', 'ChangeLogController@indexTemp')->name('change_log_temp')->middleware('auth:temp_user');
+
+Route::post('/create_change_log', 'ChangeLogController@create')->name('create_change_log');
+Route::post('/edit_change_log_form', 'ChangeLogController@editForm')->name('edit_change_log_form');
+Route::post('/edit_change_log', 'ChangeLogController@edit')->name('edit_change_log');
+Route::post('/delete_change_log', 'ChangeLogController@destroy')->name('delete_change_log');
+
+
 // -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------
 Route::any('/request_category', 'RequestCategoryController@index')->name('request_category')->middleware('auth');
 Route::post('/create_request_cat', 'RequestCategoryController@create')->name('create_request_cat');

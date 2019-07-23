@@ -17,7 +17,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea type="text" class="form-control" name="leave_description" placeholder="Request Description"></textarea>
+                                            <textarea type="text" class="form-control" name="leave_description" placeholder="Leave Description"></textarea>
                                         </div>
                                     </div>
                                 </div>

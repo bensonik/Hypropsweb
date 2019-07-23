@@ -346,6 +346,12 @@
                         <span class="icon-name">Participate in Survey</span>
                     </a>
                 </li>
+                <li>
+                    <a href="{{url('test_list_temp')}}">
+                        <i class="material-icons">border_color</i>
+                        <span class="icon-name">Take a test</span>
+                    </a>
+                </li>
 
                 <li>
                     {{--<a href="javascript:void(0);" class="menu-toggle">

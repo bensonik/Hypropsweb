@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('timesheet.page',['item'=>$item,'mainData'=>$mainData,'task'=>$task])
+    @include('timesheet.page',['item'=>$item,'mainData'=>$mainData])
 
 @endsection

@@ -68,7 +68,7 @@
             </div>
         </div>
     </li>
-    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id )
         <li>
             <div data-target="#all_request" onclick="navigatePage('<?php echo url('project/'.$item->id.'/all_request'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
                 <div class="ellipsis">
@@ -87,14 +87,16 @@
             </div>
         </div>
     </li>
+
     <li>
-        <div data-target="#change_log" data-toggle="tab">
+        <div data-target="#change_log" onclick="navigatePage('<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Change Log</span><br/>
                 <span class="account-amount">{{$item->change_log}}</span><br/>
             </div>
         </div>
     </li>
+
     <li>
         <div data-target="#decision" data-toggle="tab">
             <div>

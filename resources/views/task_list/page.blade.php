@@ -91,7 +91,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Tasks</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
-                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
                     <li>
                             <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
                                     '<?php echo url('delete_task_list_item'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
@@ -136,7 +136,7 @@
                                                     Task List(s)
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
-                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
@@ -191,7 +191,7 @@
                                                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                                             </td>
-                                                            @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+                                                            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                             <td>
                                                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>

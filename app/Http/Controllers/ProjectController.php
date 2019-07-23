@@ -77,7 +77,7 @@ class ProjectController extends Controller
         //
         //$req = new Request();
         $projectId = [];
-        $checkUser = ProjectTeam::specialColumns('user_id',Utility::checkAuth('temp_user')->id);
+        $checkUser = ProjectTeam::specialColumns('temp_user',Utility::checkAuth('temp_user')->id);
         if(!empty($checkUser)){
             foreach($checkUser as $data){
                 $projectId[] = $data->project_id;

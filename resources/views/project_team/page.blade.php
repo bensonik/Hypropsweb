@@ -111,7 +111,7 @@
                                                     Team Members
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
-                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id )
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>

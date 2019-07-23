@@ -497,9 +497,9 @@
                     </li>
                 @else
                     <li>
-                        <a href="{{url('survey_list')}}">
-                            <i class="material-icons">people</i>
-                            <span class="icon-name">Participate in Survey</span>
+                        <a href="{{url('test_list')}}">
+                            <i class="material-icons">border_color</i>
+                            <span class="icon-name">Take a test</span>
                         </a>
                     </li>
                 @endif
