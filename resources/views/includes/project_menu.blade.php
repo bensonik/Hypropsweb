@@ -98,9 +98,9 @@
     </li>
 
     <li>
-        <div data-target="#decision" data-toggle="tab">
+        <div data-target="#decision" onclick="navigatePage('<?php echo url('project/'.$item->id.'/decision'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
-                <span class="account-type">Decision</span><br/>
+                <span class="account-type">Decision(s)</span><br/>
                 <span class="account-amount">{{$item->decision}}</span><br/>
                 <a href="#" class="account-link">taken</a>
             </div>
@@ -115,7 +115,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#assumption" data-toggle="tab">
+        <div data-target="#assumption" onclick="navigatePage('<?php echo url('project/'.$item->id.'/assump_constraint'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Assumption</span><br/>
                 <span class="account-amount">{{$item->assump}}</span><br/>
@@ -126,7 +126,7 @@
     <li>
         <div data-target="#deliverable" data-toggle="tab">
             <div>
-                <span class="account-type">Deliverable</span><br/>
+                <span class="account-type">Deliverable(s)</span><br/>
                 <span class="account-amount">{{$item->deliverable}}</span><br/>
             </div>
         </div>

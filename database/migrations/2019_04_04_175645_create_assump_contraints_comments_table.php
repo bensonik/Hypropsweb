@@ -13,7 +13,7 @@ class CreateAssumpContraintsCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('assump_contraints_comments', function (Blueprint $table) {
+        Schema::create('assump_constraints_comments', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('project_id');
             $table->string('assump_id');
@@ -32,6 +32,6 @@ class CreateAssumpContraintsCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('assump_contraints_comments');
+        Schema::dropIfExists('assump_constraints_comments');
     }
 }

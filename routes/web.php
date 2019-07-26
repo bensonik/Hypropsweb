@@ -231,11 +231,43 @@ Route::post('/delete_project_request', 'ProjectMemberRequestController@destroy')
 Route::any('/project/{id}/change_log', 'ChangeLogController@index')->name('change_log')->middleware('auth');
 Route::any('/project/{id}/change_log/temp', 'ChangeLogController@indexTemp')->name('change_log_temp')->middleware('auth:temp_user');
 
+Route::any('/project/{id}/change_log/{log_id}', 'ChangeLogController@changeView')->name('change_view')->middleware('auth');
+Route::any('/project/{id}/change_log/{log_id}/temp', 'ChangeLogController@changeViewTemp')->name('change_view_temp')->middleware('auth:temp_user');
+
+
 Route::post('/create_change_log', 'ChangeLogController@create')->name('create_change_log');
+Route::any('/comment_change_log', 'ChangeLogController@comment')->name('comment_change_log');
 Route::post('/edit_change_log_form', 'ChangeLogController@editForm')->name('edit_change_log_form');
 Route::post('/edit_change_log', 'ChangeLogController@edit')->name('edit_change_log');
 Route::post('/delete_change_log', 'ChangeLogController@destroy')->name('delete_change_log');
 
+// ------------PROJECT ASSUMPTION/CONSTRAINT MODULE---------------
+Route::any('/project/{id}/assump_constraint', 'AssumpConstraintsController@index')->name('assump_constraint')->middleware('auth');
+Route::any('/project/{id}/assump_constraint/temp', 'AssumpConstraintsController@indexTemp')->name('assump_constraint_temp')->middleware('auth:temp_user');
+
+Route::any('/project/{id}/assump_constraint/{log_id}', 'AssumpConstraintsController@assumpView')->name('assump_view')->middleware('auth');
+Route::any('/project/{id}/assump_constraint/{log_id}/temp', 'AssumpConstraintsController@assumpViewTemp')->name('assump_view_temp')->middleware('auth:temp_user');
+
+
+Route::post('/create_assump_constraint', 'AssumpConstraintsController@create')->name('create_assump_constraint');
+Route::any('/comment_assump_constraint', 'AssumpConstraintsController@comment')->name('comment_assump_constraint');
+Route::post('/edit_assump_constraint_form', 'AssumpConstraintsController@editForm')->name('edit_assump_constraint_form');
+Route::post('/edit_assump_constraint', 'AssumpConstraintsController@edit')->name('edit_assump_constraint');
+Route::post('/delete_assump_constraint', 'AssumpConstraintsController@destroy')->name('delete_assump_constraint');
+
+// ------------PROJECT DECISION MODULE---------------
+Route::any('/project/{id}/decision', 'DecisionController@index')->name('decision')->middleware('auth');
+Route::any('/project/{id}/decision/temp', 'DecisionController@indexTemp')->name('decision_temp')->middleware('auth:temp_user');
+
+Route::any('/project/{id}/decision/{log_id}', 'DecisionController@decisionView')->name('decision_view')->middleware('auth');
+Route::any('/project/{id}/decision/{log_id}/temp', 'DecisionController@decisionViewTemp')->name('decision_view_temp')->middleware('auth:temp_user');
+
+
+Route::post('/create_decision', 'DecisionController@create')->name('create_decision');
+Route::any('/comment_decision', 'DecisionController@comment')->name('comment_decision');
+Route::post('/edit_decision_form', 'DecisionController@editForm')->name('edit_decision_form');
+Route::post('/edit_decision', 'DecisionController@edit')->name('edit_decision');
+Route::post('/delete_decision', 'DecisionController@destroy')->name('delete_decision');
 
 // -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------
 Route::any('/request_category', 'RequestCategoryController@index')->name('request_category')->middleware('auth');

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
-use App\model\ChangeLogComment;
-use App\model\ChangeLog;
+use App\model\AssumpConstraintsComment;
+use App\model\AssumpConstraint;
 use App\model\Project;
 use App\User;
 use Auth;
@@ -19,7 +19,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class ChangeLogController extends Controller
+class AssumpConstraintsController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,17 +31,17 @@ class ChangeLogController extends Controller
         //
         //$req = new Request();
         $projectDropdown = Project::getAllData();
-        $mainData = ChangeLog::paginateAllData();
+        $mainData = AssumpConstraint::paginateAllData();
 
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','change_log.reload','change_log.reload'),array('mainData' => $mainData,
+            return \Response::json(view::make(Utility::authBlade('temp_user','assump_constraint.reload','assump_constraint.reload'),array('mainData' => $mainData,
                 'item' => $project,'projectDropdown' => $projectDropdown))->render());
 
         }
-        return view::make(Utility::authBlade('temp_user','change_log.main_view','change_log.main_view_temp'))->with('mainData',$mainData)
+        return view::make(Utility::authBlade('temp_user','assump_constraint.main_view','assump_constraint.main_view_temp'))->with('mainData',$mainData)
             ->with('item',$project)->with('projectDropdown',$projectDropdown);
 
     }
@@ -51,53 +51,53 @@ class ChangeLogController extends Controller
         //
         //$req = new Request();
         $projectDropdown = Project::getAllData();
-        $mainData = ChangeLog::paginateAllData();
+        $mainData = AssumpConstraint::paginateAllData();
 
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','change_log.reload','change_log.reload'),array('mainData' => $mainData,
+            return \Response::json(view::make(Utility::authBlade('temp_user','assump_constraint.reload','assump_constraint.reload'),array('mainData' => $mainData,
                 'item' => $project,'projectDropdown' => $projectDropdown))->render());
 
         }
-        return view::make(Utility::authBlade('temp_user','change_log.main_view','change_log.main_view_temp'))->with('mainData',$mainData)
+        return view::make(Utility::authBlade('temp_user','assump_constraint.main_view','assump_constraint.main_view_temp'))->with('mainData',$mainData)
             ->with('item',$project)->with('projectDropdown',$projectDropdown);
 
     }
 
-    public function changeView(Request $request, $id,$log_id)
+    public function assumpView(Request $request, $id,$log_id)
     {
         //
-        $mainData = ChangeLog::firstRow2('project_id',$id,'id',$log_id);
+        $mainData = AssumpConstraint::firstRow2('project_id',$id,'id',$log_id);
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
         $this->logComments($mainData,$log_id);
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','change_log.change_view_reload','change_log.change_view_reload'),array('mainData' => $mainData,
+            return \Response::json(view::make(Utility::authBlade('temp_user','assump_constraint.change_view_reload','assump_constraint.change_view_reload'),array('mainData' => $mainData,
                 'item' => $project))->render());
 
         }
-        return view::make(Utility::authBlade('temp_user','change_log.change_view','change_log.change_view'))->with('mainData',$mainData)
+        return view::make(Utility::authBlade('temp_user','assump_constraint.change_view','assump_constraint.change_view'))->with('mainData',$mainData)
             ->with('item',$project);
 
     }
 
-    public function changeViewTemp(Request $request, $id,$log_id)
+    public function assumpViewTemp(Request $request, $id,$log_id)
     {
         //
-        $mainData = ChangeLog::firstRow2('project_id',$id,'id',$log_id);
+        $mainData = AssumpConstraint::firstRow2('project_id',$id,'id',$log_id);
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
         $this->logComments($mainData,$log_id);
 
         if ($request->ajax()) {
-            return \Response::json(view::make(Utility::authBlade('temp_user','change_log.change_view_reload','change_log.change_view_reload'),array('mainData' => $mainData,
+            return \Response::json(view::make(Utility::authBlade('temp_user','assump_constraint.change_view_reload','assump_constraint.change_view_reload'),array('mainData' => $mainData,
                 'item' => $project))->render());
 
         }
-        return view::make(Utility::authBlade('temp_user','change_log.change_view','change_log.change_view_temp'))->with('mainData',$mainData)
+        return view::make(Utility::authBlade('temp_user','assump_constraint.change_view','assump_constraint.change_view_temp'))->with('mainData',$mainData)
             ->with('item',$project);
 
     }
@@ -110,24 +110,24 @@ class ChangeLogController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),ChangeLog::$mainRules);
+        $validator = Validator::make($request->all(),AssumpConstraint::$mainRules);
         if($validator->passes()){
 
 
-                $dbDATA = [
-                    'project_id' => $request->input('project'),
-                    'change_desc' => ucfirst($request->input('change_description')),
-                    'priority' => ucfirst($request->input('priority')),
-                    'change_status' => Utility::STATUS_ACTIVE,
-                    'status' => Utility::STATUS_ACTIVE,
-                    'created_by' => Utility::checkAuth('temp_user')->id,
-                ];
-                ChangeLog::create($dbDATA);
+            $dbDATA = [
+                'project_id' => $request->input('project'),
+                'assump_desc' => ucfirst($request->input('details')),
+                'type' => ucfirst($request->input('type')),
+                'assump_status' => Utility::STATUS_ACTIVE,
+                'status' => Utility::STATUS_ACTIVE,
+                'created_by' => Utility::checkAuth('temp_user')->id,
+            ];
+            AssumpConstraint::create($dbDATA);
 
-                return response()->json([
-                    'message' => 'good',
-                    'message2' => 'saved'
-                ]);
+            return response()->json([
+                'message' => 'good',
+                'message2' => 'saved'
+            ]);
 
 
         }
@@ -143,22 +143,22 @@ class ChangeLogController extends Controller
     public function comment(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),ChangeLogComment::$mainRules);
+        $validator = Validator::make($request->all(),AssumpConstraintsComment::$mainRules);
         if($validator->passes()){
 
             $userColumn = (Utility::authColumn('temp_user') == 'temp_user') ? 'temp_user' : 'user_id';
 
             $dbDATA = [
                 'project_id' => $request->input('project'),
-                'change_id' => $request->input('change_id'),
+                'assump_id' => $request->input('assump_id'),
                 $userColumn => Utility::checkAuth('temp_user')->id,
                 'comment' => ucfirst($request->input('comment')),
                 'status' => Utility::STATUS_ACTIVE,
                 'created_by' => Utility::checkAuth('temp_user')->id,
             ];
-            $newComment = ChangeLogComment::create($dbDATA);
+            $newComment = AssumpConstraintsComment::create($dbDATA);
 
-            return view::make('change_log.change_view_reload')->with('data',$newComment);
+            return view::make('assump_constraint.change_view_reload')->with('data',$newComment);
 
 
         }
@@ -178,8 +178,8 @@ class ChangeLogController extends Controller
     public function editForm(Request $request)
     {
         //
-        $changeLog = ChangeLog::firstRow('id',$request->input('dataId'));
-        return view::make('change_log.edit_form')->with('edit',$changeLog);
+        $assumpConstraint = AssumpConstraint::firstRow('id',$request->input('dataId'));
+        return view::make('assump_constraint.edit_form')->with('edit',$assumpConstraint);
 
     }
 
@@ -192,21 +192,21 @@ class ChangeLogController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),ChangeLog::$mainRules);
+        $validator = Validator::make($request->all(),AssumpConstraint::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'change_desc' => ucfirst($request->input('change_description')),
-                'priority' => ucfirst($request->input('priority')),
+                'assump_desc' => ucfirst($request->input('details')),
+                'type' => ucfirst($request->input('type')),
                 'updated_by' => Utility::checkAuth('temp_user')->id,
             ];
 
-                ChangeLog::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+            AssumpConstraint::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
-                return response()->json([
-                    'message' => 'good',
-                    'message2' => 'saved'
-                ]);
+            return response()->json([
+                'message' => 'good',
+                'message2' => 'saved'
+            ]);
 
         }
         $errors = $validator->errors();
@@ -245,7 +245,7 @@ class ChangeLogController extends Controller
         ];
 
 
-            $delete = ChangeLog::massUpdate('id',$all_id,$dbData);
+            $delete = AssumpConstraint::massUpdate('id',$all_id,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
@@ -257,7 +257,7 @@ class ChangeLogController extends Controller
     }
 
     public function logComments($log,$log_id){
-        $comments = ChangeLogComment::specialColumns('change_id',$log_id);
+        $comments = AssumpConstraintsComment::specialColumns('assump_id',$log_id);
         $log->allComments = $comments;
         return $log;
     }

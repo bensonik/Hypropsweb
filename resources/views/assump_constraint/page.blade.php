@@ -1,80 +1,79 @@
 
-    <!-- Default Size -->
-    <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Change(s)</h4>
-                </div>
-                <div class="modal-body">
+<!-- Default Size -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">New Assumption/Constraint</h4>
+            </div>
+            <div class="modal-body">
 
-                    <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-                        <div class="body">
-                            <div class="row clearfix">
+                <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+                    <div class="body">
+                        <div class="row clearfix">
 
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select  class="form-control" name="priority" >
-                                                <option value="">Select Priority</option>
-                                                <option value="High">High</option>
-                                                <option value="Medium">Medium</option>
-                                                <option value="Low">Low</option>
-                                            </select>
-                                        </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select  class="form-control" name="type" >
+                                            <option value="">Select Type</option>
+                                            <option value="Assumption">Assumption</option>
+                                            <option value="Constraint">Constraint</option>
+                                        </select>
                                     </div>
                                 </div>
+                            </div>
 
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <textarea type="text" class="form-control" name="change_description" placeholder="Change Description"></textarea>
-                                        </div>
+                            <div class="col-sm-8">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <textarea type="text" class="form-control" name="details" placeholder="Details"></textarea>
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>
-                        <input type="hidden" value="{{$item->id}}" name="project" />
 
-                    </form>
+                    </div>
+                    <input type="hidden" value="{{$item->id}}" name="project" />
 
-                </div>
-                <div class="modal-footer">
-                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
-                        SAVE
-                    </button>
-                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_assump_constraint'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/assump_constraint'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    SAVE
+                </button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Default Size -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
-                </div>
-                <div class="modal-body" id="edit_content">
+<!-- Default Size -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
+            </div>
+            <div class="modal-body" id="edit_content">
 
-                </div>
-                <div class="modal-footer">
-                    <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
-                            class="btn btn-link waves-effect">
-                        SAVE CHANGES
-                    </button>
-                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_assump_constraint'); ?>','reload_data',
+                        '<?php echo url('project/'.$item->id.'/assump_constraint'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
+                        class="btn btn-link waves-effect">
+                    SAVE CHANGES
+                </button>
+                <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
             </div>
         </div>
     </div>
+</div>
 
-    <div class=""> <!-- style="overflow:hidden" -->
+<div class=""> <!-- style="overflow:hidden" -->
 
         <div class="clearfix"></div>
         <div class="row ">
@@ -92,20 +91,18 @@
                                     <div class="card">
                                         <div class="header">
                                             <h2>
-                                                Change Log
+                                                Assumption/Constraints
                                             </h2>
                                             <ul class="header-dropdown m-r--5">
-                                                @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                 <li>
                                                     <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                 </li>
                                                 <li>
-                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                            '<?php echo url('delete_change_log'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/assump_constraint'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                                            '<?php echo url('delete_assump_constraint'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                                         <i class="fa fa-trash-o"></i>Delete
                                                     </button>
                                                 </li>
-                                                @endif
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                         <i class="material-icons">more_vert</i>
@@ -135,8 +132,8 @@
 
                                                     </th>
                                                     <th>Project</th>
-                                                    <th>Change</th>
-                                                    <th>Priority</th>
+                                                    <th>Details</th>
+                                                    <th>Type</th>
                                                     <th>Comment</th>
                                                     <th>Manage</th>
                                                 </tr>
@@ -150,16 +147,18 @@
                                                     </td>
                                                     <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                     <td>{{$data->project->project_name}}</td>
-                                                    <td>{{$data->change_desc}}</td>
-                                                    <td>{{$data->priority}}</td>
+                                                    <td>{{$data->assump_desc}}</td>
+                                                    <td>{{$data->type}}</td>
                                                     <td>
-                                                        <a href="<?php echo url('project/'.$item->id.'/change_log/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+                                                        <a href="<?php echo url('project/'.$item->id.'/assump_constraint/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
                                                     </td>
                                                     <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                    @if(\App\Helpers\Utility::checkAuth('temp_user')->id == $data->created_by)
                                                     <td>
-                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_assump_constraint_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                     </td>
+                                                    @else
+                                                    <td></td>
                                                     @endif
                                                 </tr>
                                                 @endforeach

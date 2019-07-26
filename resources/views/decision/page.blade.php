@@ -4,7 +4,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Change(s)</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">New Decision</h4>
                 </div>
                 <div class="modal-body">
 
@@ -12,23 +12,10 @@
                         <div class="body">
                             <div class="row clearfix">
 
-                                <div class="col-sm-4">
+                                <div class="col-sm-10">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select  class="form-control" name="priority" >
-                                                <option value="">Select Priority</option>
-                                                <option value="High">High</option>
-                                                <option value="Medium">Medium</option>
-                                                <option value="Low">Low</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <textarea type="text" class="form-control" name="change_description" placeholder="Change Description"></textarea>
+                                            <textarea type="text" class="form-control" name="decision" placeholder="Decision"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -42,8 +29,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_decision'); ?>','reload_data',
+                            '<?php echo url('project/'.$item->id.'/decision'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -63,8 +50,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
+                    <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_decision'); ?>','reload_data',
+                            '<?php echo url('project/'.$item->id.'/decision'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
                     </button>
@@ -92,7 +79,7 @@
                                     <div class="card">
                                         <div class="header">
                                             <h2>
-                                                Change Log
+                                                Decision(s)
                                             </h2>
                                             <ul class="header-dropdown m-r--5">
                                                 @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
@@ -100,8 +87,8 @@
                                                     <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                 </li>
                                                 <li>
-                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                            '<?php echo url('delete_change_log'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/decision'.\App\Helpers\Utility::authLink('temp_user')); ?>',
+                                                            '<?php echo url('delete_decision'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                                         <i class="fa fa-trash-o"></i>Delete
                                                     </button>
                                                 </li>
@@ -135,8 +122,7 @@
 
                                                     </th>
                                                     <th>Project</th>
-                                                    <th>Change</th>
-                                                    <th>Priority</th>
+                                                    <th>Decision</th>
                                                     <th>Comment</th>
                                                     <th>Manage</th>
                                                 </tr>
@@ -150,15 +136,14 @@
                                                     </td>
                                                     <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                     <td>{{$data->project->project_name}}</td>
-                                                    <td>{{$data->change_desc}}</td>
-                                                    <td>{{$data->priority}}</td>
+                                                    <td>{{$data->decision_desc}}</td>
                                                     <td>
-                                                        <a href="<?php echo url('project/'.$item->id.'/change_log/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+                                                        <a href="<?php echo url('project/'.$item->id.'/decision/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
                                                     </td>
                                                     <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                     <td>
-                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_decision_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                     </td>
                                                     @endif
                                                 </tr>

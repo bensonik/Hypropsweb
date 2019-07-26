@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class AssumpContraintsController extends Controller
+class Assump_constraintsController extends Controller
 {
     //
 }

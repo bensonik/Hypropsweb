@@ -7,8 +7,8 @@
 
         </th>
         <th>Project</th>
-        <th>Change</th>
-        <th>Priority</th>
+        <th>Details</th>
+        <th>Type</th>
         <th>Comment</th>
         <th>Manage</th>
     </tr>
@@ -22,13 +22,18 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project->project_name}}</td>
-            <td>{{$data->change_desc}}</td>
-            <td>{{$data->priority}}</td>
+            <td>{{$data->assump_desc}}</td>
+            <td>{{$data->type}}</td>
+            <td>
+                <a href="<?php echo url('project/'.$item->id.'/assump_constraint/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+            </td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+            @if(\App\Helpers\Utility::checkAuth('temp_user')->id == $data->created_by)
                 <td>
-                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_assump_constraint_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
+            @else
+                <td></td>
             @endif
         </tr>
     @endforeach

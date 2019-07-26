@@ -92,7 +92,7 @@
                                     <div class="card">
                                         <div class="header">
                                             <h2>
-                                                Change Log
+                                                Selected Change(s) and Comments
                                             </h2>
                                             <ul class="header-dropdown m-r--5">
                                                 @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
@@ -123,52 +123,84 @@
                                             </ul>
                                         </div>
 
-
-
                                         <div class="body table-responsive" id="reload_data">
-                                            <table class="table table-bordered table-hover table-striped" id="main_table">
-                                                <thead>
-                                                <tr>
-                                                    <th>
-                                                        <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                                                               name="check_all" class="" />
 
-                                                    </th>
-                                                    <th>Project</th>
-                                                    <th>Change</th>
-                                                    <th>Priority</th>
-                                                    <th>Comment</th>
-                                                    <th>Manage</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach($mainData as $data)
-                                                <tr>
-                                                    <td scope="row">
-                                                        <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                                    <!-- Default Media -->
 
-                                                    </td>
-                                                    <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                                    <td>{{$data->project->project_name}}</td>
-                                                    <td>{{$data->change_desc}}</td>
-                                                    <td>{{$data->priority}}</td>
-                                                    <td>
-                                                        <a href="<?php echo url('project/'.$item->id.'/change_log/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
-                                                    </td>
-                                                    <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
-                                                    <td>
-                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                                    </td>
-                                                    @endif
-                                                </tr>
-                                                @endforeach
-                                                </tbody>
-                                            </table>
+                                                    <div class="media">
+                                                        <div class="media-left">
+                                                            <a href="#">
+                                                                <img class="media-object" src="{{ asset('images/'.$item->pro_head->photo) }}" width="64" height="64">
+                                                            </a>
+                                                        </div>
+                                                        <div class="media-body">
+                                                            <h4 class="media-heading">{{$item->pro_head->firstname}} {{$item->pro_head->lastname}}</h4>
+                                                            {{$mainData->change_desc}} @ {{$mainData->created_at}}
 
-                                            <div class=" pagination pull-right">
-                                                {!! $mainData->render() !!}
-                                            </div>
+                                                            <div class="media" id="display_comment"></div>
+                                                            @if(!empty($mainData->allComments))
+                                                            @foreach($mainData->allComments as $data)
+                                                            <div class="media">
+                                                                <div class="media-left">
+                                                                    @if($data->user_id == '')
+                                                                    <a href="#">
+                                                                        <img class="media-object" src="{{ asset('images/'.$data->tempUser->photo) }}" width="64" height="64">
+                                                                    </a>
+                                                                    @else
+                                                                    <a href="#">
+                                                                        <img class="media-object" src="{{ asset('images/'.$data->user->photo) }}" width="64" height="64">
+                                                                    </a>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="media-body">
+                                                                    @if($data->user_id == '')
+                                                                    <h4 class="media-heading">{{$data->tempUser->firstname}} {{$data->tempUser->lastname}}</h4>
+                                                                    @else
+                                                                    <h4 class="media-heading">{{$data->user->firstname}} {{$data->user->lastname}}</h4>
+                                                                    @endif
+                                                                    {{$data->comment}} <br/> @ {{$data->created_at}}
+                                                                </div>
+                                                            </div>
+                                                            @endforeach
+                                                            @endif <br/>
+
+                                                            <div class="media">
+                                                                <div class="media-left">
+                                                                        <a href="#">
+                                                                            <img class="media-object" src="{{ asset('images/'.\App\Helpers\Utility::checkAuth('temp_user')->photo) }}" width="64" height="64">
+                                                                        </a>
+                                                                </div>
+                                                                <div class="media-body">
+                                                                        <h4 class="media-heading">{{\App\Helpers\Utility::checkAuth('temp_user')->firstname}} {{\App\Helpers\Utility::checkAuth('temp_user')->lastname}}</h4>
+
+                                                                    <form name="comment" id="commentMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+                                                                    <div class="col-sm-12">
+                                                                        <div class="form-group">
+                                                                            <div class="form-line">
+                                                                                <textarea type="text" class="form-control" name="comment" placeholder="Comment on change"></textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                        <input type="hidden" name="change_id" value="{{$mainData->id}}" />
+                                                                        <input type="hidden" name="project" value="{{$item->id}}" />
+                                                                    </form>
+                                                                    <div class="row">
+                                                                        <div class="col-sm-12">
+                                                                                <button type="button" class="form-control pull-right btn-info"
+                                                                                        onclick="submitComment('commentModal','commentMainForm','<?php echo url('comment_change_log'); ?>','display_comment',
+                                                                                                '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
+                                                                                        name="comment" >Submit Comment</button>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- #END# Default Media -->
 
                                         </div>
 
@@ -219,13 +251,31 @@
 
 </script>
 
+
+
     <script>
-        /*$(function() {
-            $( ".datepicker" ).datepicker({
-                /!*changeMonth: true,
-                changeYear: true*!/
-            });
-        });*/
+        function submitComment(formModal,formId,submitUrl,reload_id,reloadUrl,token){
+            var inputVars = $('#'+formId).serialize();
+            var summerNote = '';
+            var htmlClass = document.getElementsByClassName('t-editor');
+            if (htmlClass.length > 0) {
+                summerNote = $('.summernote').eq(0).summernote('code');;
+            }
+            var postVars = inputVars+'&editor_input='+summerNote;
+
+            $('#'+formModal).modal('hide');
+            sendRequestForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    $('#'+reload_id).prepend(ajax.responseText);
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+                }
+            }
+
+        }
     </script>
 
 

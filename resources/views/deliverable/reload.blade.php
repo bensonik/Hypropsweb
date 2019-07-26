@@ -9,7 +9,6 @@
         <th>Project</th>
         <th>Change</th>
         <th>Priority</th>
-        <th>Comment</th>
         <th>Manage</th>
     </tr>
     </thead>
