@@ -150,7 +150,7 @@
                                                     <td>{{$data->assump_desc}}</td>
                                                     <td>{{$data->type}}</td>
                                                     <td>
-                                                        <a href="<?php echo url('project/'.$item->id.'/assump_constraint/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+                                                        <a href="<?php echo url('project/'.$item->id.'/assump_constraint/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on {{$data->type}}</a>
                                                     </td>
                                                     <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                     @if(\App\Helpers\Utility::checkAuth('temp_user')->id == $data->created_by)

@@ -10,7 +10,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <div class="form-line">
                         <textarea type="text" class="form-control " name="milestone_desc" placeholder="Milestone Details">{{$edit->milestone_desc}}</textarea>
@@ -32,6 +32,22 @@
                 <div class="form-group">
                     <div class="form-line">
                         <input type="text" class="form-control datepicker1" autocomplete="off" value="{{$edit->end_date}}" name="milestone_end_date" placeholder="Milestone End Date">
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control milestone_status" name="milestone_status" >
+
+                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                @if($edit->milestone_status == $key)
+                                    <option selected value="{{$key}}">{{$task}}</option>
+                                @endif
+                                <option value="{{$key}}">{{$task}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>

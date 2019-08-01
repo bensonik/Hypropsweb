@@ -168,6 +168,7 @@ class TaskListController extends Controller
                     'list_name' => $listTitle,
                     'list_desc' => $listDesc,
                     'project_id' => $projectId,
+                    'list_status' => $request->input('list_status'),
                     'status' => Utility::STATUS_ACTIVE,
                     $createUpdate => Auth::user()->id,
                 ];
@@ -257,6 +258,7 @@ class TaskListController extends Controller
             $dbDATA = [
                 'list_name' => $taskTitle,
                 'list_desc' => $taskDetails,
+                'list_status' => $request->input('list_status'),
                 'updated_by' => Auth::user()->id,
             ];
 

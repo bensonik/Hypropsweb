@@ -10,7 +10,7 @@
                 </div>
             </div>
 
-            <div class="col-sm-4">
+            <div class="col-sm-6">
                 <div class="form-group">
                     <div class="form-line">
                         <textarea class="form-control" name="project_description" placeholder="Project Description">{{$edit->project_desc}}
@@ -90,6 +90,24 @@
                 </div>
             </div>
 
+        </div>
+
+        <div class="row clearfix">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control project_status" name="project_status" >
+
+                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                @if($edit->project_status == $key)
+                                    <option selected value="{{$key}}">{{$task}}</option>
+                                @endif
+                                <option value="{{$key}}">{{$task}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>

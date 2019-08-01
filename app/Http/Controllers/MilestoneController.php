@@ -194,6 +194,7 @@ class MilestoneController extends Controller
                 'project_id' => $projectId,
                 'start_date' => Utility::standardDate($milestoneStartDate),
                 'end_date' => Utility::standardDate($milestoneEndDate),
+                'milestone_status' => $request->input('milestone_status'),
                 'status' => Utility::STATUS_ACTIVE,
                 $createUpdate => Auth::user()->id,
             ];
@@ -332,6 +333,7 @@ class MilestoneController extends Controller
                 'milestone_desc' => $taskDetails,
                 'start_date' => Utility::standardDate($startDate),
                 'end_date' => Utility::standardDate($endDate),
+                'milestone_status' => $request->input('milestone_status'),
                 'updated_by' => Auth::user()->id,
             ];
 

@@ -100,6 +100,21 @@
 
                         </div>
 
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control project_status" name="project_status" >
+                                            <option value="">Select Status</option>
+                                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                                <option value="{{$key}}">{{$task}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
 
 
@@ -187,6 +202,7 @@
                         <th>Project</th>
                         <th>Start Date</th>
                         <th>End Date</th>
+                        <th>Project Status</th>
                         <th>Created by</th>
                         <th>Updated by</th>
                         <th>Created at</th>
@@ -205,6 +221,7 @@
                             <td><a href="{{url('project_item/'.$data->id.\App\Helpers\Utility::authLink('temp_user'))}}">{{$data->project_name}}</a></td>
                             <td>{{$data->start_date}}</td>
                             <td>{{$data->end_date}}</td>
+                            <td class="{{\App\Helpers\Utility::taskColor($data->project_status)}}">{{\App\Helpers\Utility::taskVal($data->project_status)}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

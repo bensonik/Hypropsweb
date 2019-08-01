@@ -61,6 +61,19 @@
                                 </div>
                             </div>
 
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control milestone_status" name="milestone_status" >
+                                            <option value="">Select Status</option>
+                                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                                <option value="{{$key}}">{{$task}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <hr/>
 
@@ -239,7 +252,7 @@
                                         <div class="card">
                                             <div class="header">
                                                 <h2>
-                                                    Milestone
+                                                    Milestone(s)
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
                                                     @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
@@ -285,6 +298,7 @@
                                                         <th>Description</th>
                                                         <th>Start Date</th>
                                                         <th>End Date</th>
+                                                        <th>Milestone Status</th>
                                                         <th>No. of Task(s)</th>
                                                         <th>No. of Task List</th>
                                                         <th>Created by</th>
@@ -313,6 +327,7 @@
                                                             <td>{{$data->milestone_desc}}</td>
                                                             <td>{{$data->start_date}}</td>
                                                             <td>{{$data->end_date}}</td>
+                                                            <td class="{{\App\Helpers\Utility::taskColor($data->milestone_status)}}">{{\App\Helpers\Utility::taskVal($data->milestone_status)}}</td>
                                                             <td class="btn-link">
                                                                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('milestone_task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
                                                             </td>

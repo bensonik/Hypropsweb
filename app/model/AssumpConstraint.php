@@ -36,6 +36,16 @@ class AssumpConstraint extends Model
 
     }
 
+    public function tempUser_c(){
+        return $this->belongsTo('App\model\tempUsers','created_by','id');
+
+    }
+
+    public function tempUser_u(){
+        return $this->belongsTo('App\model\tempUsers','updated_by','id');
+
+    }
+
     public function department(){
         return $this->belongsTo('App\model\Department','dept_id','id');
 
@@ -169,8 +179,8 @@ class AssumpConstraint extends Model
 
     public static function firstRow2($column, $post2,$column2, $post)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->first();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->where($column2,$post2)->first();
 
     }
 

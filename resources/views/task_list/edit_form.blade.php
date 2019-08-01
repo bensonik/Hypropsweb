@@ -13,6 +13,22 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
+                        <select class="form-control list_status" name="list_status" >
+
+                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                @if($edit->list_status == $key)
+                                    <option selected value="{{$key}}">{{$task}}</option>
+                                @endif
+                                <option value="{{$key}}">{{$task}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <div class="form-line">
                         <textarea type="text" class="form-control " name="list_desc" placeholder="Task List Details">{{$edit->list_desc}}</textarea>
                     </div>
                 </div>

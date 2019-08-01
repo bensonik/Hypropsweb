@@ -87,7 +87,8 @@ class AssumpConstraintsController extends Controller
     public function assumpViewTemp(Request $request, $id,$log_id)
     {
         //
-        $mainData = AssumpConstraint::firstRow2('project_id',$id,'id',$log_id);
+        $mainData = AssumpConstraint::firstRow('id',$log_id);
+        //print_r($mainData.$log_id.$id); exit();
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
         $this->logComments($mainData,$log_id);
@@ -113,12 +114,14 @@ class AssumpConstraintsController extends Controller
         $validator = Validator::make($request->all(),AssumpConstraint::$mainRules);
         if($validator->passes()){
 
+            $userType = (Utility::authTable('temp_user') == 'temp_users') ? Utility::T_USER : Utility::P_USER;
 
             $dbDATA = [
                 'project_id' => $request->input('project'),
                 'assump_desc' => ucfirst($request->input('details')),
                 'type' => ucfirst($request->input('type')),
                 'assump_status' => Utility::STATUS_ACTIVE,
+                'user_type' => $userType,
                 'status' => Utility::STATUS_ACTIVE,
                 'created_by' => Utility::checkAuth('temp_user')->id,
             ];
@@ -244,15 +247,22 @@ class AssumpConstraintsController extends Controller
             'status' => Utility::STATUS_DELETED
         ];
 
+        $arr = [];
+        $column = (Utility::authTable('temp_user') == 'temp_users') ? Utility::T_USER : Utility::P_USER;
+        foreach($all_id as $id){
+            $data = AssumpConstraint::firstRow2('id',$id,'user_type',$column);
+            if(!empty($data)){
+                $delete = AssumpConstraint::massUpdate('id',$all_id,$dbData);
+            }else{
+                $arr[] = $id;
+            }
+        }
 
-            $delete = AssumpConstraint::massUpdate('id',$all_id,$dbData);
-
-            return response()->json([
-                'message2' => 'deleted',
-                'message' => count($all_id).' data(s) has been deleted'
-            ]);
-
-
+        $message = (count($arr) >0) ? count($arr).' was not deleted and was not created by you' : '';
+        return response()->json([
+            'message2' => 'deleted',
+            'message' => count($all_id).' data(s) has been deleted'.$message
+        ]);
 
     }
 

@@ -269,6 +269,62 @@ Route::post('/edit_decision_form', 'DecisionController@editForm')->name('edit_de
 Route::post('/edit_decision', 'DecisionController@edit')->name('edit_decision');
 Route::post('/delete_decision', 'DecisionController@destroy')->name('delete_decision');
 
+// ------------PROJECT DELIVERABLE MODULE---------------
+Route::any('/project/{id}/deliverable', 'deliverableController@index')->name('deliverable')->middleware('auth');
+Route::any('/project/{id}/deliverable/temp', 'deliverableController@indexTemp')->name('deliverable_temp')->middleware('auth:temp_user');
+
+Route::any('/project/{id}/deliverable/{log_id}', 'deliverableController@deliverableView')->name('deliverable_view')->middleware('auth');
+Route::any('/project/{id}/deliverable/{log_id}/temp', 'deliverableController@deliverableViewTemp')->name('deliverable_view_temp')->middleware('auth:temp_user');
+
+
+Route::post('/create_deliverable', 'deliverableController@create')->name('create_deliverable');
+Route::any('/comment_deliverable', 'deliverableController@comment')->name('comment_deliverable');
+Route::post('/edit_deliverable_form', 'deliverableController@editForm')->name('edit_deliverable_form');
+Route::post('/edit_deliverable', 'deliverableController@edit')->name('edit_deliverable');
+Route::post('/delete_deliverable', 'deliverableController@destroy')->name('delete_deliverable');
+
+// ------------PROJECT ISSUES MODULE---------------
+Route::any('/project/{id}/issues', 'IssuesController@index')->name('issues')->middleware('auth');
+Route::any('/project/{id}/issues/temp', 'IssuesController@indexTemp')->name('issues_temp')->middleware('auth:temp_user');
+
+Route::post('/create_issues', 'IssuesController@create')->name('create_issues');
+Route::post('/edit_issues_form', 'IssuesController@editForm')->name('edit_issues_form');
+Route::post('/edit_issues', 'IssuesController@edit')->name('edit_issues');
+Route::post('/delete_issues', 'IssuesController@destroy')->name('delete_issues');
+
+// ------------PROJECT LESSON LEARNT MODULE---------------
+Route::any('/project/{id}/lesson_learnt', 'LessonLearntController@index')->name('lesson_learnt')->middleware('auth');
+Route::any('/project/{id}/lesson_learnt/temp', 'LessonLearntController@indexTemp')->name('issues_temp')->middleware('auth:temp_user');
+
+Route::post('/create_lesson_learnt', 'LessonLearntController@create')->name('create_lesson_learnt');
+Route::post('/edit_lesson_learnt_form', 'LessonLearntController@editForm')->name('edit_lesson_learnt_form');
+Route::post('/edit_lesson_learnt', 'LessonLearntController@edit')->name('edit_lesson_learnt');
+Route::post('/delete_lesson_learnt', 'LessonLearntController@destroy')->name('delete_lesson_learnt');
+
+// ------------PROJECT RISK MODULE---------------
+Route::any('/project/{id}/risk', 'RiskController@index')->name('risk')->middleware('auth');
+Route::any('/project/{id}/risk/temp', 'RiskController@indexTemp')->name('risk_temp')->middleware('auth:temp_user');
+
+Route::post('/create_risk', 'RiskController@create')->name('create_risk');
+Route::post('/edit_risk_form', 'RiskController@editForm')->name('edit_risk_form');
+Route::post('/edit_risk', 'RiskController@edit')->name('edit_risk');
+Route::post('/delete_risk', 'RiskController@destroy')->name('delete_risk');
+
+// ------------PROJECT DOCS MODULE---------------
+Route::any('/project/{id}/project_docs', 'ProjectDocsController@index')->name('project_docs')->middleware('auth');
+Route::any('/project/{id}/project_docs/temp', 'ProjectDocsController@indexTemp')->name('project_docs_temp')->middleware('auth:temp_user');
+
+Route::post('/create_project_docs', 'ProjectDocsController@create')->name('create_project_docs');
+Route::post('/edit_project_docs_form', 'ProjectDocsController@editForm')->name('edit_project_docs_form');
+Route::post('/edit_project_docs_attachment_form', 'ProjectDocsController@attachmentForm')->name('edit_project_docs_attachment_form');
+Route::post('/edit_project_docs', 'ProjectDocsController@edit')->name('edit_project_docs');
+Route::post('/edit_project_docs_attachment', 'ProjectDocsController@editAttachment')->name('edit_project_docs_attachment');
+Route::post('/delete_project_docs', 'ProjectDocsController@destroy')->name('delete_project_docs');
+Route::any('/download_project_docs_attachment', 'ProjectDocsController@downloadAttachment')->name('download_project_docs_attachment');
+Route::post('/remove_project_docs_attachment', 'ProjectDocsController@removeAttachment')->name('remove_project_docs_attachment');
+
+
+
 // -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------
 Route::any('/request_category', 'RequestCategoryController@index')->name('request_category')->middleware('auth');
 Route::post('/create_request_cat', 'RequestCategoryController@create')->name('create_request_cat');

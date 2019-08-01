@@ -21,76 +21,33 @@ class ProjectDocs extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'goal_set' => 'required'
-    ];
-
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
+        'title' => 'required',
+        'attachment' => 'max:2058',
     ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
-
-    }
-
-    public function indi_user(){
-        return $this->belongsTo('App\User','user_id','id');
-
-    }
-
-    public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
-
-    }
-    public function hod(){
-        return $this->belongsTo('App\User','dept_head','id');
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
 
-    public function goal_set(){
-        return $this->belongsTo('App\model\UnitGoalSeries','goal_set_id','id');
+    public function project(){
+        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
 
-    }
-
-    public function i_goal_cat(){
-        return $this->belongsTo('App\model\IndiGoalCat','indi_goal_cat','id');
-
-    }
-
-    public function indiObj(){
-        return $this->hasMany('App\model\IndiObjective','indi_goal_id','id');
-
-    }
-
-    public function behavCompetency(){
-        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
-
-    }
-
-    public function compAssess(){
-        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
-
-    }
-
-    public static function digitalSign($column){
-        return Utility::digitalSign(self::table(), $column, $limit = 8);
     }
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P25);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P35);
         //return Utility::paginateAllData(self::table());
 
     }
@@ -165,35 +122,14 @@ class ProjectDocs extends Model
 
     }
 
-    public static function massData($column, $post = [])
+    public static function massData($column, $post)
     {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->orderBy('id','DESC')->get();
+        return Utility::massData(self::table(),$column, $post);
 
     }
-
-    public static function massDataPaginate($column, $post = [])
-    {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
-
-    }
-
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function massDataConditionPaginate($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
 
     }
 
@@ -221,5 +157,7 @@ class ProjectDocs extends Model
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
 
     }
+
+
 
 }

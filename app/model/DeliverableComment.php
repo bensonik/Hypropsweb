@@ -21,7 +21,7 @@ class DeliverableComment extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'goal_set' => 'required'
+        'comment' => 'required'
     ];
 
     public static $searchRules = [
@@ -40,52 +40,23 @@ class DeliverableComment extends Model
 
     }
 
-    public function indi_user(){
-        return $this->belongsTo('App\User','user_id','id');
+    public function tempUser(){
+        return $this->belongsTo('App\User','temp_user','id')->withDefault();
 
     }
 
-    public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
+    public function user(){
+        return $this->belongsTo('App\User','user_id','id')->withDefault();
 
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
     public function hod(){
-        return $this->belongsTo('App\User','dept_head','id');
+        return $this->belongsTo('App\User','dept_head','id')->withDefault();
 
-    }
-
-    public function goal_set(){
-        return $this->belongsTo('App\model\UnitGoalSeries','goal_set_id','id');
-
-    }
-
-    public function i_goal_cat(){
-        return $this->belongsTo('App\model\IndiGoalCat','indi_goal_cat','id');
-
-    }
-
-    public function indiObj(){
-        return $this->hasMany('App\model\IndiObjective','indi_goal_id','id');
-
-    }
-
-    public function behavCompetency(){
-        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
-
-    }
-
-    public function compAssess(){
-        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
-
-    }
-
-    public static function digitalSign($column){
-        return Utility::digitalSign(self::table(), $column, $limit = 8);
     }
 
     public static function paginateAllData()

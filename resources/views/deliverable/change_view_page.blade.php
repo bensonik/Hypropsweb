@@ -1,79 +1,4 @@
 
-    <!-- Default Size -->
-    <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Change(s)</h4>
-                </div>
-                <div class="modal-body">
-
-                    <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-                        <div class="body">
-                            <div class="row clearfix">
-
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select  class="form-control" name="priority" >
-                                                <option value="">Select Priority</option>
-                                                <option value="High">High</option>
-                                                <option value="Medium">Medium</option>
-                                                <option value="Low">Low</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-8">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <textarea type="text" class="form-control" name="change_description" placeholder="Change Description"></textarea>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </div>
-                        <input type="hidden" value="{{$item->id}}" name="project" />
-
-                    </form>
-
-                </div>
-                <div class="modal-footer">
-                    <button onclick="submitDefault('createModal','createMainForm','<?php echo url('create_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
-                        SAVE
-                    </button>
-                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Default Size -->
-    <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
-                </div>
-                <div class="modal-body" id="edit_content">
-
-                </div>
-                <div class="modal-footer">
-                    <button type="button"  onclick="submitDefault('editModal','editMainForm','<?php echo url('edit_change_log'); ?>','reload_data',
-                            '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
-                            class="btn btn-link waves-effect">
-                        SAVE CHANGES
-                    </button>
-                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class=""> <!-- style="overflow:hidden" -->
 
         <div class="clearfix"></div>
@@ -92,20 +17,10 @@
                                     <div class="card">
                                         <div class="header">
                                             <h2>
-                                                Selected Change(s) and Comments
+                                                Selected Deliverable and Comments
                                             </h2>
                                             <ul class="header-dropdown m-r--5">
-                                                @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
-                                                <li>
-                                                    <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                            '<?php echo url('delete_change_log'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
-                                                        <i class="fa fa-trash-o"></i>Delete
-                                                    </button>
-                                                </li>
-                                                @endif
+
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                         <i class="material-icons">more_vert</i>
@@ -135,7 +50,7 @@
                                                         </div>
                                                         <div class="media-body">
                                                             <h4 class="media-heading">{{$item->pro_head->firstname}} {{$item->pro_head->lastname}}</h4>
-                                                            {{$mainData->change_desc}} @ {{$mainData->created_at}}
+                                                            {{$mainData->del_desc}} @ {{$mainData->created_at}}
 
                                                             <div class="media" id="display_comment"></div>
                                                             @if(!empty($mainData->allComments))
@@ -177,18 +92,18 @@
                                                                     <div class="col-sm-12">
                                                                         <div class="form-group">
                                                                             <div class="form-line">
-                                                                                <textarea type="text" class="form-control" name="comment" placeholder="Comment on change"></textarea>
+                                                                                <textarea type="text" class="form-control" name="comment" placeholder="Comment on deliverable"></textarea>
                                                                             </div>
                                                                         </div>
                                                                     </div>
-                                                                        <input type="hidden" name="change_id" value="{{$mainData->id}}" />
+                                                                        <input type="hidden" name="deliverable_id" value="{{$mainData->id}}" />
                                                                         <input type="hidden" name="project" value="{{$item->id}}" />
                                                                     </form>
                                                                     <div class="row">
                                                                         <div class="col-sm-12">
                                                                                 <button type="button" class="form-control pull-right btn-info"
-                                                                                        onclick="submitComment('commentModal','commentMainForm','<?php echo url('comment_change_log'); ?>','display_comment',
-                                                                                                '<?php echo url('project/'.$item->id.'/change_log'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
+                                                                                        onclick="submitComment('commentModal','commentMainForm','<?php echo url('comment_deliverable'); ?>','display_comment',
+                                                                                                '<?php echo url('project/'.$item->id.'/deliverable'.\App\Helpers\Utility::authLink('temp_user')); ?>','<?php echo csrf_token(); ?>')"
                                                                                         name="comment" >Submit Comment</button>
 
                                                                         </div>

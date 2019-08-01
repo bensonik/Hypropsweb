@@ -46,6 +46,10 @@
                                         <td>Billing Method</td>
                                         <td>{{$item->billing->bill_name}}</td>
                                     </tr>
+                                    <tr>
+                                        <td>Project Status</td>
+                                        <td class="{{\App\Helpers\Utility::taskColor($item->project_status)}}">{{\App\Helpers\Utility::taskVal($item->project_status)}}</td>
+                                    </tr>
                                     </tbody>
                                 </table>
 

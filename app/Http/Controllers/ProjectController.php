@@ -126,6 +126,7 @@ class ProjectController extends Controller
                     'end_date' => Utility::standardDate($request->input('end_date')),
                     'bill_id' => $request->input('bill_method'),
                     'customer_id' => $request->input('customer'),
+                    'project_status' => $request->input('project_status'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -197,6 +198,7 @@ class ProjectController extends Controller
                 'end_date' => Utility::standardDate($request->input('end_date')),
                 'bill_id' => $request->input('bill_method'),
                 'customer_id' => $request->input('customer'),
+                'project_status' => $request->input('project_status'),
                 'updated_by' => Auth::user()->id
             ];
             $rowData = Project::specialColumns('project_name', $request->input('project_name'));

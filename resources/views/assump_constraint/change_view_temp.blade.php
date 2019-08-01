@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('change_log.change_view_page',['item'=>$item,'mainData'=>$mainData])
+    @include('assump_constraint.change_view_page',['item'=>$item,'mainData'=>$mainData])
 
 @endsection

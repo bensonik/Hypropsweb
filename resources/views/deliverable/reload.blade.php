@@ -7,8 +7,8 @@
 
         </th>
         <th>Project</th>
-        <th>Change</th>
-        <th>Priority</th>
+        <th>Deliverable</th>
+        <th>Comment</th>
         <th>Manage</th>
     </tr>
     </thead>
@@ -21,12 +21,14 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project->project_name}}</td>
-            <td>{{$data->change_desc}}</td>
-            <td>{{$data->priority}}</td>
+            <td>{{$data->del_desc}}</td>
+            <td>
+                <a href="<?php echo url('project/'.$item->id.'/deliverable/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+            </td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                 <td>
-                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_deliverable_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
             @endif
         </tr>

@@ -21,14 +21,9 @@ class Deliverable extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'goal_set' => 'required'
+        'deliverable' => 'required',
     ];
 
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
-    ];
 
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id');
@@ -37,16 +32,6 @@ class Deliverable extends Model
 
     public function user_u(){
         return $this->belongsTo('App\User','updated_by','id');
-
-    }
-
-    public function indi_user(){
-        return $this->belongsTo('App\User','user_id','id');
-
-    }
-
-    public function sup_id(){
-        return $this->belongsTo('App\User','supervisor_id','id');
 
     }
 
@@ -59,34 +44,11 @@ class Deliverable extends Model
 
     }
 
-    public function goal_set(){
-        return $this->belongsTo('App\model\UnitGoalSeries','goal_set_id','id');
+    public function project(){
+        return $this->belongsTo('App\model\Project','project_id','id');
 
     }
 
-    public function i_goal_cat(){
-        return $this->belongsTo('App\model\IndiGoalCat','indi_goal_cat','id');
-
-    }
-
-    public function indiObj(){
-        return $this->hasMany('App\model\IndiObjective','indi_goal_id','id');
-
-    }
-
-    public function behavCompetency(){
-        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
-
-    }
-
-    public function compAssess(){
-        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
-
-    }
-
-    public static function digitalSign($column){
-        return Utility::digitalSign(self::table(), $column, $limit = 8);
-    }
 
     public static function paginateAllData()
     {
@@ -204,9 +166,10 @@ class Deliverable extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->first();
 
     }
 

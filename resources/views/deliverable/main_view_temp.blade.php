@@ -2,6 +2,6 @@
 
 @section('content')
 
-    @include('change_log.page',['item'=>$item,'mainData'=>$mainData])
+    @include('deliverable.page',['item'=>$item,'mainData'=>$mainData])
 
 @endsection

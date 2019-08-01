@@ -68,7 +68,7 @@
             </div>
         </div>
     </li>
-    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id )
+    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
         <li>
             <div data-target="#all_request" onclick="navigatePage('<?php echo url('project/'.$item->id.'/all_request'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
                 <div class="ellipsis">
@@ -80,7 +80,7 @@
         </li>
     @endif
     <li>
-        <div data-target="#issues" data-toggle="tab">
+        <div data-target="#issues" onclick="navigatePage('<?php echo url('project/'.$item->id.'/issues'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Issues</span><br/>
                 <span class="account-amount">{{$item->issues}}</span><br/>
@@ -107,7 +107,7 @@
         </div>
     </li>
     <li class="">
-        <div data-target="#risk" data-toggle="tab">
+        <div data-target="#risk" onclick="navigatePage('<?php echo url('project/'.$item->id.'/risk'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div class="ellipsis">
                 <span class="account-type">Risk</span><br/>
                 <span class="account-amount">{{$item->risk}}</span><br/>
@@ -124,7 +124,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#deliverable" data-toggle="tab">
+        <div data-target="#deliverable" onclick="navigatePage('<?php echo url('project/'.$item->id.'/deliverable'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Deliverable(s)</span><br/>
                 <span class="account-amount">{{$item->deliverable}}</span><br/>
@@ -132,7 +132,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#documents" data-toggle="tab">
+        <div data-target="#documents" onclick="navigatePage('<?php echo url('project/'.$item->id.'/project_docs'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Documents</span><br/>
                 <span class="account-amount">{{$item->documents}}</span><br/>
@@ -140,7 +140,7 @@
         </div>
     </li>
     <li class="">
-        <div data-target="#lesson_learnt" data-toggle="tab">
+        <div data-target="#lesson_learnt"  onclick="navigatePage('<?php echo url('project/'.$item->id.'/lesson_learnt'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div class="ellipsis">
                 <span class="account-type">Lesson Learnt</span><br/>
                 <span class="account-amount">{{$item->lesson_learnt}}</span><br/>

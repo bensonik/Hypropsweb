@@ -147,7 +147,7 @@
 
                                 <div class="row">
                                     <div class="col-sm-11">
-                                        <button id="buttonId{{$cat->id}}_uid_{{\App\Helpers\Utility::checkAuth('temp_user')->id}}" onclick="submitTestDefault('testForm{{$cat->id}}','<?php echo url('submit_test_form'); ?>','reload_data',
+                                        <button id="buttonId{{$cat->id}}_uid_{{\App\Helpers\Utility::checkAuth('temp_user')->id}}_{{csrf_field()}}" onclick="submitTestDefault('testForm{{$cat->id}}','<?php echo url('submit_test_form'); ?>','reload_data',
                                                 '<?php echo url('test_list'); ?>','<?php echo csrf_token(); ?>','buttonId{{$cat->id}}')" type="button" class="btn btn-info waves-effect pull-right">
                                             Submit Test Category
                                         </button><hr/>
@@ -275,7 +275,7 @@
 
     window.onload = function () {
         var timing = '{{$mainData->showDuration}}';
-        var triggerButton = 'buttonId{{$mainData->showCat}}_uid_{{\App\Helpers\Utility::checkAuth('temp_user')->id}}';
+        var triggerButton = 'buttonId{{$mainData->showCat}}_uid_{{\App\Helpers\Utility::checkAuth('temp_user')->id}}_{{csrf_field()}}';
         var display = document.querySelector('#timing{{$mainData->showCat}}');
         startTimer(timing, display,triggerButton);
     };

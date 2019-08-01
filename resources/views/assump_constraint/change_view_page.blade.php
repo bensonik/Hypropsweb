@@ -45,12 +45,20 @@
 
                                                     <div class="media">
                                                         <div class="media-left">
+                                                            @if($mainData->user_type == \App\Helpers\Utility::T_USER)
                                                             <a href="#">
-                                                                <img class="media-object" src="{{ asset('images/'.\App\Helpers\Utility::checkAuth('temp_user')->photo) }}" width="64" height="64">
+                                                                <img class="media-object" src="{{ asset('images/'.$mainData->tempUser_c->photo) }}" width="64" height="64">
                                                             </a>
+                                                            @else
+                                                                <img class="media-object" src="{{ asset('images/'.$mainData->user_c->photo) }}" width="64" height="64">
+                                                            @endif
                                                         </div>
                                                         <div class="media-body">
-                                                            <h4 class="media-heading">{{\App\Helpers\Utility::checkAuth('temp_user')->firstname}} {{\App\Helpers\Utility::checkAuth('temp_user')->lastname}}</h4>
+                                                            @if($mainData->user_type == \App\Helpers\Utility::T_USER)
+                                                            <h4 class="media-heading">{{$mainData->tempUser_c->firstname}} {{$mainData->tempUser_c->lastname}}</h4>
+                                                            @else
+                                                            <h4 class="media-heading">{{$mainData->user_c->firstname}} {{$mainData->user_c->lastname}}</h4>
+                                                            @endif
                                                             {{$mainData->assump_desc}} @ {{$mainData->created_at}}
 
                                                             <div class="media" id="display_comment"></div>

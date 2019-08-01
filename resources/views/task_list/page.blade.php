@@ -41,6 +41,23 @@
                             </div>
 
                         </div>
+
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <div class="form-line">
+                                        <select class="form-control list_status" name="list_status" >
+                                            <option value="">Select Status</option>
+                                            @foreach(\App\Helpers\Utility::TASK_STATUS as $key => $task)
+                                                <option value="{{$key}}">{{$task}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                         <input type="checkbox" class="change_task" name="change_task" value="1" onclick="changeUserT('currentTList','formerTList','change_task','task_input','task_dropdown');" id="change_task" />Check to task(s) to existing task list
                         <hr/>
                         <h4>Add task(s) to list</h4>
@@ -177,6 +194,7 @@
                                                         <th>Project</th>
                                                         <th>Task List</th>
                                                         <th>Description</th>
+                                                        <th>Task List Status</th>
                                                         <th>No. of Task(s)</th>
                                                         <th>Created by</th>
                                                         <th>Created at</th>
@@ -202,6 +220,7 @@
                                                             <td>{{$data->project->project_name}}</td>
                                                             <td>{{$data->list_name}}</td>
                                                             <td>{{$data->list_desc}}</td>
+                                                            <td class="{{\App\Helpers\Utility::taskColor($data->list_status)}}">{{\App\Helpers\Utility::taskVal($data->list_status)}}</td>
                                                             <td class="btn-link">
                                                                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
                                                             </td>

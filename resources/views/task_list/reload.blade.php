@@ -11,6 +11,7 @@
         <th>Project</th>
         <th>Task List</th>
         <th>Description</th>
+        <th>Task List Status</th>
         <th>No. of Task(s)</th>
         <th>Created by</th>
         <th>Created at</th>
@@ -25,7 +26,7 @@
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
             </td>
-            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
+            @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                 <td>
                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
@@ -36,6 +37,7 @@
             <td>{{$data->project->project_name}}</td>
             <td>{{$data->list_name}}</td>
             <td>{{$data->list_desc}}</td>
+            <td class="{{\App\Helpers\Utility::taskColor($data->list_status)}}">{{\App\Helpers\Utility::taskVal($data->list_status)}}</td>
             <td class="btn-link">
                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','task_form','taskModal','<?php echo url('task_form') ?>','<?php echo csrf_token(); ?>')"><span class="badge bg-cyan ">{{$data->count_task}} task(s)</span> <span class="btn-link">View</span></a>
             </td>

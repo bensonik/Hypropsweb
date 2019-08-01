@@ -10,6 +10,7 @@
         <th>Project</th>
         <th>Start Date</th>
         <th>End Date</th>
+        <th>Project Status</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -28,6 +29,7 @@
             <td><a href="{{url('project_item/'.$data->id.\App\Helpers\Utility::authLink('temp_user'))}}">{{$data->project_name}}</a></td>
             <td>{{$data->start_date}}</td>
             <td>{{$data->end_date}}</td>
+            <td class="{{\App\Helpers\Utility::taskColor($data->project_status)}}">{{\App\Helpers\Utility::taskVal($data->project_status)}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -41,9 +43,13 @@
             <td>{{$data->created_at}}</td>
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_project_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-            </td>
+            @if(in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::HR_MANAGEMENT) || $data->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                <td>
+                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_project_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                </td>
+            @else
+                <td></td>
+            @endif
         </tr>
     @endforeach
     </tbody>
