@@ -148,7 +148,7 @@
         </div>
     </li>
     <li>
-        <div data-target="#status_report" data-toggle="tab">
+        <div data-target="#status_report" onclick="navigatePage('<?php echo url('project/'.$item->id.'/project_status'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Status Report</span><br/>
             </div>

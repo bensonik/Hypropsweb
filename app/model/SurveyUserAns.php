@@ -39,6 +39,11 @@ class SurveyUserAns extends Model
 
     }
 
+    public function question(){
+        return $this->belongsTo('App\model\SurveyQuest','quest_id','id')->withDefault();
+
+    }
+
     public function department(){
         return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
@@ -162,9 +167,9 @@ class SurveyUserAns extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return Utility::firstRow2(self::table(),$column, $post2,$column2, $post);
 
     }
 

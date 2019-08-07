@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-striped" id="print_text_data">
+<table class="table table-bordered table-hover table-striped" id="print_participant_data">
     <thead>
     <tr>
         <th>
@@ -8,7 +8,7 @@
         </th>
 
         <th>Name</th>
-        <th>Statement</th>
+        <th>Created at</th>
     </tr>
     </thead>
     <tbody>
@@ -20,7 +20,7 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->participant->firstname}} {{$data->participant->lastname}}</td>
-            <td>{{$data->text_answer}}</td>
+            <td>{{$data->created_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
         </tr>

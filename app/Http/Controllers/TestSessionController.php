@@ -157,34 +157,40 @@ class TestSessionController extends Controller
             }
         }
 
+        //ENSURE THAT ANSWER DOES'NT EXIST ALREADY IN THE DB
+        $testResult = (Utility::authColumn('temp_user') == 'temp_user') ? TestTempUserAns::firstRow2('session_id',$session,'user_id',Utility::checkAuth('temp_user')->id) : TestUserAns::firstRow2('session_id',$session,'user_id',Utility::checkAuth('temp_user')->id);
+
+        if(empty($testResult)){
 
             for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
                 $ansId = '';
                 $correct = 0;
-                    if($request->input('answer' . $i) != '' && $request->input('text_type' . $i) != 1) {
-                        $explodeAnswer = explode('|', $request->input('answer' . $i));
-                        $ansId = $explodeAnswer[0];
-                        $correct = $explodeAnswer[1];
-                    }
-                    $dbDATANEW = [
-                        'test_id' => $test,
-                        'session_id' => $session,
-                        'cat_id' => $category,
-                        'quest_id' => $request->input('question' . $i),
-                        'text_answer' => $request->input('answer' . $i),
-                        'text_type' => $request->input('text_type' . $i),
-                        'ans_id' => $ansId,
-                        'correct_status' => $correct,
-                        'user_id' => Utility::checkAuth('temp_user')->id,
-                        'created_by' => Utility::checkAuth('temp_user')->id,
-                        'created_at' => date('Y-m-d H:i:s'),
-                        'status' => Utility::STATUS_ACTIVE
-                    ];
+                if($request->input('answer' . $i) != '' && $request->input('text_type' . $i) != 1) {
+                    $explodeAnswer = explode('|', $request->input('answer' . $i));
+                    $ansId = $explodeAnswer[0];
+                    $correct = $explodeAnswer[1];
+                }
+                $dbDATANEW = [
+                    'test_id' => $test,
+                    'session_id' => $session,
+                    'cat_id' => $category,
+                    'quest_id' => $request->input('question' . $i),
+                    'text_answer' => $request->input('answer' . $i),
+                    'text_type' => $request->input('text_type' . $i),
+                    'ans_id' => $ansId,
+                    'correct_status' => $correct,
+                    'user_id' => Utility::checkAuth('temp_user')->id,
+                    'created_by' => Utility::checkAuth('temp_user')->id,
+                    'created_at' => date('Y-m-d H:i:s'),
+                    'status' => Utility::STATUS_ACTIVE
+                ];
 
-                    $create = Utility::createData(Utility::authTestTable('temp_user'), $dbDATANEW);
+                $create = Utility::createData(Utility::authTestTable('temp_user'), $dbDATANEW);
 
 
             }
+
+        }
 
             return response()->json([
                 'message' => 'good',

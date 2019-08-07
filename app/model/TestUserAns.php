@@ -198,9 +198,9 @@ class TestUserAns extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return Utility::firstRow2(self::table(),$column, $post2,$column2, $post);
 
     }
 

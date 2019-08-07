@@ -61,6 +61,20 @@ class SurveyResultController extends Controller
 
     }
 
+    public function surveyParticipants(Request $request)
+    {
+        //
+        $mainData = [];
+        if($request->input('param2') == 'temp_user'){
+            $mainData = SurveyTempUserAns::specialColumns2('quest_id',$request->input('dataId'),'session_id',$request->input('param1'));
+        }else{
+            $mainData = SurveyUserAns::specialColumns2('quest_id',$request->input('dataId'),'session_id',$request->input('param1'));
+        }
+
+        return view::make('survey_result.participant_preview')->with('mainData',$mainData);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -140,7 +154,7 @@ class SurveyResultController extends Controller
 
                 $questNum = 0;
                 $questCatId = array_unique($questCatArr);
-                $questionCategory = SurveyQuestCat::massData('id',$questCatId);
+                $questionCategory = SurveyQuestCat::massDataAsc('id',$questCatId);
                 foreach($questionCategory as $catId){
 
                     $ansScoreCatArr = [];

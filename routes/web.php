@@ -323,6 +323,11 @@ Route::post('/delete_project_docs', 'ProjectDocsController@destroy')->name('dele
 Route::any('/download_project_docs_attachment', 'ProjectDocsController@downloadAttachment')->name('download_project_docs_attachment');
 Route::post('/remove_project_docs_attachment', 'ProjectDocsController@removeAttachment')->name('remove_project_docs_attachment');
 
+// ------------PROJECT STATUS MODULE---------------
+Route::any('/project/{id}/project_status', 'ProjectStatusController@index')->name('project_status')->middleware('auth');
+Route::any('/project/{id}/project_status/temp', 'ProjectStatusController@indexTemp')->name('project_status_temp')->middleware('auth:temp_user');
+Route::any('/project_status', 'ProjectStatusController@projectStatus')->name('project_general_status')->middleware('auth');
+
 
 
 // -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------
@@ -757,6 +762,7 @@ Route::post('/delete_survey_session', 'SurveySessionController@destroy')->name('
 Route::any('/survey_result', 'SurveyResultController@index')->name('survey_result')->middleware('auth');
 Route::any('/search_survey_result', 'SurveyResultController@searchSurvey')->name('search_survey_result');
 Route::any('/survey_statements', 'SurveyResultController@surveyStatements')->name('survey_statements');
+Route::any('/survey_participants', 'SurveyResultController@surveyParticipants')->name('survey_participants');
 
 // -------------USER PIN CODE MODULE-----------
 Route::any('/user_pin_code', 'UserPinCodeController@index')->name('user_pin_code')->middleware('auth');

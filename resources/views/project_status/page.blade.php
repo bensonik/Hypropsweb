@@ -17,18 +17,10 @@
                                     <div class="card">
                                         <div class="header">
                                             <h2>
-                                                Today
+                                                Project Status
                                             </h2>
                                             <ul class="header-dropdown m-r--5">
-                                                <li>
-                                                    <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
-                                                </li>
-                                                <li>
-                                                    <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('project/'.$item->id.'/issues'.\App\Helpers\Utility::authLink('temp_user')); ?>',
-                                                            '<?php echo url('delete_issues'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
-                                                        <i class="fa fa-trash-o"></i>Delete
-                                                    </button>
-                                                </li>
+
                                                 <li class="dropdown">
                                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                                         <i class="material-icons">more_vert</i>
@@ -46,82 +38,575 @@
                                             </ul>
                                         </div>
 
+                                        <!-- Hover Zoom Effect -->
+                                        <div class="block-header">
+                                            <h2></h2>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="info-box-3 bg-pink hover-zoom-effect">
+                                                    <div class="icon">
+                                                        <i class="material-icons">equalizer</i>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="text">Overdue Task(s)</div>
+                                                        <div class="number">{{$item->overdueTask}}</div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="info-box-3 bg-blue hover-zoom-effect">
+                                                    <div class="icon">
+                                                        <i class="material-icons">equalizer</i>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="text">Overdue Task List</div>
+                                                        <div class="number">{{$item->overdueList}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="info-box-3 bg-light-blue hover-zoom-effect">
+                                                    <div class="icon">
+                                                        <i class="material-icons">equalizer</i>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="text">Overdue Milestone</div>
+                                                        <div class="number">{{$item->overdueMilestone}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                                                <div class="info-box-3 bg-cyan hover-zoom-effect">
+                                                    <div class="icon">
+                                                        <i class="material-icons">equalizer</i>
+                                                    </div>
+                                                    <div class="content">
+                                                        <div class="text">My Overdue Task</div>
+                                                        <div class="number">{{$item->overdueUserTask}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- #END# Hover Zoom Effect -->
+
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Task(s) (Open/Closed/Total)
+                                                            <small></small>
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+                                                        <h2>Total Tasks -- {{$item->totalTask}}</h2>
+                                                        <div class="row clearfix">
+
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Task (Open/Closed/Total)</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+
+                                                                        <tr>
+                                                                            <td>Open</td>
+                                                                            <td>{{$item->openTask}}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td>Closed</td>
+                                                                            <td>{{$item->closedTask}}</td>
+                                                                        </tr>
+
+                                                                    </tbody>
+
+                                                                </table>
 
 
-                                        <div class="body table-responsive" id="reload_data">
-                                            <table class="table table-bordered table-hover table-striped" id="main_table">
-                                                <thead>
-                                                <tr>
-                                                    <th>
-                                                        <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                                                               name="check_all" class="" />
+                                                        </div>
 
-                                                    </th>
-                                                    <th>Project</th>
-                                                    <th>Issue Description</th>
-                                                    <th>Impact</th>
-                                                    <th>Resolution</th>
-                                                    <th>Importance</th>
-                                                    <th>Created by</th>
-                                                    <th>Updated by</th>
-                                                    <th>Created at</th>
-                                                    <th>Updated by</th>
-                                                    <th>Manage</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                @foreach($mainData as $data)
-                                                <tr>
-                                                    <td scope="row">
-                                                        <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- #END# Basic Examples -->
+                                            <!-- With Icons -->
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Task List (Open/Closed/Total)
+                                                        </h2>
 
-                                                    </td>
-                                                    <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                                    <td>{{$data->project->project_name}}</td>
-                                                    <td>{{$data->issue_desc}}</td>
-                                                    <td>{{$data->impact}}</td>
-                                                    <td>{{$data->resolution}}</td>
-                                                    <td>{{$data->importance}}</td>
-                                                    <td>
-                                                       @if($data->user_type == \App\Helpers\Utility::P_USER)
-                                                       {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                                                       @else
-                                                       {{$data->tempUser_c->firstname}} {{$data->tempUser_c->lastname}}
-                                                       @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($data->user_type == \App\Helpers\Utility::P_USER)
-                                                            {{$data->user_u->firstname}} {{$data->user_u->lastname}}
-                                                        @else
-                                                            {{$data->tempUser_u->firstname}} {{$data->tempUser_u->lastname}}
-                                                        @endif
-                                                    </td>
-                                                    <td>{{$data->created_at}}</td>
-                                                    <td>{{$data->updated_at}}</td>
-                                                    <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                                    @if($data->user_type == \App\Helpers\Utility::P_USER && $data->created_by == \App\Helpers\Utility::checkAuth('temp_user')->id)
+                                                    </div>
+                                                    <div class="body">
+                                                        <h2>Total Task List -- {{$item->totalList}}</h2>
+                                                        <div class="row">
+                                                            <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Task List </th>
+                                                                <th>
+                                                                    Number
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
 
-                                                    <td>
-                                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_issues_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                                    </td>
-                                                    @elseif($data->user_type == \App\Helpers\Utility::T_USER && $data->created_by == \App\Helpers\Utility::checkAuth('temp_user')->id)
-                                                        <td>
-                                                            <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_issues_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                                        </td>
-                                                    @else
-                                                    <td></td>
-                                                    @endif
-                                                </tr>
-                                                @endforeach
-                                                </tbody>
-                                            </table>
+                                                            <tbody>
 
-                                            <div class=" pagination pull-right">
-                                                {!! $mainData->render() !!}
+                                                            <tr>
+                                                                <td>Open</td>
+                                                                <td>{{$item->openList}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Closed</td>
+                                                                <td>{{$item->closedList}}</td>
+                                                            </tr>
+
+                                                            </tbody>
+
+                                                        </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- #END# With Icons -->
+                                        </div>
+
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Milestone (Open/Closed/Total)
+                                                            <small></small>
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+                                                        <h2>Total Milestone -- {{$item->totalMilestone}}</h2>
+                                                        <div class="row clearfix">
+
+                                                            <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Milestone (Open/Closed/Total)</th>
+                                                                    <th>
+                                                                        Number
+                                                                    </th>
+                                                                </tr>
+                                                                </thead>
+
+                                                                <tbody>
+
+                                                                <tr>
+                                                                    <td>Open</td>
+                                                                    <td>{{$item->openMilestone}}</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td>Closed</td>
+                                                                    <td>{{$item->closedMilestone}}</td>
+                                                                </tr>
+
+                                                                </tbody>
+
+                                                            </table>
+
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- #END# Basic Examples -->
+                                            <!-- With Icons -->
+                                            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Overdue (Task/Task List/Milestone)
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+                                                        <table class="highchart" id="" data-graph-container-before="1" data-graph-type="column" >
+                                                            <thead>
+                                                            <tr>
+                                                                <th>Type</th>
+                                                                <th>
+                                                                    Number
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+
+                                                            <tbody>
+
+                                                            <tr>
+                                                                <td>Overdue Milestone</td>
+                                                                <td>{{$item->overdueMilestone}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Overdue Task List</td>
+                                                                <td>{{$item->overdueList}}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Overdue Task(s)</td>
+                                                                <td>{{$item->overdueTask}}</td>
+                                                            </tr>
+
+                                                            </tbody>
+
+                                                        </table>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- #END# With Icons -->
+                                        </div>
+
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class=" col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Task Status
+                                                            <small></small>
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+
+                                                        <!-- Nav tabs -->
+                                                        <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                                            <li role="presentation" class="active"><a href="#bar_chart_task" data-toggle="tab">Bar Chart</a></li>
+                                                            <li role="presentation"><a href="#pie_chart_task" data-toggle="tab">Pie Chart</a></li>
+                                                        </ul>
+
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content">
+                                                            <div role="tabpanel" class="tab-pane fade in active" id="bar_chart_task">
+                                                                <b>Bar Chart</b>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="column" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Task Status</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->taskStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane fade" id="pie_chart_task">
+                                                                <b>Pie Chart</b>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Tasks</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->taskStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         </div>
 
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class=" col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Task List Status
+                                                            <small></small>
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+
+                                                        <!-- Nav tabs -->
+                                                        <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                                            <li role="presentation" class="active"><a href="#bar_chart_list" data-toggle="tab">Bar Chart</a></li>
+                                                            <li role="presentation"><a href="#pie_chart_list" data-toggle="tab">Pie Chart</a></li>
+                                                        </ul>
+
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content">
+                                                            <div role="tabpanel" class="tab-pane fade in active" id="bar_chart_list">
+                                                                <b>Bar Chart</b>
+
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="column" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Task List</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->listStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane fade" id="pie_chart_list">
+                                                                <b>Pie Chart</b>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Task List</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->listStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class=" col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            Milestone Status
+                                                            <small></small>
+                                                        </h2>
+
+                                                    </div>
+                                                    <div class="body">
+
+                                                        <!-- Nav tabs -->
+                                                        <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                                            <li role="presentation" class="active"><a href="#bar_chart_milestone" data-toggle="tab">Bar Chart</a></li>
+                                                            <li role="presentation"><a href="#pie_chart_milestone" data-toggle="tab">Pie Chart</a></li>
+                                                        </ul>
+
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content">
+                                                            <div role="tabpanel" class="tab-pane fade in active" id="bar_chart_milestone">
+                                                                <b>Bar Chart</b>
+
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="column" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Milestone Status</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->milestoneStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane fade" id="pie_chart_milestone">
+                                                                <b>Pie Chart</b>
+                                                                <p>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Milestone Status</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->milestoneStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row clearfix">
+                                            <!-- Basic Examples -->
+                                            <div class=" col-sm-12 col-xs-12">
+                                                <div class="card">
+                                                    <div class="header">
+                                                        <h2>
+                                                            My Task Status
+                                                            <small></small>
+                                                        </h2>
+                                                        <ul class="header-dropdown m-r--5">
+                                                            <li class="dropdown">
+                                                                <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                                    <i class="material-icons">more_vert</i>
+                                                                </a>
+                                                                <ul class="dropdown-menu pull-right">
+                                                                    <li><a href="javascript:void(0);">Action</a></li>
+                                                                    <li><a href="javascript:void(0);">Another action</a></li>
+                                                                    <li><a href="javascript:void(0);">Something else here</a></li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="body">
+
+                                                        <!-- Nav tabs -->
+                                                        <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                                            <li role="presentation" class="active"><a href="#bar_chart_my_task" data-toggle="tab">Bar Chart</a></li>
+                                                            <li role="presentation"><a href="#pie_chart_my_task" data-toggle="tab">Pie Chart</a></li>
+                                                        </ul>
+
+                                                        <!-- Tab panes -->
+                                                        <div class="tab-content">
+                                                            <div role="tabpanel" class="tab-pane fade in active" id="bar_chart_my_task">
+                                                                <b>Bar Chart</b>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="column" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Tasks</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->taskUserStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+
+                                                            </div>
+                                                            <div role="tabpanel" class="tab-pane fade" id="pie_chart_my_task">
+                                                                <b>Pie Chart</b>
+                                                                <table class="highchart" id="" data-graph-container-before="1" data-graph-type="pie" style="display:none">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th>Task Status</th>
+                                                                        <th>
+                                                                            Number
+                                                                        </th>
+                                                                    </tr>
+                                                                    </thead>
+
+                                                                    <tbody>
+                                                                    @foreach($item->taskUserStatus as $key => $var)
+                                                                        <tr>
+                                                                            <td>{{$key}}</td>
+                                                                            <td>{{$var}}</td>
+                                                                        </tr>
+                                                                    @endforeach
+
+                                                                    </tbody>
+
+                                                                </table>
+
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
 
 
                                     </div>
@@ -170,12 +655,12 @@
 </script>
 
     <script>
-        /*$(function() {
-            $( ".datepicker" ).datepicker({
-                /!*changeMonth: true,
-                changeYear: true*!/
-            });
-        });*/
+        $(document).ready(function() {
+            $('table.highchart').highchartTable();
+        });
     </script>
+
+
+
 
 

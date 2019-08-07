@@ -317,17 +317,18 @@
 
     }
 
-    function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token){
+    function submitQuestDefaultEdit(questId,formId,submitUrl,reload_id,reloadUrl,token,buttonId){
+        $("#"+buttonId).attr("disabled", true);
         var inputVars = $('#'+formId).serialize();
         var quest = CKEDITOR.instances[questId].getData();
         var postVars = inputVars+'&question='+quest;
         //alert(postVars);
-        //$('#loading_modal').modal('show');
+        $('#loading_modal').modal('show');
         sendRequestForm(submitUrl,token,postVars)
         ajax.onreadystatechange = function(){
             if(ajax.readyState == 4 && ajax.status == 200) {
 
-                //$('#loading_modal').modal('hide');
+                $('#loading_modal').modal('hide');
                 var rollback = JSON.parse(ajax.responseText);
                 var message2 = rollback.message2;
                 if(message2 == 'fail'){

@@ -248,7 +248,7 @@
                                                 <div class="col-sm-2 ">
                                                     <div class=" pull-right">
                                                         <div class="">
-                                                            <span class="btn-link" >Total Participants -- {{$quest->countPeople}}</span>
+                                                            <a onclick="fetchStatement('{{$quest->id}}','text_preview','textModal','<?php echo url('survey_participants') ?>','<?php echo csrf_token(); ?>','{{$mainData->sessionId}}','{{$mainData->participantType}}');"><span class="btn-link" >Total Participants -- {{$quest->countPeople}}</span></a>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -184,8 +184,8 @@
                                             <div class="row">
                                                 <div class="col-sm-11">
                                                     @if($resultCheck != 1)
-                                                    <button onclick="submitQuestDefaultEdit('question{{$quest->id}}','questOptionForm{{$quest->id}}','<?php echo url('edit_survey_question'); ?>','reload_data',
-                                                            '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
+                                                    <button id="dept_id_{{$dept->id}}_{{csrf_field()}}" onclick="submitQuestDefaultEdit('question{{$quest->id}}','questOptionForm{{$quest->id}}','<?php echo url('edit_survey_question'); ?>','reload_data',
+                                                            '<?php echo url('survey_question'); ?>','<?php echo csrf_token(); ?>','{{csrf_field()}}')" type="button" class="btn btn-info waves-effect pull-right">
                                                         SAVE
                                                     </button><hr/>
                                                     @endif

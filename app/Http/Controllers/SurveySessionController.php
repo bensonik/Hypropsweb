@@ -158,45 +158,52 @@ class SurveySessionController extends Controller
         $validator = Validator::make($request->all(),$mainRules);
         if($validator->passes()) {
 
-            for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
-                if ($request->input('text_type' . $i) != '1') {
-                    $explodeAnswer = explode('|', $request->input('answer' . $i));
-                    $ansId = $explodeAnswer[0];
-                    $ansCatId = $explodeAnswer[1];
-                    $dbDATANEW = [
-                        'survey_id' => $survey,
-                        'session_id' => $session,
-                        'dept_id' => $dept,
-                        'quest_id' => $request->input('question' . $i),
-                        'text_type' => $request->input('text_type' . $i),
-                        'ans_id' => $ansId,
-                        'quest_cat_id' => $request->input('question_cat' . $i),
-                        'ans_cat_id' => $ansCatId,
-                        'user_id' => Utility::checkAuth('temp_user')->id,
-                        'created_by' => Utility::checkAuth('temp_user')->id,
-                        'status' => Utility::STATUS_ACTIVE
-                    ];
+            //ENSURE THAT ANSWER DOES'NT EXIST ALREADY IN THE DB
+            $surveyResult = (Utility::authColumn('temp_user') == 'temp_user') ? SurveyTempUserAns::firstRow2('session_id',$session,'user_id',Utility::checkAuth('temp_user')->id) : SurveyUserAns::firstRow2('session_id',$session,'user_id',Utility::checkAuth('temp_user')->id);
 
-                    $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
-                } else {
+            if(empty($surveyResult)){
+                for ($i = 1; $i <= $countQuest; $i++) {   //DO FOLLOWING IF QUESTION HAVE EXTRA ANSWER OPTIONS
+                    if ($request->input('text_type' . $i) != '1') {
+                        $explodeAnswer = explode('|', $request->input('answer' . $i));
+                        $ansId = $explodeAnswer[0];
+                        $ansCatId = $explodeAnswer[1];
+                        $dbDATANEW = [
+                            'survey_id' => $survey,
+                            'session_id' => $session,
+                            'dept_id' => $dept,
+                            'quest_id' => $request->input('question' . $i),
+                            'text_type' => $request->input('text_type' . $i),
+                            'ans_id' => $ansId,
+                            'quest_cat_id' => $request->input('question_cat' . $i),
+                            'ans_cat_id' => $ansCatId,
+                            'user_id' => Utility::checkAuth('temp_user')->id,
+                            'created_by' => Utility::checkAuth('temp_user')->id,
+                            'status' => Utility::STATUS_ACTIVE
+                        ];
 
-                    $dbDATANEW = [
-                        'survey_id' => $survey,
-                        'session_id' => $session,
-                        'dept_id' => $dept,
-                        'quest_id' => $request->input('question' . $i),
-                        'text_type' => $request->input('text_type' . $i),
-                        'text_answer' => $request->input('answer' . $i),
-                        'quest_cat_id' => $request->input('question_cat' . $i),
-                        'user_id' => Utility::checkAuth('temp_user')->id,
-                        'created_by' => Utility::checkAuth('temp_user')->id,
-                        'status' => Utility::STATUS_ACTIVE
-                    ];
+                        $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
+                    } else {
 
-                    $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
+                        $dbDATANEW = [
+                            'survey_id' => $survey,
+                            'session_id' => $session,
+                            'dept_id' => $dept,
+                            'quest_id' => $request->input('question' . $i),
+                            'text_type' => $request->input('text_type' . $i),
+                            'text_answer' => $request->input('answer' . $i),
+                            'quest_cat_id' => $request->input('question_cat' . $i),
+                            'user_id' => Utility::checkAuth('temp_user')->id,
+                            'created_by' => Utility::checkAuth('temp_user')->id,
+                            'status' => Utility::STATUS_ACTIVE
+                        ];
 
+                        $create = Utility::createData(Utility::authSurveyTable('temp_user'),$dbDATANEW);
+
+                    }
                 }
+
             }
+
 
             return response()->json([
                 'message' => 'good',

@@ -836,7 +836,10 @@
                             <a href="{{url('project')}}">Projects</a>
                         </li>
                         <li>
-                            <a href="{{url('project')}}">Report Dashboard</a>
+                            <a href="{{url('project_status')}}">Status Report Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="{{url('project_status')}}">Custom Report Dashboard</a>
                         </li>
                         <li>
                             <a href="{{url('temp_user')}}">Contract/External Users</a>
