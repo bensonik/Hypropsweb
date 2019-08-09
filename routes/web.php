@@ -328,6 +328,8 @@ Route::any('/project/{id}/project_status', 'ProjectStatusController@index')->nam
 Route::any('/project/{id}/project_status/temp', 'ProjectStatusController@indexTemp')->name('project_status_temp')->middleware('auth:temp_user');
 Route::any('/project_status', 'ProjectStatusController@projectStatus')->name('project_general_status')->middleware('auth');
 
+Route::any('/project_report', 'ProjectReportController@index')->name('project_report')->middleware('auth');
+Route::any('/search_project_report', 'ProjectReportController@searchReport')->name('search_report')->middleware('auth');
 
 
 // -------------REQUEST CATEGORY MODULE FOR REQUISITION-----------

@@ -74,25 +74,6 @@ class Task extends Model
 
     }
 
-    public function indiObj(){
-        return $this->hasMany('App\model\IndiObjective','indi_goal_id','id');
-
-    }
-
-    public function behavCompetency(){
-        return $this->hasMany('App\model\BehavComp','indi_goal_id','id');
-
-    }
-
-    public function compAssess(){
-        return $this->hasMany('App\model\CompetencyAssess','indi_goal_id','id');
-
-    }
-
-    public static function digitalSign($column){
-        return Utility::digitalSign(self::table(), $column, $limit = 8);
-    }
-
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P25);
@@ -173,6 +154,32 @@ class Task extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function specialColumnsDate3($column, $post, $column2, $post2, $column3, $post3)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '>=',$post2)->where($column3, '<=',$post3)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate4($column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '>=',$post2)->where($column3, '<=',$post3)->where($column4, '<=',$post4)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate5($column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->where($column4, '>=',$post4)
+            ->where($column5, '<=',$post5)->orderBy('id','DESC')->get();
 
     }
 

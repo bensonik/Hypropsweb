@@ -163,6 +163,33 @@ class TaskItems extends Model
 
     }
 
+    public static function specialColumnsDate3($column, $post, $column2, $post2, $column3, $post3)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::join('tasks', 'tasks.id', '=', 'task_items.task_id')
+            ->where($column, '=',$post)
+            ->where('task_items.status', '=','1')
+            ->where(function ($query) use($column2,$column3,$post2,$post3){
+                $query->where($column2,'>=',$post2)
+                    ->where($column3,'<=',$post3);
+            })->get();
+
+    }
+
+    public static function specialColumnsDate4($column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::join('tasks', 'tasks.id', '=', 'task_items.task_id')
+            ->where($column, '=',$post)
+            ->where($column2, '=',$post2)
+            ->where('task_items.status', '=','1')
+            ->where(function ($query) use($column3,$column4,$post3,$post4){
+                $query->where($column3,'>=',$post3)
+                    ->where($column4,'<=',$post4);
+            })->get();
+
+    }
+
     public static function massData($column, $post = [])
     {
         //return Utility::massData(self::table(),$column, $post);
