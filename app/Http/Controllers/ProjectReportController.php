@@ -49,6 +49,31 @@ class ProjectReportController extends Controller
 
     }
 
+    public function index2(Request $request, $id)
+    {
+        //
+        //$req = new Request();
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
+        //print_r($project);exit();
+
+        return view::make(Utility::authBlade('temp_user','project_report_single.main_view','project_report_single.main_view_temp'))
+            ->with('item',$project);
+
+    }
+
+    public function indexTemp(Request $request, $id)
+    {
+        //
+        //$req = new Request();
+        $project = Project::firstRow('id',$id);
+        Utility::processProjectItem($project);
+
+        return view::make(Utility::authBlade('temp_user','project_report_single.main_view','project_report_single.main_view_temp'))
+            ->with('item',$project);
+
+    }
+
     public function searchReport(Request $request)
     {
         //

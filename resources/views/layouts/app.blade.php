@@ -378,6 +378,9 @@
                                 <li>
                                     <a href="{{url('survey_access')}}">Config Individual Survey Access</a>
                                 </li>
+                                <li>
+                                    <a href="{{url('jobs_access')}}">Config Jobs/Talent Access</a>
+                                </li>
                             </ul>
                         </li>
 
@@ -836,6 +839,9 @@
                             <a href="{{url('project')}}">Projects</a>
                         </li>
                         <li>
+                            <a href="{{url('contract/staff/birthday')}}">Birthday(Temporary/Contract Staff)</a>
+                        </li>
+                        <li>
                             <a href="{{url('project_status')}}">Status Report Dashboard</a>
                         </li>
                         <li>
@@ -851,6 +857,24 @@
                     </ul>
                 </li>
 
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('survey_access'))
+                    <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">spellcheck</i>
+                            <span>Jobs/Talent Management</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="{{url('jobs')}}">Manage Jobs</a>
+                            </li>
+                            <li>
+                                <a href="{{url('filter_job_applicants')}}">Filter Job Applicants</a>
+                            </li>
+
+                        </ul>
+                    </li>
+                @endif
+
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">trending_down</i>
@@ -865,6 +889,9 @@
                             </li>
                             <li>
                                 <a href="{{url('idp')}}">Individual Development Plan</a>
+                            </li>
+                            <li>
+                                <a href="{{url('birthday')}}">Birthdays</a>
                             </li>
                             <li>
                                 <a href="{{url('salary_advance_requests')}}">Salary Advance Requests</a>

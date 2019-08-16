@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class Task extends Model
+class JobsAccess extends Model
 {
     //
-    protected  $table = 'tasks';
+    protected  $table = 'jobs_access';
 
     private static function table(){
-        return 'tasks';
+        return 'jobs_access';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,14 +21,8 @@ class Task extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'task_title' => 'required',
-        'task_status' => 'required',
-        //'user' => 'required',
-        'start_date' => 'required|date',
-        'end_date' => 'required|date',
+        'user' => 'required',
     ];
-
-
 
     public function user_c(){
         return $this->belongsTo('App\User','created_by','id')->withDefault();
@@ -40,43 +34,23 @@ class Task extends Model
 
     }
 
-    public function assignee(){
-        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
-
-    }
-
-    public function extUser(){
-        return $this->belongsTo('App\model\TempUsers','temp_user','id')->withDefault();
-
-    }
-
-    public function temp_user(){
-        return $this->belongsTo('App\User','temp_user','id')->withDefault();
-
-    }
-
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
+        return $this->belongsTo('App\model\Department','dept','id');
 
     }
-    public function project(){
-        return $this->belongsTo('App\model\Project','project_id','id')->withDefault();
-
-    }
-
-    public function milestone(){
-        return $this->belongsTo('App\model\Milestone','milestone_id','id')->withDefault();
+    public function access_user(){
+        return $this->belongsTo('App\User','user_id','id');
 
     }
 
-    public function taskList(){
-        return $this->belongsTo('App\model\TaskList','task_list_id','id')->withDefault();
+    public function approval(){
+        return $this->belongsTo('App\model\ApprovalSys','approval_id','id');
 
     }
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P25);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
         //return Utility::paginateAllData(self::table());
 
     }
@@ -102,12 +76,6 @@ class Task extends Model
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);
-
-    }
-
-    public static function countDataOr3($column, $post, $column2, $post2, $column3, $post3)
-    {
-        return Utility::countData3(self::table(),$column, $post, $column2, $post2, $column3, $post3);
 
     }
 
@@ -157,61 +125,14 @@ class Task extends Model
 
     }
 
-    public static function specialColumnsDate3($column, $post, $column2, $post2, $column3, $post3)
+    public static function massData($column, $post)
     {
-        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '>=',$post2)->where($column3, '<=',$post3)->orderBy('id','DESC')->get();
+        return Utility::massData(self::table(),$column, $post);
 
     }
-
-    public static function specialColumnsDate4($column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
-    {
-        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2,$post2)->where($column3, '>=',$post3)->where($column4, '<=',$post4)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumnsDate5($column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5)
-    {
-        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->where($column3, '=',$post3)->where($column4, '>=',$post4)
-            ->where($column5, '<=',$post5)->orderBy('id','DESC')->get();
-
-    }
-
-    public static function massData($column, $post = [])
-    {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function massDataPaginate($column, $post = [])
-    {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
-
-    }
-
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function massDataConditionPaginate($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
 
     }
 
@@ -239,5 +160,6 @@ class Task extends Model
         return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
 
     }
+
 
 }

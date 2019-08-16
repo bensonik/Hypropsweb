@@ -111,7 +111,8 @@
                                                     Team Members
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
-                                                    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id )
+                                                    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
+                                                    @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                                                     </li>
@@ -121,6 +122,7 @@
                                                             <i class="fa fa-trash-o"></i>Delete
                                                         </button>
                                                     </li>
+                                                    @endif
                                                     @endif
                                                     <li class="dropdown">
                                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -164,10 +166,12 @@
                                                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                                             </td>
+                                                            @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                                                             @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
                                                             <td>
                                                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_project_team_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>
+                                                            @endif
                                                             @else
                                                              <td></td>
                                                             @endif

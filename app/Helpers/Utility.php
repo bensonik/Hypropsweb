@@ -1337,6 +1337,21 @@ class Utility
         return $status;
     }
 
+    public static function statusDisplayIndicator($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case '0':
+                $status = 'btn-danger';
+                break;
+
+            default:
+                $status = 'btn-success';
+                break;
+        }
+        return $status;
+    }
+
     public static function statusIndicator($statusInt){
         $status = '';
 
@@ -1371,6 +1386,13 @@ class Utility
             return 'Visible to participants';
         }
         return 'Invisible to participants';
+    }
+
+    public static function statusDisplay($statusInt){
+        if($statusInt == 1){
+            return 'Active';
+        }
+        return 'Inactive';
     }
 
     public static function createData($table,$dataArray){
@@ -1479,6 +1501,12 @@ class Utility
                 'message' => 'incorrect'
             ]));
         }
+    }
+
+    public static function decodeUriData($string){
+        $output = preg_replace("/%u([0-9a-f]{3,4})/i","&#x\\1;",urldecode($string));
+        return html_entity_decode($output,null,'UTF-8');
+
     }
 
 

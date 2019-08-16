@@ -28,6 +28,7 @@
                 <a href="<?php echo url('project/'.$item->id.'/assump_constraint/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on {{$data->type}}</a>
             </td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+
             @if(\App\Helpers\Utility::checkAuth('temp_user')->id == $data->created_by)
                 <td>
                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_assump_constraint_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>

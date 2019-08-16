@@ -328,6 +328,10 @@ Route::any('/project/{id}/project_status', 'ProjectStatusController@index')->nam
 Route::any('/project/{id}/project_status/temp', 'ProjectStatusController@indexTemp')->name('project_status_temp')->middleware('auth:temp_user');
 Route::any('/project_status', 'ProjectStatusController@projectStatus')->name('project_general_status')->middleware('auth');
 
+// ------------PROJECT REPORT SINGLE MODULE---------------
+Route::any('/project/{id}/project_report', 'ProjectReportController@index2')->name('project_report_single')->middleware('auth');
+Route::any('/project/{id}/project_report/temp', 'ProjectReportController@indexTemp')->name('project_report_single_temp')->middleware('auth:temp_user');
+
 Route::any('/project_report', 'ProjectReportController@index')->name('project_report')->middleware('auth');
 Route::any('/search_project_report', 'ProjectReportController@searchReport')->name('search_report')->middleware('auth');
 
@@ -813,5 +817,31 @@ Route::any('/test_result', 'TestResultController@index')->name('test_result')->m
 Route::any('/search_test_result', 'TestResultController@searchTest')->name('search_test_result');
 Route::any('/test_explanation', 'TestResultController@testExplanation')->name('test_explanation');
 
+// -------------JOBS MODULE-----------
+Route::any('/jobs', 'JobsController@index')->name('jobs')->middleware('auth');
+Route::post('/create_jobs', 'jobsController@create')->name('create_jobs');
+Route::post('/edit_jobs_form', 'jobsController@editForm')->name('edit_jobs_form');
+Route::post('/edit_jobs', 'jobsController@edit')->name('edit_jobs');
+Route::post('/delete_jobs', 'jobsController@destroy')->name('delete_jobs');
+Route::post('/delete_applicants', 'jobsController@destroyApplicants')->name('delete_applicants');
+Route::post('/apply_job', 'jobsController@applyJob')->name('apply_job');
+Route::post('/change_jobs_status', 'JobsController@changeStatus')->name('change_jobs_status');
+Route::any('/job_item/{id}/', 'JobsController@jobItem')->name('job_item')->middleware('auth');
+Route::any('/download_cv_attachment', 'JobsController@downloadAttachment')->name('download_cv_attachment');
+Route::any('/filter_job_applicants', 'JobsController@filterApplicants')->name('filter_job_applicants');
+Route::any('/search_job_applicants', 'JobsController@searchApplicants')->name('search_job_applicants');
+Route::any('/OByxRFDeOtxHYxnTTfJmSukkJZ7aCY/positions/2y101HS5A2C30Nex/available', 'JobsController@availablePositions')->name('available_positions');
+Route::any('/OByxRFDeOtxHYxnTTfJmSukkJZ7aCY/positions/2y101HS5A2C30Nex/available/job/{id}/', 'JobsController@jobPosition')->name('job_position');
+
+// -------------JOBS ACCESS MODULE-----------
+Route::any('/jobs_access', 'JobsAccessController@index')->name('jobs_access')->middleware('auth.admin');
+Route::post('/create_jobs_access', 'JobsAccessController@create')->name('create_jobs_access');
+Route::post('/edit_jobs_access_form', 'JobsAccessController@editForm')->name('edit_jobs_access_form');
+Route::post('/edit_jobs_access', 'JobsAccessController@edit')->name('edit_jobs_access');
+Route::post('/delete_jobs_access', 'JobsAccessController@destroy')->name('delete_jobs_access');
+
+// -------------BIRTHDAY MODULE-----------
+Route::any('/birthday', 'UsersController@birthday')->name('birthday')->middleware('auth');
+Route::any('/contract/staff/birthday', 'TempUsersController@birthday')->name('contract_birthday')->middleware('auth');
 
 

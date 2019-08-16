@@ -15,7 +15,8 @@
             </div>
         </div>
     </li>
-    @if($item->project_head != \App\Helpers\Utility::checkAuth('temp_user')->id || in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::TOP_USERS))
+    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
+        @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
         <li>
             <div data-target="#timesheet" onclick="navigatePage('<?php echo url('project/'.$item->id.'/timesheet_approval'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
                 <div class="ellipsis">
@@ -25,6 +26,7 @@
                 </div>
             </div>
         </li>
+    @endif
     @endif
     <li>
         <div data-target="#milestone" onclick="navigatePage('<?php echo url('project/'.$item->id.'/milestone'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
@@ -68,6 +70,7 @@
             </div>
         </div>
     </li>
+    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
         <li>
             <div data-target="#all_request" onclick="navigatePage('<?php echo url('project/'.$item->id.'/all_request'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
@@ -78,6 +81,7 @@
                 </div>
             </div>
         </li>
+    @endif
     @endif
     <li>
         <div data-target="#issues" onclick="navigatePage('<?php echo url('project/'.$item->id.'/issues'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
@@ -154,11 +158,15 @@
             </div>
         </div>
     </li>
+    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
+        @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
     <li>
-        <div data-target="#custom_report" data-toggle="tab">
+        <div data-target="#custom_report" onclick="navigatePage('<?php echo url('project/'.$item->id.'/project_report'.\App\Helpers\Utility::authLink('temp_user')) ?>')" data-toggle="tab">
             <div>
                 <span class="account-type">Custom Report</span><br/>
             </div>
         </div>
     </li>
+        @endif
+    @endif
 </ul>

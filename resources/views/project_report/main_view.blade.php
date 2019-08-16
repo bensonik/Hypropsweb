@@ -163,7 +163,7 @@
             var proj = $('#'+projId).val();
 
             var inputVars = $('#'+formId).serialize();
-
+            //alert(inputVars);
             if(from != '' && to !='' && proj !=''){
 
                 var summerNote = '';

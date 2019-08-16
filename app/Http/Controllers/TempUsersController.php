@@ -409,6 +409,13 @@ class TempUsersController extends Controller
 
     }
 
+    public function birthday(Request $request){
+
+        $mainData =  TempUsers::birthday();
+
+        return view::make('temp_users.birthday')->with('mainData',$mainData);
+
+    }
 
     public function downloadAttachment(){
         $file = $_GET['file'];

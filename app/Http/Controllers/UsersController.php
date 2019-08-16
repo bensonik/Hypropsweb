@@ -103,7 +103,7 @@ class UsersController extends Controller
                     'lastname' => ucfirst($request->input('lastname')),
                     'othername' => ucfirst($request->input('othername')),
                     'sex' => ucfirst($request->input('gender')),
-                    'dob' => ucfirst($request->input('birthdate')),
+                    'dob' => Utility::standardDate($request->input('birthdate')),
                     'phone' => ucfirst($request->input('phone')),
                     'job_role' => ucfirst($request->input('job_role')),
                     'address' => ucfirst($request->input('home_address')),
@@ -224,7 +224,7 @@ class UsersController extends Controller
                 'lastname' => ucfirst($request->input('lastname')),
                 'othername' => ucfirst($request->input('othername')),
                 'sex' => ucfirst($request->input('gender')),
-                'dob' => ucfirst($request->input('birthdate')),
+                'dob' => Utility::standardDate($request->input('birthdate')),
                 'phone' => ucfirst($request->input('phone')),
                 'job_role' => ucfirst($request->input('job_role')),
                 'address' => ucfirst($request->input('home_address')),
@@ -335,6 +335,13 @@ class UsersController extends Controller
 
     }
 
+    public function birthday(Request $request){
+
+        $mainData =  User::birthday();
+
+            return view::make('users.birthday')->with('mainData',$mainData);
+
+    }
 
     /**
      * Remove the specified resource from storage.

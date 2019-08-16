@@ -164,6 +164,7 @@
                     Projects
                 </h2>
                 <ul class="header-dropdown m-r--5">
+                    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                     <li>
                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                     </li>
@@ -173,6 +174,7 @@
                             <i class="fa fa-trash-o"></i>Delete
                         </button>
                     </li>
+                    @endif
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>
@@ -235,12 +237,14 @@
                             <td>{{$data->created_at}}</td>
                             <td>{{$data->updated_at}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                             @if(in_array(\App\Helpers\Utility::checkAuth('temp_user')->role,\App\Helpers\Utility::HR_MANAGEMENT) || $data->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                             <td>
                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_project_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
+                            @endif
                             @else
-                            <td></td>
+                                <td></td>
                             @endif
                         </tr>
                     @endforeach

@@ -108,6 +108,7 @@
             <div class="modal-header">
                 <h4 class="modal-title" id="defaultModalLabel">Tasks</h4>
                 <ul class="header-dropdown m-r--5 pull-right" style="list-style-type: none;">
+                    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id )
                     <li>
                             <button type="button" onclick="deleteTaskItems('kid_checkbox_task','reload_data','<?php echo url('project/'.$item->id.'/task_list'.\App\Helpers\Utility::authLink('temp_user')); ?>',
@@ -115,6 +116,7 @@
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
+                @endif
                 @endif
                 </ul>
             </div>
@@ -153,6 +155,7 @@
                                                     Task List(s)
                                                 </h2>
                                                 <ul class="header-dropdown m-r--5">
+                                                    @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                                                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                     <li>
                                                         <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
@@ -163,6 +166,7 @@
                                                             <i class="fa fa-trash-o"></i>Delete
                                                         </button>
                                                     </li>
+                                                    @endif
                                                     @endif
                                                     <li class="dropdown">
                                                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -209,10 +213,12 @@
                                                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                                             </td>
+                                                            @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
                                                             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                                                             <td>
                                                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_task_list_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                                             </td>
+                                                            @endif
                                                             @else
                                                              <td></td>
                                                             @endif

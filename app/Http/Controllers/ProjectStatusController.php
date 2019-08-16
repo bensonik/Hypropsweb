@@ -54,7 +54,7 @@ class ProjectStatusController extends Controller
         //$req = new Request();
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
-
+        $this->report($project);
 
         return view::make(Utility::authBlade('temp_user','project_status.main_view','project_status.main_view_temp'))
             ->with('item',$project);

@@ -254,4 +254,15 @@ class User extends Authenticatable
             })->get();
     }
 
+    public static function birthday()
+    {
+
+        return static::whereRaw(' DAYOFYEAR(curdate()) <= DAYOFYEAR(dob) AND DAYOFYEAR(curdate()) + 7 >=  dayofyear(dob)')
+            ->where('status',Utility::STATUS_ACTIVE)
+            ->where('active_status',Utility::STATUS_ACTIVE)
+            ->orderByRaw('DAYOFYEAR(dob)')
+            ->get();
+
+    }
+
 }

@@ -25,10 +25,12 @@
             <td>{{$data->change_desc}}</td>
             <td>{{$data->priority}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+            @if(\App\Helpers\Utility::authColumn('temp_user') != 'temp_user')
             @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)
                 <td>
                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_change_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
+            @endif
             @endif
         </tr>
     @endforeach
