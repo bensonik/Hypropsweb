@@ -914,7 +914,7 @@
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">accessible</i>
-                            <span>Jobs/Talent Management</span>
+                            <span>Jobs/Talent Management </span>
                         </a>
                         <ul class="ml-menu">
                             <li>
