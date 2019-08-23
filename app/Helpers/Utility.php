@@ -28,7 +28,7 @@ class Utility
     const PROCESSING = 0, APPROVED = 1, DENIED = 2, COMPLETED = 1;
     const USUAL_REQUEST_TYPE = 1, PROJECT_REQUEST_TYPE = 2;
     const TOP_USERS = [1,2,3], ACCOUNTANTS = 5, HR_MANAGEMENT = [1,2,3,6], ACCOUNT_MANAGEMENT = [1,2,3,5],
-        HR = 6, SCM_MANAGEMENT = [1,2,3,9], ACCOUNT_SCM_WHSE_MANAGEMENT = [1,2,3,5,9,10];
+        HR = 6, SCM_MANAGEMENT = [1,2,3,9], ACCOUNT_SCM_WHSE_MANAGEMENT = [1,2,3,5,9,10], ADMIN = 3;
     const PRO_QUAL = 1, TECH_COMP = 2, BEHAV_COMP = 3;
     const APP_OBJ_GOAL = 1, COMP_ASSESS = 2, BEHAV_COMP2 = 3, INDI_REV_COMMENT = 4, EMP_COM_APP_PLAT = 5;
     const P25 = '25', P20 = '20', P15 = '15', P50 = '50', P100 = '100', P35 = '35';
@@ -732,9 +732,65 @@ class Utility
             }
             $sumArr = array_sum($holdArr);
             $dayLength = $sumArr + $days;
-            $determiner = ($leave->days > $dayLength) ? true : false;
+            $determiner = ($leave->days >= $dayLength) ? true : false;
         }
         return $determiner;
+    }
+
+    public static function dateTimeDiff($dateTime1,$dateTime2){
+        // Declare and define two dates
+        $date1 = strtotime($dateTime1);
+        $date2 = strtotime($dateTime2);
+
+        // Formulate the Difference between two dates
+                $diff = abs($date2 - $date1);
+
+
+        // To get the year divide the resultant date into
+        // total seconds in a year (365*60*60*24)
+                $years = floor($diff / (365*60*60*24));
+
+
+        // To get the month, subtract it with years and
+        // divide the resultant date into
+        // total seconds in a month (30*60*60*24)
+                $months = floor(($diff - $years * 365*60*60*24)
+                    / (30*60*60*24));
+
+
+        // To get the day, subtract it with years and
+        // months and divide the resultant date into
+        // total seconds in a days (60*60*24)
+                $days = floor(($diff - $years * 365*60*60*24 -
+                        $months*30*60*60*24)/ (60*60*24));
+
+
+        // To get the hour, subtract it with years,
+        // months & seconds and divide the resultant
+        // date into total seconds in a hours (60*60)
+                $hours = floor(($diff - $years * 365*60*60*24
+                        - $months*30*60*60*24 - $days*60*60*24)
+                    / (60*60));
+
+
+        // To get the minutes, subtract it with years,
+        // months, seconds and hours and divide the
+        // resultant date into total seconds i.e. 60
+                $minutes = floor(($diff - $years * 365*60*60*24
+                        - $months*30*60*60*24 - $days*60*60*24
+                        - $hours*60*60)/ 60);
+
+
+        // To get the minutes, subtract it with years,
+        // months, seconds, hours and minutes
+                $seconds = floor(($diff - $years * 365*60*60*24
+                    - $months*30*60*60*24 - $days*60*60*24
+                    - $hours*60*60 - $minutes*60));
+
+        $result = $years.', '.$months.', '.$days.', '.$hours.', '.$minutes.', '.$seconds;
+
+        return $result;
+
     }
 
     public static function standardDate($date){

@@ -74,4 +74,9 @@ class Notify
         //Mail::to($email)->send(new GeneralMail($objContent));
     }
 
+    public static function AdminMail($viewPage,$arrayContent = [],$email,$fullName = '',$subject = ''){
+
+        //Mail::to($email)->send(new AdminMail($arrayContent));
+    }
+
 }

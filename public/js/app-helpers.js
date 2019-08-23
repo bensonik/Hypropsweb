@@ -40,11 +40,7 @@
 
     function swalFormError(formError){
         var errorMessage = '';
-         /*errorMessage += '<div class="alert alert-danger text-center alert-dismissable">' +
-            '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><ul>' +
-            '<li style="list-style-type: none">';*/
         errorMessage += formError;
-        /*errorMessage += "</ul></li></div></div>";*/
         return errorMessage;
 
     }
@@ -52,10 +48,8 @@
     function swalDefaultError(errorMessage){
 
         var info_div = '';
-         /*info_div += '<div class="alert alert-danger">'+
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';*/
+
         info_div += errorMessage;
-       /* info_div += '</div>';*/
         return info_div;
 
     }
@@ -63,10 +57,8 @@
     function swalWarningError(errorMessage){
 
         var info_div = '';
-         /*info_div += '<div class="alert alert-info">'+
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';*/
+
         info_div += errorMessage;
-        /*info_div += '</div>';*/
         return info_div;
 
     }
@@ -74,10 +66,7 @@
     function swalSuccess(successMessage){
 
         var info_div = '';
-        /*info_div += '<div class="alert alert-info">'+
-            '<a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>';*/
         info_div += successMessage;
-        /*info_div += '</div>';*/
         return info_div;
 
     }

@@ -363,6 +363,9 @@
                         <li>
                             <a href="{{url('loan_interest_rate')}}">Loan Interest Rate Config</a>
                         </li>
+                        <li>
+                            <a href="{{url('admin_category')}}">Admin Request Category</a>
+                        </li>
 
                         <li>
                             <a href="javascript:void(0);" class="menu-toggle">
@@ -400,6 +403,12 @@
                                 </li>
                                 <li>
                                     <a href="{{url('leave_approval')}}">HRIS Leave Departmental Approval</a>
+                                </li><hr/>
+                                <li>
+                                    <a href="{{url('admin_approval_system')}}">Admin Approval System</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('admin_approval_dept')}}">Admin Departmental Approval</a>
                                 </li><hr/>
                             </ul>
                         </li>
@@ -585,10 +594,32 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">help</i>
+                        <span>Help Desk</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('help_desk_ticket')}}">My Tickets</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                        <li>
+                            <a href="{{url('ticket_category')}}">Tickets Category</a>
+                        </li>
+                        <li>
+                            <a href="{{url('all_help_desk_ticket')}}">Process Ticket Requests</a>
+                        </li>
+                        <li>
+                            <a href="{{url('help_desk_report')}}">Help Desk Report</a>
+                        </li>
+                        @endif
+                    </ul>
+                </li>
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
-                        <i class="material-icons">view_quilt</i>
+                        <i class="material-icons">business_center</i>
                         <span>PO/RFQ/Quotes</span>
                     </a>
                     <ul class="ml-menu">
@@ -607,7 +638,7 @@
             @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">domain</i>
+                            <i class="material-icons">account_balance</i>
                             <span>Accounting Module </span>
                         </a>
                         <ul class="ml-menu">
@@ -800,8 +831,30 @@
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">library_books</i>
+                        <span class="icon-name">Admin Request</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('admin_requisition')}}">My Requests</a>
+                        </li>
+                        <li>
+                            <a href="{{url('my_admin_requests')}}">Request Approval</a>
+                        </li>
+                        <li>
+                            <a href="{{url('approved_admin_requests')}}">Request Reports</a>
+                        </li>
+                        <li>
+                            <a href="{{url('chart_approved_admin_requests')}}">Request Chart Reports</a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">next_week</i>
-                        <span class="icon-name">Requisition</span>
+                        <span class="icon-name">Fund Requisition</span>
                     </a>
                     <ul class="ml-menu">
                         <li>
@@ -857,10 +910,10 @@
                     </ul>
                 </li>
 
-                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('survey_access'))
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('jobs_access'))
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">spellcheck</i>
+                            <i class="material-icons">accessible</i>
                             <span>Jobs/Talent Management</span>
                         </a>
                         <ul class="ml-menu">

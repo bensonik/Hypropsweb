@@ -1182,7 +1182,7 @@ class RequisitionController extends Controller
             //DEPARTMENT IS ALL,CATEGORY SELECTED, TYPE IS ALL
             if($this->allOrSome($dept) == Utility::ALL_DATA && $this->valSelType($type) == Utility::USUAL_REQUEST_TYPE){
 
-                $deptN = Department::specialColumnsMass('id',$dept);
+                $deptN = Department::getAllData();
                 $categoryN = RequestCategory::specialColumnsMass('id',$category);
                 $typeN = 'Usual Request';
                 $projectN = 'None';
@@ -1557,13 +1557,13 @@ class RequisitionController extends Controller
     }   //END OF FILTERING DATA
 
     public function sumReportAmount($query){
-        $ammountArray = [];
+        $amountArray = [];
         $sum = 0.00;
         if(!empty($query)){
             foreach($query as $val){
-                $ammountArray[] = $val->amount;
+                $amountArray[] = $val->amount;
             }
-            $sum = array_sum($ammountArray);
+            $sum = array_sum($amountArray);
         }
 
         return number_format($sum);

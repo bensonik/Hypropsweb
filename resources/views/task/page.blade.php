@@ -286,7 +286,7 @@
         $.ajax({
             url: '?page=' + page
         }).done(function(data){
-            $('#reload_task').html(data);
+            $('#reload_data').html(data);
         });
     }
 

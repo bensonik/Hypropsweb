@@ -844,4 +844,64 @@ Route::post('/delete_jobs_access', 'JobsAccessController@destroy')->name('delete
 Route::any('/birthday', 'UsersController@birthday')->name('birthday')->middleware('auth');
 Route::any('/contract/staff/birthday', 'TempUsersController@birthday')->name('contract_birthday')->middleware('auth');
 
+// -------------ADMIN APPROVAL SYSTEM MODULE-----------
+Route::any('/admin_approval_system', 'AdminApprovalSysController@index')->name('admin_approval_system')->middleware('auth.admin');
+Route::post('/create_admin_approval', 'AdminApprovalSysController@create')->name('create_admin_approval');
+Route::post('/edit_admin_approval_form', 'AdminApprovalSysController@editForm')->name('edit_admin_approval_form');
+Route::post('/edit_admin_approval', 'AdminApprovalSysController@edit')->name('edit_admin_approval');
+Route::post('/delete_admin_approval', 'AdminApprovalSysController@destroy')->name('delete_admin_approval');
+
+// -------------ADMIN DEPARTMENTAL APPROVAL MODULE-----------
+Route::any('/admin_approval_dept', 'AdminApprovalDeptController@index')->name('admin_approval_dept')->middleware('auth.admin');
+Route::post('/create_admin_approval_dept', 'AdminApprovalDeptController@create')->name('create_admin_approval_dept');
+Route::post('/edit_admin_approval_dept_form', 'AdminApprovalDeptController@editForm')->name('edit_admin_approval_dept_form');
+Route::post('/edit_admin_approval_dept', 'AdminApprovalDeptController@edit')->name('edit_admin_approval_dept');
+Route::post('/delete_admin_approval_dept', 'AdminApprovalDeptController@destroy')->name('delete_admin_approval_dept');
+
+// -------------ADMIN REQUEST CATEGORY MODULE FOR REQUISITION-----------
+Route::any('/admin_category', 'AdminCategoryController@index')->name('admin_category')->middleware('auth.admin');
+Route::post('/create_admin_cat', 'AdminCategoryController@create')->name('create_admin_cat');
+Route::post('/edit_admin_cat_form', 'AdminCategoryController@editForm')->name('edit_admin_cat_form');
+Route::post('/edit_admin_cat', 'AdminCategoryController@edit')->name('edit_admin_cat');
+Route::post('/delete_admin_cat', 'AdminCategoryController@destroy')->name('delete_admin_cat');
+
+// -------------ADMIN REQUEST MODULE-----------
+Route::any('/admin_requisition', 'AdminRequestController@index')->name('admin_requisition')->middleware('auth');
+Route::any('/my_admin_requests', 'AdminRequestController@myRequests')->name('my_admin_request')->middleware('auth');
+Route::any('/approved_admin_requests', 'AdminRequestController@approvedRequests')->name('approved_admin_requests')->middleware('auth');
+Route::any('/chart_approved_admin_requests', 'AdminRequestController@chartApprovedRequests')->name('chart_approved_admin_requests')->middleware('auth');
+Route::any('/table_admin_request_report', 'AdminRequestController@tableRequestReport')->name('table_admin_request_report')->middleware('auth');
+Route::any('/print_admin_request', 'AdminRequestController@searchRequests')->name('print_admin_request')->middleware('auth');
+Route::post('/admin_request_print_preview', 'AdminRequestController@printPreview')->name('admin_request_print_preview');
+Route::post('/create_admin_requisition', 'AdminRequestController@create')->name('create_admin_requisition');
+Route::post('/approve_admin_requisition', 'AdminRequestController@approval')->name('approve_admin_requisition');
+Route::post('/edit_admin_requisition_form', 'AdminRequestController@editForm')->name('edit_admin_requisition_form');
+Route::post('/edit_admin_attachment_form', 'AdminRequestController@attachmentForm')->name('edit_admin_attachment_form');
+Route::post('/edit_admin_requisition', 'AdminRequestController@edit')->name('edit_admin_requisition');
+Route::post('/edit_admin_attachment', 'AdminRequestController@editAttachment')->name('edit_admin_attachment');
+Route::post('/remove_admin_attachment', 'AdminRequestController@removeAttachment')->name('remove_admin_attachment');
+Route::any('/download_admin_attachment', 'AdminRequestController@downloadAttachment')->name('download_admin_attachment');
+Route::any('/feedback_admin', 'AdminRequestController@createFeedback')->name('feedback_admin');
+Route::post('/delete_admin_requisition', 'AdminRequestController@destroy')->name('delete_admin_requisition');
+
+// -------------TICKET CATEGORY MODULE FOR HELP DESK-----------
+Route::any('/ticket_category', 'TicketCategoryController@index')->name('ticket_category')->middleware('auth.admin');
+Route::post('/create_ticket_cat', 'TicketCategoryController@create')->name('create_ticket_cat');
+Route::post('/edit_ticket_cat_form', 'TicketCategoryController@editForm')->name('edit_ticket_cat_form');
+Route::post('/edit_ticket_cat', 'TicketCategoryController@edit')->name('edit_ticket_cat');
+Route::post('/delete_ticket_cat', 'TicketCategoryController@destroy')->name('delete_ticket_cat');
+
+// ------------HELP DESK MODULE---------------
+Route::any('/help_desk_ticket', 'HelpDeskController@index')->name('help_desk_ticket')->middleware('auth');
+Route::any('/all_help_desk_ticket', 'HelpDeskController@allRequests')->name('all_help_desk_ticket')->middleware('auth');
+Route::any('/help_desk_ticket_response_form', 'HelpDeskController@requestResponseForm')->name('help_desk_ticket_response_form');
+Route::any('/help_desk_ticket_response', 'HelpDeskController@requestResponse')->name('help_desk_ticket_response');
+Route::post('/create_help_desk_ticket', 'HelpDeskController@create')->name('create_help_desk_ticket');
+Route::any('/feedback_ticket', 'HelpDeskController@createFeedback')->name('feedback_ticket');
+Route::post('/edit_help_desk_ticket_form', 'HelpDeskController@editForm')->name('edit_help_desk_ticket_form');
+Route::post('/edit_help_desk_ticket', 'HelpDeskController@edit')->name('edit_help_desk_ticket');
+Route::post('/delete_help_desk_ticket', 'HelpDeskController@destroy')->name('delete_help_desk_ticket');
+
+
+
 

@@ -33,16 +33,16 @@ class RequestCategoryController extends Controller
         //$req = new Request();
         $mainData = RequestCategory::paginateAllData();
         $dept = Department::getAllData();
-        $acct_cat = AccountCategory::getAllData();
+        $acctCat = AccountCategory::getAllData();
         $hod = Utility::detectHOD(Auth::user()->id);
 
         if ($request->ajax()) {
             return \Response::json(view::make('request_category.reload',array('mainData' => $mainData,
-                'dept' => $dept,'acct_cat' => $acct_cat, 'hod' => $hod))->render());
+                'dept' => $dept,'acct_cat' => $acctCat, 'hod' => $hod))->render());
 
         }else{
             return view::make('request_category.main_view')->with('mainData',$mainData)->with('dept',$dept)
-                ->with('acct_cat',$acct_cat)->with('hod',$hod);
+                ->with('acct_cat',$acctCat)->with('hod',$hod);
         }
 
     }

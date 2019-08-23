@@ -33,7 +33,7 @@ class Requisition extends Model
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
