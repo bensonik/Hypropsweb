@@ -73,7 +73,8 @@ class Utility
 
     const QUOTE_STATUS = [1 => 'Invoice Submitted to client', 2 => 'PO sent to supplier',
         3 => 'Received Payment from Customer', 4 => 'Actioned payment to supplier',
-        5 => 'Item Delivered to Client', 6 => 'SQuote Closed'];
+        5 => 'Item Delivered to Client', 6 => 'Quote Closed'];
+    const TICKET_STATUS = [0 => 'Open', 1 => 'Closed'];
 
     const SALES_DESC = 2, PURCHASE_DESC = 1;
     const POST_RECEIPT = 1, CREATE_RECEIPT = 2;
@@ -83,6 +84,7 @@ class Utility
     const TASK_PRIORITY = ['None','Low','Medium','High'];
     const T_USER = '2', P_USER = '1';
     const TEMP_EXTERNAL_STAFF = 2, TEMP_JOB_CANDIDATE = 1, TEMP_CLIENT = 3;
+    const HSE_REPORT_TYPE = [1 => 'Incident', 2 => 'Hazard'];
 
 
     public static function IMG_URL(){
@@ -316,33 +318,6 @@ class Utility
 
     }
 
-    public static function getAllData($table)
-    {
-        return DB::table($table)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function paginateData($table,$column, $post)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')->paginate('15');
-
-    }
-
-    public static function paginateData2($table,$column, $post, $column2, $post2)
-    {
-        return DB::table($table)
-            ->where($column2, $post2)
-            ->where($column, $post)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')->paginate('15');
-
-    }
-
     public static function sumColumnDataCondition($table,$column, $post,$sumColumn)
     {
         return DB::table($table)
@@ -426,81 +401,6 @@ class Utility
 
     }
 
-
-    public static function specialColumns($table,$column, $post)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumns2($table,$column, $post, $column2, $post2)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumns3($table,$column, $post, $column2, $post2, $column3, $post3)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where($column3, $post3)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumns4($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where($column3, $post3)
-            ->where($column4, $post4)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumns5($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where($column3, $post3)
-            ->where($column4, $post4)
-            ->where($column5, $post5)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumns6($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5, $column6, $post6)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where($column3, $post3)
-            ->where($column4, $post4)
-            ->where($column5, $post5)
-            ->where($column6, $post6)
-            ->where('status', self::STATUS_ACTIVE)
-            ->orderBy('id','DESC')
-            ->orderBy('id','DESC')->get();
-
-    }
-
     public static function massData($table,$column, $post)
     {
         return DB::table($table)
@@ -516,49 +416,6 @@ class Utility
             ->where($column2, $post2)
             ->where('status', self::STATUS_ACTIVE)
             ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function firstRow($table,$column, $post)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where('status', self::STATUS_ACTIVE)->first();
-
-    }
-
-    public static function firstRow2($table,$column, $post,$column2, $post2)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where('status', self::STATUS_ACTIVE)->first();
-
-    }
-
-    public static function firstRow3($table,$column, $post,$column2, $post2,$column3, $post3)
-    {
-        return DB::table($table)
-            ->where($column, $post)
-            ->where($column2, $post2)
-            ->where($column3, $post3)
-            ->where('status', self::STATUS_ACTIVE)->first();
-
-    }
-
-    public static function massUpdate($table,$column, $arrayPost, $arrayDataUpdate=[])
-    {
-        return DB::table($table)
-            ->whereIn($column , $arrayPost
-            )->update($arrayDataUpdate);
-
-    }
-
-    public static function defaultUpdate($table,$column, $postId, $arrayDataUpdate=[])
-    {
-        return DB::table($table)
-            ->where($column , $postId
-            )->update($arrayDataUpdate);
 
     }
 
@@ -787,7 +644,7 @@ class Utility
                     - $months*30*60*60*24 - $days*60*60*24
                     - $hours*60*60 - $minutes*60));
 
-        $result = $years.', '.$months.', '.$days.', '.$hours.', '.$minutes.', '.$seconds;
+        $result = $years.' years, '.$months.' months, '.$days.' days, '.$hours.' hours, '.$minutes.' minutes, '.$seconds.' seconds';
 
         return $result;
 
@@ -1393,6 +1250,24 @@ class Utility
         return $status;
     }
 
+    public static function defaultStatus($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case '0':
+                $status = 'Open';
+                break;
+            case '1':
+                $status = 'Closed';
+                break;
+
+            default:
+                $status = 'Processing';
+                break;
+        }
+        return $status;
+    }
+
     public static function statusDisplayIndicator($statusInt){
         $status = '';
 
@@ -1442,6 +1317,13 @@ class Utility
             return 'Visible to participants';
         }
         return 'Invisible to participants';
+    }
+
+    public static function hseReportType($reportType){
+        if($reportType == 1){
+            return 'Incident';
+        }
+        return 'Hazard';
     }
 
     public static function statusDisplay($statusInt){

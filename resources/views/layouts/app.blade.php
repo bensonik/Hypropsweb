@@ -373,7 +373,7 @@
                             </a>
                             <ul class="ml-menu">
                                 <li>
-                                    <a href="{{url('request_access')}}">Config Individual Request Access</a>
+                                    <a href="{{url('request_access')}}">Config User Fund Request Access for Other Users</a>
                                 </li>
                                 <li>
                                     <a href="{{url('inventory_access')}}">Config Inventory System Access</a>
@@ -383,6 +383,9 @@
                                 </li>
                                 <li>
                                     <a href="{{url('jobs_access')}}">Config Jobs/Talent Access</a>
+                                </li>
+                                <li>
+                                    <a href="{{url('hse_access')}}">Config HSE Administrators</a>
                                 </li>
                             </ul>
                         </li>
@@ -420,7 +423,7 @@
                     <li>
                         <a href="{{url('user')}}">
                             <i class="material-icons">account_box</i>
-                            <span class="icon-name">Manage Users</span>
+                            <span class="icon-name">Manage Users/Employee(s)</span>
                         </a>
                     </li>
                 @endif
@@ -619,6 +622,69 @@
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">accessibility</i>
+                        <span>HSE (Health Safety Environment)</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('hse_report')}}">HSE Report</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || \App\Helpers\Utility::moduleAccessCheck('hse_access'))
+                            <li>
+                                <a href="{{url('hse_report_filter')}}">Manage Reports</a>
+                            </li>
+                            <li>
+                                <a href="{{url('hse_source_type')}}">HSE Source Types</a>
+                            </li>
+                        @endif
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="{{url('news')}}">
+                        <i class="material-icons">record_voice_over</i>
+                        <span class="icon-name">News/Notice/Tips</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">event</i>
+                        <span>Events/Appointments</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('hse_report')}}">Manage Events/Appointments</a>
+                        </li>
+                        <li>
+                            <a href="{{url('hse_report_filter')}}">My Events Calendar</a>
+                        </li>
+                        <li>
+                            <a href="{{url('hse_source_type')}}">General Events Calendar</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">folder</i>
+                        <span>Document Management System</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('document')}}">Documents</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                            <li>
+                                <a href="{{url('document_archive')}}">Document Archives</a>
+                            </li>
+
+                        @endif
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">business_center</i>
                         <span>PO/RFQ/Quotes</span>
                     </a>
@@ -639,7 +705,7 @@
                     <li>
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">account_balance</i>
-                            <span>Accounting Module </span>
+                            <span>Account Management System </span>
                         </a>
                         <ul class="ml-menu">
                             <li>

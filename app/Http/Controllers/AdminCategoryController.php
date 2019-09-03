@@ -179,19 +179,10 @@ class AdminCategoryController extends Controller
             'status' => Utility::STATUS_DELETED
         ];
 
-        $in_use = [];
-        $unused = [];
         $inactiveCat = [];
         $activeCat = [];
-        for($i=0;$i<count($all_id);$i++){
-            if(in_array($all_id[$i],Utility::DEFAULT_REQUEST_CATEGORIES)){
-                $unused[$i] = $all_id[$i];
-            }else{
-                $in_use[$i] = $all_id[$i];
-            }
-        }
 
-        foreach($in_use as $var){
+        foreach($all_id as $var){
             $request = AdminRequisition::firstRow('req_cat',$var);
             if(empty($request)){
                 $inactiveCat[] = $var;
@@ -201,7 +192,7 @@ class AdminCategoryController extends Controller
         }
 
         $message = (count($inactiveCat) < 1) ? ' and '.count($activeCat).
-            ' category(ies) has been used in another module and cannot be deleted' : '';
+            ' category(ies) has been used in making requests and cannot be deleted' : '';
         if(count($inactiveCat) > 0){
 
 
@@ -209,7 +200,7 @@ class AdminCategoryController extends Controller
 
             return response()->json([
                 'message2' => 'deleted',
-                'message' => count($in_use).' data(s) has been deleted'.$message
+                'message' => count($inactiveCat).' data(s) has been deleted'.$message
             ]);
 
         }else{

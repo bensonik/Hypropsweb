@@ -27,9 +27,11 @@
 
             </td>
             <td>
-            @if($data->response != '')
-                <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('project_request_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
-            @endif
+                @if($data->response != '')
+                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('project_request_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
+                @else
+                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('project_request_response_form') ?>','<?php echo csrf_token(); ?>')">Respond</a>
+                @endif
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->project->project_name}}</td>
@@ -50,11 +52,7 @@
                 @endif
             </td>
             <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">
-                @if($data->response_status != '0')
-                    Processed
-                @else
-                    Processing
-                @endif
+                {{\App\Helpers\Utility::defaultStatus($data->response_status)}}
             </td>
             <td>{{$data->created_at}}</td>
             <td>{{$data->updated_at}}</td>
@@ -65,6 +63,3 @@
     </tbody>
 </table>
 
-<div class="task pagination pull-left">
-    {!! $mainData->render() !!}
-</div>

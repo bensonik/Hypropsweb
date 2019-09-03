@@ -158,7 +158,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        My Request(s)
+                        My Ticket(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
 
@@ -224,7 +224,7 @@
                                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_help_desk_ticket_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <td>
-                                    @if(empty($data->feedback) && $data->approval_status == 1)
+                                    @if(empty($data->feedback) && $data->response_status == 1)
                                         <a style="cursor: pointer;" class="btn btn-info" onclick="fetchModal('{{$data->id}}','request_id','feedbackModal')"><i class="fa fa-pencil-square-o"></i>Feedback</a>
                                     @else
                                         {{$data->feedback}}
@@ -241,7 +241,7 @@
                                 <td>{{$data->subject}}</td>
                                 <td>{!!$data->details!!}</td>
                                 <td>{!!$data->response!!}</td>
-                                <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::approveStatus($data->response_status)}}</td>
+                                <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::defaultStatus($data->response_status)}}</td>
                                 <td>{{$data->response_dates}}</td>
                                 <td>{{$data->user_u->updated_by}}</td>
                                 <td>{{$data->created_at}}</td>

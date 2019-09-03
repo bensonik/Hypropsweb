@@ -901,7 +901,59 @@ Route::any('/feedback_ticket', 'HelpDeskController@createFeedback')->name('feedb
 Route::post('/edit_help_desk_ticket_form', 'HelpDeskController@editForm')->name('edit_help_desk_ticket_form');
 Route::post('/edit_help_desk_ticket', 'HelpDeskController@edit')->name('edit_help_desk_ticket');
 Route::post('/delete_help_desk_ticket', 'HelpDeskController@destroy')->name('delete_help_desk_ticket');
+Route::any('/search_help_desk_ticket', 'HelpDeskController@searchReport')->name('search_help_desk_ticket');
+Route::any('/help_desk_report', 'HelpDeskController@report')->name('help_desk_report')->middleware('auth');
 
+// -------------NEWS MODULE-----------
+Route::any('/news', 'NewsController@index')->name('admin_category')->middleware('auth');
+Route::post('/create_news', 'NewsController@create')->name('create_news');
+Route::post('/edit_news_form', 'NewsController@editForm')->name('edit_news_form');
+Route::post('/edit_news', 'NewsController@edit')->name('edit_news');
+Route::post('/delete_news', 'NewsController@destroy')->name('delete_news');
+
+// -------------HSE SOURCE TYPE MODULE-----------
+Route::any('/hse_source_type', 'HseSourceTypeController@index')->name('hse_source_type')->middleware('auth');
+Route::post('/create_hse_source_type', 'HseSourceTypeController@create')->name('create_news');
+Route::post('/edit_hse_source_type_form', 'HseSourceTypeController@editForm')->name('edit_hse_source_type_form');
+Route::post('/edit_hse_source_type', 'HseSourceTypeController@edit')->name('edit_hse_source_type');
+Route::post('/delete_hse_source_type', 'HseSourceTypeController@destroy')->name('delete_hse_source_type');
+
+// ------------HSE REPORT MODULE---------------
+Route::any('/hse_report', 'HseReportsController@index')->name('hse_report')->middleware('auth');
+Route::any('/hse_report_response_form', 'HseReportsController@requestResponseForm')->name('hse_report_response_form');
+Route::any('/hse_report_response', 'HseReportsController@requestResponse')->name('hse_report_response');
+Route::post('/create_hse_report', 'HseReportsController@create')->name('create_hse_report');
+Route::post('/edit_hse_report_form', 'HseReportsController@editForm')->name('edit_hse_report_form');
+Route::post('/edit_hse_report', 'HseReportsController@edit')->name('edit_hse_report');
+Route::post('/delete_hse_report', 'HseReportsController@destroy')->name('delete_hse_report');
+Route::any('/search_hse_report', 'HseReportsController@searchReport')->name('search_hse_report');
+Route::any('/hse_report_filter', 'HseReportsController@report')->name('hse_report_filter');
+
+// -------------HSE ACCESS MODULE-----------
+Route::any('/hse_access', 'HseAccessController@index')->name('request_access')->middleware('auth.admin');
+Route::post('/create_hse_access', 'HseAccessController@create')->name('create_hse_access');
+Route::post('/edit_hse_access_form', 'HseAccessController@editForm')->name('edit_hse_access_form');
+Route::post('/edit_hse_access', 'HseAccessController@edit')->name('edit_hse_access');
+Route::post('/delete_hse_access', 'HseAccessController@destroy')->name('delete_hse_access');
+
+// -------------DOCUMENT MODULE-----------
+Route::any('/document', 'DocumentsController@index')->name('document')->middleware('auth');
+Route::any('/document_archive', 'DocumentsController@documentArchive')->name('document_archive')->middleware('auth.admin');
+Route::post('/create_document', 'DocumentsController@create')->name('create_document');
+Route::post('/edit_document_form', 'DocumentsController@editForm')->name('edit_document_form');
+Route::post('/edit_document_dept_form', 'DocumentsController@editDeptForm')->name('edit_document_dept_form');
+Route::post('/edit_document', 'DocumentsController@edit')->name('edit_document');
+Route::post('/edit_document_attachment_form', 'DocumentsController@attachmentForm')->name('edit_document_attachment_form');
+Route::post('/edit_document_attachment', 'DocumentsController@editAttachment')->name('edit_document_attachment');
+Route::post('/remove_document_attachment', 'DocumentsController@removeAttachment')->name('remove_document_attachment');
+Route::any('/download_document_attachment', 'DocumentsController@downloadAttachment')->name('download_document_attachment');
+Route::post('/modify_document_dept', 'DocumentsController@modifyDept')->name('modify_document_dept');
+Route::post('/delete_document', 'DocumentsController@destroy')->name('delete_document');
+Route::post('/delete_document_archive', 'DocumentsController@destroyArchive')->name('delete_document_archive');
+Route::any('/search_document', 'DocumentsController@searchDocument')->name('search_document');
+Route::any('/search_document_using_date', 'DocumentsController@searchDocumentUsingDate')->name('search_document_using_date');
+Route::any('/remove_document_user', 'DocumentsController@removeAccessibleUser')->name('remove_document_user');
+Route::any('/restore_document_archive', 'DocumentsController@restoreDocumentArchive')->name('restore_document_archive');
 
 
 

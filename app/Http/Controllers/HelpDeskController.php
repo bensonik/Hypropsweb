@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Notify;
+use App\model\Department;
 use Illuminate\Http\Request;
 use App\model\Helpdesk;
 use App\model\TicketCategory;
@@ -43,7 +44,7 @@ class HelpDeskController extends Controller
 
     }
 
-    public function allRequests(Request $request,$id)
+    public function allRequests(Request $request)
     {
 
 
@@ -64,17 +65,28 @@ class HelpDeskController extends Controller
         $validator = Validator::make($request->all(),Helpdesk::$responseRules);
         if($validator->passes()) {
             $editId = $request->input('edit_id');
-            $response = $request->input('ckInput');
-            $responseDate = date("d-m-Y:H:i:s");
+            $response = $request->input('response');
+            $responseDate = date("d-m-Y H:i:s");
             $helpDeskData = Helpdesk::firstRow('id',$editId);
             $responseRate = Utility::dateTimeDiff($helpDeskData->created_at,$responseDate);
-            $dbData = [
-                'response' => $response,
-                'response_rate' => $responseRate,
-                'response_dates' => 'Responded at'.$responseDate.', ',
-                'response_status' => Utility::STATUS_ACTIVE,
-                'updated_by' => Utility::checkAuth('temp_user')->id,
-            ];
+            $formerResponseDate = $helpDeskData->response_dates;
+            $dbData = [];
+            if(empty($helpDeskData->response_rate)) {
+                $dbData = [
+                    'response' => $response,
+                    'response_rate' => $responseRate,
+                    'response_dates' => $formerResponseDate.'|Responded at '.$responseDate.'| ',
+                    'response_status' => Utility::STATUS_ACTIVE,
+                    'updated_by' => Utility::checkAuth('temp_user')->id,
+                ];
+            }else{
+                $dbData = [
+                    'response' => $response,
+                    'response_dates' => $formerResponseDate.'|Responded at '.$responseDate.'| ',
+                    'response_status' => Utility::STATUS_ACTIVE,
+                    'updated_by' => Utility::checkAuth('temp_user')->id,
+                ];
+            }
 
             Helpdesk::defaultUpdate('id', $editId, $dbData);
 
@@ -117,6 +129,87 @@ class HelpDeskController extends Controller
             'message' => $errors
         ]);
 
+
+    }
+
+    //FETCH HELP DESK REPORT SEARCH FORM
+    public function report(Request $request)
+    {
+        //
+        $mainData = Helpdesk::paginateAllData();
+        $ticketCat = TicketCategory::getAllData();
+        $dept = Department::getAllData();
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('help_desk.report_reload',array('ticketCat' => $ticketCat,
+                'dept' => $dept))->render());
+
+        }else{
+            return view::make('help_desk.report')->with('ticketCat',$ticketCat)->with('dept',$dept);
+        }
+
+    }
+
+    //HELP DESK REPORT SEARCH REQUEST AND QUERY
+    public function searchReport(Request $request)
+    {
+        //
+        /*$searchResultRules = [
+            'project' => 'required',
+            'report_type' => 'required',
+            'from_date' => 'required',
+            'to_date' => 'required',
+        ];
+        $validator = Validator::make($request->all(),$searchResultRules);
+        if($validator->passes()) {*/
+
+        $startDate = Utility::standardDate($request->input('from_date'));
+        $endDate = Utility::standardDate($request->input('to_date'));
+        $ticketCat = $request->input('ticket_category');
+        $dept = $request->input('department');
+        $status = $request->input('status');
+        $dateArray = [$startDate,$endDate];
+        $mainData = [];
+
+        //PROCESS SEARCH REQUEST
+        //$mainData = Helpdesk::specialColumnsDate5('ticket_cat', $ticketCat, 'dept_id', $dept, 'response_status', $status, $dateArray);
+
+        if($ticketCat != '' && $dept != '' && $status != ''){
+                $mainData = Helpdesk::specialColumnsDate7('ticket_cat', $ticketCat, 'dept_id', $dept, 'response_status', $status, $dateArray);
+            }
+            if($ticketCat != '' && $dept != '' && $status == ''){
+                $mainData = Helpdesk::specialColumnsDate5('ticket_cat', $ticketCat, 'dept_id', $dept, $dateArray);
+            }
+            if($ticketCat != '' && $dept == '' && $status == ''){
+                $mainData = Helpdesk::specialColumnsDate3('ticket_cat', $ticketCat, $dateArray);
+            }
+            if($ticketCat == '' && $dept != '' && $status != ''){
+                $mainData = Helpdesk::specialColumnsDate5('dept_id', $dept,'response_status', $status, $dateArray);
+            }
+            if($ticketCat == '' && $dept == '' && $status != ''){
+                $mainData = Helpdesk::specialColumnsDate3('response_status', $status, $dateArray);
+            }
+            if($ticketCat != '' && $dept == '' && $status != ''){
+                $mainData = Helpdesk::specialColumnsDate5('ticket_cat', $ticketCat, 'response_status', $status, $dateArray);
+            }
+            if($ticketCat == '' && $dept != '' && $status == ''){
+                $mainData = Helpdesk::specialColumnsDate3('dept_id', $dept, $dateArray);
+            }
+            if($ticketCat == '' && $dept == '' && $status == ''){
+                $mainData = Helpdesk::specialColumnsDate($dateArray);
+            }
+
+        return view::make('help_desk.report_reload')->with('mainData',$mainData);
+
+        /*}else{
+
+            $errors = $validator->errors();
+            return response()->json([
+                'message2' => 'fail',
+                'message' => $errors
+            ]);
+
+        }*/
 
     }
 

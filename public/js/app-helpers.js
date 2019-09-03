@@ -205,6 +205,12 @@
         return newStr;
     }
 
+    function sanitizeDataWithoutEncode(data){
+        var str = classToArray(data);
+        var strJson = JSON.stringify(str);
+        return strJson;
+    }
+
     function hideCheckedClassItems(getclass){
 
         var approve = document.getElementsByClassName(getclass);
@@ -560,6 +566,19 @@
         });
     }
 
+    function addMoreEditable(more_id,hide_button,num,page,type,hideButtonId,editClassOrId){
+
+        var hide_id = document.getElementById(hide_button);
+        //alert(page+'?num='+num+'&type='+type+'&hide_id='+hideButtonId+'&editClassOrId='+editClassOrId);
+        $.ajax({
+            url:  page+'?num='+num+'&type='+type+'&add_id='+more_id+'&hide_id='+hideButtonId+'&editClassOrId='+editClassOrId
+        }).done(function(data){
+
+            hide_id.style.display = 'none';
+            $('#'+more_id).append(data);
+        });
+    }
+
     function addMoreParam(more_id,hide_button,num,page,type,hideButtonId,param1){
 
         var hide_id = document.getElementById(hide_button);
@@ -725,6 +744,86 @@
 
 
     }
+
+    function deleteSingleEntry(dataHtmlId,reloadId,reloadUrl,submitUrl,token){
+    var dataVal = $('#'+dataHtmlId).val();
+    var postVars = "dataId="+dataVal;
+    $('#loading_modal').modal('show');
+    sendRequestForm(submitUrl,token,postVars)
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalDefaultError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'deleted'){
+
+                var successMessage = swalSuccess(rollback.message);
+                swal("Success!", successMessage, "success");
+
+            }else{
+
+                var infoMessage = swalWarningError(message2);
+                swal("Success!", infoMessage, "warning");
+
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            if(reloadUrl != '') {
+                reloadContent(reloadId, reloadUrl);
+            }
+        }
+    }
+
+
+}
+
+    function deleteSingleEntryWithParam(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token){
+    var dataVal = $('#'+dataHtmlId).val();
+    var postVars = "dataId="+dataVal+"&param="+param;
+    $('#loading_modal').modal('show');
+    sendRequestForm(submitUrl,token,postVars)
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalDefaultError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'deleted'){
+
+                var successMessage = swalSuccess(rollback.message);
+                swal("Success!", successMessage, "success");
+
+            }else{
+
+                var infoMessage = swalWarningError(message2);
+                swal("Success!", infoMessage, "warning");
+
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            if(reloadUrl != '') {
+                reloadContent(reloadId, reloadUrl);
+            }
+        }
+    }
+
+
+}
 
     function deleteEntryFetchId(klass,reloadId,reloadUrl,submitUrl,token,dataId){
         var data_string = group_val(klass);
@@ -955,6 +1054,58 @@
             }else{
                 alert('Please select an entry to continue');
         }
+
+    }
+
+    function deleteSingleItem(dataHtmlId,reloadId,reloadUrl,submitUrl,token) {
+
+        swal({
+                title: "Are you sure you want to delete?",
+                text: "You will not be able to recover this data entry!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel delete!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    deleteSingleEntry(dataHtmlId, reloadId, reloadUrl, submitUrl, token);
+                    //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                } else {
+                    swal("Delete Cancelled", "Your data is safe :)", "error");
+                }
+            });
+
+    }
+
+    function deleteSingleItemWithParam(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token,divDataIdOnModalForRemoval) {
+
+        swal({
+                title: "Are you sure you want to delete?",
+                text: "You will not be able to recover this data entry!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, delete it!",
+                cancelButtonText: "No, cancel delete!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    deleteSingleEntryWithParam(dataHtmlId, param, reloadId, reloadUrl, submitUrl, token);
+
+                    if(divDataIdOnModalForRemoval != ''){
+                        $('#'+divDataIdOnModalForRemoval).remove();
+                    }
+                    //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                } else {
+                    swal("Delete Cancelled", "Your data is safe :)", "error");
+                }
+            });
 
     }
 
@@ -1531,7 +1682,64 @@
 
     }
 
-    function print_content(el){
+
+    function searchItemParam(inputId,displayId,submitUrl,defaultUrl,token,paramId){
+
+        var searchInput = $('#'+inputId).val();
+        var param = $('#'+paramId).val();
+        var postVars = "?searchVar="+searchInput+"&param="+param;
+        //alert(postVars);
+        if(searchInput != '') {
+            $.ajax({
+                url: submitUrl + postVars
+            }).done(function (data) {
+                $('#' + displayId).html(data);
+            });
+            $('#' + displayId).html('LOADING DATA');
+        }else{
+            reloadContent('reload_data',defaultUrl)
+        }
+
+    }
+
+    function searchUsingDate(formId,submitUrl,reload_id,reloadUrl,token,fromId,toId){
+
+        var from = $('#'+fromId).val();
+        var to = $('#'+toId).val();
+
+        var inputVars = $('#'+formId).serialize();
+        //alert(inputVars);
+        if(from != '' && to !=''){
+
+            var summerNote = '';
+            var htmlClass = document.getElementsByClassName('t-editor');
+            if (htmlClass.length > 0) {
+                summerNote = $('.summernote').eq(0).summernote('code');;
+            }
+            var postVars = inputVars+'&editor_input='+summerNote;
+            $('#loading_modal').modal('show');
+            sendRequestForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    $('#loading_modal').modal('hide');
+                    var result = ajax.responseText;
+                    $('#'+reload_id).html(result);
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+                }
+            }
+
+        }else{
+            swal("warning!", "Please ensure to select from, to date.", "warning");
+
+        }
+
+    }
+
+
+function print_content(el){
         var restorepage = document.body.innerHTML;
 
         var printcontent = document.getElementById(el).outerHTML;

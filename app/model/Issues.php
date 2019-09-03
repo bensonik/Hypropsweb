@@ -73,18 +73,6 @@ class Issues extends Model
 
     }
 
-    public static function paginateData($column, $post)
-    {
-        return Utility::paginateData(self::table(),$column, $post);
-
-    }
-
-    public static function paginateData2($column, $post, $column2, $post2)
-    {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
-
-    }
-
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);
@@ -176,7 +164,7 @@ class Issues extends Model
 
     }
 
-    public static function firstRow2($column, $post2,$column2, $post)
+    public static function firstRow2($column, $post,$column2, $post2)
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->first();
@@ -185,13 +173,14 @@ class Issues extends Model
 
     public static function massUpdate($column, $arrayPost, $arrayDataUpdate=[])
     {
-        return Utility::massUpdate(self::table(),$column, $arrayPost, $arrayDataUpdate);
+        return static::whereIn($column , $arrayPost)->update($arrayDataUpdate);
 
     }
 
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
-        return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+        return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
 

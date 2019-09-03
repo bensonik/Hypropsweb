@@ -92,7 +92,9 @@
                                 </td>
                                 <td>
                                     @if($data->response != '')
-                                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('project_request_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
+                                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('help_desk_ticket_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
+                                    @else
+                                        <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('help_desk_ticket_response_form') ?>','<?php echo csrf_token(); ?>')">Respond</a>
                                     @endif
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -143,7 +145,7 @@
 
         var postVars = new FormData(form);
         postVars.append('token',token);
-        postVars.append('ckInput',ckInput);
+        postVars.append('response',ckInput);
 
         $('#loading_modal').modal('show');
         $('#'+formModal).modal('hide');

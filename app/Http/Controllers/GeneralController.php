@@ -965,6 +965,16 @@ class GeneralController extends Controller
         }
         //END OF TEAM MEMBER
 
+        //START OF MULTIPLE USERS
+        if($type == 'multiple_users'){
+            $editClassOrId = $_GET['editClassOrId'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('editClassOrId',$editClassOrId)->with('type',$type)->with('add_id',$addButtonId)
+                ->with('hide_id',$hideButtonId);
+
+        }
+        //END OF MULTIPLE USERS
+
     }
     /**
      * Store a newly created resource in storage.

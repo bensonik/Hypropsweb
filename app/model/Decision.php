@@ -175,13 +175,14 @@ class Decision extends Model
 
     public static function massUpdate($column, $arrayPost, $arrayDataUpdate=[])
     {
-        return Utility::massUpdate(self::table(),$column, $arrayPost, $arrayDataUpdate);
+        return static::whereIn($column , $arrayPost)->update($arrayDataUpdate);
 
     }
 
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
-        return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+        return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
 

@@ -484,12 +484,7 @@ class RequisitionController extends Controller
     {
         //
         $request = Requisition::firstRow('id',$request->input('dataId'));
-        $reqCat = RequestCategory::getAllData();
-        $requestType = RequestType::getAllData();
-        $project = ProjectTeam::specialColumns('user_id',Auth::user()->id);
-        return view::make('requisition.attach_form')->with('edit',$request)->with('reqType',$requestType)
-            ->with('reqCat',$reqCat)->with('project',$project);
-
+        return view::make('requisition.attach_form')->with('edit',$request);
     }
 
     /**

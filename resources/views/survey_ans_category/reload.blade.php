@@ -8,7 +8,7 @@
         </th>
 
         <th>Answer Category</th>
-        <th>Score Rating</th>
+        <th>Score Rating %</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>

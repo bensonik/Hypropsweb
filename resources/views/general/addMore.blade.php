@@ -2573,6 +2573,46 @@
 @endif
 <!-- END OF TEAM MEMBER -->
 
+<!-- BEGIN OF MULTIPLE USERS -->
+@if($type == 'multiple_users')
+
+    <div class="row clearfix new_multiple_users remove_multiple_users{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-8" id="">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_user{{$num2}}" onkeyup="searchOptionList('select_user{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','default_search','user{{$num2}}');" name="select_user" placeholder="Select User">
+
+                        <input type="hidden" class="{{$editClassOrId}}" name="user" id="user{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL1{{$num2}}" class="myUL"></ul>
+            </div>
+
+            <div class="col-sm-1 addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMoreEditable('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','multiple_users','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_multiple_users{{$more}}','{{url('add_more')}}','task_list','new_multiple_users','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF MULTIPLE USERS -->
+
 <script>
     $(function() {
         $( ".datepicker2" ).datepicker({

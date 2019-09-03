@@ -194,7 +194,7 @@
                                                             <td>{{$data->subject}}</td>
                                                             <td>{!!$data->details!!}</td>
                                                             <td>{!!$data->response!!}</td>
-                                                            <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::approveStatus($data->response_status)}}</td>
+                                                            <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::defaultStatus($data->response_status)}}</td>
                                                             <td>{{$data->user_u->updated_by}}</td>
                                                             <td>{{$data->created_at}}</td>
                                                             <td>{{$data->updated_at}}</td>

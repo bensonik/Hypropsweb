@@ -31,7 +31,9 @@
             </td>
             <td>
                 @if($data->response != '')
-                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('project_request_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
+                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('help_desk_ticket_response_form') ?>','<?php echo csrf_token(); ?>')">Respond Again</a>
+                @else
+                    <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('help_desk_ticket_response_form') ?>','<?php echo csrf_token(); ?>')">Respond</a>
                 @endif
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -45,7 +47,7 @@
             <td>{{$data->subject}}</td>
             <td>{!!$data->details!!}</td>
             <td>{!!$data->response!!}</td>
-            <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::approveStatus($data->response_status)}}</td>
+            <td class="{{\App\Helpers\Utility::statusIndicator($data->response_status)}}">{{\App\Helpers\Utility::defaultStatus($data->response_status)}}</td>
             <td>{{$data->response_dates}}</td>
             <td>{{$data->user_u->updated_by}}</td>
             <td>{{$data->created_at}}</td>

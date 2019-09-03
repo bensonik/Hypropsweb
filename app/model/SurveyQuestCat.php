@@ -44,11 +44,6 @@ class SurveyQuestCat extends Model
 
     }
 
-    public function account_cat(){
-        return $this->belongsTo('App\model\AccountCategory','acct_id','id')->withDefault();
-
-    }
-
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
@@ -59,18 +54,6 @@ class SurveyQuestCat extends Model
     public static function getAllData()
     {
         return static::where('status', '=','1')->orderBy('id','DESC')->get();
-
-    }
-
-    public static function paginateData($column, $post)
-    {
-        return Utility::paginateData(self::table(),$column, $post);
-
-    }
-
-    public static function paginateData2($column, $post, $column2, $post2)
-    {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
 
     }
 
@@ -170,24 +153,24 @@ class SurveyQuestCat extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post,$column2, $post2)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->first();
 
     }
 
     public static function massUpdate($column, $arrayPost, $arrayDataUpdate=[])
     {
-        return Utility::massUpdate(self::table(),$column, $arrayPost, $arrayDataUpdate);
+        return static::whereIn($column , $arrayPost)->update($arrayDataUpdate);
 
     }
 
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
-        return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+        return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
-
-
 
 }

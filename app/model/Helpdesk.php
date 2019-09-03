@@ -48,11 +48,6 @@ class Helpdesk extends Model
 
     }
 
-    public function approveName(){
-        return $this->belongsTo('App\User','approved_by','id')->withDefault();
-
-    }
-
     public function ticketCategory(){
         return $this->belongsTo('App\model\TicketCategory','ticket_cat','id')->withDefault();
 
@@ -147,6 +142,35 @@ class Helpdesk extends Model
 
     }
 
+    public static function specialColumnsDate($dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate3($column, $post, $dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate5($column, $post, $column2, $post2, $dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2,$post2)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate7($column, $post, $column2, $post2, $column3, $post3, $dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
     public static function massData($column, $post = [])
     {
         //return Utility::massData(self::table(),$column, $post);
@@ -194,13 +218,14 @@ class Helpdesk extends Model
 
     public static function massUpdate($column, $arrayPost, $arrayDataUpdate=[])
     {
-        return Utility::massUpdate(self::table(),$column, $arrayPost, $arrayDataUpdate);
+        return static::whereIn($column , $arrayPost)->update($arrayDataUpdate);
 
     }
 
     public static function defaultUpdate($column, $postId, $arrayDataUpdate=[])
     {
-        return Utility::defaultUpdate(self::table(),$column, $postId, $arrayDataUpdate);
+
+        return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
 
