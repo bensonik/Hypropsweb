@@ -1028,6 +1028,35 @@
 
     }
 
+    function restoreDeletedItems(klass,reloadId,reloadUrl,submitUrl,token) {
+    var items = group_val(klass);
+    if (items.length > 0){
+        swal({
+                title: "Are you sure you want to restore?",
+                text: "This will move this entry to its original location!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, restore it!",
+                cancelButtonText: "No, cancel restore!",
+                closeOnConfirm: false,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    deleteEntry(klass, reloadId, reloadUrl, submitUrl, token);
+                    //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                } else {
+                    swal("Restore Cancelled", "Your data was not restored :)", "error");
+                }
+            });
+
+    }else{
+        alert('Please select an entry to continue');
+    }
+
+}
+
     function deleteItems(klass,reloadId,reloadUrl,submitUrl,token) {
         var items = group_val(klass);
         if (items.length > 0){
