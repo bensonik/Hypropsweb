@@ -15,7 +15,7 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea type="text" id="edit_details" class="form-control " name="details" placeholder="Details">Enter news details</textarea>
+                        <textarea type="text" id="edit_details" class="form-control " name="details" placeholder="Details">{{$edit->news_desc}}</textarea>
                         <script>
                             CKEDITOR.replace('edit_details');
                         </script>

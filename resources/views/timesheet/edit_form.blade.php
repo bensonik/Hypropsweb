@@ -47,7 +47,7 @@
                 <b>Work Date</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" value="{{$edit->work_date}}" class="form-control datepicker" autocomplete="off" name="work_date" placeholder="Work Date">
+                        <input type="text" value="{{$edit->work_date}}" class="form-control datepicker1" autocomplete="off" name="work_date" placeholder="Work Date">
                     </div>
                 </div>
             </div>

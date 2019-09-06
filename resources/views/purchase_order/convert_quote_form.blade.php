@@ -901,9 +901,11 @@
 <script>
     $(function() {
         $( ".datepicker4" ).datepicker({
-            /*changeMonth: true,
-             changeYear: true*/
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+            /*yearRange: "-90:+00"*/
+
         });
     });
-
 </script>

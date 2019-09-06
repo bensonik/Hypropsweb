@@ -51,9 +51,12 @@
 
 <script>
     $(function() {
-     $( ".datepickerEdit" ).datepicker({
-     /*changeMonth: true,
-     changeYear: true*/
-     });
-     });
+        $( ".datepicker1" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+            /*yearRange: "-90:+00"*/
+
+        });
+    });
 </script>

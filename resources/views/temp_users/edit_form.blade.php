@@ -108,7 +108,7 @@
                 <b>Date of Birth</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" value="{{$edit->dob}}" name="birthdate" placeholder="Date of Birth" >
+                        <input type="text" class="form-control datepicker1" value="{{$edit->dob}}" name="birthdate" placeholder="Date of Birth" >
                     </div>
                 </div>
             </div>
@@ -201,7 +201,7 @@
                 <b>Certificate Expiry Date</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" name="cert_expiry_date" value="{{$edit->cert_expiry_date}}" placeholder="Certificate Expiry Date" >
+                        <input type="text" class="form-control datepicker1" name="cert_expiry_date" value="{{$edit->cert_expiry_date}}" placeholder="Certificate Expiry Date" >
                     </div>
                 </div>
             </div>
@@ -209,7 +209,7 @@
                 <b>Certificate Issue Date</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" name="cert_issue_date" value="{{$edit->cert_issue_date}}" placeholder="Certificate Issue Date" >
+                        <input type="text" class="form-control datepicker1" name="cert_issue_date" value="{{$edit->cert_issue_date}}" placeholder="Certificate Issue Date" >
                     </div>
                 </div>
             </div>
@@ -217,7 +217,7 @@
                 <b>BUPA/HMO Expiry Date</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" name="bupa_hmo_expiry_date" value="{{$edit->bupa_hmo_expiry_date}}" placeholder="BUPA/HMO Expiry Date">
+                        <input type="text" class="form-control datepicker1" name="bupa_hmo_expiry_date" value="{{$edit->bupa_hmo_expiry_date}}" placeholder="BUPA/HMO Expiry Date">
                     </div>
                 </div>
             </div>
@@ -230,7 +230,7 @@
                 <b>Green Card Expiry Date</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" value="{{$edit->green_card_expiry_date}}" name="green_card_expiry_date" placeholder="Green Card Expiry Date" >
+                        <input type="text" class="form-control datepicker1" value="{{$edit->green_card_expiry_date}}" name="green_card_expiry_date" placeholder="Green Card Expiry Date" >
                     </div>
                 </div>
             </div>
@@ -291,9 +291,12 @@
 
 <script>
     $(function() {
-     $( ".datepicker" ).datepicker({
-     /*changeMonth: true,
-     changeYear: true*/
-     });
-     });
+        $( ".datepicker1" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+            /*yearRange: "-90:+00"*/
+
+        });
+    });
 </script>

@@ -22,8 +22,11 @@ class Events extends Model
 
     public static $mainRules = [
         'event_title' => 'required',
-        'start' => 'required',
-        'end' => 'required',
+        'schedule_type' => 'required',
+        'start_date' => 'required',
+        'end_date' => 'required',
+        'start_time' => 'required',
+        'end_time' => 'required',
     ];
 
     public function user(){

@@ -168,7 +168,7 @@
                 <b>Date of Birth</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" value="{{$edit->dob}}" name="birthdate" placeholder="Date of Birth" >
+                        <input type="text" class="form-control datepicker1" value="{{$edit->dob}}" name="birthdate" placeholder="Date of Birth" >
                     </div>
                 </div>
             </div>
@@ -298,7 +298,7 @@
                 <b>Date of Employment</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker" value="{{$edit->employ_date}}" name="employ_date" placeholder="Date of Employment" >
+                        <input type="text" class="form-control datepicker1" value="{{$edit->employ_date}}" name="employ_date" placeholder="Date of Employment" >
                     </div>
                 </div>
             </div>
@@ -362,9 +362,12 @@
 
 <script>
     $(function() {
-     $( ".datepicker" ).datepicker({
-     /*changeMonth: true,
-     changeYear: true*/
-     });
-     });
+        $( ".datepicker1" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
+            /*yearRange: "-90:+00"*/
+
+        });
+    });
 </script>

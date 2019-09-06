@@ -85,6 +85,8 @@ class Utility
     const T_USER = '2', P_USER = '1';
     const TEMP_EXTERNAL_STAFF = 2, TEMP_JOB_CANDIDATE = 1, TEMP_CLIENT = 3;
     const HSE_REPORT_TYPE = [1 => 'Incident', 2 => 'Hazard'];
+    const EVENT_TYPE = [1 => 'My Schedule', 2 => 'General Schedule'];
+    const GENERAL_SCHEDULE = 2, MY_SCHEDULE = 1;
 
 
     public static function IMG_URL(){
@@ -660,7 +662,7 @@ class Utility
     }
 
     public static function standardDateTime($date){
-        $newDate = date("d-m-Y:H:i:s", strtotime($date));
+        $newDate = date("Y-m-d H:i:s", strtotime($date));
         return $newDate;
     }
 
@@ -1324,6 +1326,13 @@ class Utility
             return 'Incident';
         }
         return 'Hazard';
+    }
+
+    public static function eventType($reportType){
+        if($reportType == 1){
+            return 'My Schedule';
+        }
+        return 'General Schedule';
     }
 
     public static function statusDisplay($statusInt){

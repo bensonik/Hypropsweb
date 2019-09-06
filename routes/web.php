@@ -905,7 +905,7 @@ Route::any('/search_help_desk_ticket', 'HelpDeskController@searchReport')->name(
 Route::any('/help_desk_report', 'HelpDeskController@report')->name('help_desk_report')->middleware('auth');
 
 // -------------NEWS MODULE-----------
-Route::any('/news', 'NewsController@index')->name('admin_category')->middleware('auth');
+Route::any('/news', 'NewsController@index')->name('news')->middleware('auth');
 Route::post('/create_news', 'NewsController@create')->name('create_news');
 Route::post('/edit_news_form', 'NewsController@editForm')->name('edit_news_form');
 Route::post('/edit_news', 'NewsController@edit')->name('edit_news');
@@ -955,5 +955,16 @@ Route::any('/search_document_using_date', 'DocumentsController@searchDocumentUsi
 Route::any('/remove_document_user', 'DocumentsController@removeAccessibleUser')->name('remove_document_user');
 Route::any('/restore_document_archive', 'DocumentsController@restoreDocumentArchive')->name('restore_document_archive');
 
+// -------------EVENTS MODULE-----------
+Route::any('/events', 'EventsController@index')->name('events')->middleware('auth');
+Route::any('/my_events_calendar', 'EventsController@myCalendar')->name('my_events_calendar')->middleware('auth');
+Route::any('/general_events_calendar', 'EventsController@generalCalendar')->name('general_events_calendar')->middleware('auth');
+Route::post('/create_events', 'EventsController@create')->name('create_events');
+Route::post('/edit_events_form', 'EventsController@editForm')->name('edit_events_form');
+Route::post('/edit_events', 'EventsController@edit')->name('edit_events');
+Route::post('/delete_events', 'EventsController@destroy')->name('delete_events');
+Route::any('/change_calendar', 'EventsController@changeCalendar')->name('change_calendar')->middleware('auth');
+Route::any('/load_my_calendar', 'EventsController@loadMyCalendar')->name('load_my_calendar');
+Route::any('/load_general_calendar', 'EventsController@loadGeneralCalendar')->name('load_general_calendar');
 
 

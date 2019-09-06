@@ -50,6 +50,13 @@
     <link rel="stylesheet" href="{{ asset('summernote/dist/summernote.css') }}">
     <!-- Multiselect Css -->
     <link rel="stylesheet" href="{{ asset('multiselect/dist/css/bootstrap-multiselect.css') }}">
+
+    <!-- Full Event Calendar !-->
+    <link rel="stylesheet" href="{{ asset('full_calendar/packages/core/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('full_calendar/packages/daygrid/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('full_calendar/packages/timegrid/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('full_calendar/packages/list/main.css') }}">
+
     <!-- Jquery Core Js -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
@@ -650,17 +657,17 @@
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">event</i>
-                        <span>Events/Appointments</span>
+                        <span>Events/Appointments/Tasks</span>
                     </a>
                     <ul class="ml-menu">
                         <li>
-                            <a href="{{url('hse_report')}}">Manage Events/Appointments</a>
+                            <a href="{{url('events')}}">Manage Events/Appointments/Tasks</a>
                         </li>
                         <li>
-                            <a href="{{url('hse_report_filter')}}">My Events Calendar</a>
+                            <a href="{{url('my_events_calendar')}}">My Calendar</a>
                         </li>
                         <li>
-                            <a href="{{url('hse_source_type')}}">General Events Calendar</a>
+                            <a href="{{url('general_events_calendar')}}">General Calendar</a>
                         </li>
                     </ul>
                 </li>
@@ -680,6 +687,24 @@
                             </li>
 
                         @endif
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">device_hub</i>
+                        <span>CRM</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('events')}}">Pipeline</a>
+                        </li>
+                        <li>
+                            <a href="{{url('my_events_calendar')}}">Activities</a>
+                        </li>
+                        <li>
+                            <a href="{{url('general_events_calendar')}}">Report</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -914,6 +939,24 @@
                             <a href="{{url('chart_approved_admin_requests')}}">Request Chart Reports</a>
                         </li>
 
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">device_hub</i>
+                        <span>Fleet/Transport Management</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('events')}}">Pipeline</a>
+                        </li>
+                        <li>
+                            <a href="{{url('my_events_calendar')}}">Activities</a>
+                        </li>
+                        <li>
+                            <a href="{{url('general_events_calendar')}}">Report</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -1697,6 +1740,14 @@
 <script src="{{ asset('plugins/node-waves/waves.js') }}"></script>
 <!-- App Custom Helpers -->
 <script src="{{ asset('js/app-helpers.js') }}"></script>
+
+<!-- Full Event Calendar -->
+<script src="{{ asset('full_calendar/packages/core/main.js') }}"></script>
+<script src="{{ asset('full_calendar/packages/interaction/main.js') }}"></script>
+<script src="{{ asset('full_calendar/packages/daygrid/main.js') }}"></script>
+<script src="{{ asset('full_calendar/packages/timegrid/main.js') }}"></script>
+<script src="{{ asset('full_calendar/packages/list/main.js') }}"></script>
+
 <!-- Export to DOCS,PDF,EXCEL,MSWORD,CSV -->
 <script src="{{ asset('export/tableExport.js') }}"></script>
 <script src="{{ asset('export/jquery.base64.js') }}"></script>
