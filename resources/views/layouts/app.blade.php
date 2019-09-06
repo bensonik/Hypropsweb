@@ -944,7 +944,7 @@
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
-                        <i class="material-icons">device_hub</i>
+                        <i class="material-icons">local_shipping</i>
                         <span>Fleet/Transport Management</span>
                     </a>
                     <ul class="ml-menu">

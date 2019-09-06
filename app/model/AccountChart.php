@@ -182,9 +182,9 @@ class AccountChart extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post2)
+    public static function firstRow2($table,$column, $post,$column2, $post2)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post2);
+        return Utility::firstRow2($table,$column, $post,$column2, $post2);
 
     }
 
