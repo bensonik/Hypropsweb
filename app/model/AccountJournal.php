@@ -128,9 +128,9 @@ class AccountJournal extends Model
 
     }
 
-    public static function firstRow2($column, $post2,$column2, $post2)
+    public static function firstRow2($column, $post,$column2, $post2)
     {
-        return Utility::firstRow2(self::table(),$column, $post2,$column2, $post2);
+        return Utility::firstRow2(self::table(),$column, $post,$column2, $post2);
 
     }
 
