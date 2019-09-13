@@ -15,6 +15,12 @@ class CreateCrmStagesTable extends Migration
     {
         Schema::create('crm_stages', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name')->nullable();
+            $table->string('probability')->nullable();
+            $table->string('stage')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

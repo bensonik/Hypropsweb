@@ -30,7 +30,7 @@ class VendorCustomer extends Model
         'logo' => 'sometimes|image|mimes:jpeg,jpg,png,bmp,gif',
         'name' => 'required',
         'address' => 'required',
-
+        'currency' => 'required',
     ];
 
     public function user_c(){
@@ -172,6 +172,11 @@ class VendorCustomer extends Model
 
     }
 
+    public static function firstRow($column, $post)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->first();
+
+    }
 
     public static function firstRow2($column, $post,$column2, $post2)
     {

@@ -290,7 +290,6 @@
 
     function reloadContent(id,page){
 
-
         $.ajax({
             url: page
         }).done(function(data){
@@ -301,9 +300,20 @@
 
     function reloadContentId(id,page,dataId){
 
-
         $.ajax({
             url: page+'?dataId='+dataId
+        }).done(function(data){
+            $('#'+id).html(data);
+        });
+
+    }
+
+    function reloadContentWithInputs(id,page,formId){
+
+        var inputVars = $('#'+formId).serialize();
+
+        $.ajax({
+            url: page+'?get=rough&'+inputVars
         }).done(function(data){
             $('#'+id).html(data);
         });
@@ -2669,3 +2679,149 @@ function print_content(el){
             e.preventDefault();
         }
     }
+
+    function submitMediaFormEditor(formModal,formId,submitUrl,reload_id,reloadUrl,token,editorName,editorId){
+
+    var form = document.forms.namedItem(formId);
+    var ckInput = CKEDITOR.instances[editorId].getData();
+
+    var postVars = new FormData(form);
+    postVars.append('token',token);
+    postVars.append(editorName,ckInput);
+
+    $('#loading_modal').modal('show');
+    $('#'+formModal).modal('hide');
+
+    sendRequestMediaForm(submitUrl,token,postVars)
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalFormError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'saved'){
+
+                var successMessage = swalSuccess('Data saved successfully');
+                swal("Success!", successMessage, "success");
+                //location.reload();
+
+            }else{
+
+                //alert(message2);
+                console.log(message2)
+                var infoMessage = swalWarningError(message2);
+                swal("Warning!", infoMessage, "warning");
+
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            reloadContent(reload_id,reloadUrl);
+        }
+    }
+
+}
+
+    function submitMediaFormEditorReloadWithInputs(formModal,formId,submitUrl,reload_id,reloadUrl,token,editorName,editorId){
+
+    var form = document.forms.namedItem(formId);
+    var ckInput = CKEDITOR.instances[editorId].getData();
+
+    var postVars = new FormData(form);
+    postVars.append('token',token);
+    postVars.append(editorName,ckInput);
+
+    $('#loading_modal').modal('show');
+    $('#'+formModal).modal('hide');
+
+    sendRequestMediaForm(submitUrl,token,postVars)
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalFormError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'saved'){
+
+                var successMessage = swalSuccess('Data saved successfully');
+                swal("Success!", successMessage, "success");
+                //location.reload();
+
+            }else{
+
+                //alert(message2);
+                console.log(message2)
+                var infoMessage = swalWarningError(message2);
+                swal("Warning!", infoMessage, "warning");
+
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            reloadContentWithInputs(reload_id,reloadUrl,formId);
+        }
+    }
+
+}
+
+    function submitMediaFormReloadWithInputs(formModal,formId,submitUrl,reload_id,reloadUrl,token){
+    var form_get = $('#'+formId);
+    var form = document.forms.namedItem(formId);
+    var postVars = new FormData(form);
+    postVars.append('token',token);
+    $('#loading_modal').modal('show');
+    $('#'+formModal).modal('hide');
+
+    sendRequestMediaForm(submitUrl,token,postVars);
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalFormError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'saved'){
+
+                var successMessage = swalSuccess('Data saved successfully');
+                swal("Success!", successMessage, "success");
+
+            }else if(message2 == 'token_mismatch'){
+
+                location.reload();
+
+            }else {
+                var infoMessage = swalWarningError(message2);
+                swal("Warning!", infoMessage, "warning");
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            reloadContentWithInputs(reload_id,reloadUrl,formId);
+        }
+    }
+
+}
+
+
+
+
+
+
+

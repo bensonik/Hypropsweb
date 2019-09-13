@@ -15,6 +15,11 @@ class CreateCrmActivityTypesTable extends Migration
     {
         Schema::create('crm_activity_types', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name')->nullable();
+            $table->string('summary')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

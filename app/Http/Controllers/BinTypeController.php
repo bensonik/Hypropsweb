@@ -185,8 +185,8 @@ class BinTypeController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = Zone::specialColumns('bin_id', $all_id[$i]);
-            if(count($rowDataSalary)>0){
+            $rowDataZone = Zone::specialColumns('bin_id', $all_id[$i]);
+            if(count($rowDataZone)>0){
                 $unused[$i] = $all_id[$i];
             }else{
                 $in_use[$i] = $all_id[$i];

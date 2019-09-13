@@ -15,6 +15,11 @@ class CreateCrmSalesTeamTable extends Migration
     {
         Schema::create('crm_sales_team', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('name')->nullable();
+            $table->string('users')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

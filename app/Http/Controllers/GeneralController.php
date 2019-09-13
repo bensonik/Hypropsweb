@@ -7,6 +7,7 @@ use App\model\AccountChart;
 use App\model\AccountDetailType;
 use App\model\AccountJournal;
 use App\model\CompetencyFramework;
+use App\model\CrmLead;
 use App\model\Currency;
 use App\model\PoExtension;
 use App\model\Project;
@@ -324,26 +325,19 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
-        //SEARCH CUSTOMER
-        if($type == 'search_customer'){
+        //SEARCH CRM LEAD
+        if($type == 'search_crm_lead'){
 
             $searchId = $_GET['searchId'];
             $hiddenId = $_GET['hiddenId'];
             $listId = $_GET['listId'];
 
             if($pickedVal != '') {
-                $search = VendorCustomer::searchCustomer($pickedVal);
-                $obtain_array = [];
+                $fetchData = CrmLead::searchLead($pickedVal);
 
-                foreach ($search as $data) {
-
-                    $obtain_array[] = $data->id;
-                }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = VendorCustomer::massData('id', $user_ids);
             }else{
 
-                $fetchData = VendorCustomer::specialColumns('company_type', Utility::CUSTOMER);
+                $fetchData = CrmLead::getAllData();
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
             }
@@ -367,8 +361,36 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->id;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = VendorCustomer::massData('id', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $dataIds);
+            }else{
+
+                $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //SEARCH VENDOR
+        if($type == 'search_vendor'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = VendorCustomer::searchVendor($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $dataIds = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $dataIds);
             }else{
 
                 $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
@@ -403,8 +425,8 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->id;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = VendorCustomer::massData('id', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = VendorCustomer::massData('id', $dataIds);
             }else{
 
                 $fetchData = ($contactType == Utility::CUSTOMER) ? VendorCustomer::specialColumns('company_type', Utility::CUSTOMER) : VendorCustomer::specialColumns('company_type', Utility::VENDOR);
@@ -439,8 +461,8 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->id;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = Inventory::massData('id', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = Inventory::massData('id', $dataIds);
             }else{
 
                 $fetchData = Inventory::getAllData();
@@ -467,8 +489,8 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->id;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = RFQExtension::massData('id', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = RFQExtension::massData('id', $dataIds);
             }else{
 
                 $fetchData = RFQExtension::getAllData();
@@ -495,8 +517,8 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->uid;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = QuoteExtension::massData('uid', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = QuoteExtension::massData('uid', $dataIds);
             }else{
 
                 $fetchData = QuoteExtension::getAllData();
@@ -537,8 +559,8 @@ class GeneralController extends Controller
 
                     $obtain_array[] = $data->id;
                 }
-                $user_ids = array_unique($obtain_array);
-                $fetchData = Inventory::massData('id', $user_ids);
+                $dataIds = array_unique($obtain_array);
+                $fetchData = Inventory::massData('id', $dataIds);
             }else{
 
                 $fetchData = Inventory::getAllData();

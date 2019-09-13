@@ -43,11 +43,6 @@ class Bin extends Model
 
     }
 
-    public function approval(){
-        return $this->belongsTo('App\model\HrisApprovalSys','approval_id','id');
-
-    }
-
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
@@ -58,18 +53,6 @@ class Bin extends Model
     public static function getAllData()
     {
         return static::where('status', '=','1')->orderBy('id','DESC')->get();
-
-    }
-
-    public static function paginateData($column, $post)
-    {
-        return Utility::paginateData(self::table(),$column, $post);
-
-    }
-
-    public static function paginateData2($column, $post, $column2, $post2)
-    {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
 
     }
 

@@ -26,7 +26,7 @@
                                 </div>
 
                                 <div class="col-sm-4">
-                                    <b>Contact Type*</b>
+                                    <b>Currency*</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select class="form-control" name="currency" placeholder="currency" required>
@@ -122,6 +122,7 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
@@ -151,7 +152,6 @@
 
                             </div>
 
-                        </div>
 
                         <div class="row clearfix">
                             <div class="col-sm-4">
@@ -228,7 +228,7 @@
                 </div>
                 <div class="modal-footer">
                     <button onclick="submitMediaForm('createModal','createMainForm','<?php echo url('create_vendor_customer'); ?>','reload_data',
-                            '<?php echo url('vendor'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                            '<?php echo url('vendor'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -314,7 +314,7 @@
                                 <div class="form-line">
                                     <input type="text" id="search_vendor" class="form-control"
                                            onkeyup="searchItem('search_vendor','reload_data','<?php echo url('search_vendor') ?>','{{url('vendor')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_user" placeholder="Search Users" >
+                                           name="search_user" placeholder="Search Vendor" >
                                 </div>
                             </div>
                         </div>

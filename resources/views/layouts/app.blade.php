@@ -697,13 +697,22 @@
                     </a>
                     <ul class="ml-menu">
                         <li>
-                            <a href="{{url('events')}}">Pipeline</a>
+                            <a href="{{url('crm_activity_type')}}">Activity Type</a>
                         </li>
                         <li>
-                            <a href="{{url('my_events_calendar')}}">Activities</a>
+                            <a href="{{url('crm_opportunity_stage')}}">Opportunity Stages</a>
                         </li>
                         <li>
-                            <a href="{{url('general_events_calendar')}}">Report</a>
+                            <a href="{{url('crm_sales_team')}}">Sales Team</a>
+                        </li>
+                        <li>
+                            <a href="{{url('crm_lead')}}">Manage Lead</a>
+                        </li>
+                        <li>
+                            <a href="{{url('crm_opportunity')}}">Opportunities</a>
+                        </li>
+                        <li>
+                            <a href="{{url('crm_report')}}">Report</a>
                         </li>
                     </ul>
                 </li>
@@ -1740,6 +1749,12 @@
 <script src="{{ asset('plugins/node-waves/waves.js') }}"></script>
 <!-- App Custom Helpers -->
 <script src="{{ asset('js/app-helpers.js') }}"></script>
+
+<!-- FORM WIZARD -->
+<script src="{{ asset('js/pages/forms/form-wizard.js') }}"></script>
+
+<!-- JQuery Steps Plugin Js -->
+<script src="{{ asset('/plugins/jquery-steps/jquery.steps.js') }}"></script>
 
 <!-- Full Event Calendar -->
 <script src="{{ asset('full_calendar/packages/core/main.js') }}"></script>

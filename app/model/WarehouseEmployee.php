@@ -162,6 +162,12 @@ class WarehouseEmployee extends Model
 
     }
 
+    public static function firstRow($column, $post)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->first();
+
+    }
+
     public static function firstRow2($column, $post,$column2, $post2)
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->where($column2, '=',$post2)->first();

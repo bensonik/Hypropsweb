@@ -539,7 +539,7 @@ Route::post('/edit_unit_measure_form', 'UnitMeasureController@editForm')->name('
 Route::post('/edit_unit_measure', 'UnitMeasureController@edit')->name('edit_unit_measure');
 Route::post('/delete_unit_measure', 'UnitMeasureController@destroy')->name('delete_unit_measure');
 
-// -------------VENDOR MODULE-----------
+// -------------VENDOR/CUSTOMER MODULE-----------
 Route::any('/vendor', 'VendorCustomerController@indexVendor')->name('vendor_customer')->middleware('auth');
 Route::any('/customer', 'VendorCustomerController@indexCustomer')->name('vendor_customer')->middleware('auth');
 Route::post('/create_vendor_customer', 'VendorCustomerController@create')->name('create_vendor_customer');
@@ -966,5 +966,66 @@ Route::post('/delete_events', 'EventsController@destroy')->name('delete_events')
 Route::any('/change_calendar', 'EventsController@changeCalendar')->name('change_calendar')->middleware('auth');
 Route::any('/load_my_calendar', 'EventsController@loadMyCalendar')->name('load_my_calendar');
 Route::any('/load_general_calendar', 'EventsController@loadGeneralCalendar')->name('load_general_calendar');
+
+// -------------CRM ACTIVITY TYPE MODULE-----------
+Route::any('/crm_activity_type', 'CrmActivityTypeController@index')->name('crm_activity_type')->middleware('auth');
+Route::post('/create_crm_activity_type', 'CrmActivityTypeController@create')->name('create_crm_activity_type');
+Route::post('/edit_crm_activity_type_form', 'CrmActivityTypeController@editForm')->name('edit_crm_activity_type_form');
+Route::post('/edit_crm_activity_type', 'CrmActivityTypeController@edit')->name('edit_crm_activity_type');
+Route::post('/delete_crm_activity_type', 'CrmActivityTypeController@destroy')->name('delete_crm_activity_type');
+
+// -------------CRM OPPORTUNITY STAGE MODULE-----------
+Route::any('/crm_opportunity_stage', 'CrmStagesController@index')->name('crm_opportunity_stage')->middleware('auth');
+Route::post('/create_crm_opportunity_stage', 'CrmStagesController@create')->name('create_crm_opportunity_stage');
+Route::post('/edit_crm_opportunity_stage_form', 'CrmStagesController@editForm')->name('edit_crm_opportunity_stage_form');
+Route::post('/edit_crm_opportunity_stage', 'CrmStagesController@edit')->name('edit_crm_opportunity_stage');
+Route::post('/delete_crm_opportunity_stage', 'CrmStagesController@destroy')->name('delete_crm_opportunity_stage');
+
+// -------------CRM SALES TEAM MODULE-----------
+Route::any('/crm_sales_team', 'CrmSalesTeamController@index')->name('crm_sales_team')->middleware('auth');
+Route::post('/create_crm_sales_team', 'CrmSalesTeamController@create')->name('create_crm_sales_team');
+Route::post('/edit_crm_sales_team_form', 'CrmSalesTeamController@editForm')->name('edit_crm_sales_team_form');
+Route::post('/edit_crm_sales_team', 'CrmSalesTeamController@edit')->name('edit_crm_sales_team');
+Route::post('/delete_crm_sales_team', 'CrmSalesTeamController@destroy')->name('delete_crm_sales_team');
+Route::any('/search_crm_sales_team', 'CrmSalesTeamController@searchData')->name('search_crm_sales_team');
+Route::any('/remove_crm_sales_team_user', 'CrmSalesTeamController@removeUser')->name('remove_crm_sales_team_user');
+
+// -------------CRM LEAD MODULE-----------
+Route::any('/crm_lead', 'CrmLeadController@index')->name('crm_lead')->middleware('auth');
+Route::post('/create_crm_lead', 'CrmLeadController@create')->name('create_crm_lead');
+Route::post('/edit_crm_lead_form', 'CrmLeadController@editForm')->name('edit_crm_lead_form');
+Route::post('/convert_crm_lead_form', 'CrmLeadController@convertForm')->name('convert_crm_lead_form');
+Route::post('/edit_crm_lead', 'CrmLeadController@edit')->name('edit_crm_lead');
+Route::any('/search_crm_lead', 'CrmLeadController@searchLead')->name('search_crm_lead');
+Route::post('/delete_crm_lead', 'CrmLeadController@destroy')->name('delete_crm_lead');
+Route::post('/change_crm_lead_status', 'CrmLeadController@changeStatus')->name('change_crm_lead_status');
+
+// -------------CRM OPPORTUNITY MODULE-----------
+Route::any('/crm_opportunity', 'CrmOpportunityController@index')->name('crm_opportunity')->middleware('auth');
+Route::post('/create_crm_opportunity', 'CrmOpportunityController@create')->name('create_crm_opportunity');
+Route::post('/edit_crm_opportunity_form', 'CrmOpportunityController@editForm')->name('edit_crm_opportunity_form');
+Route::post('/edit_crm_opportunity', 'CrmOpportunityController@edit')->name('edit_crm_opportunity');
+Route::any('/search_crm_opportunity', 'CrmOpportunityController@searchOpportunity')->name('search_crm_opportunity');
+Route::post('/delete_crm_opportunity', 'CrmOpportunityController@destroy')->name('delete_crm_opportunity');
+Route::any('/fetch_crm_possibility', 'CrmOpportunityController@fetchPossibility')->name('fetch_crm_possibility');
+Route::any('/crm_opportunity/id/{id}/', 'CrmOpportunityController@opportunityItem')->name('crm_opportunity_item')->middleware('auth');
+
+// -------------CRM ACTIVITY STAGE MODULE-----------
+Route::any('/crm_activity', 'CrmActivityController@index')->name('crm_activity')->middleware('auth');
+Route::post('/create_crm_activity', 'CrmActivityController@create')->name('create_crm_activity');
+Route::post('/edit_crm_activity_form', 'CrmActivityController@editForm')->name('edit_crm_activity_form');
+Route::post('/edit_crm_activity', 'CrmActivityController@edit')->name('edit_crm_activity');
+Route::post('/delete_crm_activity', 'CrmActivityController@destroy')->name('delete_crm_activity');
+Route::any('/crm_activity_response_form', 'CrmActivityController@activityResponseForm')->name('crm_activity_response_form');
+Route::any('/crm_activity_response', 'CrmActivityController@activityResponse')->name('crm_activity_response');
+
+
+// -------------CRM NOTES STAGE MODULE-----------
+Route::any('/crm_notes', 'CrmNotesController@index')->name('crm_notes')->middleware('auth');
+Route::post('/create_crm_notes', 'CrmNotesController@create')->name('create_crm_notes');
+Route::post('/edit_crm_notes_form', 'CrmNotesController@editForm')->name('edit_crm_notes_form');
+Route::post('/edit_crm_notes', 'CrmNotesController@edit')->name('edit_crm_notes');
+Route::post('/delete_crm_notes', 'CrmNotesController@destroy')->name('delete_crm_notes');
+
 
 

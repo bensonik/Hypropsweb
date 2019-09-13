@@ -214,8 +214,8 @@ class TaxController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = SalaryStructure::specialColumns('id', $all_id[$i]);
-            if(count($rowDataSalary)>0){
+            $rowDataTax = SalaryStructure::specialColumns('id', $all_id[$i]);
+            if(count($rowDataTax)>0){
                 $unused[$i] = $all_id[$i];
             }else{
                 $in_use[$i] = $all_id[$i];

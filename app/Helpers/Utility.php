@@ -312,6 +312,25 @@ class Utility
         return $newArray;
     }
 
+    public static function firstRow($table,$column,$post)
+    {
+        return DB::table($table)
+            ->where('status', self::STATUS_ACTIVE)
+            ->where($column, $post)
+            ->orderBy('id','DESC')->first();
+
+    }
+
+    public static function firstRow2($table,$column,$post,$column2,$post2)
+    {
+        return DB::table($table)
+            ->where('status', self::STATUS_ACTIVE)
+            ->where($column, $post)
+            ->where($column2, $post2)
+            ->orderBy('id','DESC')->first();
+
+    }
+
     public static function paginateAllData($table)
     {
         return DB::table($table)
@@ -1455,6 +1474,8 @@ class Utility
         return html_entity_decode($output,null,'UTF-8');
 
     }
+
+
 
 
 }

@@ -178,15 +178,15 @@ class PositionController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = User::specialColumns('position_id', $all_id[$i]);
-            if(count($rowDataSalary)>0){
+            $rowDataPosition = User::specialColumns('position_id', $all_id[$i]);
+            if(count($rowDataPosition)>0){
                 $unused[$i] = $all_id[$i];
             }else{
                 $in_use[$i] = $all_id[$i];
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' tax(es) has been used in another module and cannot be deleted' : '';
+            ' position(s) has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
             $delete = Position::massUpdate('id',$in_use,$dbData);
 

@@ -294,10 +294,10 @@ class VendorCustomerController extends Controller
             $obtain_array[] = $search[$i]->id;
         }*/
 
-        $user_ids = array_unique($obtain_array);
-        $mainData =  VendorCustomer::massDataCondition('id', $user_ids,'company_type',Utility::CUSTOMER);
+        $dataIds = array_unique($obtain_array);
+        $mainData =  VendorCustomer::massDataCondition('id', $dataIds,'company_type',Utility::CUSTOMER);
         //print_r($obtain_array); die();
-        if (count($user_ids) > 0) {
+        if (count($dataIds) > 0) {
 
             return view::make('vendor_customer.vendor_customer_search')->with('mainData',$mainData);
         }else{
@@ -325,15 +325,15 @@ class VendorCustomerController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = AccountJournal::specialColumns('vendor_customer', $all_id[$i]);
-            if(count($rowDataSalary)>0){
+            $rowDataJournal = AccountJournal::specialColumns('vendor_customer', $all_id[$i]);
+            if(count($rowDataJournal)>0){
                 $unused[$i] = $all_id[$i];
             }else{
                 $in_use[$i] = $all_id[$i];
             }
         }
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' contact has been used in another module and cannot be deleted' : '';
+            ' contact has been used in another general ledger and cannot be deleted' : '';
         if(count($in_use) > 0){
             $delete = VendorCustomer::massUpdate('id',$in_use,$dbData);
 

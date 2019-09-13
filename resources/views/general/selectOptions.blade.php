@@ -356,6 +356,14 @@
     </select>
 @endif
 
+@if($type == 'search_crm_lead')
+    @foreach($optionArray as $data)
 
+        <li>
+            <a   onclick="dropdownItem('{{$searchId}}','{{$data->name}} ({{$data->email1}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->name}} ({{$data->email1}})</a>
+        </li>
+
+    @endforeach
+@endif
 
 

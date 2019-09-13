@@ -18,7 +18,7 @@
             </div>
 
             <div class="col-sm-4">
-                <b>Contact Type*</b>
+                <b>Currency*</b>
                 <div class="form-group">
                     <div class="form-line">
                         <select class="form-control" name="currency" placeholder="currency" required>
@@ -66,7 +66,7 @@
                 <b>Zip Code*</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" name="zip_code" placeholder="Zip Code" required>
+                        <input type="text" class="form-control" name="zip_code" value="{{$edit->zip_code}}" placeholder="Zip Code" required>
                     </div>
                 </div>
             </div>
@@ -114,6 +114,7 @@
                     </div>
                 </div>
             </div>
+        </div>
 
             <div class="row clearfix">
                 <div class="col-sm-4">
@@ -143,7 +144,6 @@
 
             </div>
 
-        </div>
 
         <div class="row clearfix">
             <div class="col-sm-4">

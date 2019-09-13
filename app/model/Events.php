@@ -136,9 +136,10 @@ class Events extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post2,$column2, $post)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
-        return Utility::firstRow2($table,$column, $post2,$column2, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->first();
 
     }
 
