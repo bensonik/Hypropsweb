@@ -1707,6 +1707,23 @@
                 </div>
             </div>
 
+            <!-- QUICK NOTES MODAL -->
+            <div class="modal fade" id="quick_notes_modal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-sm" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel"></h4>
+                        </div>
+                        <div class="modal-body" id="quick_notes">
+
+                        </div>
+                        <div class="modal-footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             @yield('content')
 
         </div>
