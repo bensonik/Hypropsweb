@@ -154,7 +154,7 @@ class ProjectStatusController extends Controller
 
             if(in_array($val->task_status,$statusOpen)){
                 $openUserTask[] = $val->task_status;
-            }
+        }
             if($val->task_status == $statusClosed){
                 $closedUserTask[] = $val->task_status;
             }

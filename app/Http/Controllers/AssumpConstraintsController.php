@@ -267,7 +267,7 @@ class AssumpConstraintsController extends Controller
     }
 
     public function logComments($log,$log_id){
-        $comments = AssumpConstraintsComment::specialColumns('assump_id',$log_id);
+        $comments = AssumpConstraintsComment::specialColumnsAsc('assump_id',$log_id);
         $log->allComments = $comments;
         return $log;
     }

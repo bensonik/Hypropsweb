@@ -208,16 +208,42 @@ class CrmLeadController extends Controller
     public function destroy(Request $request)
     {
         //
-        $idArray = json_decode($request->input('all_data'));
+        $all_id = json_decode($request->input('all_data'));
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        CrmLead::massUpdate('id',$idArray,$dbData);
 
-        return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
-        ]);
+        $inactiveLead = [];
+        $activeLead = [];
+
+        foreach($all_id as $var){
+            $leadRequest = CrmLead::firstRow('id',$var);
+            if($leadRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
+                $inactiveLead[] = $var;
+            }else{
+                $activeLead[] = $var;
+            }
+        }
+
+        $message = (count($inactiveLead) < 1) ? ' and '.count($activeLead).
+            ' lead was not created by you and cannot be deleted' : '';
+        if(count($inactiveLead) > 0){
+
+
+            $delete = CrmLead::massUpdate('id',$inactiveLead,$dbData);
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($inactiveLead).' data(s) has been deleted'.$message
+            ]);
+
+        }else{
+            return  response()->json([
+                'message2' => 'The '.count($activeLead).' was not created by you and cannot be deleted',
+                'message' => 'warning'
+            ]);
+
+        }
     }
 
     public function changeStatus(Request $request)

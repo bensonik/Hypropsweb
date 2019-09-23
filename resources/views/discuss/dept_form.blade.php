@@ -1,5 +1,5 @@
 <p>
-    {{$edit->doc_name}}
+    {{$edit->title}}
 </p>
 
 <table class="table table-bordered table-hover table-striped" id="">
@@ -11,7 +11,7 @@
 
         </th>
 
-        <th>Current department(s) accessible to document(s)</th>
+        <th>Current department(s) accessible to discussion(s)</th>
     </tr>
     </thead>
     <tbody>
@@ -44,7 +44,7 @@
 
         </th>
 
-        <th>Department(s) currently not accessible to document(s)</th>
+        <th>Department(s) currently not accessible to discussion(s)</th>
     </tr>
     </thead>
     <tbody>
@@ -67,4 +67,4 @@
     </tbody>
 </table>
 
-<input type="hidden" value="{{$edit->id}}" id="document_id" name="document_id" />
+<input type="hidden" value="{{$edit->id}}" id="discuss_id" name="discuss_id" />

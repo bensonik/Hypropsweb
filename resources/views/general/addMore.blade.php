@@ -2560,7 +2560,7 @@
 
             <div class="" id="">
                 <div class="form-group">
-                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_team_member{{$more}}','{{url('add_more')}}','task_list','new_team_member','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_team_member{{$more}}','{{url('add_more')}}','team_member','new_team_member','{{$more}}','{{$add_id}}','{{$hide_id}}');">
                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2600,7 +2600,7 @@
 
             <div class="col-sm-1" id="">
                 <div class="form-group">
-                    <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_multiple_users{{$more}}','{{url('add_more')}}','task_list','new_multiple_users','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                    <div style="cursor: pointer;" onclick="removeInputEditable('{{$add_id}}','remove_multiple_users{{$more}}','{{url('add_more')}}','multiple_users','new_multiple_users','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$editClassOrId}}');">
                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                     </div>
                 </div>
@@ -2612,6 +2612,46 @@
 
 @endif
 <!-- END OF MULTIPLE USERS -->
+
+<!-- BEGIN OF MULTIPLE STAGES -->
+@if($type == 'multiple_stages')
+
+    <div class="row clearfix new_multiple_stages remove_multiple_stages{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-8" id="">
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" autocomplete="off" id="select_stage{{$num2}}" onkeyup="searchOptionList('select_stage{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','crm_stage_search','stage{{$num2}}');" name="select_stage" placeholder="Select Stage">
+
+                        <input type="hidden" class="{{$editClassOrId}}" name="stage" id="stage{{$num2}}" />
+                    </div>
+                </div>
+                <ul id="myUL1{{$num2}}" class="myUL"></ul>
+            </div>
+
+            <div class="col-sm-1 addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMoreEditable('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','multiple_stages','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInputEditable('{{$add_id}}','remove_multiple_stages{{$more}}','{{url('add_more')}}','multiple_stages','new_multiple_stages','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF MULTIPLE STAGES -->
 
 <script>
     $(function() {

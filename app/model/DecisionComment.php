@@ -97,6 +97,13 @@ class DecisionComment extends Model
 
     }
 
+    public static function specialColumnsAsc($column, $post)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','ASC')->get();
+
+    }
+
     public static function specialColumnsPage($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);

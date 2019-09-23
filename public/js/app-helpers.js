@@ -3,10 +3,18 @@
  */
 
     const LoadingIcon = "public/icons/loading_icon.gif";
+    const META = $('meta[name="csrf-token"]');
+    const CRSF_TOKEN =  META.attr('content');
 
     function _(e){
         return document.getElementById(e);
     }
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': META.attr('content')
+        }
+    });
 
     var ajax = false;
 
@@ -291,7 +299,9 @@
     function reloadContent(id,page){
 
         $.ajax({
-            url: page
+            type:'POST',
+            url: page,
+            data: 'get=rough'
         }).done(function(data){
             $('#'+id).html(data);
         });
@@ -301,6 +311,7 @@
     function reloadContentId(id,page,dataId){
 
         $.ajax({
+            type:'POST',
             url: page+'?dataId='+dataId
         }).done(function(data){
             $('#'+id).html(data);
@@ -313,6 +324,7 @@
         var inputVars = $('#'+formId).serialize();
 
         $.ajax({
+            type:'POST',
             url: page+'?get=rough&'+inputVars
         }).done(function(data){
             $('#'+id).html(data);
@@ -489,7 +501,6 @@
         }
 
     function fillNextInputParam(value_id,displayId,page,moduleType,param){
-        //var pickedVal = $('#'+value_id).val();
 
         $.ajax({
             url:  page+'?pickedVal='+value_id+'&type='+moduleType+'&param='+param
@@ -635,6 +646,40 @@
         show_all.style.display = 'block';
         }
     }
+
+    function removeInputEditable(show_id,ghost_class,addUrl,type,all_new_fields_class,unique_num,addButtonId,hideButtonId,editableClass) {
+    var get_class = document.getElementsByClassName(all_new_fields_class);
+    //var currAddId = _('hide_button'+unique_num);
+    //var prevNum = unique_num - 1;
+    //var prevAddId = _('hide_button'+prevNum);
+    var addButtons = document.getElementsByClassName('addButtons');
+    if(addButtons.length < 1 ) {
+
+        if (addButtons.length < 1) {
+            prevAddId.style.display = 'block';
+        }
+    }
+    $('.' + ghost_class).remove();
+    /*for (var i = 0; i < get_class.length; i++) {
+     //get_class[i].parentNode.removeChild(get_class[i]);
+     }*/
+    //var show_all = document.getElementById(show_id);
+    var show_all = document.getElementById(hideButtonId);
+    var show_button = '';
+
+    show_button += '<tr><td></td><td></td><td></td><td>';
+    show_button += '<div style="cursor: pointer;" onclick="addMoreEditable(';
+
+    show_button += "'"+addButtonId+"','"+hideButtonId+"','1','" + addUrl + "','"+type+"','"+hideButtonId+"','"+editableClass+"');";
+    show_button += '">';
+    show_button += '<i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></div>';
+    show_button += '</tr>';
+    if (get_class.length === 0) {
+
+        show_all.innerHTML =show_button;
+        show_all.style.display = 'block';
+    }
+}
 
     function removeInputParam(show_id,ghost_class,addUrl,type,all_new_fields_class,unique_num,addButtonId,hideButtonId,param1) {
     var get_class = document.getElementsByClassName(all_new_fields_class);
@@ -1856,8 +1901,6 @@ function print_content(el){
             });
         },3600000)
 
-
-
     }
 
     function postCurrency(page,jsonCurrency,token){
@@ -1912,7 +1955,7 @@ function print_content(el){
                         if (denyReason === false) return false;
                             if (denyReason  != '') {
                             changeStatusMethodInput(klass, reloadId, reloadUrl, submitUrl, token, status, denyReason);
-                            swal("Approved!", "Selected request(s) have been denied.", "success");
+                            swal("Denied!", "Selected request(s) have been denied.", "success");
                         } else {
                             swal.showInputError("Please enter reason for denial");
                                 return false
@@ -1926,6 +1969,63 @@ function print_content(el){
         }
 
     }
+
+    function statusChangeWithReason(klass,reloadId,reloadUrl,submitUrl,token,status) {
+    var items = group_val(klass);
+    if (items.length > 0) {
+        if(status == 3){
+
+            swal({
+                    title: "Are you sure you want to continue ?",
+                    text: "State reason!",
+                    type: "input",
+                    inputPlaceholder: "State your reason",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel!",
+                    closeOnConfirm: false,
+                    closeOnCancel: true
+                },
+                function (denyReason) {
+                    if (denyReason === false) return false;
+                    if (denyReason  != '') {
+                        changeStatusMethodInput(klass, reloadId, reloadUrl, submitUrl, token, status, denyReason);
+                        swal("Changed!", "Selected data have been changed.", "success");
+                    } else {
+                        swal.showInputError("Please enter reason");
+                        return false
+                    }
+                });
+        } else{ //END OF IF STATUS IS FOR REJECTION AND NOT ACCEPTANCE
+
+            swal({
+                    title: "Are you sure you want to continue ?",
+                    text: "You won't be able to revert changes!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, change it!",
+                    cancelButtonText: "No, cancel change!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token, status);
+                        swal("Changed!", "Selected data have been changed.", "success");
+                    } else {
+                        swal("Change Cancelled", "Data remains unchanged :)", "error");
+                    }
+                });
+
+        }  //END OF IF STATUS IS FOR ACCEPTANCE
+
+    }else{
+        alert('Please select an entry to continue');
+    }
+
+}
 
     function deleteChartAccount(klass,reloadId,reloadUrl,submitUrl,token,status) {
     var items = group_val(klass);
@@ -2818,6 +2918,24 @@ function print_content(el){
     }
 
 }
+
+    function fetchFreshComments(postId,commentClass,displayId,submitUrl,token){
+        var commentIds = 'commentIds='+sanitizeDataWithoutEncode(commentClass);
+        var postData = commentIds+'&postId='+postId;
+        //console.log(postData);
+        sendRequestForm(submitUrl,token,postData)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                $('#'+displayId).html(ajax.responseText);
+
+                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+            }
+        }
+
+    }
+
 
 
 

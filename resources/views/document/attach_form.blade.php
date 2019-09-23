@@ -73,7 +73,9 @@
     </tbody>
 </table><hr/>
 
-    @if($edit->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+@endif
+
+@if($edit->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
     <div class="row clearfix">
         <button type="button"  onclick="submitMediaForm('attachModal','attachForm','<?php echo url('edit_document_attachment'); ?>','reload_data',
                 '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>')"
@@ -81,6 +83,7 @@
             SAVE CHANGES
         </button>
     </div>
-    @endif
-
 @endif
+
+
+

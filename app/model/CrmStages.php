@@ -118,6 +118,13 @@ class CrmStages extends Model
 
     }
 
+    public static function massDataGroupByStage($column, $post)
+    {
+        return static::whereIn($column, $post)->where('status', Utility::STATUS_ACTIVE)
+            ->groupBy('stage')->get();
+
+    }
+
     public static function firstRow($column, $post)
     {
         //return Utility::firstRow(self::table(),$column, $post);
@@ -145,5 +152,10 @@ class CrmStages extends Model
 
     }
 
+    public static function searchData($column, $post)
+    {
+        return static::where($column,'LIKE','%'.$post.'%')->orderBy('id','DESC')->get();
+
+    }
 
 }

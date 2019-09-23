@@ -8,6 +8,8 @@ use App\model\AccountDetailType;
 use App\model\AccountJournal;
 use App\model\CompetencyFramework;
 use App\model\CrmLead;
+use App\model\CrmSalesCycle;
+use App\model\CrmStages;
 use App\model\Currency;
 use App\model\PoExtension;
 use App\model\Project;
@@ -15,6 +17,7 @@ use App\model\ProjectTeam;
 use App\model\Quote;
 use App\model\QuoteExtension;
 use App\model\RFQExtension;
+use App\model\SalesTeam;
 use App\model\Survey;
 use App\model\Task;
 use App\model\TaskList;
@@ -708,7 +711,7 @@ class GeneralController extends Controller
                 ->with('param',$param);
         }
 
-        //FOR COMPETENCY FRAMEWORK
+        //FOR DEPARTMENTS OF A SURVEY
         if($type == 'survey_dept'){
             $survey = Survey::firstRow('id',$pickedVal);
             $surveyDept = json_decode($survey->all_dept,true);
@@ -717,7 +720,7 @@ class GeneralController extends Controller
 
         }
 
-        //FOR COMPETENCY FRAMEWORK
+        //FOR CATEGORIES OF A TEST
         if($type == 'test_cat'){
             $survey = Test::firstRow('id',$pickedVal);
             $surveyDept = json_decode($survey->all_category,true);
@@ -726,8 +729,39 @@ class GeneralController extends Controller
 
         }
 
+        //SEARCH CRM STAGE
+        if($type == 'crm_stage_search'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                //PROCESS SEARCH REQUEST
+                $fetchData = CrmStages::searchData('name',$pickedVal);
+            }else{
+
+                $fetchData = CrmStages::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
+        //FOR STAGES OF A CRM SALES CYCLE
+        if($type == 'get_crm_stages'){
+            $salesCycle = CrmSalesCycle::firstRow('id',$pickedVal);
+            $salesCycleStages = json_decode($salesCycle->stages,true);
+            $fetchStages = CrmStages::massData('id',$salesCycleStages);
+            return view::make('general.selectOptions')->with('optionArray',$fetchStages)->with('type',$type);
+
+        }
 
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -996,6 +1030,16 @@ class GeneralController extends Controller
 
         }
         //END OF MULTIPLE USERS
+
+        //START OF MULTIPLE STAGES
+        if($type == 'multiple_stages'){
+            $editClassOrId = $_GET['editClassOrId'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('editClassOrId',$editClassOrId)->with('type',$type)->with('add_id',$addButtonId)
+                ->with('hide_id',$hideButtonId);
+
+        }
+        //END OF MULTIPLE STAGES
 
     }
     /**

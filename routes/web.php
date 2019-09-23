@@ -657,7 +657,7 @@ Route::post('/edit_warehouse_employee', 'WarehouseEmployeeController@edit')->nam
 Route::post('/delete_warehouse_employee', 'WarehouseEmployeeController@destroy')->name('delete_warehouse_employee');
 
 // -------------WAREHOUSE RECEIPT  MODULE-----------
-Route::get('/warehouse_receipt', 'WarehouseReceiptController@index')->name('warehouse_receipt')->middleware('auth');
+Route::any('/warehouse_receipt', 'WarehouseReceiptController@index')->name('warehouse_receipt')->middleware('auth');
 Route::any('/post_warehouse_receipt', 'WarehouseReceiptController@postCreateReceipt')->name('post_warehouse_receipt');
 Route::any('/post_receipt', 'WarehouseReceiptController@postReceipt')->name('post_receipt');
 Route::post('/edit_warehouse_receipt_form', 'WarehouseReceiptController@editForm')->name('edit_warehouse_receipt_form');
@@ -666,7 +666,7 @@ Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchWareho
 Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
 // -------------WAREHOUSE PUT AWAY  MODULE-----------
-Route::get('/put_away', 'WhsePickPutAwayController@index')->name('put_away')->middleware('auth');
+Route::any('/put_away', 'WhsePickPutAwayController@index')->name('put_away')->middleware('auth');
 Route::any('/register_put_away', 'WhsePickPutAwayController@putAway')->name('post_put_away');
 Route::post('/edit_put_away_form', 'WhsePickPutAwayController@editForm')->name('edit_put_away_form');
 Route::post('/edit_put_away', 'WhsePickPutAwayController@edit')->name('edit_put_away');
@@ -1009,6 +1009,7 @@ Route::any('/search_crm_opportunity', 'CrmOpportunityController@searchOpportunit
 Route::post('/delete_crm_opportunity', 'CrmOpportunityController@destroy')->name('delete_crm_opportunity');
 Route::any('/fetch_crm_possibility', 'CrmOpportunityController@fetchPossibility')->name('fetch_crm_possibility');
 Route::any('/crm_opportunity/id/{id}/', 'CrmOpportunityController@opportunityItem')->name('crm_opportunity_item')->middleware('auth');
+Route::post('/crm_opportunity_status', 'CrmOpportunityController@opportunityStatus')->name('opportunity_status');
 
 // -------------CRM ACTIVITY STAGE MODULE-----------
 Route::any('/crm_activity', 'CrmActivityController@index')->name('crm_activity')->middleware('auth');
@@ -1026,6 +1027,43 @@ Route::post('/create_crm_notes', 'CrmNotesController@create')->name('create_crm_
 Route::post('/edit_crm_notes_form', 'CrmNotesController@editForm')->name('edit_crm_notes_form');
 Route::post('/edit_crm_notes', 'CrmNotesController@edit')->name('edit_crm_notes');
 Route::post('/delete_crm_notes', 'CrmNotesController@destroy')->name('delete_crm_notes');
+
+// -------------CRM SALES CYCLE MODULE-----------
+Route::any('/crm_sales_cycle', 'CrmSalesCycleController@index')->name('crm_sales_cycle')->middleware('auth');
+Route::any('/crm_report', 'CrmSalesCycleController@index')->name('crm_sales_cycle')->middleware('auth');
+Route::post('/create_crm_sales_cycle', 'CrmSalesCycleController@create')->name('create_crm_sales_cycle');
+Route::post('/edit_crm_sales_cycle_form', 'CrmSalesCycleController@editForm')->name('edit_crm_sales_cycle_form');
+Route::post('/edit_crm_sales_cycle', 'CrmSalesCycleController@edit')->name('edit_crm_sales_cycle');
+Route::post('/delete_crm_sales_cycle', 'CrmSalesCycleController@destroy')->name('delete_crm_sales_cycle');
+Route::any('/search_crm_sales_cycle', 'CrmSalesCycleController@searchData')->name('search_crm_sales_cycle');
+Route::any('/remove_crm_sales_cycle_stage', 'CrmSalesCycleController@removeStage')->name('remove_crm_sales_cycle_stage');
+
+// -------------CRM REPORT MODULE-----------
+Route::any('/crm_report', 'CrmReportController@index')->name('crm_report')->middleware('auth');
+Route::post('/search_crm_report', 'CrmReportController@searchReport')->name('search_crm_report')->middleware('auth');
+
+// -------------DISCUSS MODULE-----------
+Route::any('/discuss', 'DiscussController@index')->name('discuss')->middleware('auth');
+Route::any('/discuss_archive', 'DiscussController@discussArchive')->name('discuss_archive')->middleware('auth.admin');
+Route::post('/create_discuss', 'DiscussController@create')->name('create_discuss');
+Route::post('/edit_discuss_form', 'DiscussController@editForm')->name('edit_discuss_form');
+Route::post('/edit_discuss_dept_form', 'DiscussController@editDeptForm')->name('edit_discuss_dept_form');
+Route::post('/edit_discuss', 'DiscussController@edit')->name('edit_discuss');
+Route::post('/edit_discuss_attachment_form', 'DiscussController@attachmentForm')->name('edit_discuss_attachment_form');
+Route::post('/edit_discuss_attachment', 'DiscussController@editAttachment')->name('edit_discuss_attachment');
+Route::post('/remove_discuss_attachment', 'DiscussController@removeAttachment')->name('remove_discuss_attachment');
+Route::any('/download_discuss_attachment', 'DiscussController@downloadAttachment')->name('download_discuss_attachment');
+Route::post('/modify_discuss_dept', 'DiscussController@modifyDept')->name('modify_discuss_dept');
+Route::post('/delete_discuss', 'DiscussController@destroy')->name('delete_discuss');
+Route::post('/delete_discuss_archive', 'DiscussController@destroyArchive')->name('delete_discuss_archive');
+Route::any('/search_discuss', 'DiscussController@searchDiscuss')->name('search_discuss');
+Route::any('/search_discuss_using_date', 'DiscussController@searchDiscussUsingDate')->name('search_discuss_using_date');
+Route::any('/remove_discuss_user', 'DiscussController@removeAccessibleUser')->name('remove_discuss_user');
+Route::any('/restore_discuss_archive', 'DiscussController@restoreDiscussArchive')->name('restore_discuss_archive');
+
+Route::any('/discuss/{id}/', 'DiscussController@viewComments')->name('discuss_comments')->middleware('auth');
+Route::any('/comment_discuss', 'DiscussController@comment')->name('comment_discuss');
+Route::any('/fetch_fresh_comments', 'DiscussController@freshComments')->name('fetch_fresh_comments');
 
 
 

@@ -74,8 +74,10 @@ class DocumentsController extends Controller
             $usersAccessibleToDocuments = $request->input('users');
             $deptArr = [];
             $allDept = $request->input('department');
-            foreach($allDept as $dept){
-                $deptArr[] = $dept;
+            if(!empty($allDept)) {
+                foreach ($allDept as $dept) {
+                    $deptArr[] = $dept;
+                }
             }
 
             $files = $request->file('attachment');

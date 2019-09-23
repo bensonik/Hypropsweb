@@ -7,7 +7,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Document</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">New Discussion</h4>
                 </div>
                 <div class="modal-body" style="height: 400px; overflow-y:scroll;">
 
@@ -17,7 +17,7 @@
                                 <div class="col-sm-6">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="document_name" placeholder="Document Name">
+                                            <input type="text" class="form-control" name="title" placeholder="Title">
                                         </div>
                                     </div>
                                 </div>
@@ -25,7 +25,7 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select  class="form-control" multiple name="department[]" >
-                                                <option value="">Department(s) Accessible to Document(s) </option>
+                                                <option value="">Department(s) Accessible to Discussion(s) </option>
                                                 @foreach($dept as $ap)
                                                     <option value="{{$ap->id}}">{{$ap->dept_name}}</option>
                                                 @endforeach
@@ -81,8 +81,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitDocument('createModal','createMainForm','<?php echo url('create_document'); ?>','reload_data',
-                            '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>','user_class')" type="button" class="btn btn-info waves-effect">
+                    <button onclick="submitDiscuss('createModal','createMainForm','<?php echo url('create_discuss'); ?>','reload_data',
+                            '<?php echo url('discuss'); ?>','<?php echo csrf_token(); ?>','user_class')" type="button" class="btn btn-info waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -102,8 +102,8 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  onclick="submitDocument('editModal','editMainForm','<?php echo url('edit_document'); ?>','reload_data',
-                            '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>','user_class_edit')"
+                    <button type="button"  onclick="submitDiscuss('editModal','editMainForm','<?php echo url('edit_discuss'); ?>','reload_data',
+                            '<?php echo url('discuss'); ?>','<?php echo csrf_token(); ?>','user_class_edit')"
                             class="btn btn-link waves-effect">
                         SAVE CHANGES
                     </button>
@@ -122,14 +122,14 @@
                 </div>
                 <ul class="header-dropdown m-r--5 " style="list-style-type: none;">
                     <li class="pull-right">
-                            <button type="button" onclick="removeAddItem('kid_checkbox_add','reload_data','<?php echo url('document'); ?>',
-                                    '<?php echo url('modify_document_dept'); ?>','<?php echo csrf_token(); ?>','1','add selected Item(s)','document_id','editDeptModal');" class="btn btn-success">
+                            <button type="button" onclick="removeAddItem('kid_checkbox_add','reload_data','<?php echo url('discuss'); ?>',
+                                    '<?php echo url('modify_discuss_dept'); ?>','<?php echo csrf_token(); ?>','1','add selected Item(s)','discuss_id','editDeptModal');" class="btn btn-success">
                                 <i class="fa fa-plus"></i>Add
                             </button>
                     </li>
                     <li>
-                        <button type="button" onclick="removeAddItem('kid_checkbox_remove','reload_data','<?php echo url('document'); ?>',
-                                '<?php echo url('modify_document_dept'); ?>','<?php echo csrf_token(); ?>','0','remove selected Item(s)','document_id','editDeptModal');" class="btn btn-danger">
+                        <button type="button" onclick="removeAddItem('kid_checkbox_remove','reload_data','<?php echo url('discuss'); ?>',
+                                '<?php echo url('modify_discuss_dept'); ?>','<?php echo csrf_token(); ?>','0','remove selected Item(s)','discuss_id','editDeptModal');" class="btn btn-danger">
                             <i class="fa fa-trash-o"></i>Remove
                         </button>
                     </li>
@@ -170,15 +170,15 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Document(s)
+                        Discussion(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('document'); ?>',
-                                    '<?php echo url('delete_document'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('discuss'); ?>',
+                                    '<?php echo url('delete_discuss'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
@@ -225,8 +225,8 @@
 
                                 <div class="col-sm-4" id="" style="">
                                     <div class="form-group">
-                                        <button class="btn btn-info col-sm-8" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_document_using_date'); ?>','reload_data',
-                                                '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>','start_date','end_date')" id="search_hse_button">Search</button>
+                                        <button class="btn btn-info col-sm-8" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_discuss_using_date'); ?>','reload_data',
+                                                '<?php echo url('discuss'); ?>','<?php echo csrf_token(); ?>','start_date','end_date')" id="search_hse_button">Search</button>
                                     </div>
                                 </div>
 
@@ -239,26 +239,27 @@
                 </div><hr/>
                 <!-- END OF SEARCH WITH DATE INTERVALS -->
 
-                <!-- BEGIN OF SEARCH WITH DOCUMENT NAME -->
+                <!-- BEGIN OF SEARCH WITH Discuss NAME -->
                 <div class="container">
                     <div class="col-sm-6 ">
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="text" id="search_document" class="form-control"
-                                       onkeyup="searchItemParam('search_document','reload_data','<?php echo url('search_document') ?>','{{url('document')}}','<?php echo csrf_token(); ?>','type_id')"
-                                       name="search_user" placeholder="Search Documents" >
+                                <input type="text" id="search_discuss" class="form-control"
+                                       onkeyup="searchItemParam('search_discuss','reload_data','<?php echo url('search_discuss') ?>','{{url('discuss')}}','<?php echo csrf_token(); ?>','type_id')"
+                                       name="search_discuss" placeholder="Search Discussion" >
                             </div>
                         </div>
                         <input type="hidden" id="type_id" value="1" name="type"/>
                     </div>
                 </div><hr/>
-                <!-- BEGIN OF SEARCH WITH DOCUMENT NAME -->
+                <!-- BEGIN OF SEARCH WITH Discuss NAME -->
 
                 <div class="body table-responsive" id="reload_data">
 
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>
+
                             <th>
                                 <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
                                        name="check_all" class="" />
@@ -267,8 +268,9 @@
 
                             <th>Manage</th>
                             <th>Manage Department(s)</th>
-                            <th>Manage Document(s)</th>
-                            <th>Document Name</th>
+                            <th>Manage Attachment(s)</th>
+                            <th>Comment</th>
+                            <th>Title</th>
                             <th>Department Access</th>
                             <th>User(s) Access</th>
                             <th>Created by</th>
@@ -279,28 +281,31 @@
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
-                            @if(in_array(Auth::user()->dept_id,$data->deptArray) || in_array(Auth::user()->id,$data->userArray) || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $data->created_by == Auth::user()->id)
+                            @if(in_array(Auth::user()->dept_id,$data->deptArray) || in_array(Auth::user()->id,$data->userArray) || $data->created_by == Auth::user()->id )
                             <tr>
                                 <td scope="row">
                                     <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                                 </td>
-                                @if($data->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                                @if($data->created_by == Auth::user()->id))
                                 <td>
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_document_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_discuss_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <td>
-                                    <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','edit_dept_content','editDeptModal','<?php echo url('edit_document_dept_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','edit_dept_content','editDeptModal','<?php echo url('edit_discuss_dept_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 @else
                                 <td></td>
                                 <td></td>
                                 @endif
                                 <td>
-                                    <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_document_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_discuss_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td>{{$data->doc_name}}</td>
+                                <td>
+                                    <a href="<?php echo url('discuss/'.$data->id) ?>">View/Comment</a>
+                                </td>
+                                <td>{{$data->title}}</td>
                                 <td>
                                     @if(!empty($data->deptAccess))
                                         <table>
@@ -355,7 +360,7 @@
     <script>
 
         //SUBMIT FORM WITH A FILE
-        function submitDocument(formModal,formId,submitUrl,reload_id,reloadUrl,token,userClass){
+        function submitDiscuss(formModal,formId,submitUrl,reload_id,reloadUrl,token,userClass){
             var form_get = $('#'+formId);
             var form = document.forms.namedItem(formId);
             var postVars = new FormData(form);

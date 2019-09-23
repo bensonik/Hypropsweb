@@ -52,10 +52,10 @@
                                                             <h4 class="media-heading">{{$item->pro_head->firstname}} {{$item->pro_head->lastname}}</h4>
                                                             {{$mainData->decision_desc}} @ {{$mainData->created_at}}
 
-                                                            <div class="media" id="display_comment"></div>
                                                             @if(!empty($mainData->allComments))
                                                             @foreach($mainData->allComments as $data)
                                                             <div class="media">
+                                                                <div class="row">
                                                                 <div class="media-left">
                                                                     @if($data->user_id == '')
                                                                     <a href="#">
@@ -75,9 +75,13 @@
                                                                     @endif
                                                                     {{$data->comment}} <br/> @ {{$data->created_at}}
                                                                 </div>
+                                                                </div>
                                                             </div>
                                                             @endforeach
-                                                            @endif <br/>
+                                                            @endif
+                                                            <div class="media" id="display_comment"></div>
+
+                                                            <br/>
 
                                                             <div class="media">
                                                                 <div class="media-left">
@@ -183,7 +187,7 @@
             ajax.onreadystatechange = function(){
                 if(ajax.readyState == 4 && ajax.status == 200) {
 
-                    $('#'+reload_id).prepend(ajax.responseText);
+                    $('#'+reload_id).append(ajax.responseText);
 
                     //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
 

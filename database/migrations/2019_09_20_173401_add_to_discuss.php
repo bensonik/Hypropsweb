@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddToCrmOpportunity extends Migration
+class AddToDiscuss extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class AddToCrmOpportunity extends Migration
      */
     public function up()
     {
-        Schema::table('crm_opportunity', function (Blueprint $table) {
+        Schema::table('discuss', function (Blueprint $table) {
             //
-            $table->string('uid',60)->nullable();
+            $table->string('title')->nullable();
         });
     }
 
@@ -26,10 +26,9 @@ class AddToCrmOpportunity extends Migration
      */
     public function down()
     {
-        Schema::table('crm_opportunity', function (Blueprint $table) {
+        Schema::table('discuss', function (Blueprint $table) {
             //
-            $table->dropColumn('uid');
-
+            $table->dropColumn('title');
         });
     }
 }

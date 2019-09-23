@@ -1,5 +1,5 @@
 <p>
-    {{$edit->doc_name}}
+    {{$edit->title}}
 </p>
 
 <form name="" id="attachForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
@@ -36,7 +36,7 @@
         <?php $num++; ?>
     <tr>
         <td>{{$at}}</td>
-        <td><a target="_blank" href="<?php echo URL::to('download_document_attachment?file='); ?>{{$at}}">
+        <td><a target="_blank" href="<?php echo URL::to('download_discuss_attachment?file='); ?>{{$at}}">
                 <i class="fa fa-files-o fa-2x"></i>
             </a></td>
         <td>
@@ -58,12 +58,13 @@
                 </div>
 
                 <input type="hidden" name="edit_id" value="{{$edit->id}}" >
+
             </form>
 
-            @if($edit->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
-            <button type="button"  onclick="submitMediaForm('attachModal','removeAttachForm','<?php echo url('remove_document_attachment'); ?>','reload_data',
-                    '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>')"
-                    class="btn btn-link waves-effect">
+            @if($edit->created_by == Auth::user()->id )
+            <button type="button"  onclick="submitMediaForm('attachModal','removeAttachForm','<?php echo url('remove_discuss_attachment'); ?>','reload_data',
+                    '<?php echo url('discuss'); ?>','<?php echo csrf_token(); ?>')"
+                    class="btn btn-danger waves-effect">
                 Remove
             </button>
             @endif
@@ -73,14 +74,16 @@
     </tbody>
 </table><hr/>
 
-    @if($edit->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+@endif
+
+@if($edit->created_by == Auth::user()->id )
     <div class="row clearfix">
-        <button type="button"  onclick="submitMediaForm('attachModal','attachForm','<?php echo url('edit_document_attachment'); ?>','reload_data',
-                '<?php echo url('document'); ?>','<?php echo csrf_token(); ?>')"
+        <button type="button"  onclick="submitMediaForm('attachModal','attachForm','<?php echo url('edit_discuss_attachment'); ?>','reload_data',
+                '<?php echo url('discuss'); ?>','<?php echo csrf_token(); ?>')"
                 class="btn btn-info waves-effect pull-right">
             SAVE CHANGES
         </button>
     </div>
-    @endif
-
 @endif
+
+

@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
-use App\model\SalesTeam;
+use App\model\CrmSalesCycle;
+use App\model\CrmStages;
 use App\User;
 use Auth;
 use View;
@@ -16,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class CrmSalesTeamController extends Controller
+class CrmSalesCycleController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -27,14 +28,14 @@ class CrmSalesTeamController extends Controller
     {
         //
 
-        $mainData = SalesTeam::paginateAllData();
+        $mainData = CrmSalesCycle::paginateAllData();
         $this->processData($mainData);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('crm_sales_team.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('crm_sales_cycle.reload',array('mainData' => $mainData))->render());
 
         }else{
-            return view::make('crm_sales_team.main_view')->with('mainData',$mainData);
+            return view::make('crm_sales_cycle.main_view')->with('mainData',$mainData);
         }
 
     }
@@ -47,12 +48,14 @@ class CrmSalesTeamController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),SalesTeam::$mainRules);
+        $validator = Validator::make($request->all(),CrmSalesCycle::$mainRules);
         if($validator->passes()){
 
-            $users = $request->input('users');
+            $jsonStages = $request->input('stages');
+            $decodeStages = json_decode($jsonStages);
+            $stages = array_unique($decodeStages);
 
-            $countData = SalesTeam::countData('name',$request->input('name'));
+            $countData = CrmSalesCycle::countData('name',$request->input('name'));
             if($countData > 0){
 
                 return response()->json([
@@ -64,11 +67,11 @@ class CrmSalesTeamController extends Controller
 
                 $dbDATA = [
                     'name' => ucfirst($request->input('name')),
-                    'users' => $users,
+                    'stages' => json_encode($stages),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                SalesTeam::create($dbDATA);
+                CrmSalesCycle::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -96,34 +99,34 @@ class CrmSalesTeamController extends Controller
     public function editForm(Request $request)
     {
         //
-        $mainData = SalesTeam::firstRow('id',$request->input('dataId'));
+        $mainData = CrmSalesCycle::firstRow('id',$request->input('dataId'));
         $this->processItemData($mainData);
-        return view::make('crm_sales_team.edit_form')->with('edit',$mainData);
+        return view::make('crm_sales_cycle.edit_form')->with('edit',$mainData);
 
     }
 
-    public function removeUser(Request $request){
+    public function removeStage(Request $request){
 
         $editId = $request->input('dataId');
-        $userId = $request->input('param');
-        $oldData = SalesTeam::firstRow('id',$editId);
-        $oldUsers = json_decode($oldData->users,true);
+        $stageId = $request->input('param');
+        $oldData = CrmSalesCycle::firstRow('id',$editId);
+        $oldStages = json_decode($oldData->stages,true);
 
 
         //REMOVE USER FROM AN ARRAY
-        if (($key = array_search($userId, $oldUsers)) != false) {
-            unset($oldUsers[$key]);
+        if (($key = array_search($stageId, $oldStages)) != false) {
+            unset($oldStages[$key]);
         }
 
-        $usersArrayToJson = json_encode($oldUsers);
+        $stagesArrayToJson = json_encode($oldStages);
         $dbData = [
-            'users' => $usersArrayToJson,
+            'stages' => $stagesArrayToJson,
         ];
-        $save = SalesTeam::defaultUpdate('id',$editId,$dbData);
+        $save = CrmSalesCycle::defaultUpdate('id',$editId,$dbData);
 
         return response()->json([
             'message' => 'good',
-            'message2' => 'User have been removed'
+            'message2' => 'Stage have been removed'
         ]);
 
     }
@@ -137,20 +140,22 @@ class CrmSalesTeamController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),SalesTeam::$mainRulesEdit);
+        $validator = Validator::make($request->all(),CrmSalesCycle::$mainRulesEdit);
         if($validator->passes()) {
-            $users = $request->input('users');
+            $jsonStages = $request->input('stages');
+            $decodeStages = json_decode($jsonStages);
+            $stages = array_unique($decodeStages);
 
             $dbDATA = [
                 'name' => ucfirst($request->input('name')),
-                'users' => $users,
+                'stages' => json_encode($stages),
                 'updated_by' => Auth::user()->id,
             ];
-            $rowData = SalesTeam::specialColumns('name', $request->input('name'));
+            $rowData = CrmSalesCycle::specialColumns('name', $request->input('name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    SalesTeam::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    CrmSalesCycle::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -166,7 +171,7 @@ class CrmSalesTeamController extends Controller
                 }
 
             } else{
-                SalesTeam::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                CrmSalesCycle::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -188,9 +193,9 @@ class CrmSalesTeamController extends Controller
 
         $searchValue = $request->input('searchVar');
         //PROCESS SEARCH REQUEST
-        $mainData = SalesTeam::searchData('name',$searchValue);
+        $mainData = CrmSalesCycle::searchData('name',$searchValue);
         $this->processData($mainData);
-            return view::make('crm_sales_team.search')->with('mainData',$mainData);
+        return view::make('crm_sales_cycle.search')->with('mainData',$mainData);
 
     }
 
@@ -208,33 +213,33 @@ class CrmSalesTeamController extends Controller
             'status' => Utility::STATUS_DELETED
         ];
 
-        $inactiveSalesTeam = [];
-        $activeSalesTeam = [];
+        $inactiveSalesCycle = [];
+        $activeSalesCycle = [];
 
         foreach($all_id as $var){
-            $salesTeamRequest = SalesTeam::firstRow('id',$var);
+            $salesTeamRequest = CrmSalesCycle::firstRow('id',$var);
             if($salesTeamRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
-                $inactiveSalesTeam[] = $var;
+                $inactiveSalesCycle[] = $var;
             }else{
-                $activeSalesTeam[] = $var;
+                $activeSalesCycle[] = $var;
             }
         }
 
-        $message = (count($inactiveSalesTeam) < 1) ? ' and '.count($activeSalesTeam).
-            ' sales team was not created by you and cannot be deleted' : '';
-        if(count($inactiveSalesTeam) > 0){
+        $message = (count($inactiveSalesCycle) < 1) ? ' and '.count($activeSalesCycle).
+            ' sales cycle was not created by you and cannot be deleted' : '';
+        if(count($inactiveSalesCycle) > 0){
 
 
-            $delete = SalesTeam::massUpdate('id',$inactiveSalesTeam,$dbData);
+            $delete = CrmSalesCycle::massUpdate('id',$inactiveSalesCycle,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
-                'message' => count($inactiveSalesTeam).' data(s) has been deleted'.$message
+                'message' => count($inactiveSalesCycle).' data(s) has been deleted'.$message
             ]);
 
         }else{
             return  response()->json([
-                'message2' => 'The '.count($activeSalesTeam).' was not created by you and cannot be deleted',
+                'message2' => 'The '.count($activeSalesCycle).' was not created by you and cannot be deleted',
                 'message' => 'warning'
             ]);
 
@@ -244,27 +249,27 @@ class CrmSalesTeamController extends Controller
 
     public function processData($data){
         foreach($data as $val){
-            $users = json_decode($val->users,true);
+            $stages = json_decode($val->stages,true);
 
-            if(!empty($users)){
-                $fetchUsers = User::massData('id',$users);
-                $val->userAccess = $fetchUsers;
-                $val->userArray = $users;
+            if(!empty($stages)){
+                $fetchStages = CrmStages::massData('id',$stages);
+                $val->stageAccess = $fetchStages;
+                $val->stageArray = $stages;
             }else{
-                $val->userAccess = '';
+                $val->stageAccess = '';
             }
 
         }
     }
 
     public function processItemData($val){
-        $users = json_decode($val->users,true);
+        $stages = json_decode($val->stages,true);
 
-        if(!empty($users)){
-            $fetchUsers = User::massData('id',$users);
-            $val->userAccess = $fetchUsers;
+        if(!empty($stages)){
+            $fetchStages = CrmStages::massData('id',$stages);
+            $val->stageAccess = $fetchStages;
         }else{
-            $val->userAccess = '';
+            $val->stageAccess = '';
         }
 
     }

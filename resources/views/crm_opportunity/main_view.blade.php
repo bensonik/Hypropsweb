@@ -59,19 +59,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <b>Opportunity Stage</b>
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select class="form-control" name="opportunity_stage" id="stage" onchange="getRevenue('amount','stage','revenue','{{url('fetch_crm_possibility')}}');" >
-                                                <option value="">Select Opportunity Stage</option>
-                                                @foreach($opportunityStage as $d)
-                                                    <option value="{{$d->id}}">{{$d->name}}(Stage {{$d->stage}})</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
+
                                 <div class="col-sm-4">
                                     <b>Revenue ({{\App\Helpers\Utility::defaultCurrency()}})</b>
                                     <div class="form-group">
@@ -80,13 +68,37 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="text" class="form-control datepicker" name="closing_date" placeholder="Closing Date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-4">
+                                    <b>Sales Cycle</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="sales_cycle" id="sales_cycle" onchange="fillNextInput('sales_cycle','stages_display','{{url('default_select')}}','get_crm_stages');" >
+                                                <option value="">Select Sales Cycle</option>
+                                                @foreach($salesCycle as $d)
+                                                    <option value="{{$d->id}}">{{$d->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <b>Opportunity Stage</b>
+                                    <div class="form-group">
+                                        <div class="form-line" id="stages_display">
+                                            <select class="form-control" name="opportunity_stage" id="stage" onchange="getRevenue('amount','stage','revenue','{{url('fetch_crm_possibility')}}');" >
+                                                <option value="">Select Opportunity Stage</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -144,6 +156,24 @@
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
+                            <button type="button" onclick="statusChangeWithReason('kid_checkbox','reload_data','<?php echo url('crm_opportunity'); ?>',
+                                    '<?php echo url('crm_opportunity_status'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::WON}}');" class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i>Mark as Won
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="statusChangeWithReason('kid_checkbox','reload_data','<?php echo url('crm_opportunity'); ?>',
+                                    '<?php echo url('crm_opportunity_status'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::ONGOING}}');" class="btn btn-info">
+                                <i class="fa fa-check-square-o"></i>Mark as Ongoing
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="statusChangeWithReason('kid_checkbox','reload_data','<?php echo url('crm_opportunity'); ?>',
+                                    '<?php echo url('crm_opportunity_status'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::LOST}}');" class="btn btn-danger">
+                                <i class="fa fa-close"></i>Mark as Lost
+                            </button>
+                        </li>
+                        <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('crm_opportunity'); ?>',
                                     '<?php echo url('delete_crm_opportunity'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
@@ -194,7 +224,10 @@
                             <th>Pipeline</th>
                             <th>Lead</th>
                             <th>Opportunity</th>
+                            <th>Sales Cycle</th>
                             <th>Stage/Phase</th>
+                            <th>Status</th>
+                            <th>Lost Reason</th>
                             <th>Probability (%)</th>
                             <th>Amount ({{\App\Helpers\Utility::defaultCurrency()}})</th>
                             <th>Closing Date</th>
@@ -208,40 +241,50 @@
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
-                        <tr>
-                            <td scope="row">
-                                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
-                            </td>
-                            <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_crm_opportunity_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                            </td>
-                            <td>
-                                <a href="<?php echo url('crm_opportunity/id/'.$data->id) ?>">Pipeline Activities/Notes</a>
-                            </td>
+                            @php
+                                $salesTeamUserIds = json_decode($data->sales->users);
+                            @endphp
+                            @if(in_array(Auth::user()->id,$salesTeamUserIds) || $data->created_by == Auth::user()->id || in_array(Auth::user()->id,\App\Helpers\Utility::TOP_USERS))
+                                <tr>
+                                    <td scope="row">
+                                        <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
-                            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>{{$data->lead->name}}</td>
-                            <td>{{$data->opportunity_name}}</td>
-                            <td>{{$data->phase->name}} (Stage{{$data->phase->stage}})</td>
-                            <td>{{$data->phase->probability}}</td>
-                            <td>{{number_format($data->amount)}}</td>
-                            <td>{{$data->closing_date}}</td>
-                            <td>{{number_format($data->expected_revenue)}}</td>
-                            <td>{{$data->sales->name}}</td>
-                            <td>
-                                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                            </td>
-                            <td>{{$data->created_at}}</td>
-                            <td>
-                                    {{$data->user_u->firstname}} {{$data->user_u->lastname}}
-                            </td>
-                            <td>{{$data->updated_at}}</td>
+                                    </td>
+                                    <td>
+                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_crm_opportunity_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    </td>
+                                    <td>
+                                        <a href="<?php echo url('crm_opportunity/id/'.$data->id) ?>">Pipeline Activities/Notes</a>
+                                    </td>
+
+                                    <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    <td>{{$data->lead->name}}</td>
+                                    <td>{{$data->opportunity_name}}</td>
+                                    <td>{{$data->salesCycle->name}}</td>
+                                    <td>{{$data->phase->name}} (Stage{{$data->phase->stage}})</td>
+                                    <td style="color:black;" class="{{\App\Helpers\Utility::opportunityStatusIndicator($data->opportunity_status)}}">{{\App\Helpers\Utility::opportunityStatus($data->opportunity_status)}}</td>
+                                    <td>{{$data->lost_reason}}</td>
+                                    <td>{{$data->phase->probability}}</td>
+                                    <td>{{number_format($data->amount)}}</td>
+                                    <td>{{$data->closing_date}}</td>
+                                    <td>{{number_format($data->expected_revenue)}}</td>
+                                    <td>{{$data->sales->name}}</td>
+                                    <td>
+                                        {{$data->user_c->firstname}} {{$data->user_c->lastname}}
+                                    </td>
+                                    <td>{{$data->created_at}}</td>
+                                    <td>
+                                        {{$data->user_u->firstname}} {{$data->user_u->lastname}}
+                                    </td>
+                                    <td>{{$data->updated_at}}</td>
 
 
-                            <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
-                        </tr>
+                                </tr>
+                            @else
+                            @endif
                         @endforeach
                         </tbody>
                     </table>

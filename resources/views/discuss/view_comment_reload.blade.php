@@ -8,7 +8,7 @@
         <h4 class="media-heading">{{\App\Helpers\Utility::checkAuth('temp_user')->firstname}} {{\App\Helpers\Utility::checkAuth('temp_user')->lastname}}</h4>
 
         {{$data->comment}} <br/> @ {{$data->created_at }} ({{$data->created_at->diffForHumans()}})
-
+        <input type="hidden" class="comment_class" value="{{$data->id}}" />
     </div>
 </div>
 

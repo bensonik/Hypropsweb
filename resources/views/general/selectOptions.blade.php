@@ -366,4 +366,23 @@
     @endforeach
 @endif
 
+@if($type == 'crm_stage_search')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->name}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->name}}</a>
+        </li>
+
+    @endforeach
+@endif
+
+@if($type == 'get_crm_stages')
+    <select class="form-control" name="opportunity_stage" id="stage" onchange="getRevenue('amount','stage','revenue','{{url('fetch_crm_possibility')}}');" >
+        <option value="">Select Opportunity Stage</option>
+        @foreach($optionArray as $d)
+            <option value="{{$d->id}}">{{$d->name}}(Stage {{$d->stage}})</option>
+        @endforeach
+    </select>
+@endif
+
 

@@ -217,18 +217,6 @@ class DeliverableController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -253,7 +241,7 @@ class DeliverableController extends Controller
     }
 
     public function logComments($log,$log_id){
-        $comments = DeliverableComment::specialColumns('del_id',$log_id);
+        $comments = DeliverableComment::specialColumnsAsc('del_id',$log_id);
         $log->allComments = $comments;
         return $log;
     }

@@ -172,7 +172,7 @@ class CrmActivityTypeController extends Controller
 
         foreach($all_id as $var){
             $activityTypeRequest = CrmActivityType::firstRow('id',$var);
-            if($activityTypeRequest->created_by == Auth::user()->id){
+            if($activityTypeRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
                 $inactiveType[] = $var;
             }else{
                 $activeType[] = $var;

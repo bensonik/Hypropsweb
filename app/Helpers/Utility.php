@@ -87,6 +87,7 @@ class Utility
     const HSE_REPORT_TYPE = [1 => 'Incident', 2 => 'Hazard'];
     const EVENT_TYPE = [1 => 'My Schedule', 2 => 'General Schedule'];
     const GENERAL_SCHEDULE = 2, MY_SCHEDULE = 1;
+    const ONGOING = 1, WON = 2, LOST = 3;
 
 
     public static function IMG_URL(){
@@ -961,14 +962,17 @@ class Utility
         }
     }
 
-    public static function checkVendorCustomerExistingLedgerTrans($id){
+    public static function checkVendorCustomerExistingLedgerTrans($id,$currencyId){
+        $getData = DB::table('vendor_customer')->where('id', $id)
+            ->where('status', self::STATUS_ACTIVE)->first();
+
         $checkLedgerTrans = DB::table('account_journal')
             ->where('vendor_customer', $id)
             ->where('debit_credit', self::DEBIT_TABLE_ID)
             ->orWhere('debit_credit', self::CREDIT_TABLE_ID)
             ->where('status', self::STATUS_ACTIVE)->first();
 
-        if(!empty($checkLedgerTrans)) {
+        if(!empty($checkLedgerTrans) && $getData->currency_id != $currencyId) {
             exit(json_encode([
                 'message2' => 'Currency cannot be changed, the general ledger already has existing transaction linked to this data',
                 'message' => 'rejected'
@@ -1320,6 +1324,48 @@ class Utility
 
             default:
                 $status = 'btn-primary';
+                break;
+        }
+        return $status;
+    }
+
+    public static function opportunityStatusIndicator($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case self::ONGOING :
+                $status = 'alert-info';
+                break;
+            case self::WON:
+                $status = 'alert-success';
+                break;
+            case self::LOST:
+                $status = 'alert-danger';
+                break;
+
+            default:
+                $status = 'alert-info';
+                break;
+        }
+        return $status;
+    }
+
+    public static function opportunityStatus($statusInt){
+        $status = '';
+
+        switch ($statusInt) {
+            case self::ONGOING :
+                $status = 'Ongoing';
+                break;
+            case self::WON:
+                $status = 'Won';
+                break;
+            case self::LOST:
+                $status = 'Lost';
+                break;
+
+            default:
+                $status = 'Ongoing';
                 break;
         }
         return $status;

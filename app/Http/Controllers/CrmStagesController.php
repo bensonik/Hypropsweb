@@ -52,8 +52,7 @@ class CrmStagesController extends Controller
         if($validator->passes()){
 
             $countData = CrmStages::countData('name',$request->input('name'));
-            $countData2 = CrmStages::countData('stage',$request->input('stage'));
-            if($countData > 0 || $countData2 > 0){
+            if($countData > 0){
 
                 return response()->json([
                     'message' => 'good',
@@ -181,19 +180,36 @@ class CrmStagesController extends Controller
                 $in_use[$i] = $all_id[$i];
             }
         }
+
+        $inactiveStage = [];
+        $activeStage = [];
+
+        foreach($in_use as $var){
+            $stageRequest = CrmStages::firstRow('id',$var);
+            if($stageRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
+                $inactiveStage[] = $var;
+            }else{
+                $activeStage[] = $var;
+            }
+        }
+
+        $stageMessage = (count($inactiveStage) < 1) ? ', '.count($activeStage).
+            ' opportunity stage(s) was not created by you and cannot be deleted' : '';
+
         $message = (count($unused) > 0) ? ' and '.count($unused).
-            ' opportunity stage has been used in another module and cannot be deleted' : '';
-        if(count($in_use) > 0){
+            ' opportunity stage(s) has been used in various opportunities and cannot be deleted' : '';
+
+        if(count($in_use) > 0 && count($inactiveStage) > 0){
             $delete = CrmStages::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
-                'message' => count($in_use).' data(s) has been deleted'.$message
+                'message' => count($in_use).' data(s) has been deleted'.$message.$stageMessage
             ]);
 
         }else{
             return  response()->json([
-                'message2' => count($unused).' bin has been used in another module and cannot be deleted',
+                'message2' => $message.$stageMessage,
                 'message' => 'warning'
             ]);
 

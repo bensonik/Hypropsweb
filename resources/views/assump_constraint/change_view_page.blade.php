@@ -61,11 +61,10 @@
                                                             @endif
                                                             {{$mainData->assump_desc}} @ {{$mainData->created_at}}
 
-                                                            <div class="media" id="display_comment"></div>
                                                             @if(!empty($mainData->allComments))
                                                             @foreach($mainData->allComments as $data)
                                                             <div class="media">
-                                                                <div class="media-left">
+                                                                <div class="row">                                                                <div class="media-left">
                                                                     @if($data->user_id == '')
                                                                     <a href="#">
                                                                         <img class="media-object" src="{{ asset('images/'.$data->tempUser->photo) }}" width="64" height="64">
@@ -84,9 +83,12 @@
                                                                     @endif
                                                                     {{$data->comment}} <br/> @ {{$data->created_at}}
                                                                 </div>
+                                                                </div>
                                                             </div>
                                                             @endforeach
-                                                            @endif <br/>
+                                                            @endif
+                                                                <div class="media" id="display_comment"></div>
+                                                                <br/>
 
                                                             <div class="media">
                                                                 <div class="media-left">
@@ -192,7 +194,7 @@
             ajax.onreadystatechange = function(){
                 if(ajax.readyState == 4 && ajax.status == 200) {
 
-                    $('#'+reload_id).prepend(ajax.responseText);
+                    $('#'+reload_id).append(ajax.responseText);
 
                     //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
 

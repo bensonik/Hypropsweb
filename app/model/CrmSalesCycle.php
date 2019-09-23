@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class AssumpConstraintsComment extends Model
+class CrmSalesCycle extends Model
 {
     //
-    protected  $table = 'assump_constraints_comments';
+    protected  $table = 'crm_sales_cycle';
 
     private static function table(){
-        return 'assump_constraints_comments';
+        return 'crm_sales_cycle';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,32 +21,22 @@ class AssumpConstraintsComment extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'comment' => 'required'
+        'stages' => 'required',
+        'name' => 'required',
     ];
 
-    public static $searchRules = [
-        'goal_set' => 'required',
-        'department' => 'required',
-        'user' => 'required',
+    public static $mainRulesEdit = [
+        'stages' => 'required',
+        'name' => 'required',
     ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
-
-    }
-
-    public function tempUser(){
-        return $this->belongsTo('App\User','temp_user','id')->withDefault();
-
-    }
-
-    public function user(){
-        return $this->belongsTo('App\User','user_id','id')->withDefault();
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
@@ -54,14 +44,10 @@ class AssumpConstraintsComment extends Model
         return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
-    public function hod(){
-        return $this->belongsTo('App\User','dept_head','id')->withDefault();
-
-    }
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P25);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
         //return Utility::paginateAllData(self::table());
 
     }
@@ -69,18 +55,6 @@ class AssumpConstraintsComment extends Model
     public static function getAllData()
     {
         return static::where('status', '=','1')->orderBy('id','DESC')->get();
-
-    }
-
-    public static function paginateData($column, $post)
-    {
-        return Utility::paginateData(self::table(),$column, $post);
-
-    }
-
-    public static function paginateData2($column, $post, $column2, $post2)
-    {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
 
     }
 
@@ -97,10 +71,10 @@ class AssumpConstraintsComment extends Model
 
     }
 
-    public static function specialColumnsAsc($column, $post)
+    public static function specialColumnsMass($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','ASC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)->orderBy('id','DESC')->get();
 
     }
 
@@ -116,6 +90,14 @@ class AssumpConstraintsComment extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsOr2($column, $post, $column2, $post2)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->orWhere($column2, '=',$post2)->orderBy('id','DESC')->get();
 
     }
 
@@ -143,46 +125,31 @@ class AssumpConstraintsComment extends Model
 
     }
 
-    public static function massData($column, $post = [])
+    public static function specialColumnsDate($dateArray)
     {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
 
     }
 
-    public static function massDataPaginate($column, $post = [])
+    public static function massData($column, $post)
     {
-        //return Utility::massData(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+        return Utility::massData(self::table(),$column, $post);
 
     }
-
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->get();
-
-    }
-
-    public static function massDataConditionPaginate($column, $post, $column2, $post2)
-    {
-        //return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->where($column2, '=',$post2)
-            ->orderBy('id','DESC')->paginate(Utility::P35);
+        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
 
     }
 
     public static function firstRow($column, $post)
     {
-        //return Utility::firstRow(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->first();
 
     }
 
-    public static function firstRow2($column, $post,$column2, $post2)
+    public static function firstRow2($column, $post2,$column2, $post)
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->first();
@@ -199,6 +166,19 @@ class AssumpConstraintsComment extends Model
     {
 
         return static::where($column , $postId)->update($arrayDataUpdate);
+
+    }
+
+    public static function searchData($column, $post)
+    {
+        return static::where($column,'LIKE','%'.$post.'%')->orderBy('id','DESC')->get();
+
+    }
+
+    public static function searchUsingDate($dateArray)
+    {
+        return static::whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->get();
 
     }
 

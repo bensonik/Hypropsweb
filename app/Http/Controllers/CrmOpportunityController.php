@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\CrmActivity;
 use App\model\CrmActivityType;
 use App\model\CrmNotes;
+use App\model\CrmSalesCycle;
 use App\model\CrmStages;
 use Illuminate\Http\Request;
 use App\model\CrmOpportunity;
@@ -33,6 +35,7 @@ class CrmOpportunityController extends Controller
     {
 
         $mainData = CrmOpportunity::paginateAllData();
+        $salesCycle = CrmSalesCycle::getAllData();
         $salesTeam = SalesTeam::getAllData();
         $opportunityStage = CrmStages::getAllData();
         $activityType = CrmActivityType::getAllData();
@@ -44,7 +47,7 @@ class CrmOpportunityController extends Controller
         }else{
                 return view::make('crm_opportunity.main_view')->with('mainData',$mainData)
                     ->with('salesTeam',$salesTeam)->with('opportunityStage',$opportunityStage)
-                    ->with('activityType',$activityType);
+                    ->with('activityType',$activityType)->with('salesCycle',$salesCycle);
 
         }
 
@@ -55,7 +58,8 @@ class CrmOpportunityController extends Controller
 
         $mainData = CrmOpportunity::firstRow('id',$id);
         $salesTeam = SalesTeam::getAllData();
-        $opportunityStage = CrmStages::getAllDataGroupByStage();
+        $salesCycleStages = json_decode($mainData->salesCycle->stages,true);
+        $opportunityStage = CrmStages::massDataGroupByStage('id',$salesCycleStages);
         $activityType = CrmActivityType::getAllData();
         $this->sortOpportunityStages($opportunityStage,$mainData);
         //return $opportunityStage;exit();
@@ -82,6 +86,7 @@ class CrmOpportunityController extends Controller
         $expectedRevenue = $request->input('expected_revenue');
         $closingDate = Utility::standardDate($request->input('closing_date'));
         $salesTeam = $request->input('sales_team');
+        $salesCycle = $request->input('sales_cycle');
 
         $validator = Validator::make($request->all(),CrmOpportunity::$mainRules);
         if($validator->passes()){
@@ -94,9 +99,11 @@ class CrmOpportunityController extends Controller
                 'opportunity_name' => $opportunityName,
                 'stage_id' => $stage,
                 'sales_team_id' => $salesTeam,
+                'sales_cycle_id' => $salesCycle,
                 'amount' => $amount,
                 'expected_revenue' => $expectedRevenue,
                 'closing_date' => $closingDate,
+                'opportunity_status' => Utility::ONGOING,
                 'created_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE
             ];
@@ -132,7 +139,9 @@ class CrmOpportunityController extends Controller
         //
         $data = CrmOpportunity::firstRow('id',$request->input('dataId'));
         $salesTeam = SalesTeam::getAllData();
-        $opportunityStage = CrmStages::getAllData();
+        $salesCycleList = json_decode($data->salesCycle->stages,true);
+
+        $opportunityStage = CrmStages::massData('id',$salesCycleList);
         return view::make('crm_opportunity.edit_form')->with('edit',$data)->with('salesTeam',$salesTeam)
             ->with('opportunityStage',$opportunityStage);
 
@@ -223,6 +232,104 @@ class CrmOpportunityController extends Controller
 
     }
 
+    public function opportunityStatus(Request $request)
+    {
+        //
+
+        $idArray = json_decode($request->input('all_data'));
+
+        $opportunities = CrmOpportunity::massData('id',$idArray);
+
+        if($request->input('status') == Utility::WON){
+            foreach($opportunities as $data){
+
+                    $dbData = [
+                        'opportunity_status' => Utility::WON,
+                        'lost_reason' => '',
+                        'updated_by' => Auth::user()->id
+                    ];
+
+                    $update = CrmOpportunity::defaultUpdate('id',$data->id,$dbData);
+
+
+                    if($update){
+                        $management = User::specialColumns('role',Utility::TOP_USERS);
+                        if(count($management) >0){ //SEND MAIL TO ALL IN MANAGEMENT ABOUT THIS APPROVAL
+                            foreach($management as $userData) {
+
+                                $mailContent = [];
+
+                                $messageBody = "Hello '.$userData->firstname.', ".Utility::companyInfo()->name." have 
+                             won ".$data->opportunity_name." business deal, please visit the portal to view";
+
+                                $mailContent['message'] = $messageBody;
+                                Notify::GeneralMail('mail_views.general', $mailContent, $userData->email);
+
+                            }
+                        }
+
+                    }   //END OF WHEN STATUS IS COMPLETE
+
+
+
+            }   //END OF LOOP FOR APPROVING PROCESS
+
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($idArray).' have been marked as won'
+            ]);
+
+        }
+
+        if($request->input('status') == Utility::LOST){  //LOST OPPORTUNITY CODES BEGINS HERE
+
+            $lostReason = $request->input('input_text');
+
+            foreach($idArray as $id) {
+
+                $dbData = [
+                    'updated_by' => Auth::user()->id,
+                    'lost_reason' => $lostReason,
+                    'opportunity_status' => Utility::LOST,
+                ];
+
+                $update = CrmOpportunity::defaultUpdate('id',$id,$dbData);
+
+                return response()->json([
+                    'message2' => 'deleted',
+                    'message' => count($idArray).' have been marked as lost'
+                ]);
+
+            }
+
+        }   //END OF LOST OPPORTUNITY CODES
+
+        if($request->input('status') == Utility::ONGOING){  //LOST OPPORTUNITY CODES BEGINS HERE
+
+            foreach($idArray as $id) {
+
+                $dbData = [
+                    'updated_by' => Auth::user()->id,
+                    'lost_reason' => '',
+                    'opportunity_status' => Utility::ONGOING,
+                ];
+
+                $update = CrmOpportunity::defaultUpdate('id',$id,$dbData);
+
+            }
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($idArray).' have been marked as ongoing'
+            ]);
+
+        }   //END OF LOST OPPORTUNITY CODES
+
+    //END FOR MARKING OPPORTUNITY
+
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -232,16 +339,42 @@ class CrmOpportunityController extends Controller
     public function destroy(Request $request)
     {
         //
-        $idArray = json_decode($request->input('all_data'));
+        $all_id = json_decode($request->input('all_data'));
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = CrmOpportunity::massUpdate('id',$idArray,$dbData);
 
-        return response()->json([
-            'message2' => 'deleted',
-            'message' => 'Data deleted successfully'
-        ]);
+        $inactiveOpportunity = [];
+        $activeOpportunity = [];
+
+        foreach($all_id as $var){
+            $opportunityRequest = CrmOpportunity::firstRow('id',$var);
+            if($opportunityRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
+                $inactiveOpportunity[] = $var;
+            }else{
+                $activeOpportunity[] = $var;
+            }
+        }
+
+        $message = (count($inactiveOpportunity) < 1) ? ' and '.count($activeOpportunity).
+            ' opportunity was not created by you and cannot be deleted' : '';
+        if(count($inactiveOpportunity) > 0){
+
+
+            $delete = CrmOpportunity::massUpdate('id',$inactiveOpportunity,$dbData);
+
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => count($inactiveOpportunity).' data(s) has been deleted'.$message
+            ]);
+
+        }else{
+            return  response()->json([
+                'message2' => 'The '.count($activeOpportunity).' was not created by you and cannot be deleted',
+                'message' => 'warning'
+            ]);
+
+        }
     }
 
     public function sortOpportunityStages($stages,$opportunityData){

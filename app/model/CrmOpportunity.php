@@ -44,8 +44,8 @@ class CrmOpportunity extends Model
 
     }
 
-    public function inventory(){
-        return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
+    public function salesCycle(){
+        return $this->belongsTo('App\model\CrmSalesCycle','sales_cycle_id','id')->withDefault();
 
     }
 
@@ -208,6 +208,29 @@ class CrmOpportunity extends Model
     public static function searchOpportunity($column, $post)
     {
         return static::where($column,'LIKE','%'.$post.'%')->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataDate3($column, $post, $dateArray)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataDate4($column, $post, $column2, $post2,$dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->whereIn($column2,$post2)->whereBetween('created_at',$dateArray)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate($dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
 

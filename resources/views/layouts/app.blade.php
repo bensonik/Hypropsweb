@@ -318,9 +318,9 @@
                     <ul class="dropdown-menu pull-right">
                         <li><a href="{{route('profile', ['uid' => Auth::user()->uid])}}"><i class="material-icons">person</i>Profile</a></li>
                         <li role="seperator" class="divider"></li>
-                        <li><a href="javascript:void(0);"><i class="material-icons">group</i>Language</a></li>
-                        <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Stock</a></li>
-                        <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
+                        <li><a href="javascript:void(0);"><i class="material-icons">language</i>Language</a></li>
+                        <li><a href="javascript:void(0);"><i class="material-icons">note_add</i>Quick Notes</a></li>
+                        <li><a href="javascript:void(0);"><i class="material-icons">keyboard</i>Calculator</a></li>
                         <li role="seperator" class="divider"></li>
                         <li><a href="{{url('logout')}}"><i class="material-icons">input</i>Sign Out</a></li>
 
@@ -703,6 +703,9 @@
                             <a href="{{url('crm_opportunity_stage')}}">Opportunity Stages</a>
                         </li>
                         <li>
+                            <a href="{{url('crm_sales_cycle')}}">Sales Cycle</a>
+                        </li>
+                        <li>
                             <a href="{{url('crm_sales_team')}}">Sales Team</a>
                         </li>
                         <li>
@@ -732,6 +735,24 @@
                         <li>
                             <a href="{{url('purchase_order')}}">Purchase Order</a>
                         </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">chat</i>
+                        <span>Discuss/Forum</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('discuss')}}">Discuss</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                            <li>
+                                <a href="{{url('discuss_archive')}}">Discuss Archives</a>
+                            </li>
+
+                        @endif
                     </ul>
                 </li>
 

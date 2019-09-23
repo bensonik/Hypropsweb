@@ -8,18 +8,18 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Archived Document(s)
+                        Archived Discuss(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
-                            <button type="button" onclick="restoreDeletedItems('kid_checkbox','reload_data','<?php echo url('document_archive'); ?>',
-                                    '<?php echo url('restore_document_archive'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-success">
+                            <button type="button" onclick="restoreDeletedItems('kid_checkbox','reload_data','<?php echo url('discuss_archive'); ?>',
+                                    '<?php echo url('restore_discuss_archive'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-success">
                                 <i class="fa fa-check"></i>Restore
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('document_archive'); ?>',
-                                    '<?php echo url('delete_document_archive'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('discuss_archive'); ?>',
+                                    '<?php echo url('delete_discuss_archive'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete from archive
                             </button>
                         </li>
@@ -66,8 +66,8 @@
 
                                 <div class="col-sm-4" id="" style="">
                                     <div class="form-group">
-                                        <button class="btn btn-info col-sm-8" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_document_using_date'); ?>','reload_data',
-                                                '<?php echo url('document_archive'); ?>','<?php echo csrf_token(); ?>','start_date','end_date')" id="search_hse_button">Search</button>
+                                        <button class="btn btn-info col-sm-8" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_discuss_using_date'); ?>','reload_data',
+                                                '<?php echo url('discuss_archive'); ?>','<?php echo csrf_token(); ?>','start_date','end_date')" id="search_hse_button">Search</button>
                                     </div>
                                 </div>
 
@@ -80,20 +80,20 @@
                 </div><hr/>
                 <!-- END OF SEARCH WITH DATE INTERVALS -->
 
-                <!-- BEGIN OF SEARCH WITH DOCUMENT NAME -->
+                <!-- BEGIN OF SEARCH WITH DISCUSSION TITLE -->
                 <div class="container">
                     <div class="col-sm-6 ">
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="text" id="search_document" class="form-control"
-                                       onkeyup="searchItemParam('search_document','reload_data','<?php echo url('search_document') ?>','{{url('document_archive')}}','<?php echo csrf_token(); ?>','type_id')"
-                                       name="search_user" placeholder="Search Users" >
+                                <input type="text" id="search_discuss" class="form-control"
+                                       onkeyup="searchItemParam('search_discuss','reload_data','<?php echo url('search_discuss') ?>','{{url('discuss_archive')}}','<?php echo csrf_token(); ?>','type_id')"
+                                       name="search_discuss" placeholder="Search Discussions" >
                             </div>
                         </div>
                         <input type="hidden" id="type_id" value="0" name="type"/>
                     </div>
                 </div><hr/>
-                <!-- BEGIN OF SEARCH WITH DOCUMENT NAME -->
+                <!-- BEGIN OF SEARCH WITH DISCUSSION TITLE -->
 
 
                 <div class="body table-responsive" id="reload_data">
@@ -106,7 +106,7 @@
 
                             </th>
 
-                            <th>Document Name</th>
+                            <th>Title</th>
                             <th>Department Access</th>
                             <th>User(s) Access</th>
                             <th>Created by</th>
@@ -123,7 +123,7 @@
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td>{{$data->doc_name}}</td>
+                                <td>{{$data->title}}</td>
                                 <td>
                                     @if(!empty($data->deptAccess))
                                         <table>

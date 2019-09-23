@@ -173,7 +173,7 @@ class VendorCustomerController extends Controller
 
             $photo = $request->get('prev_photo');
 
-            Utility::checkVendorCustomerExistingLedgerTrans($request->input('edit_id'));
+            Utility::checkVendorCustomerExistingLedgerTrans($request->input('edit_id'),$request->input('currency'));
 
             if($request->hasFile('photo')){
 
@@ -332,19 +332,35 @@ class VendorCustomerController extends Controller
                 $in_use[$i] = $all_id[$i];
             }
         }
+
+        $inactiveContact = [];
+        $activeContact = [];
+
+        foreach($in_use as $var){
+            $leadRequest = VendorCustomer::firstRow('id',$var);
+            if($leadRequest->created_by == Auth::user()->id || in_array(Auth::user()->id,Utility::TOP_USERS)){
+                $inactiveContact[] = $var;
+            }else{
+                $activeContact[] = $var;
+            }
+        }
+
+        $contactMessage = (count($inactiveContact) < 1) ? ', '.count($activeContact).
+            ' contact(s) was not created by you and cannot be deleted' : '';
+
         $message = (count($unused) > 0) ? ' and '.count($unused).
             ' contact has been used in another general ledger and cannot be deleted' : '';
-        if(count($in_use) > 0){
-            $delete = VendorCustomer::massUpdate('id',$in_use,$dbData);
+        if(count($in_use) > 0 && count($inactiveContact) > 0){
+            $delete = VendorCustomer::massUpdate('id',$inactiveContact,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
-                'message' => count($in_use).' data(s) has been deleted'.$message
+                'message' => count($in_use).' data(s) has been deleted'.$message.$contactMessage
             ]);
 
         }else{
             return  response()->json([
-                'message2' => 'The '.count($unused).' contact has been used in another module and cannot be deleted',
+                'message2' => 'The '.$message.$contactMessage,
                 'message' => 'warning'
             ]);
 

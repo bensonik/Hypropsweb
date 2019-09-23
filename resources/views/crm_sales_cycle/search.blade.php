@@ -7,9 +7,9 @@
 
         </th>
 
-        <th>Title</th>
-        <th>Department Access</th>
-        <th>User(s) Access</th>
+        <th>Manage</th>
+        <th>Name</th>
+        <th>Stages</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
@@ -23,25 +23,21 @@
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
             </td>
-            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->title}}</td>
+            @if($data->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                <td>
+                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_crm_sales_cycle_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                </td>
+            @else
+                <td></td>
+        @endif
+        <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+            <td>{{$data->name}}</td>
             <td>
-                @if(!empty($data->deptAccess))
+                @if(!empty($data->stageAccess))
                     <table>
                         <tbody>
-                        @foreach($data->deptAccess as $dept)
-                            <tr><td>{{$dept->dept_name}}</td></tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                @endif
-            </td>
-            <td>
-                @if(!empty($data->userAccess))
-                    <table>
-                        <tbody>
-                        @foreach($data->userAccess as $user)
-                            <tr><td>{{$user->firstname}} {{$user->lastname}}</td></tr>
+                        @foreach($data->stageAccess as $stage)
+                            <tr><td>{{$stage->name}}</td></tr>
                         @endforeach
                         </tbody>
                     </table>
@@ -61,7 +57,3 @@
     @endforeach
     </tbody>
 </table>
-
-<div class=" pagination pull-right">
-    {!! $mainData->render() !!}
-</div>

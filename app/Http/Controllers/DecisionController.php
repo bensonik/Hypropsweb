@@ -255,7 +255,7 @@ class DecisionController extends Controller
     }
 
     public function logComments($log,$log_id){
-        $comments = DecisionComment::specialColumns('decision_id',$log_id);
+        $comments = DecisionComment::specialColumnsAsc('decision_id',$log_id);
         $log->allComments = $comments;
         return $log;
     }

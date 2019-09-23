@@ -213,7 +213,7 @@ class RequisitionController extends Controller
         //$req = new Request();
         $approveSys = ApprovalSys::getAllData();
         $approveAccess = Approve::approveAccess($approveSys);
-        $mainData = (in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT)) ? Requisition::paginateAllData() : Requisition::specialColumnsPageOr2('request_user',Auth::user()->id,'created_by',Auth::user()->id);
+        $mainData = (in_array(Auth::user()->role,Utility::ACCOUNT_MANAGEMENT)) ? Requisition::paginateAllData() : Requisition::specialColumnsPageOr2('request_user',Auth::user()->id,'created_by',Auth::user()->id);
 
         $this->filterData($mainData);
         $reqCat = RequestCategory::getAllData();
