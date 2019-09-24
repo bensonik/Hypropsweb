@@ -601,20 +601,15 @@ class Utility
 
         $data = DB::table('leave_log')
             ->where('status', self::STATUS_ACTIVE)
+            ->where('leave_type', $leave->id)
             ->where('request_user', Auth::user()->id)
             ->where('deny_reason', '')
             ->where('approval_status', self::APPROVED)
-            ->where('year', $year)->get();
+            ->where('year', $year)->sum('duration');
 
-        $holdArr = [];
-        if(count($data) >0) {
-            foreach ($data as $value) {
-                $holdArr[] = $value->duration;
-            }
-            $sumArr = array_sum($holdArr);
-            $dayLength = $sumArr + $days;
-            $determiner = ($leave->days >= $dayLength) ? true : false;
-        }
+        $dayLength = $data + $days;
+        $determiner = ($leave->days >= $dayLength) ? true : false;
+
         return $determiner;
     }
 
@@ -688,27 +683,22 @@ class Utility
         return $newDate;
     }
 
-    public static function extraLeaveDays($leaveType){
+    public static function extraLeaveDays($leaveTypeParam){
         $year = date('Y');
         $determiner = 0;
         $leaveType = DB::table('leave_type')
             ->where('status', self::STATUS_ACTIVE)
-            ->where('id', $leaveType)->first();
+            ->where('id', $leaveTypeParam)->first();
 
         $data = DB::table('leave_log')
             ->where('status', self::STATUS_ACTIVE)
+            ->where('leave_type', $leaveTypeParam)
             ->where('request_user', Auth::user()->id)
             ->where('deny_reason', '')
-            ->where('year', $year)->get();
+            ->where('year', $year)->sum('duration');
 
-        $holdArr = [];
-        if(count($data) >0) {
-            foreach ($data as $value) {
-                $holdArr[] = $value->duration;
-            }
-            $sumArr = array_sum($holdArr);
-            $determiner = $leaveType->days - $sumArr;
-        }
+        $determiner = $leaveType->days - $data;
+
         return $determiner;
     }
 

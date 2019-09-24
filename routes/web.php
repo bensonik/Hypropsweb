@@ -432,6 +432,7 @@ Route::post('/delete_leave_type', 'LeaveTypeController@destroy')->name('delete_l
 Route::any('/leave_log', 'LeaveLogController@index')->name('leave_log')->middleware('auth');
 Route::any('/leave_history', 'LeaveLogController@leaveHistory')->name('leave_history')->middleware('auth');
 Route::any('/my_leave_requests', 'LeaveLogController@myRequests')->name('my_leave_request')->middleware('auth');
+Route::any('/my_leave_status', 'LeaveLogController@myLeaveStatus')->name('my_leave_status')->middleware('auth');
 Route::post('/create_leave', 'LeaveLogController@create')->name('create_leave');
 Route::post('/approve_leave', 'LeaveLogController@approval')->name('approve_leave');
 Route::post('/edit_leave_form', 'LeaveLogController@editForm')->name('edit_leave_form');

@@ -40,6 +40,7 @@ class LeaveLogController extends Controller
         $mainData = LeaveLog::specialColumnsPage('request_user',Auth::user()->id);
         $this->filterData($mainData);
         $leaveType = LeaveType::getAllData();
+        $leaveStatus = $this->leaveDaysStatus();
 
         if ($request->ajax()) {
             return \Response::json(view::make('leave_log.reload',array('mainData' => $mainData,
@@ -47,8 +48,19 @@ class LeaveLogController extends Controller
 
         }else{
             return view::make('leave_log.main_view')->with('mainData',$mainData)->with('leaveType',$leaveType)
-                ->with('appAccess',$approveAccess);
+                ->with('appAccess',$approveAccess)->with('leaveStatus',$leaveStatus);
         }
+
+    }
+
+    public function myLeaveStatus(Request $request)
+    {
+        //
+        //$req = new Request();
+
+        $mainData = $this->leaveDaysStatus();
+
+            return view::make('leave_log.leave_status')->with('mainData',$mainData);
 
     }
 
@@ -800,6 +812,31 @@ class LeaveLogController extends Controller
         }
         return $dbData;
     }   //END OF FILTERING DATA
+
+    public function leaveDaysStatus()
+    {
+        $year = date('Y');
+        $leaveType = LeaveType::getAllData();
+
+        foreach($leaveType as $type){
+
+            $daysTaken = DB::table('leave_log')
+                ->where('status', Utility::STATUS_ACTIVE)
+                ->where('leave_type', $type->id)
+                ->where('request_user', Auth::user()->id)
+                ->where('deny_reason', '')
+                ->where('approval_status', Utility::APPROVED)
+                ->where('year', $year)->sum('duration');
+
+            $daysRemaining = $type->days - $daysTaken;
+            $displayRemaining = ($daysRemaining == '') ? $type->days : $daysRemaining;
+            $type->daysRemaining = $displayRemaining;
+
+        }
+
+
+        return $leaveType;
+    }
 
 
 }

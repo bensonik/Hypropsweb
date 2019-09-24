@@ -2,6 +2,54 @@
 
 @section('content')
 
+    <!-- LEAVE STATUS MODAL -->
+    <div class="modal fade" id="leaveStatusModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">My Leave Status</h4>
+                </div>
+                <div class="modal-body" id="" style="height:400px; overflow:scroll;">
+                    <div class="row clearfix">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                            <div class="card">
+                                <div class="header">
+                                    <h2>
+                                        Leave Types and Status
+                                    </h2>
+                                    <ul class="header-dropdown m-r--5">
+                                        <li class="dropdown">
+                                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <i class="material-icons">more_vert</i>
+                                            </a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table_leave_status');" ><i class="fa fa-print"></i>Print</a></li>
+                                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table_leave_status');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                                                <li><a class="btn btn-warning" onClick ="$('#main_table_leave_status').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
+                                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table_leave_status').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
+                                                <li><a class="btn btn-info" onClick ="$('#main_table_leave_status').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
+
+                                            </ul>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                                <div class="body table-responsive" id="leave_status_display">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Default Size -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
@@ -139,6 +187,9 @@
                         Leave Requests
                     </h2>
                     <ul class="header-dropdown m-r--5">
+                        <li>
+                            <button class="btn btn-info" onclick="fetchHtml('no_id','leave_status_display','leaveStatusModal','<?php echo url('my_leave_status') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-eye fa-2x"></i>My Leave Status</button>
+                        </li>
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
