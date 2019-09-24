@@ -15,6 +15,10 @@ class CreateQuickNote extends Migration
     {
         Schema::create('quick_note', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->integer('details')->nullable();
+            $table->integer('status')->nullable();
+            $table->integer('created_by')->nullable();
+            $table->integer('updated_by')->nullable();
             $table->timestamps();
         });
     }

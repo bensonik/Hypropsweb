@@ -486,7 +486,7 @@ Route::post('/edit_bin_type', 'BinTypeController@edit')->name('edit_bin_type');
 Route::post('/delete_bin_type', 'BinTypeController@destroy')->name('delete_bin_type');
 
 // -------------BIN MODULE-----------
-Route::any('/bin', 'BinController@index')->name('bin_type')->middleware('auth');
+Route::any('/bin', 'BinController@index')->name('bin')->middleware('auth');
 Route::post('/create_bin', 'BinController@create')->name('create_bin');
 Route::post('/edit_bin_form', 'BinController@editForm')->name('edit_bin_form');
 Route::post('/edit_bin', 'BinController@edit')->name('edit_bin');
@@ -1065,5 +1065,10 @@ Route::any('/discuss/{id}/', 'DiscussController@viewComments')->name('discuss_co
 Route::any('/comment_discuss', 'DiscussController@comment')->name('comment_discuss');
 Route::any('/fetch_fresh_comments', 'DiscussController@freshComments')->name('fetch_fresh_comments');
 
-
+// -------------QUICK NOTE MODULE-----------
+Route::any('/quick_note', 'QuickNoteController@index')->name('quick_note')->middleware('auth');
+Route::post('/create_quick_note', 'QuickNoteController@create')->name('create_quick_note');
+Route::post('/edit_quick_note_form', 'QuickNoteController@editForm')->name('edit_quick_note_form');
+Route::post('/edit_quick_note', 'QuickNoteController@edit')->name('edit_quick_note');
+Route::post('/delete_quick_note', 'QuickNoteController@destroy')->name('delete_quick_note');
 

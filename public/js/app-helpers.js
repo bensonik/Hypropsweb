@@ -379,6 +379,47 @@
 
     }
 
+    function submitDefaultNoFormModal(formId,submitUrl,reload_id,reloadUrl,token){
+    var inputVars = $('#'+formId).serialize();
+    var summerNote = '';
+    var postVars = inputVars+'&editor_input='+summerNote;
+    $('#loading_modal').modal('show');
+    sendRequestForm(submitUrl,token,postVars)
+    ajax.onreadystatechange = function(){
+        if(ajax.readyState == 4 && ajax.status == 200) {
+
+            $('#loading_modal').modal('hide');
+            var rollback = JSON.parse(ajax.responseText);
+            var message2 = rollback.message2;
+            if(message2 == 'fail'){
+
+                //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                var serverError = phpValidationError(rollback.message);
+
+                var messageError = swalFormError(serverError);
+                swal("Error",messageError, "error");
+
+            }else if(message2 == 'saved'){
+
+                var successMessage = swalSuccess('Data saved successfully');
+                swal("Success!", "Data saved successfully!", "success");
+
+            }else if(message2 == 'token_mismatch'){
+
+                location.reload();
+
+            }else {
+                var infoMessage = swalWarningError(message2);
+                swal("Warning!", infoMessage, "warning");
+            }
+
+            //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+            reloadContent(reload_id,reloadUrl);
+        }
+    }
+
+}
+
     //SUBMIT FORM WITH A FILE
     function submitMediaForm(formModal,formId,submitUrl,reload_id,reloadUrl,token){
         var form_get = $('#'+formId);

@@ -57,6 +57,9 @@
     <link rel="stylesheet" href="{{ asset('full_calendar/packages/timegrid/main.css') }}">
     <link rel="stylesheet" href="{{ asset('full_calendar/packages/list/main.css') }}">
 
+    <!-- Calculator Styling Sheets !-->
+    <link rel="stylesheet" href="{{ asset('calculator/jsRapCalculator.css') }}">
+
     <!-- Jquery Core Js -->
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
@@ -319,8 +322,12 @@
                         <li><a href="{{route('profile', ['uid' => Auth::user()->uid])}}"><i class="material-icons">person</i>Profile</a></li>
                         <li role="seperator" class="divider"></li>
                         <li><a href="javascript:void(0);"><i class="material-icons">language</i>Language</a></li>
-                        <li><a href="javascript:void(0);"><i class="material-icons">note_add</i>Quick Notes</a></li>
-                        <li><a href="javascript:void(0);"><i class="material-icons">keyboard</i>Calculator</a></li>
+                        <li>
+                            <a class="" data-toggle="modal" data-target="#quickNoteModal"><i class="material-icons">note_add</i>Quick Notes</a>
+                        </li>
+                        <li>
+                            <a class="" data-toggle="modal" data-target="#quickCalculatorModal"><i class="material-icons">keyboard</i>Calculator</a>
+                        </li>
                         <li role="seperator" class="divider"></li>
                         <li><a href="{{url('logout')}}"><i class="material-icons">input</i>Sign Out</a></li>
 
@@ -1689,6 +1696,44 @@
     <div class="container-fluid">
         <div class="block-header">
 
+            <!-- QUICK NOTES MODAL -->
+            <div class="modal fade" id="quickCalculatorModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog " role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel">Calculator</h4>
+                        </div>
+                        <div class="modal-body" id="" style="height:500px; overflow:scroll;">
+                            <div class="row">
+                                <div class="card">
+                                    <div id="quick_calculator"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUICK NOTES MODAL -->
+            <div class="modal fade" id="quickNoteModal" tabindex="-1" role="dialog">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="defaultModalLabel"></h4>
+                        </div>
+                        <div class="modal-body" id="quick_notes" style="height:500px; overflow:scroll;">
+                            @include('quick_note.main_view',['mainData' => \App\Helpers\Utility::quickNotes()])
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">CLOSE</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- LOADING MODAL -->
             <div class="modal fade" id="loading_modal" tabindex="-1" role="dialog">
                 <div class="modal-dialog modal-sm" role="document">
@@ -1707,22 +1752,6 @@
                 </div>
             </div>
 
-            <!-- QUICK NOTES MODAL -->
-            <div class="modal fade" id="quick_notes_modal" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-sm" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="defaultModalLabel"></h4>
-                        </div>
-                        <div class="modal-body" id="quick_notes">
-
-                        </div>
-                        <div class="modal-footer">
-
-                        </div>
-                    </div>
-                </div>
-            </div>
 
             @yield('content')
 
@@ -1743,17 +1772,6 @@
 
 <!-- Waves Effect Plugin Js -->
 <script src="{{ asset('plugins/node-waves/waves.js') }}"></script>
-
-<!-- Jquery DataTable Plugin Js -->
-{{--<script src="{{asset('plugins/jquery-datatable/jquery.dataTables.js ') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.flash.min.js') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/jszip.min.js ') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/pdfmake.min.jss') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/vfs_fonts.js') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.html5.min.js') }}"></script>
-<script src="{{asset('plugins/jquery-datatable/extensions/export/buttons.print.min.js') }}"></script>--}}
 
 <!-- Custom Js -->
 <script src="{{ asset('js/admin.js') }}"></script>
@@ -1809,7 +1827,15 @@
 <script src="{{ asset('export/jspdf/jspdf.js') }}"></script>
 <script src="{{ asset('export/jspdf/libs/base64.js') }}"></script>
 
+<!-- Calculator JS-->
+<script src="{{ asset('calculator/jsRapCalculator.js') }}"></script>
+
 <script>
+
+    $(document).ready(function(){
+        $('#quick_calculator').jsRapCalculator({name:'ERP Calculator'});
+    });
+
     var li_class = document.getElementsByClassName("myUL");
     $(window).click(function() {
         for (var i = 0; i < li_class.length; i++){

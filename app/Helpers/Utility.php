@@ -8,6 +8,8 @@
 
 namespace App\Helpers;
 
+use App\model\QuickNote;
+use App\User;
 use DB;
 use Illuminate\Support\Facades\Auth;
 use view;
@@ -1521,7 +1523,13 @@ class Utility
 
     }
 
+    public static function quickNotes(){
 
+        $data = QuickNote::where('status', self::STATUS_ACTIVE)->orderBy('id','DESC')->get();
+
+        return $data;
+
+    }
 
 
 }
