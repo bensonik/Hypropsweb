@@ -215,16 +215,16 @@
                             <th>Attachment</th>
                             <th>Preview</th>
                             <th>Description</th>
+                            <th>Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
+                            <th>Approval Status</th>
+                            <th>Finance Status</th>
+                            <th>Approved by</th>
                             <th>Edited</th>
                             <th>Request Category</th>
                             <th>Request Type</th>
                             <th>Project Category</th>
-                            <th>Amount {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Requested by</th>
                             <th>Department</th>
-                            <th>Approval Status</th>
-                            <th>Finance Status</th>
-                            <th>Approved by</th>
                             <th>Created by</th>
                             <th>Updated by</th>
                             <th>Created at</th>
@@ -251,24 +251,7 @@
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->req_desc}}</td>
-                            <td>
-                                @if($data->edit_request != '')
-                                    <?php $edited = json_decode($data->edit_request,true); ?>
-                                    @foreach($edited as $key => $val)
-                                        {{$key}} : {{$val}}<br>
-                                    @endforeach
-                                @endif
-                            </td>
-                            <td>{{$data->requestCat->request_name}}</td>
-                            <td>{{$data->requestType->request_type}}</td>
-                            <td>
-                                @if($data->proj_id != 0)
-                                {{$data->project->project_name}}
-                                @endif
-                            </td>
                             <td>{{number_format($data->amount)}}</td>
-                            <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>
-                            <td>{{$data->department->dept_name}}</td>
                             <td class="{{\App\Helpers\Utility::statusIndicator($data->approval_status)}}">
                                 @if($data->approval_status === 1)
                                     Request Approved
@@ -290,32 +273,49 @@
                             </td>
                             <td>
                                 @if($data->approved_users != '')
-                                <table class="table table-bordered table-responsive">
-                                    <thead>
-                                    <th>Name</th>
-                                    <th>Reason</th>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($data->approved_by as $users)
+                                    <table class="table table-bordered table-responsive">
+                                        <thead>
+                                        <th>Name</th>
+                                        <th>Reason</th>
+                                        </thead>
+                                        <tbody>
+                                        @foreach($data->approved_by as $users)
+                                            <tr>
+                                                <td>{{$users->firstname}} &nbsp; {{$users->lastname}}</td>
+                                                <td>Approved</td>
+                                            </tr>
+                                        @endforeach
                                         <tr>
-                                            <td>{{$users->firstname}} &nbsp; {{$users->lastname}}</td>
-                                            <td>Approved</td>
+                                            @if($data->deny_reason != '')
+                                                <td>{{$data->denyUser->firstname}} &nbsp; {{$data->denyUser->lastname}}</td>
+                                                <td>Denied: {{$data->deny_reason}}</td>
+                                            @endif
                                         </tr>
-                                    @endforeach
-                                    <tr>
-                                        @if($data->deny_reason != '')
-                                            <td>{{$data->denyUser->firstname}} &nbsp; {{$data->denyUser->lastname}}</td>
-                                            <td>Denied: {{$data->deny_reason}}</td>
-                                        @endif
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                        </tbody>
+                                    </table>
                                 @else
                                     @if($data->approval_status === 1)
                                         Management
                                     @endif
                                 @endif
                             </td>
+                            <td>
+                                @if($data->edit_request != '')
+                                    <?php $edited = json_decode($data->edit_request,true); ?>
+                                    @foreach($edited as $key => $val)
+                                        {{$key}} : {{$val}}<br>
+                                    @endforeach
+                                @endif
+                            </td>
+                            <td>{{$data->requestCat->request_name}}</td>
+                            <td>{{$data->requestType->request_type}}</td>
+                            <td>
+                                @if($data->proj_id != 0)
+                                {{$data->project->project_name}}
+                                @endif
+                            </td>
+                            <td>{{$data->requestUser->firstname}} &nbsp; {{$data->requestUser->lastname}}</td>
+                            <td>{{$data->department->dept_name}}</td>
                             <td>
                                 @if($data->created_by != '0')
                                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Approve;
 use App\model\ApprovalSys;
 use App\model\ApprovalDept;
 use App\Helpers\Utility;
@@ -170,6 +171,12 @@ class ApprovalSysController extends Controller
                 'updated_by' => Auth::user()->id,
                 'level_users' => $encodeCompArray
             ];
+
+            $approvalId = $request->input('edit_id');
+
+            //OVERWRITE ALL APPROVAL SYSTEM AWAITING APPROVAL ASSOCIATED WITH THIS APPROVAL IN REQUISITION TABLE
+            Approve::actionOnModifyingApprovalSys('approval_system','requisition',$approvalId,$userArray,$stageArray,$encodeUser,$encodeStage,$encodeCompArray);
+
             $rowData = ApprovalSys::specialColumns('approval_name', $request->input('approval_name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {

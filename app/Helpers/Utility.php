@@ -459,6 +459,22 @@ class Utility
 
     }
 
+    public static function massUpdate($table,$column, $arrayPost, $arrayDataUpdate=[])
+    {
+        return DB::table($table)
+            ->whereIn($column , $arrayPost
+            )->update($arrayDataUpdate);
+
+    }
+
+    public static function defaultUpdate($table,$column, $postId, $arrayDataUpdate=[])
+    {
+        return DB::table($table)
+            ->where($column , $postId
+            )->update($arrayDataUpdate);
+
+    }
+
     public static function tenColumnSingleValue($table,$column1,$column2,$column3,$column4
         ,$column5,$column6,$column7,$column8,$column9,$column10, $post)
     {

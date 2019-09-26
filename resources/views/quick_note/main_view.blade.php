@@ -10,7 +10,7 @@
                     <ul class="header-dropdown m-r--5">
 
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('quick_note'); ?>',
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data_quick_notes','<?php echo url('quick_note'); ?>',
                                     '<?php echo url('delete_quick_note'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
@@ -31,7 +31,7 @@
 
                     </ul>
                 </div>
-                <div class="body" id="reload_data">
+                <div class="body" id="reload_data_quick_notes">
                     <div class="row clearfix" id="notes_main_table">
                         <div class="col-xs-12 ol-sm-12 col-md-12 col-lg-12">
                             <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check" name="check_all" class="" />
@@ -49,7 +49,7 @@
                                     <div id="collapseOne_1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne_1">
                                         <div class="panel-body">
 
-                                            <form name="quickNoteForm" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+                                            <form name="quickNoteForm" id="createMainFormQuickNote" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
 
                                                 <div class="row clearfix">
                                                     <div class="col-sm-12">
@@ -63,7 +63,7 @@
                                                 </div>
                                             </form>
                                             <div class="modal-footer">
-                                                <button onclick="submitDefaultNoFormModal('createMainForm','<?php echo url('create_quick_note'); ?>','reload_data',
+                                                <button onclick="submitDefaultNoFormModal('createMainFormQuickNote','<?php echo url('create_quick_note'); ?>','reload_data_quick_notes',
                                                         '<?php echo url('quick_note'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect pull-right">
                                                     SAVE
                                                 </button>
@@ -87,7 +87,7 @@
                                         <div id="collapse_{{$data->id}}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNote_{{$data->id}}">
                                             <div class="panel-body">
                                                 <p>Created at {{$data->created_at}} ({{$data->created_at->diffForHumans()}})</p>
-                                                <form name="" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
+                                                <form name="" id="editMainFormQuickNote" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
 
                                                     <div class="row clearfix">
                                                         <div class="col-sm-12">
@@ -102,7 +102,7 @@
                                                 </form>
 
                                                 <div class="modal-footer">
-                                                    <button type="button"  onclick="submitDefaultNoFormModal('editMainForm','<?php echo url('edit_quick_note'); ?>','reload_data',
+                                                    <button type="button"  onclick="submitDefaultNoFormModal('editMainFormQuickNote','<?php echo url('edit_quick_note'); ?>','reload_data_quick_notes',
                                                             '<?php echo url('quick_note'); ?>','<?php echo csrf_token(); ?>')"
                                                             class="btn btn-info waves-effect pull-right">
                                                         SAVE CHANGES

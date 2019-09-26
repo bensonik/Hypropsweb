@@ -118,4 +118,67 @@ class Approve
         return $appButton;
     }
 
+
+    public static function actionOnModifyingApprovalSys($approvalTable,$requestTable,$approvalId,$userArr,$stageArr,$userJson,$stageJson,$levelToUserPairJson){
+        $approvalSys = DB::table($approvalTable)
+            ->where('status', Utility::STATUS_ACTIVE)->where('id', $approvalId)->first();   //FETCH EXISTING APPROVAL TO BE MODIFIED FROM DB
+
+        $currentUserArr = json_decode($approvalSys->users,true);    //CONVERT TO ARRAY
+        $currentStageArr = json_decode($approvalSys->levels,true);  //CONVERT TO ARRAY
+        sort($userArr); sort($stageArr); sort($currentUserArr); sort($currentStageArr); //SORT TO ALLOW MATCHING OF THE ARRAY
+        if($userArr == $currentUserArr && $stageArr == $currentStageArr){
+
+        }else{ //UPDATE ALL APPROVAL SYS IN THE REQUISITION TABLE THAT HAVE NOT BEEN APPROVED OR DENIED
+            $requestData = DB::table($requestTable)
+                ->where('status', Utility::STATUS_ACTIVE)->where('approval_id', $approvalId)
+                ->where('complete_status', Utility::ZERO)->get();   //REQUESTS STILL AWAITING APPROVAL
+
+            if(!empty($requestData)){
+                $dbData = [
+                    'approval_json' => $levelToUserPairJson,
+                    'approval_level' => $stageJson,
+                    'approval_user' => $userJson,
+                    'approved_users' => '',
+                ];
+
+                foreach($requestData as $data){
+                    Utility::defaultUpdate($requestTable,'id',$data->id,$dbData);
+                }
+            }
+
+        }
+
+    }
+
+    public static function actionOnChangingApprovalSysForDept($deptApprovalTable,$requestTable,$approvalTable,$deptApprovalId,$newApprovalId,$deptId){
+        $deptApproval = DB::table($deptApprovalTable)
+            ->where('status', Utility::STATUS_ACTIVE)->where('id', $deptApprovalId)->first();   //FETCH EXISTING APPROVAL TO BE MODIFIED FROM DB
+
+        if($deptApproval->approval_id == $newApprovalId){
+
+        }else{ //UPDATE ALL DEPT APPROVAL SYS IN THE REQUISITION TABLE THAT HAVE NOT BEEN APPROVED OR DENIED
+            $requestData = DB::table($requestTable)
+                ->where('status', Utility::STATUS_ACTIVE)->where('dept_id', $deptId)
+                ->where('complete_status', Utility::ZERO)->get();   //REQUESTS STILL AWAITING APPROVAL
+
+            $approvalSys = DB::table($approvalTable)
+                ->where('status', Utility::STATUS_ACTIVE)->where('id', $newApprovalId)->first(); //NEW SELECTED APPROVAL SYSTEM DATA
+
+            if(!empty($requestData)){
+                $dbData = [
+                    'approval_json' => $approvalSys->level_users,
+                    'approval_level' => $approvalSys->levels,
+                    'approval_user' => $approvalSys->users,
+                    'approved_users' => '',
+                ];
+
+                foreach($requestData as $data){
+                    Utility::defaultUpdate($requestTable,'id',$data->id,$dbData);
+                }
+            }
+
+        }
+
+    }
+
 }

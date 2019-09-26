@@ -715,14 +715,14 @@ Route::post('/delete_temp_user', 'TempUsersController@destroy')->name('delete_te
 Route::post('/change_temp_user_status', 'TempUsersController@changeStatus')->name('change_temp_user_status');
 Route::any('/temp_user_cv', 'TempUserController@downloadAttachment')->name('temp_user_cv');
 
-// -------------SURVEY ANSWER CATEGORY MODULE FOR REQUISITION-----------
+// -------------SURVEY ANSWER CATEGORY MODULE FOR Survey-----------
 Route::any('/survey_ans_category', 'SurveyAnsCatController@index')->name('survey_ans_category')->middleware('auth');
 Route::post('/create_survey_ans_category', 'SurveyAnsCatController@create')->name('create_survey_ans_category');
 Route::post('/edit_survey_ans_category_form', 'SurveyAnsCatController@editForm')->name('edit_survey_ans_category_form');
 Route::post('/edit_survey_ans_category', 'SurveyAnsCatController@edit')->name('edit_survey_ans_category');
 Route::post('/delete_survey_ans_category', 'SurveyAnsCatController@destroy')->name('delete_survey_ans_category');
 
-// -------------SURVEY QUESTION CATEGORY MODULE FOR REQUISITION-----------
+// -------------SURVEY QUESTION CATEGORY MODULE FOR SURVEY-----------
 Route::any('/survey_quest_category', 'SurveyQuestCatController@index')->name('survey_quest_category')->middleware('auth');
 Route::post('/create_survey_quest_category', 'SurveyQuestCatController@create')->name('create_survey_quest_category');
 Route::post('/edit_survey_quest_category_form', 'SurveyQuestCatController@editForm')->name('edit_survey_quest_category_form');
@@ -859,7 +859,7 @@ Route::post('/edit_admin_approval_dept_form', 'AdminApprovalDeptController@editF
 Route::post('/edit_admin_approval_dept', 'AdminApprovalDeptController@edit')->name('edit_admin_approval_dept');
 Route::post('/delete_admin_approval_dept', 'AdminApprovalDeptController@destroy')->name('delete_admin_approval_dept');
 
-// -------------ADMIN REQUEST CATEGORY MODULE FOR REQUISITION-----------
+// -------------ADMIN REQUEST CATEGORY MODULE FOR ADMIN REQUESTS-----------
 Route::any('/admin_category', 'AdminCategoryController@index')->name('admin_category')->middleware('auth.admin');
 Route::post('/create_admin_cat', 'AdminCategoryController@create')->name('create_admin_cat');
 Route::post('/edit_admin_cat_form', 'AdminCategoryController@editForm')->name('edit_admin_cat_form');

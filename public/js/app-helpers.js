@@ -459,6 +459,7 @@
 
                 //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
                 reloadContent(reload_id,reloadUrl);
+
             }
         }
 

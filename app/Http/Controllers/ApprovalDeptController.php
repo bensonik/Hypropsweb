@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Approve;
 use App\model\ApprovalDept;
 use App\Helpers\Utility;
 use App\model\ApprovalSys;
@@ -127,21 +128,17 @@ class ApprovalDeptController extends Controller
                 'updated_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE
             ];
+            $deptId = $request->input('department');
+            $newApprovalId = $request->input('approval_system');
+            $deptApprovalId = $request->input('edit_id');
+
+            Approve::actionOnChangingApprovalSysForDept('dept_approvals','requisition','approval_system',$deptApprovalId,$newApprovalId,$deptId);
+
             $rowData = ApprovalDept::specialColumns('dept', $request->input('dept'));
-            $rowData2 = ApprovalDept::specialColumns('id', $request->input('edit_id'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
-                    $activeApprovalSys = Requisition::specialColumns3('dept_id',$rowData2[0]->dept_id,'approval_id',$rowData2[0]->approval_id,'complete_status',Utility::ZERO);
-                    if($activeApprovalSys->count() >0){
-                        return response()->json([
-                            'message' => 'warning',
-                            'message2' => 'Ensure there are no pending requests for approval for this department'
-                        ]);
-                    }
-
-                        Department::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                        ApprovalDept::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -157,20 +154,6 @@ class ApprovalDeptController extends Controller
                 }
 
             } else{
-
-                //CHECK IF PREVIOUS APPROVAL SYSTEM STILL HAVE SOME REQUEST FOR APPROVAL IN REQUISITION TABLE
-                /*return response()->json([
-                    'message' => 'warning',
-                    'message2' => json_encode($rowData)//'dept_id'.$rowData[0]->dept_id.'approval_id'.$rowData[0]->approval_id.'complete_status',Utility::ZERO
-                ]);*/
-
-                $activeApprovalSys = Requisition::specialColumns3('dept_id',$rowData2[0]->dept,'approval_id',$rowData2[0]->approval_id,'complete_status',Utility::ZERO);
-                if($activeApprovalSys->count() >0){
-                    return response()->json([
-                        'message' => 'warning',
-                        'message2' => 'Ensure there are no pending requests for approval for this department'
-                    ]);
-                }
 
                 ApprovalDept::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
