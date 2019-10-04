@@ -986,13 +986,40 @@
                     </a>
                     <ul class="ml-menu">
                         <li>
-                            <a href="{{url('events')}}">Pipeline</a>
+                            <a href="{{url('vehicle_make')}}">Vehicle Make</a>
                         </li>
                         <li>
-                            <a href="{{url('my_events_calendar')}}">Activities</a>
+                            <a href="{{url('vehicle_model')}}">Vehicle Model</a>
                         </li>
                         <li>
-                            <a href="{{url('general_events_calendar')}}">Report</a>
+                            <a href="{{url('vehicle_category')}}">Vehicle Category</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_contract_type')}}">Vehicle Contract Type</a>
+                        <li>
+                            <a href="{{url('vehicle_service_type')}}">Vehicle Service Type(s)</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_status')}}">Vehicle Status</a>
+                        </li>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle')}}">Vehicle(s)</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_fuel_station')}}">Fuel Station</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_fuel_log')}}">Fuel Log</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_fuel_log_report')}}">Fuel Log Report</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_service_log')}}">Service Log</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_service_log_report')}}">Service Log Report</a>
                         </li>
                     </ul>
                 </li>

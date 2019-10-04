@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class AdminCategory extends Model
+class VehicleCategory extends Model
 {
     //
-    protected  $table = 'admin_category';
+    protected  $table = 'vehicle_category';
 
     private static function table(){
-        return 'admin_category';
+        return 'vehicle_category';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,7 @@ class AdminCategory extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'request_name' => 'required',
+        'name' => 'required',
     ];
 
     public function user_c(){
@@ -34,11 +34,6 @@ class AdminCategory extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
-
-    }
-
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
@@ -48,7 +43,7 @@ class AdminCategory extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 

@@ -598,12 +598,6 @@
         $(document).on('click','.search .pagination a', function(event){
             event.preventDefault();
 
-           /* $('li').removeClass('active');
-
-            $(this).parent('li').addClass('active');
-
-            var myurl = $(this).attr('href');*/
-
             var page=$(this).attr('href').split('page=')[1];
             getSearchData(page);
             //location.hash = page;

@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\model\AdminCategory;
+use App\model\VehicleContract;
+use App\model\VehicleContractType;
 use App\model\Department;
 use App\Helpers\Utility;
-use App\model\AdminRequisition;
+use App\model\Vehicle;
 use App\User;
 use Auth;
 use View;
@@ -19,7 +20,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class AdminCategoryController extends Controller
+class VehicleContractTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,13 +31,13 @@ class AdminCategoryController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = AdminCategory::paginateAllData();
+        $mainData = VehicleContractType::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('admin_category.reload',array('mainData' => $mainData,))->render());
+            return \Response::json(view::make('vehicle_contract_type.reload',array('mainData' => $mainData,))->render());
 
         }else{
-            return view::make('admin_category.main_view')->with('mainData',$mainData);
+            return view::make('vehicle_contract_type.main_view')->with('mainData',$mainData);
         }
 
     }
@@ -49,10 +50,10 @@ class AdminCategoryController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),AdminCategory::$mainRules);
+        $validator = Validator::make($request->all(),VehicleContractType::$mainRules);
         if($validator->passes()){
 
-            $countData = AdminCategory::countData('request_name',$request->input('request_name'));
+            $countData = VehicleContractType::countData('name',$request->input('name'));
             if($countData > 0){
 
                 return response()->json([
@@ -62,11 +63,11 @@ class AdminCategoryController extends Controller
 
             }else{
                 $dbDATA = [
-                    'request_name' => ucfirst($request->input('request_name')),
+                    'name' => ucfirst($request->input('name')),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
-                AdminCategory::create($dbDATA);
+                VehicleContractType::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -94,8 +95,8 @@ class AdminCategoryController extends Controller
     public function editForm(Request $request)
     {
         //
-        $request = AdminCategory::firstRow('id',$request->input('dataId'));
-        return view::make('admin_category.edit_form')->with('edit',$request);
+        $request = VehicleContractType::firstRow('id',$request->input('dataId'));
+        return view::make('vehicle_contract_type.edit_form')->with('edit',$request);
 
     }
 
@@ -108,19 +109,19 @@ class AdminCategoryController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),AdminCategory::$mainRules);
+        $validator = Validator::make($request->all(),VehicleContractType::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'request_name' => ucfirst($request->input('request_name')),
+                'name' => ucfirst($request->input('name')),
                 'updated_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE
             ];
-            $rowData = AdminCategory::specialColumns('request_name', $request->input('request_name'));
+            $rowData = VehicleContractType::specialColumns('name', $request->input('name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    AdminCategory::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    VehicleContractType::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -136,7 +137,7 @@ class AdminCategoryController extends Controller
                 }
 
             } else{
-                AdminCategory::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                VehicleContractType::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -151,18 +152,6 @@ class AdminCategoryController extends Controller
         ]);
 
 
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -183,7 +172,7 @@ class AdminCategoryController extends Controller
         $activeCat = [];
 
         foreach($all_id as $var){
-            $request = AdminRequisition::firstRow('req_cat',$var);
+            $request = VehicleContract::firstRow('contract_type',$var);
             if(empty($request)){
                 $inactiveCat[] = $var;
             }else{
@@ -192,11 +181,11 @@ class AdminCategoryController extends Controller
         }
 
         $message = (count($inactiveCat) < 1) ? ' and '.count($activeCat).
-            ' category(ies) has been used in making requests and cannot be deleted' : '';
+            ' contract type(s) has been used in creating a contract and cannot be deleted' : '';
         if(count($inactiveCat) > 0){
 
 
-            $delete = AdminCategory::massUpdate('id',$inactiveCat,$dbData);
+            $delete = VehicleContractType::massUpdate('id',$inactiveCat,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',

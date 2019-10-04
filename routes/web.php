@@ -29,9 +29,6 @@ Route::get('/temp_user_dashboard', 'Auth\TempUserHomeController@index')->name('t
 Route::any('/login_temp_user', 'Auth\TempUserLoginController@login')->name('login_temp_user');
 Route::any('/temp_user_logout', 'Auth\TempUserHomeController@signout')->name('temp_user_logout');
 
-// -------------USER MODULE-----------
-Route::post('/create_user', 'UsersController@createUser')->name('create_user');
-
 // -------------DEPARTMENT MODULE-----------
 Route::any('/department', 'DepartmentController@index')->name('department')->middleware('auth.admin');
 Route::post('/create_dept', 'DepartmentController@create')->name('create_dept');
@@ -1031,7 +1028,6 @@ Route::post('/delete_crm_notes', 'CrmNotesController@destroy')->name('delete_crm
 
 // -------------CRM SALES CYCLE MODULE-----------
 Route::any('/crm_sales_cycle', 'CrmSalesCycleController@index')->name('crm_sales_cycle')->middleware('auth');
-Route::any('/crm_report', 'CrmSalesCycleController@index')->name('crm_sales_cycle')->middleware('auth');
 Route::post('/create_crm_sales_cycle', 'CrmSalesCycleController@create')->name('create_crm_sales_cycle');
 Route::post('/edit_crm_sales_cycle_form', 'CrmSalesCycleController@editForm')->name('edit_crm_sales_cycle_form');
 Route::post('/edit_crm_sales_cycle', 'CrmSalesCycleController@edit')->name('edit_crm_sales_cycle');
@@ -1072,4 +1068,101 @@ Route::post('/create_quick_note', 'QuickNoteController@create')->name('create_qu
 Route::post('/edit_quick_note_form', 'QuickNoteController@editForm')->name('edit_quick_note_form');
 Route::post('/edit_quick_note', 'QuickNoteController@edit')->name('edit_quick_note');
 Route::post('/delete_quick_note', 'QuickNoteController@destroy')->name('delete_quick_note');
+
+// -------------VEHICLE CATEGORY MODULE-----------
+Route::any('/vehicle_category', 'VehicleCategoryController@index')->name('vehicle_category')->middleware('auth');
+Route::post('/create_vehicle_cat', 'VehicleCategoryController@create')->name('create_vehicle_cat');
+Route::post('/edit_vehicle_cat_form', 'VehicleCategoryController@editForm')->name('edit_vehicle_cat_form');
+Route::post('/edit_vehicle_cat', 'VehicleCategoryController@edit')->name('edit_vehicle_cat');
+Route::post('/delete_vehicle_cat', 'VehicleCategoryController@destroy')->name('delete_vehicle_cat');
+
+
+// -------------VEHICLE CONTRACT TYPE MODULE-----------
+Route::any('/vehicle_contract_type', 'VehicleContractTypeController@index')->name('vehicle_contract_type')->middleware('auth');
+Route::post('/create_vehicle_contract_type', 'VehicleContractTypeController@create')->name('create_vehicle_contract_type');
+Route::post('/edit_vehicle_contract_type_form', 'VehicleContractTypeController@editForm')->name('edit_vehicle_contract_type_form');
+Route::post('/edit_vehicle_contract_type', 'VehicleContractTypeController@edit')->name('edit_vehicle_contract_type');
+Route::post('/delete_vehicle_contract_type', 'VehicleContractTypeController@destroy')->name('delete_vehicle_contract_type');
+
+// -------------VEHICLE MAKE MODULE-----------
+Route::any('/vehicle_make', 'VehicleMakeController@index')->name('vehicle_make')->middleware('auth');
+Route::post('/create_vehicle_make', 'VehicleMakeController@create')->name('create_vehicle_make');
+Route::post('/edit_vehicle_make_form', 'VehicleMakeController@editForm')->name('edit_vehicle_make_form');
+Route::post('/edit_vehicle_make', 'VehicleMakeController@edit')->name('edit_vehicle_make');
+Route::post('/delete_vehicle_make', 'VehicleMakeController@destroy')->name('delete_vehicle_make');
+
+// -------------VEHICLE MODEL MODULE-----------
+Route::any('/vehicle_model', 'VehicleModelController@index')->name('vehicle_model')->middleware('auth');
+Route::post('/create_vehicle_model', 'VehicleModelController@create')->name('create_vehicle_model');
+Route::post('/edit_vehicle_model_form', 'VehicleModelController@editForm')->name('edit_vehicle_model_form');
+Route::post('/edit_vehicle_model', 'VehicleModelController@edit')->name('edit_vehicle_model');
+Route::post('/delete_vehicle_model', 'VehicleModelController@destroy')->name('delete_vehicle_model');
+
+// -------------VEHICLE FUEL STATION MODULE-----------
+Route::any('/vehicle_fuel_station', 'VehicleFuelStationController@index')->name('vehicle_fuel_station')->middleware('auth');
+Route::post('/create_vehicle_fuel_station', 'VehicleFuelStationController@create')->name('create_vehicle_fuel_station');
+Route::post('/edit_vehicle_fuel_station_form', 'VehicleFuelStationController@editForm')->name('edit_vehicle_fuel_station_form');
+Route::post('/edit_vehicle_fuel_station', 'VehicleFuelStationController@edit')->name('edit_vehicle_fuel_station');
+Route::post('/delete_vehicle_fuel_station', 'VehicleFuelStationController@destroy')->name('delete_vehicle_fuel_station');
+
+// -------------VEHICLE SERVICE TYPE MODULE-----------
+Route::any('/vehicle_service_type', 'VehicleServiceTypeController@index')->name('vehicle_service_type')->middleware('auth');
+Route::post('/create_vehicle_service_type', 'VehicleServiceTypeController@create')->name('create_vehicle_service_type');
+Route::post('/edit_vehicle_service_type_form', 'VehicleServiceTypeController@editForm')->name('edit_vehicle_service_type_form');
+Route::post('/edit_vehicle_service_type', 'VehicleServiceTypeController@edit')->name('edit_vehicle_service_type');
+Route::post('/delete_vehicle_service_type', 'VehicleServiceTypeController@destroy')->name('delete_vehicle_service_type');
+
+// -------------VEHICLE STATUS MODULE-----------
+Route::any('/vehicle_status', 'VehicleStatusController@index')->name('vehicle_status')->middleware('auth');
+Route::post('/create_vehicle_status', 'VehicleStatusController@create')->name('create_vehicle_status');
+Route::post('/edit_vehicle_status_form', 'VehicleStatusController@editForm')->name('edit_vehicle_status_form');
+Route::post('/edit_vehicle_status', 'VehicleStatusController@edit')->name('edit_vehicle_status');
+Route::post('/delete_vehicle_status', 'VehicleStatusController@destroy')->name('delete_vehicle_status');
+
+
+// -------------VEHICLE MODULE-----------
+Route::any('/vehicle', 'VehicleController@index')->name('vehicle')->middleware('auth');
+Route::post('/create_vehicle', 'VehicleController@create')->name('create_vehicle');
+Route::post('/edit_vehicle_form', 'VehicleController@editForm')->name('edit_vehicle_form');
+Route::post('/edit_vehicle_attachment_form', 'VehicleController@attachmentForm')->name('edit_vehicle_attachment_form');
+Route::post('/edit_vehicle', 'VehicleController@edit')->name('edit_vehicle');
+Route::any('/search_vehicle', 'VehicleController@searchVehicle')->name('search_vehicle');
+Route::post('/edit_vehicle_attachment', 'VehicleController@editAttachment')->name('edit_vehicle_attachment');
+Route::post('/remove_vehicle_attachment', 'VehicleController@removeAttachment')->name('remove_vehicle_attachment');
+Route::any('/download_vehicle_attachment', 'VehicleController@downloadAttachment')->name('download_vehicle_attachment');
+Route::post('/delete_vehicle', 'VehicleController@destroy')->name('delete_vehicle');
+
+// -------------VEHICLE FUEL LOG MODULE-----------
+Route::any('/vehicle_fuel_log', 'VehicleFuelLogController@index')->name('vehicle_fuel_log')->middleware('auth');
+Route::post('/create_vehicle_fuel_log', 'VehicleFuelLogController@create')->name('create_vehicle_fuel_log');
+Route::post('/edit_vehicle_fuel_log_form', 'VehicleFuelLogController@editForm')->name('edit_vehicle_fuel_log_form');
+Route::post('/edit_vehicle_fuel_log_attachment_form', 'VehicleFuelLogController@attachmentForm')->name('edit_vehicle_fuel_log_attachment_form');
+Route::post('/edit_vehicle_fuel_log', 'VehicleFuelLogController@edit')->name('edit_vehicle_fuel_log');
+Route::any('/search_vehicle_fuel_log', 'VehicleFuelLogController@searchVehicle')->name('search_vehicle_fuel_log');
+Route::post('/edit_vehicle_fuel_log_attachment', 'VehicleFuelLogController@editAttachment')->name('edit_vehicle_fuel_log_attachment');
+Route::post('/remove_vehicle_fuel_log_attachment', 'VehicleFuelLogController@removeAttachment')->name('remove_vehicle_fuel_log_attachment');
+Route::any('/download_vehicle_fuel_log_attachment', 'VehicleFuelLogController@downloadAttachment')->name('download_vehicle_fuel_log_attachment');
+Route::post('/delete_vehicle_fuel_log', 'VehicleFuelLogController@destroy')->name('delete_vehicle_fuel_log');
+
+// -------------VEHICLE FUEL LOG REPORT MODULE-----------
+Route::any('/vehicle_fuel_log_report', 'VehicleFuelLogReportController@index')->name('vehicle_fuel_log_report')->middleware('auth');
+Route::post('/search_vehicle_fuel_log_report', 'VehicleFuelLogReportController@searchReport')->name('search_vehicle_fuel_log_report')->middleware('auth');
+
+
+// -------------VEHICLE SERVICE LOG MODULE-----------
+Route::any('/vehicle_service_log', 'VehicleServiceLogController@index')->name('vehicle_service_log')->middleware('auth');
+Route::post('/create_vehicle_service_log', 'VehicleServiceLogController@create')->name('create_vehicle_service_log');
+Route::post('/edit_vehicle_service_log_form', 'VehicleServiceLogController@editForm')->name('edit_vehicle_service_log_form');
+Route::post('/edit_vehicle_service_log_attachment_form', 'VehicleServiceLogController@attachmentForm')->name('edit_vehicle_service_log_attachment_form');
+Route::post('/edit_vehicle_service_log', 'VehicleServiceLogController@edit')->name('edit_vehicle_service_log');
+Route::any('/search_vehicle_service_log', 'VehicleServiceLogController@searchVehicle')->name('search_vehicle_service_log');
+Route::post('/edit_vehicle_service_log_attachment', 'VehicleServiceLogController@editAttachment')->name('edit_vehicle_service_log_attachment');
+Route::post('/remove_vehicle_service_log_attachment', 'VehicleServiceLogController@removeAttachment')->name('remove_vehicle_service_log_attachment');
+Route::any('/download_vehicle_service_log_attachment', 'VehicleServiceLogController@downloadAttachment')->name('download_vehicle_service_log_attachment');
+Route::post('/delete_vehicle_service_log', 'VehicleServiceLogController@destroy')->name('delete_vehicle_service_log');
+
+// -------------VEHICLE SERVICE LOG REPORT MODULE-----------
+Route::any('/vehicle_service_log_report', 'VehicleServiceLogReportController@index')->name('vehicle_service_log_report')->middleware('auth');
+Route::post('/search_vehicle_service_log_report', 'VehicleServiceLogReportController@searchReport')->name('search_vehicle_service_log_report')->middleware('auth');
+
 

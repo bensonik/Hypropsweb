@@ -540,7 +540,7 @@
             }).done(function(data){
                 $('#'+displayId).html(data);
             });
-        }
+    }
 
     function fillNextInputParam(value_id,displayId,page,moduleType,param){
 

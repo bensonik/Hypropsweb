@@ -24,6 +24,8 @@ use App\model\TaskList;
 use App\model\TempUsers;
 use App\model\Test;
 use App\model\TestCategory;
+use App\model\Vehicle;
+use App\model\VehicleModel;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
@@ -758,6 +760,43 @@ class GeneralController extends Controller
             return view::make('general.selectOptions')->with('optionArray',$fetchStages)->with('type',$type);
 
         }
+
+        //BEGIN OF FETCH VEHICLE MODEL
+        if($type == 'fetch_vehicle_model'){
+            //print_r($pickedVal);exit();
+            $optionArray = VehicleModel::specialColumns('make_id',$pickedVal);
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+
+        }
+
+        //SEARCH VEHICLE
+        if($type == 'search_vehicle'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = Vehicle::searchVehicle($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->uid;
+                }
+                $data_ids = array_unique($obtain_array);
+                $fetchData =  Vehicle::massData('uid', $data_ids);
+            }else{
+
+                $fetchData = Vehicle::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
 
     }
 

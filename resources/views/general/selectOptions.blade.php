@@ -385,4 +385,29 @@
     </select>
 @endif
 
+@if($type == 'fetch_vehicle_model')
+
+    <select name="model"  class="form-control " id=""  >
+        @if(count($optionArray) > 0)
+            <option value="">Select Vehicle Model</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->id}}">{{$data->model_name}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Vehicle Model Found</option>
+        @endif
+    </select>
+@endif
+
+@if($type == 'search_vehicle')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a  onclick="dropdownItem('{{$searchId}}','{{$data->make->make_name}} {{$data->model->model_name}} ({{$data->license_plate}})','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->make->make_name}} {{$data->model->model_name}} ({{$data->license_plate}})</a>
+        </li>
+
+    @endforeach
+@endif
+
 

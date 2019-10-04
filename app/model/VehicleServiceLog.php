@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class AdminCategory extends Model
+class VehicleServiceLog extends Model
 {
     //
-    protected  $table = 'admin_category';
+    protected  $table = 'vehicle_service_log';
 
     private static function table(){
-        return 'admin_category';
+        return 'vehicle_service_log';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,13 @@ class AdminCategory extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'request_name' => 'required',
+        'vehicle' => 'required',
+        'mileage_in' => 'required',
+        'mileage_out' => 'required',
+        'workshop' => 'required',
+        'service_date' => 'required',
+        'service_type' => 'required',
+        'total_bill' => 'required',
     ];
 
     public function user_c(){
@@ -34,8 +40,18 @@ class AdminCategory extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
+    public function driver(){
+        return $this->belongsTo('App\User','driver_id','id')->withDefault();
+
+    }
+
+    public function service(){
+        return $this->belongsTo('App\model\VehicleServiceType','service_type','id')->withDefault();
+
+    }
+
+    public function vehicleDetail(){
+        return $this->belongsTo('App\model\Vehicle','vehicle_id','id')->withDefault();
 
     }
 
@@ -48,7 +64,7 @@ class AdminCategory extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 
@@ -116,6 +132,51 @@ class AdminCategory extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function massDataDate3($column, $post, $dateArray)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereBetween('service_date',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataColumnDate5($column, $post, $column2, $post2,$dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->whereIn($column2,$post2)->whereBetween('service_date',$dateArray)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataColumnDate7($column, $post, $column2, $post2, $column3, $post3,$dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->where($column2,$post2)->whereIn($column3,$post3)->whereBetween('service_date',$dateArray)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate($dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->whereBetween('service_date',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate3($column, $post,$dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->whereBetween('service_date',$dateArray)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumnsDate5($column, $post, $column2, $post2,$dateArray)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column,$post)
+            ->where($column2,$post2)->whereBetween('service_date',$dateArray)->orderBy('id','DESC')->get();
 
     }
 

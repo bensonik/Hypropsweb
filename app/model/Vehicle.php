@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class AdminCategory extends Model
+class Vehicle extends Model
 {
     //
-    protected  $table = 'admin_category';
+    protected  $table = 'vehicle';
 
     private static function table(){
-        return 'admin_category';
+        return 'vehicle';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,11 @@ class AdminCategory extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'request_name' => 'required',
+        'make' => 'required',
+        'model' => 'required',
+        'license_plate' => 'required',
+        'registration_due_date' => 'required',
+        'mileage' => 'required',
     ];
 
     public function user_c(){
@@ -34,8 +38,23 @@ class AdminCategory extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
+    public function make(){
+        return $this->belongsTo('App\model\VehicleMake','make_id','id')->withDefault();
+
+    }
+
+    public function model(){
+        return $this->belongsTo('App\model\VehicleModel','model_id','id')->withDefault();
+
+    }
+
+    public function category(){
+        return $this->belongsTo('App\model\VehicleCategory','category_id','id')->withDefault();
+
+    }
+
+    public function driver(){
+        return $this->belongsTo('App\User','driver_id','id')->withDefault();
 
     }
 
@@ -48,7 +67,7 @@ class AdminCategory extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 
@@ -121,12 +140,21 @@ class AdminCategory extends Model
 
     public static function massData($column, $post)
     {
-        return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->get();
 
     }
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+
+    }
+
+    public static function massDataPaginate($column, $post = [])
+    {
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
 
     }
 
@@ -157,6 +185,18 @@ class AdminCategory extends Model
 
     }
 
-
+    public static function searchVehicle($value){
+        return static::join('vehicle_make', 'vehicle_make.id', '=', 'vehicle.make_id')
+            ->join('vehicle_model', 'vehicle_model.id', '=', 'vehicle.model_id')
+            ->join('vehicle_category', 'vehicle_category.id', '=', 'vehicle.category_id')
+            ->where('vehicle.status', '=',Utility::STATUS_ACTIVE)
+            ->where(function ($query) use($value){
+                $query->where('vehicle.license_plate','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle.chasis_no','LIKE','%'.$value.'%') ->orWhere('vehicle.location','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle.model_year','LIKE','%'.$value.'%')->orWhere('vehicle_make.make_name','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle_model.model_name','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle_category.name','LIKE','%'.$value.'%');
+            })->get();
+    }
 
 }

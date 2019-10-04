@@ -5,13 +5,13 @@ namespace App\model;
 use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
 
-class AdminCategory extends Model
+class VehicleContract extends Model
 {
     //
-    protected  $table = 'admin_category';
+    protected  $table = 'vehicle_contract';
 
     private static function table(){
-        return 'admin_category';
+        return 'vehicle_contract';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,7 +21,12 @@ class AdminCategory extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'request_name' => 'required',
+        'vehicle' => 'required',
+        'contract_type' => 'required',
+        'start_date' => 'required',
+        'end_date' => 'required',
+        'starting_mileage' => 'required',
+        'ending_mileage' => 'required',
     ];
 
     public function user_c(){
@@ -34,11 +39,6 @@ class AdminCategory extends Model
 
     }
 
-    public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
-
-    }
-
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
@@ -48,7 +48,7 @@ class AdminCategory extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 
@@ -157,6 +157,15 @@ class AdminCategory extends Model
 
     }
 
-
+    public static function searchContract($value){
+        return static::join('vehicle', 'vehicle.id', '=', 'vehicle_contract.vehicle_id')
+            ->join('vehicle_contract_type', 'vehicle_contract_type.id', '=', 'vehicle_contract.contract_type')
+            ->where('vehicle_contract.status', '=',Utility::STATUS_ACTIVE)
+            ->where(function ($query) use($value){
+                $query->where('vehicle_contract.contract_status','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle_contract.contractor','LIKE','%'.$value.'%')
+                    ->orWhere('vehicle.license_plate','LIKE','%'.$value.'%');
+            })->get();
+    }
 
 }
