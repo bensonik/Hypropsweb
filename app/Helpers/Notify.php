@@ -7,6 +7,7 @@
  */
 
 namespace App\Helpers;
+use App\model\VehicleFleetAccess;
 use Illuminate\Http\Request;
 use DB;
 use Auth;
@@ -77,6 +78,27 @@ class Notify
     public static function AdminMail($viewPage,$arrayContent = [],$email,$fullName = '',$subject = ''){
 
         //Mail::to($email)->send(new AdminMail($arrayContent));
+    }
+
+    public static function VehicleMaintenanceScheduleReminder($vehicle,$serviceArr)
+    {
+        $fleetManagers = VehicleFleetAccess::getAllData();
+        foreach ($fleetManagers as $userData) {
+            $userEmail = $userData->reqUser->email;
+
+            $mailContent = [];
+
+            $messageBody = "Hello " . $userData->reqUser->firstname . ", the vehicle " . $vehicle->make->make_name
+                . " " . $vehicle->model->model_name . " " . $vehicle->model_year . " with license plate "
+                . $vehicle->license_plate . " is due for the following maintenance, " .
+                implode(',', $serviceArr) . ", please ensure to service the vehicle assigned to" .
+                $vehicle->driver->firstname . "" . $vehicle->driver->lastname .
+                ", please visit the portal to join discussion";
+
+            $mailContent['message'] = $messageBody;
+            self::GeneralMail('mail_views.general', $mailContent, $userEmail);
+
+        }
     }
 
 }

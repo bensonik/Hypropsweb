@@ -729,8 +729,8 @@
                     $('#'+extAmtId).attr('value', data);
                     var dArray = classToArray(qty_class);
                     var cArray = classToArray(cost);
-                    var dArraySum = sumArray(dArray);
-                    var cArraySum = sumArray(cArray);
+                    var dArraySum = sumArrayItems(dArray);
+                    var cArraySum = sumArrayItems(cArray);
 
                     $('#'+unitCostId).attr('value', decPoints(cArraySum,2));
                     //$('#'+unitCostId).val(cArraySum);

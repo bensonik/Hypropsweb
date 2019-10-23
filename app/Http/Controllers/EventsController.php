@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\Events;
 use App\model\Department;
 use App\Helpers\Utility;
@@ -180,6 +181,24 @@ class EventsController extends Controller
                 ];
                 Events::create($dbDATA);
 
+                if(Utility::GENERAL_SCHEDULE == $request->input('schedule_type')){
+                    $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', an event with title ".ucfirst($request->input('event_title'))." have been
+                    created by ".Auth::user()->firstname." ".Auth::user()->lastname.", it starts by".
+                        $startEvent." and ends by ".$endEvent;
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+
+                }
+
                 return response()->json([
                     'message' => 'good',
                     'message2' => 'saved'
@@ -239,6 +258,24 @@ class EventsController extends Controller
 
                     Events::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
+                    if(Utility::GENERAL_SCHEDULE == $request->input('schedule_type')){
+                        $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+
+                        foreach ($activeUsers as $userData){
+                            $userEmail = $userData->email;
+
+                            $mailContent = [];
+
+                            $messageBody = "Hello '.$userData->firstname.', an event with title ".ucfirst($request->input('event_title'))." have been
+                    modified by ".Auth::user()->firstname." ".Auth::user()->lastname.", it starts by".
+                                $startEvent." and ends by ".$endEvent;
+
+                            $mailContent['message'] = $messageBody;
+                            Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                        }
+
+                    }
+
                     return response()->json([
                         'message' => 'good',
                         'message2' => 'saved'
@@ -254,6 +291,24 @@ class EventsController extends Controller
 
             } else{
                 Events::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+                if(Utility::GENERAL_SCHEDULE == $request->input('schedule_type')){
+                    $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', an event with title ".ucfirst($request->input('event_title'))." have been
+                    modified by ".Auth::user()->firstname." ".Auth::user()->lastname.", it starts by".
+                            $startEvent." and ends by ".$endEvent;
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+
+                }
 
                 return response()->json([
                     'message' => 'good',

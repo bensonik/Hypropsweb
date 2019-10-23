@@ -86,8 +86,6 @@ class RequisitionController extends Controller
             'message2' => 'Payment(s) has been processed'
         ]);
 
-
-
     }
 
     public function loanRequests(Request $request)

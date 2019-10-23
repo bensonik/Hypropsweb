@@ -64,6 +64,21 @@
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
 
+    <script type="text/javascript">
+        var csrfToken = $('[name="csrf_token"]').attr('content');
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+        function refreshToken(){
+            $.get('refresh-csrf').done(function(data){
+                csrfToken = data; // the new token
+            });
+        }
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+    </script>
+
 </head>
 
 <body class="theme-red">
@@ -394,6 +409,10 @@
                                 </li>
                                 <li>
                                     <a href="{{url('survey_access')}}">Config Individual Survey Access</a>
+                                </li>
+
+                                <li>
+                                    <a href="{{url('vehicle_fleet_access')}}">Config Fleet Management Access</a>
                                 </li>
                                 <li>
                                     <a href="{{url('jobs_access')}}">Config Jobs/Talent Access</a>
@@ -959,6 +978,29 @@
 
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
+                        <i class="material-icons">import_contacts</i>
+                        <span class="icon-name">Budget</span>
+                    </a>
+                    <ul class="ml-menu">
+                        <li>
+                            <a href="{{url('budget_summary')}}">Budget</a>
+                        </li>
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                        <li>
+                            <a href="{{url('budget_approval')}}">Budget Approval</a>
+                        </li>
+                        @endif
+                        <li>
+                            <a href="{{url('my_admin_requests')}}">Budget Report</a>
+                        </li>
+                        <li>
+                            <a href="{{url('approved_admin_requests')}}">Requisition/Budget Report</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">library_books</i>
                         <span class="icon-name">Admin Request</span>
                     </a>
@@ -982,9 +1024,10 @@
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">local_shipping</i>
-                        <span>Fleet/Transport Management</span>
+                        <span>Fleet Management System</span>
                     </a>
                     <ul class="ml-menu">
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('vehicle_fleet_access'))
                         <li>
                             <a href="{{url('vehicle_make')}}">Vehicle Make</a>
                         </li>
@@ -1000,26 +1043,41 @@
                             <a href="{{url('vehicle_service_type')}}">Vehicle Service Type(s)</a>
                         </li>
                         <li>
-                            <a href="{{url('vehicle_status')}}">Vehicle Status</a>
-                        </li>
+                            <a href="{{url('vehicle_status')}}">Vehicle Contract Status</a>
                         </li>
                         <li>
                             <a href="{{url('vehicle')}}">Vehicle(s)</a>
                         </li>
                         <li>
+                            <a href="{{url('vehicle_fuel_log_report')}}">Fuel Log Report</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_service_log_report')}}">Service Log Report</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_odometer_log_report')}}">Vehicle Odometer Mileage Report</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_contract')}}">Vehicle Contract(s)</a>
+                        </li>
+                        @endif
+                        <li>
                             <a href="{{url('vehicle_fuel_station')}}">Fuel Station</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_odometer_log')}}">Vehicle Odometer Mileage Log</a>
                         </li>
                         <li>
                             <a href="{{url('vehicle_fuel_log')}}">Fuel Log</a>
                         </li>
                         <li>
-                            <a href="{{url('vehicle_fuel_log_report')}}">Fuel Log Report</a>
-                        </li>
-                        <li>
                             <a href="{{url('vehicle_service_log')}}">Service Log</a>
                         </li>
                         <li>
-                            <a href="{{url('vehicle_service_log_report')}}">Service Log Report</a>
+                            <a href="{{url('vehicle_maintenance_reminder')}}">Vehicle Maintenance Reminder</a>
+                        </li>
+                        <li>
+                            <a href="{{url('vehicle_maintenance_schedule')}}">Vehicle Maintenance Scheduling</a>
                         </li>
                     </ul>
                 </li>
@@ -1858,6 +1916,10 @@
 <script src="{{ asset('calculator/jsRapCalculator.js') }}"></script>
 
 <script>
+
+    $('.tbl_order').on('scroll', function () {
+        $(".tbl_order > *").width($(".tbl_order").width() + $(".tbl_order").scrollLeft());
+    });
 
     $(document).ready(function(){
         $('#quick_calculator').jsRapCalculator({name:'ERP Calculator'});

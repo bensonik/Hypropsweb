@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\News;
 use App\model\Department;
 use App\Helpers\Utility;
@@ -67,6 +68,21 @@ class NewsController extends Controller
                 ];
                 News::create($dbDATA);
 
+                    $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', a new information with title ".ucfirst($request->input('news_title'))." have been
+                    created by ".Auth::user()->firstname." ".Auth::user()->lastname.", please visit the portal to read";
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+
+
+
                 return response()->json([
                     'message' => 'good',
                     'message2' => 'saved'
@@ -121,6 +137,19 @@ class NewsController extends Controller
 
                     News::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
+                    $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', the new/tips with title ".ucfirst($request->input('news_title'))." have been
+                    modified by ".Auth::user()->firstname." ".Auth::user()->lastname.", please visit the portal to read";
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+
                     return response()->json([
                         'message' => 'good',
                         'message2' => 'saved'
@@ -135,6 +164,20 @@ class NewsController extends Controller
                 }
 
             } else{
+
+                $activeUsers = User::specialColumns('active_status',Utility::STATUS_ACTIVE);
+                foreach ($activeUsers as $userData){
+                    $userEmail = $userData->email;
+
+                    $mailContent = [];
+
+                    $messageBody = "Hello '.$userData->firstname.', the news/tips with title ".ucfirst($request->input('news_title'))." have been
+                    created by ".Auth::user()->firstname." ".Auth::user()->lastname.", please visit the portal to read";
+
+                    $mailContent['message'] = $messageBody;
+                    Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                }
+
                 News::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([

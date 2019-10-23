@@ -54,6 +54,21 @@
     <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
     <script src="{{ asset('templateEditor/ckeditor/ckeditor.js') }}"></script>
 
+    <script type="text/javascript">
+        var csrfToken = $('[name="csrf_token"]').attr('content');
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+        function refreshToken(){
+            $.get('refresh-csrf').done(function(data){
+                csrfToken = data; // the new token
+            });
+        }
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+    </script>
+
 </head>
 
 <body class="theme-red">

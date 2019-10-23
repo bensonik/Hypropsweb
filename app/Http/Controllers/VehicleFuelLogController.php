@@ -32,7 +32,7 @@ class VehicleFuelLogController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = VehicleFuelLog::paginateAllData();
+        $mainData = VehicleFuelLog::specialColumnsPage('created_by',Auth::user()->id);
         $fuelStation = VehicleFuelStation::getAllData();
         $this->processData($mainData);
 
@@ -143,12 +143,10 @@ class VehicleFuelLogController extends Controller
         //
         $validator = Validator::make($request->all(),VehicleFuelLog::$mainRules);
         if($validator->passes()) {
-            $vehicleData = Vehicle::firstRow('id',$request->input('vehicle'));
             $dbDATA = [
                 'vehicle_id' => $request->input('vehicle'),
                 'liter' => $request->input('liter'),
                 'price_per_liter' => $request->input('price_per_liter'),
-                'driver_id' => $vehicleData->driver_id,
                 'invoice_reference' => $request->input('invoice_reference'),
                 'fuel_station' => ucfirst($request->input('fuel_station')),
                 'total_price' => $request->input('total_price'),

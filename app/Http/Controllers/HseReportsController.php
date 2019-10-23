@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Notify;
 use App\model\Department;
+use App\model\HseAccess;
 use App\model\HseReports;
 use Illuminate\Http\Request;
 use App\model\HseSourceType;
@@ -59,6 +60,17 @@ class HseReportsController extends Controller
                 ];
 
             HseReports::defaultUpdate('id', $editId, $dbData);
+
+            $hseData = HseReports::firstRow('id',$editId);
+                $userEmail = $hseData->reqUser->email;  //email of user who logged report
+
+                $mailContent = [];
+
+                $messageBody = "Hello ".$hseData->reqUser->firstname.", ".Auth::user()->firstname." ".Auth::user()->lastname.
+                    " responded to your incident/hazard report, please visit the portal to view";
+
+                $mailContent['message'] = $messageBody;
+                Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
 
             return response()->json([
                 'message' => 'saved',
@@ -150,6 +162,19 @@ class HseReportsController extends Controller
             ];
             HseReports::create($dbDATA);
 
+            $hseManagers = HseAccess::specialColumns('user_id',Utility::STATUS_ACTIVE);
+            foreach ($hseManagers as $userData){
+                $userEmail = $userData->access_user->email;
+
+                $mailContent = [];
+
+                $messageBody = "Hello ".$userData->access_user->firstname.", ".Auth::user()->firstname." ".Auth::user()->lastname.
+                    " just logged an incident/hazard report, please visit the portal to action report";
+
+                $mailContent['message'] = $messageBody;
+                Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+            }
+
             return response()->json([
                 'message' => 'good',
                 'message2' => 'saved'
@@ -218,6 +243,19 @@ class HseReportsController extends Controller
             ];
 
             HseReports::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+
+            $hseManagers = HseAccess::specialColumns('user_id',Utility::STATUS_ACTIVE);
+            foreach ($hseManagers as $userData){
+                $userEmail = $userData->access_user->email;
+
+                $mailContent = [];
+
+                $messageBody = "Hello ".$userData->access_user->firstname.", ".Auth::user()->firstname." ".Auth::user()->lastname.
+                    " just modified a logged incident/hazard report, please visit the portal to action report";
+
+                $mailContent['message'] = $messageBody;
+                Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+            }
 
             return response()->json([
                 'message' => 'good',

@@ -16,6 +16,7 @@
                         <div class="body">
 
                             <div class="row clearfix">
+                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('vehicle_fleet_access'))
                                 <div class="col-sm-4">
                                     <b>Vehicle*</b>
                                     <div class="form-group">
@@ -27,6 +28,23 @@
                                     </div>
                                     <ul id="myUL1" class="myUL"></ul>
                                 </div>
+                                @else
+
+                                <div class="col-sm-4">
+                                    <b>Vehicle*</b>
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="vehicle"  required>
+                                                <option value="">Select Select Vehicle</option>
+                                                @foreach(\App\Helpers\Utility::driverVehicles() as $data)
+                                                    <option value="{{$data->id}}">{{$data->make->make_name}} {{$data->model->model_name}} ({{$data->license_plate}})</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @endif
 
                                 <div class="col-sm-4">
                                     <b>Fuel Station*</b>
@@ -183,10 +201,6 @@
         </div>
     </div>
 
-    <!-- Print Transact Default Size -->
-    @include('includes.print_preview')
-
-
     <!-- Bordered Table -->
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -242,6 +256,7 @@
                             <th>liter</th>
                             <th>Mileage (Miles)</th>
                             <th>Purchase Date</th>
+                            <th>Comment</th>
                             <th>Invoice Reference</th>
                             <th>Created by</th>
                             <th>Updated by</th>
@@ -271,6 +286,7 @@
                             <td>{{number_format($data->liter)}}</td>
                             <td>{{number_format($data->mileage)}}</td>
                             <td>{{$data->purchase_date}}</td>
+                            <td>{{$data->comment}}</td>
                             <td>{{$data->invoice_reference}}</td>
                             <td>
                                 @if($data->created_by != '0')

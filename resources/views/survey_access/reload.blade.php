@@ -38,7 +38,7 @@
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_request_access_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_survey_access_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
         </tr>
     @endforeach

@@ -232,6 +232,7 @@ class TempUsers extends Authenticatable
         return static::join('department', 'department.id', '=', 'temp_users.dept_id')
             ->join('roles', 'roles.id', '=', 'temp_users.role')
             ->where('temp_users.status', '=','1')
+            ->where('temp_users.role', '=',Utility::TEMP_EXTERNAL_STAFF)
             ->where(function ($query) use($value){
                 $query->where('temp_users.lastname','LIKE','%'.$value.'%')
                     ->orWhere('temp_users.firstname','LIKE','%'.$value.'%') ->orWhere('temp_users.phone','LIKE','%'.$value.'%')
@@ -248,6 +249,7 @@ class TempUsers extends Authenticatable
         return static::join('department', 'department.id', '=', 'temp_users.dept_id')
             ->join('roles', 'roles.id', '=', 'temp_users.role')
             ->where('temp_users.status', '=','1')
+            ->where('temp_users.role', '=',Utility::TEMP_EXTERNAL_STAFF)
             ->where('temp_users.dept_id', '=',Auth::user()->dept_id)
             ->where(function ($query) use($value){
                 $query->where('temp_users.lastname','LIKE','%'.$value.'%')

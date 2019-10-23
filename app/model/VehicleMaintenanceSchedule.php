@@ -21,8 +21,9 @@ class VehicleMaintenanceSchedule extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'reminder_name' => 'required',
+        'reminder' => 'required',
         'vehicle' => 'required',
+        'mileage' => 'required',
     ];
 
     public function user_c(){
@@ -32,6 +33,17 @@ class VehicleMaintenanceSchedule extends Model
 
     public function user_u(){
         return $this->belongsTo('App\User','updated_by','id')->withDefault();
+
+    }
+
+    public function reminder(){
+        return $this->belongsTo('App\model\VehicleMaintenanceReminder','reminder_id','id')->withDefault();
+
+    }
+
+
+    public function vehicleDetail(){
+        return $this->belongsTo('App\model\Vehicle','vehicle_id','id')->withDefault();
 
     }
 
@@ -120,6 +132,13 @@ class VehicleMaintenanceSchedule extends Model
         return Utility::massData(self::table(),$column, $post);
 
     }
+    public static function massDataPaginate($column, $post = [])
+    {
+        //return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column,$post)
+            ->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
@@ -153,6 +172,13 @@ class VehicleMaintenanceSchedule extends Model
 
     }
 
+    public static function searchData($value){
+        return static::join('vehicle_maintenance_reminder', 'vehicle_maintenance_reminder.id', '=', 'vehicle_maintenance_schedule.reminder_id')
+            ->where('vehicle_maintenance_schedule.status', '=',Utility::STATUS_ACTIVE)
+            ->where(function ($query) use($value){
+                $query->orWhere('vehicle_maintenance_reminder.name','LIKE','%'.$value.'%');
+                    })->get();
+    }
 
 
 }

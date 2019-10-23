@@ -192,3 +192,67 @@
     }
 
     /*END STYLE FOR TABS PREVIOUS AND NEXT*/
+	
+	
+	/*BEGIN OF STYLE FOR FIXED TABLE HEAD*/
+	
+		.tbl_order {
+			border-collapse: collapse;
+			width: auto;
+			overflow-x: scroll;
+			display: block;
+		}
+		.tbl_order > thead {
+			background-color: #EFEFEF;
+		}
+		.tbl_order > thead, .tbl_order > tbody {
+			display: block;
+		}
+		.tbl_order > tbody {
+			overflow-y: scroll;
+			overflow-x: hidden;
+			height: 400px;
+		}
+		.tbl_order th, .tbl_order td {
+			min-width: 200px;
+			border: dashed 1px lightblue;
+			text-overflow: ellipsis;
+			max-width: 200px;
+		}
+	
+	/*END STYLE FOR FIXED TABLE HEAD*/
+	
+	/*BEGIN OF STYLE FOR SMALL FIXED TABLE HEAD*/
+	
+		.tbl_order_sm {
+			border-collapse: collapse;
+			width: auto;
+			overflow-x: scroll;
+			display: block;
+		}
+		.tbl_order_sm > thead {
+			background-color: #EFEFEF;
+		}
+		.tbl_order_sm > thead, .tbl_order_sm > tbody {
+			display: block;
+		}
+		.tbl_order_sm > tbody {
+			overflow-y: scroll;
+			overflow-x: hidden;
+			height: 200px;
+		}
+		.tbl_order_sm th, .tbl_order_sm td {
+			min-width: 200px;
+			border: dashed 1px lightblue;
+			text-overflow: ellipsis;
+			max-width: 200px;
+		}
+	
+	/*END STYLE FOR SMALL FIXED TABLE HEAD*/
+	
+	
+	
+	
+	
+	
+	

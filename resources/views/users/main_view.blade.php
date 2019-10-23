@@ -429,7 +429,7 @@
                         </div>
                     </div>
                 <div class=" table-responsive" id="reload_data">
-                    <table class="table table-bordered table-hover table-striped" id="main_table">
+                    <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
                         <thead>
                         <tr>
                             <th>

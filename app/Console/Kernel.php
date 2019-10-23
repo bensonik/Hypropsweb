@@ -29,7 +29,22 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
-        $schedule->command('Inventory:reorder')
+        $schedule->command('command:InventoryReorder')
+            ->everyMinute();
+
+        $schedule->command('command:VehicleMaintenanceScheduling')
+            ->everyMinute();
+
+        $schedule->command('command:Birthday')
+            ->everyMinute();
+
+        $schedule->command('command:BirthdayForTempUsers')
+            ->everyMinute();
+
+        $schedule->command('command:OdometerLogReminder')
+            ->everyMinute();
+
+        $schedule->command('command:EventReminder')
             ->everyMinute();
 
 

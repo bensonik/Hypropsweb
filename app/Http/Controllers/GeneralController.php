@@ -26,6 +26,7 @@ use App\model\Test;
 use App\model\TestCategory;
 use App\model\Vehicle;
 use App\model\VehicleModel;
+use App\model\VehicleServiceType;
 use App\model\WarehouseEmployee;
 use App\model\PurchaseOrder;
 use App\model\SalaryComponent;
@@ -1079,6 +1080,26 @@ class GeneralController extends Controller
 
         }
         //END OF MULTIPLE STAGES
+
+        //START OF MULTIPLE VEHICLE SERVICES
+        if($type == 'multiple_services'){
+            $editClassOrId = $_GET['editClassOrId'];
+            $serviceType = VehicleServiceType::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('serviceType',$serviceType)->with('editClassOrId',$editClassOrId);
+        }
+        //END OF MULTIPLE VEHICLE SERVICES
+
+        //START OF MULTIPLE VEHICLES
+        if($type == 'multiple_vehicles'){
+            $editClassOrId = $_GET['editClassOrId'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('editClassOrId',$editClassOrId)->with('type',$type)->with('add_id',$addButtonId)
+                ->with('hide_id',$hideButtonId);
+
+        }
+        //END OF MULTIPLE VEHICLES
 
     }
     /**

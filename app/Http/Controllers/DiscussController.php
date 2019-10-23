@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\Notify;
 use App\model\Department;
 use App\Helpers\Utility;
 use App\model\Discuss;
@@ -117,6 +118,38 @@ class DiscussController extends Controller
                     'status' => Utility::STATUS_ACTIVE
                 ];
                 Discuss::create($dbDATA);
+
+                if(!empty($deptArr)){
+                    $activeUsers = User::massDataCondition('dept_id',$deptArr,'active_status',Utility::STATUS_ACTIVE);
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', you have been invited by ".Auth::user()->firstname." ".Auth::user()->lastname.
+                            " to join a topic discussion with title ".ucfirst($request->input('title')).
+                            " please visit the portal to join discussion";
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+                }
+                if(!empty(json_decode($usersAccessibleToDiscuss))){
+                    $getUsers = json_decode($usersAccessibleToDiscuss);
+                    $activeUsers = User::massDataCondition('id',$getUsers,'active_status',Utility::STATUS_ACTIVE);
+                    foreach ($activeUsers as $userData){
+                        $userEmail = $userData->email;
+
+                        $mailContent = [];
+
+                        $messageBody = "Hello '.$userData->firstname.', you have been invited by ".Auth::user()->firstname." ".Auth::user()->lastname.
+                            " to join a topic discussion with title ".ucfirst($request->input('title')).
+                            " please visit the portal to join discussion";
+
+                        $mailContent['message'] = $messageBody;
+                        Notify::GeneralMail('mail_views.general', $mailContent, $userEmail);
+                    }
+                }
 
                 return response()->json([
                     'message' => 'good',

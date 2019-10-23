@@ -24,7 +24,7 @@
                     </li>
 
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="po_main_table">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="po_main_table">
 
                     <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
@@ -253,7 +253,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                 </div>
-                <div class="modal-body" id="edit_content" style="height:500px; overflow:scroll;">
+                <div class="modal-body" id="edit_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">

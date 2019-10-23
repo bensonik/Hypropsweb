@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-striped" id="main_table">
+<table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
     <thead>
     <tr>
         <th>
@@ -120,3 +120,10 @@
 <div class=" pagination pull-right">
     {!! $mainData->render() !!}
 </div>
+
+<script>
+    $('.tbl_order').on('scroll', function () {
+        $(".tbl_order > *").width($(".tbl_order").width() + $(".tbl_order").scrollLeft());
+    });
+</script>
+

@@ -171,8 +171,8 @@ class IndiGoalController extends Controller
                     for ($i = 0; $i < count($obj); $i++) {
 
                         $dbDATA2 = [
-                            'objectives' => $obj[$i],
-                            'obj_level' => $level[$i],
+                            'objectives' => Utility::checkEmptyArrayItem($obj,$i,''),
+                            'obj_level' => Utility::checkEmptyArrayItem($level,$i,'None'),
                             'indi_goal_id' => $createIndiGoal->id,
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
@@ -229,10 +229,10 @@ class IndiGoalController extends Controller
                     for ($i = 0; $i < count($coreComp); $i++) {
 
                         $dbDATA2 = [
-                            'core_comp' => $coreComp[$i],
-                            'capability' => $capable[$i],
+                            'core_comp' => Utility::checkEmptyArrayItem($coreComp,$i,''),
+                            'capability' => Utility::checkEmptyArrayItem($capable,$i,''),
                             'indi_goal_id' => $createIndiGoal->id,
-                            'level' => $compLevel[$i],
+                            'level' => Utility::checkEmptyArrayItem($compLevel,$i,'Nil'),
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
@@ -289,10 +289,10 @@ class IndiGoalController extends Controller
                     for ($i = 0; $i < count($coreBehavComp); $i++) {
 
                         $dbDATA2 = [
-                            'core_behav_comp' => $coreBehavComp[$i],
-                            'element_behav_comp' => $element[$i],
+                            'core_behav_comp' => Utility::checkEmptyArrayItem($coreBehavComp,$i,''),
+                            'element_behav_comp' => Utility::checkEmptyArrayItem($element,$i,''),
                             'indi_goal_id' => $createIndiGoal->id,
-                            'level' => $compLevel[$i],
+                            'level' => Utility::checkEmptyArrayItem($compLevel,$i,'Nil'),
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
@@ -495,8 +495,8 @@ class IndiGoalController extends Controller
                             for ($i = 0; $i < count($obj); $i++) {
 
                                 $dbDATA2 = [
-                                    'objectives' => $obj[$i],
-                                    'obj_level' => $level[$i],
+                                    'objectives' => Utility::checkEmptyArrayItem($obj,$i,''),
+                                    'obj_level' => Utility::checkEmptyArrayItem($level,$i,'None'),
                                     'indi_goal_id' => $request->input('edit_id'),
                                     'updated_by' => Auth::user()->id,
                                     'status' => Utility::STATUS_ACTIVE
@@ -674,9 +674,9 @@ class IndiGoalController extends Controller
                         for ($i = 0; $i < count($coreComp); $i++) {
 
                             $dbDATA2 = [
-                                'core_comp' => $coreComp[$i],
-                                'capability' => $capable[$i],
-                                'level' => $compLevel[$i],
+                                'core_comp' => Utility::checkEmptyArrayItem($coreComp,$i,''),
+                                'capability' => Utility::checkEmptyArrayItem($capable,$i,''),
+                                'level' => Utility::checkEmptyArrayItem($compLevel,$i,'Nil'),
                                 'indi_goal_id' => $request->input('edit_id'),
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE
@@ -855,9 +855,9 @@ class IndiGoalController extends Controller
                         for ($i = 0; $i < count($coreBehavComp); $i++) {
 
                             $dbDATA2 = [
-                                'core_behav_comp' => $coreBehavComp[$i],
-                                'element_behav_comp' => $element[$i],
-                                'level' => $compLevel[$i],
+                                'core_behav_comp' => Utility::checkEmptyArrayItem($coreBehavComp,$i,''),
+                                'element_behav_comp' => Utility::checkEmptyArrayItem($element,$i,''),
+                                'level' => Utility::checkEmptyArrayItem($compLevel,$i,'Nil'),
                                 'indi_goal_id' => $request->input('edit_id'),
                                 'updated_by' => Auth::user()->id,
                                 'status' => Utility::STATUS_ACTIVE

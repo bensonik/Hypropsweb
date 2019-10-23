@@ -18,6 +18,7 @@
         <th>Mileage Out(Miles)</th>
         <th>Location</th>
         <th>Service Date</th>
+        <th>Comment</th>
         <th>Invoice Reference</th>
         <th>Created by</th>
         <th>Updated by</th>
@@ -48,6 +49,7 @@
             <td>{{number_format($data->mileage_out)}}</td>
             <td>{{$data->location}}</td>
             <td>{{$data->service_date}}</td>
+            <td>{{$data->comment}}</td>
             <td>{{$data->invoice_reference}}</td>
             <td>
                 @if($data->created_by != '0')

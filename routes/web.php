@@ -17,6 +17,10 @@
 
 //Auth::routes();
 
+Route::get('refresh-csrf', function(){
+    return csrf_token();
+});
+
 //------HOME AND LOGIN MODULE----------
 Route::get('/', 'HomeController@signin')->name('login');
 Route::get('/home', 'HomeController@index')->name('home');
@@ -1164,5 +1168,78 @@ Route::post('/delete_vehicle_service_log', 'VehicleServiceLogController@destroy'
 // -------------VEHICLE SERVICE LOG REPORT MODULE-----------
 Route::any('/vehicle_service_log_report', 'VehicleServiceLogReportController@index')->name('vehicle_service_log_report')->middleware('auth');
 Route::post('/search_vehicle_service_log_report', 'VehicleServiceLogReportController@searchReport')->name('search_vehicle_service_log_report')->middleware('auth');
+
+// -------------VEHICLE CONTRACT MODULE-----------
+Route::any('/vehicle_contract', 'VehicleContractController@index')->name('vehicle_contract')->middleware('auth');
+Route::post('/create_vehicle_contract', 'VehicleContractController@create')->name('create_vehicle_contract');
+Route::post('/edit_vehicle_contract_form', 'VehicleContractController@editForm')->name('edit_vehicle_contract_form');
+Route::post('/edit_vehicle_contract_attachment_form', 'VehicleContractController@attachmentForm')->name('edit_vehicle_contract_attachment_form');
+Route::post('/edit_vehicle_contract', 'VehicleContractController@edit')->name('edit_vehicle_contract');
+Route::any('/search_vehicle_contract', 'VehicleContractController@searchVehicle')->name('search_vehicle_contract');
+Route::post('/edit_vehicle_contract_attachment', 'VehicleContractController@editAttachment')->name('edit_vehicle_contract_attachment');
+Route::post('/remove_vehicle_contract_attachment', 'VehicleContractController@removeAttachment')->name('remove_vehicle_contract_attachment');
+Route::any('/download_vehicle_contract_attachment', 'VehicleContractController@downloadAttachment')->name('download_vehicle_contract_attachment');
+Route::post('/delete_vehicle_contract', 'VehicleContractController@destroy')->name('delete_vehicle_contract');
+
+// -------------VEHICLE ODOMETER LOG MODULE-----------
+Route::any('/vehicle_odometer_log', 'VehicleOdometerLogController@index')->name('vehicle_odometer_log')->middleware('auth');
+Route::post('/create_vehicle_odometer_log', 'VehicleOdometerLogController@create')->name('create_vehicle_odometer_log');
+Route::post('/edit_vehicle_odometer_log_form', 'VehicleOdometerLogController@editForm')->name('edit_vehicle_odometer_log_form');
+Route::post('/edit_vehicle_odometer_log_attachment_form', 'VehicleOdometerLogController@attachmentForm')->name('edit_vehicle_odometer_log_attachment_form');
+Route::post('/edit_vehicle_odometer_log', 'VehicleOdometerLogController@edit')->name('edit_vehicle_odometer_log');
+Route::any('/search_vehicle_odometer_log', 'VehicleOdometerLogController@searchVehicle')->name('search_vehicle_odometer_log');
+Route::post('/edit_vehicle_odometer_log_attachment', 'VehicleOdometerLogController@editAttachment')->name('edit_vehicle_odometer_log_attachment');
+Route::post('/remove_vehicle_odometer_log_attachment', 'VehicleOdometerLogController@removeAttachment')->name('remove_vehicle_odometer_log_attachment');
+Route::any('/download_vehicle_odometer_log_attachment', 'VehicleOdometerLogController@downloadAttachment')->name('download_vehicle_odometer_log_attachment');
+Route::post('/delete_vehicle_odometer_log', 'VehicleOdometerLogController@destroy')->name('delete_vehicle_odometer_log');
+
+// -------------VEHICLE ODOMETER LOG REPORT MODULE-----------
+Route::any('/vehicle_odometer_log_report', 'VehicleOdometerLogReportController@index')->name('vehicle_odometer_log_report')->middleware('auth');
+Route::post('/search_vehicle_odometer_log_report', 'VehicleOdometerLogReportController@searchReport')->name('search_vehicle_odometer_log_report')->middleware('auth');
+
+// -------------VEHICLE ACCESS MODULE-----------
+Route::any('/vehicle_fleet_access', 'VehicleFleetAccessController@index')->name('vehicle_fleet_access')->middleware('auth.admin');
+Route::post('/create_vehicle_fleet_access', 'VehicleFleetAccessController@create')->name('create_vehicle_fleet_access');
+Route::post('/edit_vehicle_fleet_access_form', 'VehicleFleetAccessController@editForm')->name('edit_vehicle_fleet_access_form');
+Route::post('/edit_vehicle_fleet_access', 'VehicleFleetAccessController@edit')->name('edit_vehicle_fleet_access');
+Route::post('/delete_vehicle_fleet_access', 'VehicleFleetAccessController@destroy')->name('delete_vehicle_fleet_access');
+
+// -------------VEHICLE MAINTENANCE REMINDER MODULE-----------
+Route::any('/vehicle_maintenance_reminder', 'VehicleMaintenanceReminderController@index')->name('vehicle_maintenance_reminder')->middleware('auth');
+Route::post('/create_vehicle_maintenance_reminder', 'VehicleMaintenanceReminderController@create')->name('create_vehicle_maintenance_reminder');
+Route::post('/edit_vehicle_maintenance_reminder_form', 'VehicleMaintenanceReminderController@editForm')->name('edit_vehicle_maintenance_reminder_form');
+Route::post('/edit_vehicle_maintenance_reminder', 'VehicleMaintenanceReminderController@edit')->name('edit_vehicle_maintenance_reminder');
+Route::post('/delete_vehicle_maintenance_reminder', 'VehicleMaintenanceReminderController@destroy')->name('delete_vehicle_maintenance_reminder');
+Route::any('/search_vehicle_maintenance_reminder', 'VehicleMaintenanceReminderController@searchData')->name('search_vehicle_maintenance_reminder');
+Route::any('/remove_vehicle_maintenance_reminder_service', 'VehicleMaintenanceReminderController@removeService')->name('remove_vehicle_maintenance_reminder_service');
+
+// -------------VEHICLE MAINTENANCE SCHEDULE MODULE-----------
+Route::any('/vehicle_maintenance_schedule', 'VehicleMaintenanceScheduleController@index')->name('vehicle_maintenance_schedule')->middleware('auth');
+Route::post('/create_vehicle_maintenance_schedule', 'VehicleMaintenanceScheduleController@create')->name('create_vehicle_maintenance_schedule');
+Route::post('/edit_vehicle_maintenance_schedule_form', 'VehicleMaintenanceScheduleController@editForm')->name('edit_vehicle_maintenance_schedule_form');
+Route::post('/edit_vehicle_maintenance_schedule', 'VehicleMaintenanceScheduleController@edit')->name('edit_vehicle_maintenance_schedule');
+Route::post('/delete_vehicle_maintenance_schedule', 'VehicleMaintenanceScheduleController@destroy')->name('delete_vehicle_maintenance_schedule');
+Route::any('/search_vehicle_maintenance_schedule', 'VehicleMaintenanceScheduleController@searchData')->name('search_vehicle_maintenance_schedule');
+
+// -------------BUDGET SUMMARY MODULE-----------
+Route::any('/budget_summary', 'BudgetSummaryController@index')->name('budget_summary')->middleware('auth');
+Route::post('/create_budget_summary', 'BudgetSummaryController@create')->name('create_budget_summary');
+Route::post('/edit_budget_summary_form', 'BudgetSummaryController@editForm')->name('edit_budget_summary_form');
+Route::post('/edit_budget_summary_attachment_form', 'BudgetSummaryController@attachmentForm')->name('edit_budget_summary_attachment_form');
+Route::post('/edit_budget_summary', 'BudgetSummaryController@edit')->name('edit_budget_summary');
+Route::any('/search_budget_summary', 'BudgetSummaryController@searchVehicle')->name('search_budget_summary');
+Route::post('/edit_budget_summary_attachment', 'BudgetSummaryController@editAttachment')->name('edit_budget_summary_attachment');
+Route::post('/remove_budget_summary_attachment', 'BudgetSummaryController@removeAttachment')->name('remove_budget_summary_attachment');
+Route::any('/download_budget_summary_attachment', 'BudgetSummaryController@downloadAttachment')->name('download_budget_summary_attachment');
+Route::post('/delete_budget_summary', 'BudgetSummaryController@destroy')->name('delete_budget_summary');
+Route::post('/change_budget_status', 'BudgetSummaryController@approveBudget')->name('change_budget_status');
+Route::any('/budget_approval', 'BudgetSummaryController@budgetApprovalView')->name('budget_approval');
+
+
+// -------------BUDGET MODULE-----------
+Route::any('/budget_item/view/{id}', 'BudgetController@budgetView')->name('budget_item_view')->middleware('auth');
+Route::any('/budget_item/modify/{id}', 'BudgetController@index')->name('budget_item_modify')->middleware('auth');
+Route::post('/create_modify_budget_item', 'BudgetController@createModify')->name('create_modify_budget_item');
+Route::post('/create_modify_budget_account', 'BudgetController@createModifyAcct')->name('create_modify_budget_account');
 
 

@@ -2653,6 +2653,116 @@
 @endif
 <!-- END OF MULTIPLE STAGES -->
 
+<!-- BEGIN OF MULTIPLE SERVICES -->
+@if($type == 'multiple_services')
+
+    <div class="row clearfix new_multiple_services remove_multiple_services{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            <div class="col-sm-8" id="">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select class="form-control {{$editClassOrId}}" name="service_type"  required>
+                            <option value="">Select Service Type</option>
+                            @foreach($serviceType as $data)
+                                <option value="{{$data->id}}">{{$data->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1 addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMoreEditable('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','multiple_services','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInputEditable('{{$add_id}}','remove_multiple_services{{$more}}','{{url('add_more')}}','multiple_services','new_multiple_services','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF MULTIPLE SERVICES -->
+
+<!-- BEGIN OF MULTIPLE VEHICLES -->
+@if($type == 'multiple_vehicles')
+
+    <div class="row clearfix new_multiple_vehicles remove_multiple_vehicles{{$more}}" style="margin-left:5px;">
+
+        <div class="row clearfix">
+            @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('vehicle_fleet_access'))
+                <div class="col-sm-4">
+                    <b>Vehicle*</b>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <input type="text" class="form-control " autocomplete="off" id="select_vehicle{{$num2}}" onkeyup="searchOptionList('select_vehicle{{$num2}}','myUL1{{$num2}}','{{url('default_select')}}','search_vehicle','vehicle{{$num2}}');" name="select_vehicle" placeholder="Select Vehicle">
+
+                            <input type="hidden" class="{{$editClassOrId}}" name="vehicle" id="vehicle{{$num2}}" />
+                        </div>
+                    </div>
+                    <ul id="myUL1{{$num2}}" class="myUL"></ul>
+                </div>
+            @else
+
+                <div class="col-sm-4">
+                    <b>Vehicle*</b>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <select class="form-control {{$editClassOrId}}" name="vehicle"  required>
+                                <option value="">Select Select Vehicle</option>
+                                @foreach(\App\Helpers\Utility::driverVehicles() as $data)
+                                    <option value="{{$data->id}}">{{$data->make->make_name}} {{$data->model->model_name}} ({{$data->license_plate}})</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            @endif
+
+                <div class="col-sm-5">
+                    <b>Vehicle Current Mileage(Miles)</b>
+                    <div class="form-group">
+                        <div class="form-line">
+                            <input type="number" class="form-control mileage_class" value="0" name="mileage" id="" placeholder="Mileage" required>
+                        </div>
+                    </div>
+                </div>
+
+            <div class="col-sm-1 addButtons" id="{{$hide_id}}{{$more}}">
+                <div class="form-group">
+                    <div onclick="addMoreEditable('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','multiple_vehicles','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-1" id="">
+                <div class="form-group">
+                    <div style="cursor: pointer;" onclick="removeInputEditable('{{$add_id}}','remove_multiple_vehicles{{$more}}','{{url('add_more')}}','multiple_vehicles','new_multiple_vehicles','{{$more}}','{{$add_id}}','{{$hide_id}}','{{$editClassOrId}}');">
+                        <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <hr/>
+    </div>
+
+@endif
+<!-- END OF MULTIPLE VEHICLES -->
+
 <script>
     $(function() {
         $( ".datepicker2" ).datepicker({

@@ -1,4 +1,4 @@
-<table class="table table-bordered table-hover table-striped" id="main_table">
+<table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
     <thead>
     <tr>
         <th>
@@ -32,7 +32,9 @@
 
             </td>
             <td>
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT) || Auth::user()->id == $data->created_by)
                 <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_po_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay','billing_address_edit','curr_rate_edit','convert_rfq_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                @endif
             </td>
             <td>
                 <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('po_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
@@ -64,3 +66,10 @@
 <div class=" pagination pull-right">
     {!! $mainData->render() !!}
 </div>
+
+<script>
+    $('.tbl_order').on('scroll', function () {
+        $(".tbl_order > *").width($(".tbl_order").width() + $(".tbl_order").scrollLeft());
+    });
+</script>
+

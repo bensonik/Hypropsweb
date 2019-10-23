@@ -280,7 +280,7 @@ class WarehouseReceiptController extends Controller
         }
 
 
-        $displayMessage2 = (count($noWhse) >0) ? ' also '.implode(',',$noWhse).
+        $displayMessage2 = (count($noWhse) >0) ? ', also '.implode(',',$noWhse).
             ' items have not been assigned to a warehouse,zone and bin and therefore receipt cannot be posted' : '';
 
         return response()->json([
@@ -384,6 +384,38 @@ class WarehouseReceiptController extends Controller
                         }
 
                     }
+
+                    // BEGINING OF SENDING MAIL TO WAREHOUSE EMPLOYEE
+                    if(count($whseEmp) >0){
+                        $uniqueEmp = array_unique($whseEmp);
+
+                        foreach($uniqueEmp as $emp){
+
+                            $whseEmployee = WarehouseEmployee::specialColumns('warehouse_id',$emp);
+
+
+                            $emailContent1 = [];
+                            $emailContent1['subject'] = 'Warehouse Put-Away';
+
+                            if(!empty($whseEmployee)){
+                                foreach($whseEmployee as $user){
+                                    $toMail = $user->access_user->email;
+                                    $name = $user->access_user->firstname.' '.$user->access_user->lastname;
+                                    $messageBody = "Hello $name, a new warehouse receipt was posted a while ago and are ready for put-away";
+                                    $emailContent1['message'] = $messageBody;
+                                    $emailContent1['to_mail'] = $toMail;
+
+                                    Notify::warehouseMail('mail.warehouse', $emailContent1,$toMail,'', $emailContent1['subject']);
+
+
+                                }
+                            }
+
+                        }
+
+                    }
+                    //END OF SENDING MAIL TO WHAREHOUSE WORKERS
+
                 }   //END OF POST RECEIPT
 
                 if($status == Utility::CREATE_RECEIPT){
@@ -421,67 +453,35 @@ class WarehouseReceiptController extends Controller
                         $checkStock[] = $data->inventory->item_name;
                     }
 
+                    //SEND MAIL TO WAREHOUSE MANAGER
+                    if(count($whseMan)>0){
+
+                        $uniqueMan = array_unique($whseMan);
+                        $emailContent1 = [];
+                        $emailContent1['subject'] = 'Warehouse Put-Away';
+
+                        if(!empty($whseMngr)){
+                            $manDetails = User::massData('id',$uniqueMan);
+                            foreach($manDetails as $user){
+                                $toMail = $user->email;
+                                $name = $user->firstname.' '.$user->lastname;
+                                $messageBody = "Hello $name, a new warehouse receipt was created a while ago, please action request";
+                                $emailContent1['message'] = $messageBody;
+                                $emailContent1['to_mail'] = $toMail;
+
+                                Notify::warehouseMail('mail.warehouse', $emailContent1,$toMail,'', $emailContent1['subject']);
+
+
+                            }
+                        }
+
+                    }
+                    //END OF SEND MAIL TO WAREHOUSE MANAGER
 
                 } //END OF CREATE WAREHOUSE RECEIPT
 
-            }
+            }   //END OF FOREACH POST RECEIPT
 
-            //SEND MAIL TO WAREHOUSE MANAGER
-            if(count($whseMan)>0){
-
-                $uniqueMan = array_unique($whseMan);
-                $emailContent1 = [];
-                $emailContent1['subject'] = 'Warehouse Put-Away';
-
-                if(!empty($whseMngr)){
-                    $manDetails = User::massData('id',$uniqueMan);
-                    foreach($manDetails as $user){
-                        $toMail = $user->email;
-                        $name = $user->firstname.' '.$user->lastname;
-                        $messageBody = "Hello $name, a new warehouse receipt was created a while ago, please action request";
-                        $emailContent1['message'] = $messageBody;
-                        $emailContent1['to_mail'] = $toMail;
-
-                        Notify::warehouseMail('mail.warehouse', $emailContent1,$toMail,'', $emailContent1['subject']);
-
-
-                    }
-                }
-
-            }
-            //END OF SEND MAIL TO WAREHOUSE MANAGER
-
-
-            // BEGINING OF SENDING MAIL TO WAREHOUSE EMPLOYEE
-            if(count($whseEmp) >0){
-            $uniqueEmp = array_unique($whseEmp);
-
-                foreach($uniqueEmp as $emp){
-
-                    $whseEmployee = WarehouseEmployee::specialColumns('warehouse_id',$emp);
-
-
-                    $emailContent1 = [];
-                    $emailContent1['subject'] = 'Warehouse Put-Away';
-
-                    if(!empty($whseEmployee)){
-                        foreach($whseEmployee as $user){
-                            $toMail = $user->access_user->email;
-                            $name = $user->access_user->firstname.' '.$user->access_user->lastname;
-                            $messageBody = "Hello $name, a new warehouse receipt was posted a while ago and are ready for put-away";
-                            $emailContent1['message'] = $messageBody;
-                            $emailContent1['to_mail'] = $toMail;
-
-                            Notify::warehouseMail('mail.warehouse', $emailContent1,$toMail,'', $emailContent1['subject']);
-
-
-                        }
-                    }
-
-                }
-
-            }
-           //END OF SENDING MAIL TO WHAREHOUSE WORKERS
 
         }
 

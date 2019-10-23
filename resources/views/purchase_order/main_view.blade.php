@@ -24,7 +24,7 @@
                     </li>
 
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="po_main_table">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="po_main_table">
 
                     <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
@@ -303,7 +303,7 @@
                                 '<?php echo url('post_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::CREATE_RECEIPT}}','Create Warehouse Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-plus"></i>Create Warehouse Receipt</button></div>
 
                 </div>
-                <div class="modal-body" id="edit_content" style="height:500px; overflow:scroll;">
+                <div class="modal-body" id="edit_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -346,7 +346,7 @@
                     </li>
 
                 </div>
-                <div class="modal-body" id="convert_rfq_content" style="height:500px; overflow:scroll;">
+                <div class="modal-body" id="convert_rfq_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -389,7 +389,7 @@
                     </li>
 
                 </div>
-                <div class="modal-body" id="convert_quote_content" style="height:500px; overflow:scroll;">
+                <div class="modal-body" id="convert_quote_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -503,7 +503,7 @@
                 </div>
 
                 <div class="body table-responsive" id="reload_data">
-                    <table class="table table-bordered table-hover table-striped" id="main_table">
+                    <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
                         <thead>
                         <tr>
                             <th>

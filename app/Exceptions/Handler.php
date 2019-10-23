@@ -63,7 +63,8 @@ class Handler extends ExceptionHandler
             return response()->json([
                 'message' => 'token_mismatch'
             ], $exception->getStatusCode());
-        };
+        }
+            return redirect()->back()->withInput()->with('token', csrf_token());
     }
 
 

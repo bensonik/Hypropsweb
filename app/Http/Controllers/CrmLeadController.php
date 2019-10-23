@@ -239,7 +239,7 @@ class CrmLeadController extends Controller
 
         }else{
             return  response()->json([
-                'message2' => 'The '.count($activeLead).' was not created by you and cannot be deleted',
+                'message2' => 'The '.count($activeLead).$message,
                 'message' => 'warning'
             ]);
 

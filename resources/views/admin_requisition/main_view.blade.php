@@ -389,13 +389,6 @@
 
     }
 
-    function fetchModal(dataId,requestId,modalId){
-
-        $('#'+modalId).modal('show');
-
-        $('#'+requestId).val(dataId);
-
-    }
 
 </script>
 

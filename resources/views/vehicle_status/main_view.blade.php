@@ -69,7 +69,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Vehicle Status
+                        Vehicle Contract Status
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $hod == \App\Helpers\Utility::HOD_DETECTOR)

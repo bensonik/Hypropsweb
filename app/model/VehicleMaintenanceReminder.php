@@ -21,7 +21,7 @@ class VehicleMaintenanceReminder extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'reminder_name' => 'required',
+        'name' => 'required',
         'mileage' => 'required',
     ];
 
@@ -153,6 +153,11 @@ class VehicleMaintenanceReminder extends Model
 
     }
 
+    public static function searchData($column, $post)
+    {
+        return static::where($column,'LIKE','%'.$post.'%')->orderBy('id','DESC')->get();
+
+    }
 
 
 }

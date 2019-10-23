@@ -44,7 +44,7 @@ class PurchaseOrderController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = PoExtension::paginateAllData();
+        $mainData = PoExtension::specialColumnsPage('created_by',Auth::user()->id);
 
         if ($request->ajax()) {
             return \Response::json(view::make('purchase_order.reload',array('mainData' => $mainData))->render());

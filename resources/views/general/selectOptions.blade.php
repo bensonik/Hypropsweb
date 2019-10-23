@@ -293,7 +293,7 @@
 
 @if($type == 'z_bins_param')
 
-    <select name="bin{{$param}}"  class="form-control " id=""  >
+    <select name="bin{{$param}}"  class=" " id=""  >
         @if(count($optionArray) > 0)
             <option value="">Select</option>
             @foreach($optionArray as $data)

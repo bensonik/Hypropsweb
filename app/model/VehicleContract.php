@@ -25,8 +25,8 @@ class VehicleContract extends Model
         'contract_type' => 'required',
         'start_date' => 'required',
         'end_date' => 'required',
-        'starting_mileage' => 'required',
-        'ending_mileage' => 'required',
+        'mileage_before_contract' => 'required',
+        'mileage_after_contract' => 'required',
     ];
 
     public function user_c(){
@@ -38,6 +38,21 @@ class VehicleContract extends Model
         return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
+    public function statusType(){
+        return $this->belongsTo('App\model\VehicleStatus','contract_status','id')->withDefault();
+
+    }
+
+    public function contract(){
+        return $this->belongsTo('App\model\VehicleContractType','contract_type','id')->withDefault();
+
+    }
+
+    public function vehicleDetail(){
+        return $this->belongsTo('App\model\Vehicle','vehicle_id','id')->withDefault();
+
+    }
+
 
     public static function paginateAllData()
     {

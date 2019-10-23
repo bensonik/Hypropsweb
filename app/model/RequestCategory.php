@@ -105,7 +105,7 @@ class RequestCategory extends Model
             ->orWhere($column2, '=',$post2)->orderBy('id','DESC')->get();
 
     }
-	
+
 	public static function specialColumnsPage2($column, $post, $column2, $post2)
     {
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
@@ -135,9 +135,17 @@ class RequestCategory extends Model
         return Utility::massData(self::table(),$column, $post);
 
     }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+
+    }
+
+    public static function massDataAlphaOrder($column, $post)
+    {
+        return static::where('status', Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->orderBy('request_name','ASC')->get();
 
     }
 

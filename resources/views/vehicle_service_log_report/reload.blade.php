@@ -132,7 +132,6 @@
 
                             </th>
 
-                            <th>Manage</th>
                             <th>Attachment</th>
                             <th>Vehicle</th>
                             <th>Service Type</th>
@@ -143,6 +142,7 @@
                             <th>Mileage Out(Miles)</th>
                             <th>Location</th>
                             <th>Service Date</th>
+                            <th>Comment</th>
                             <th>Invoice Reference</th>
                             <th>Created by</th>
                             <th>Updated by</th>
@@ -158,9 +158,6 @@
 
                                 </td>
                                 <td>
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_vehicle_fuel_log_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                </td>
-                                <td>
                                     <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_vehicle_fuel_log_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -173,6 +170,7 @@
                                 <td>{{number_format($data->mileage_out)}}</td>
                                 <td>{{$data->location}}</td>
                                 <td>{{$data->service_date}}</td>
+                                <td>{{$data->comment}}</td>
                                 <td>{{$data->invoice_reference}}</td>
                                 <td>
                                     @if($data->created_by != '0')

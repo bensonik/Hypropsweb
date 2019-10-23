@@ -32,7 +32,7 @@ class VehicleServiceLogController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = VehicleServiceLog::paginateAllData();
+        $mainData = VehicleServiceLog::specialColumnsPage('created_by',Auth::user()->id);
         $serviceType = VehicleServiceType::getAllData();
         $this->processData($mainData);
 
@@ -144,12 +144,10 @@ class VehicleServiceLogController extends Controller
         //
         $validator = Validator::make($request->all(),VehicleServiceLog::$mainRules);
         if($validator->passes()) {
-            $vehicleData = Vehicle::firstRow('id',$request->input('vehicle'));
             $dbDATA = [
                 'vehicle_id' => $request->input('vehicle'),
                 'mileage_in' => $request->input('mileage_in'),
                 'mileage_out' => $request->input('mileage_out'),
-                'driver_id' => $vehicleData->driver_id,
                 'invoice_reference' => $request->input('invoice_reference'),
                 'workshop' => ucfirst($request->input('workshop')),
                 'location' => ucfirst($request->input('location')),

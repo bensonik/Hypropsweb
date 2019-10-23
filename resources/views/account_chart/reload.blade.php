@@ -7,6 +7,7 @@
 
         </th>
 
+        <th>Manage</th>
         <th>Account Number</th>
         <th>Account Name</th>
         <th>Account Category</th>
@@ -17,7 +18,6 @@
         <th>Created at</th>
         <th>Updated by</th>
         <th>Updated at</th>
-        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
@@ -26,6 +26,9 @@
             <td scope="row">
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
+            </td>
+            <td>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_account_chart_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->acct_no}}</td>
@@ -49,9 +52,6 @@
 
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_account_chart_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-            </td>
         </tr>
     @endforeach
     </tbody>

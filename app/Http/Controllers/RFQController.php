@@ -40,7 +40,7 @@ class RFQController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = RFQExtension::paginateAllData();
+        $mainData = RFQExtension::specialColumnsPage('created_by',Auth::user()->id);
         $unitMeasure = UnitMeasure::paginateAllData();
 
         if ($request->ajax()) {

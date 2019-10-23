@@ -9,6 +9,7 @@
 namespace App\Helpers;
 
 use App\model\QuickNote;
+use App\model\Vehicle;
 use App\User;
 use DB;
 use Illuminate\Support\Facades\Auth;
@@ -78,18 +79,19 @@ class Utility
         5 => 'Item Delivered to Client', 6 => 'Quote Closed'];
     const TICKET_STATUS = [0 => 'Open', 1 => 'Closed'];
 
-    const SALES_DESC = 2, PURCHASE_DESC = 1;
-    const POST_RECEIPT = 1, CREATE_RECEIPT = 2;
+    const SALES_DESC = 2, PURCHASE_DESC = 1;    //FOR PO,RFQ,QUOTES,EXPENSES AND OTHER TRANSACTIONS
+    const POST_RECEIPT = 1, CREATE_RECEIPT = 2; //FOR WAREHOUSE RECEIPT
     const PUT_AWAY = 1, PICK = 2;
-    const ALL_DATA = 0, SELECTED = 1;
+    const ALL_DATA = 0, SELECTED = 1;   //FOR REPORT MoDULE IN MOST OF THE MODULES
     const TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];
-    const TASK_PRIORITY = ['None','Low','Medium','High'];
+    const TASK_PRIORITY = ['None','Low','Medium','High'];   //FOR PROJECT TASK MDULE
     const T_USER = '2', P_USER = '1';
     const TEMP_EXTERNAL_STAFF = 2, TEMP_JOB_CANDIDATE = 1, TEMP_CLIENT = 3;
-    const HSE_REPORT_TYPE = [1 => 'Incident', 2 => 'Hazard'];
-    const EVENT_TYPE = [1 => 'My Schedule', 2 => 'General Schedule'];
-    const GENERAL_SCHEDULE = 2, MY_SCHEDULE = 1;
-    const ONGOING = 1, WON = 2, LOST = 3;
+    const HSE_REPORT_TYPE = [1 => 'Incident', 2 => 'Hazard'];   //FOR HSE MDULE
+    const EVENT_TYPE = [1 => 'My Schedule', 2 => 'General Schedule'];   //FOR EVENT MODULE
+    const GENERAL_SCHEDULE = 2, MY_SCHEDULE = 1;    //FOR EVENT MODULE
+    const ONGOING = 1, WON = 2, LOST = 3; //FOR CRM MODULE
+    const READY_FOR_APPROVAL = 1, NOT_READY_FOR_APPROVAL = 2; //FOR BUDGET MODULE
 
 
     public static function IMG_URL(){
@@ -339,6 +341,18 @@ class Utility
         return DB::table($table)
             ->where('status', self::STATUS_ACTIVE)
             ->orderBy('id','DESC')->paginate('15');
+
+    }
+
+    public static function specialColumns3($table,$column, $post, $column2, $post2, $column3, $post3)
+    {
+
+        return DB::table($table)
+            ->where('status', '=',self::STATUS_ACTIVE)
+            ->where($column, '=',$post)
+            ->where($column2, '=',$post2)
+            ->where($column3, '=',$post3)
+            ->orderBy('id','DESC')->get();
 
     }
 
@@ -1394,6 +1408,13 @@ class Utility
         return 'Invisible to participants';
     }
 
+    public static function budgetStatusReadyDisplay($statusInt){
+        if($statusInt == 1){
+            return 'Ready for Approval';
+        }
+        return 'Not Ready for Approval';
+    }
+
     public static function hseReportType($reportType){
         if($reportType == 1){
             return 'Incident';
@@ -1532,6 +1553,14 @@ class Utility
     public static function quickNotes(){
 
         $data = QuickNote::where('status', self::STATUS_ACTIVE)->orderBy('id','DESC')->get();
+
+        return $data;
+
+    }
+
+    public static function driverVehicles(){
+
+        $data = Vehicle::specialColumns('driver_id',Auth::user()->id);
 
         return $data;
 

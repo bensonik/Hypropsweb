@@ -39,7 +39,7 @@ class QuoteController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = QuoteExtension::paginateAllData();
+        $mainData = QuoteExtension::specialColumnsPage('created_by',Auth::user()->id);
 
         if ($request->ajax()) {
             return \Response::json(view::make('quote.reload',array('mainData' => $mainData))->render());

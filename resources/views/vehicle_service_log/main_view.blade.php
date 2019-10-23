@@ -10,23 +10,41 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">New Service Log</h4>
                 </div>
-                <div class="modal-body" style="overflow-y:scroll; height:500px;">
+                <div class="modal-body" style="overflow-y:scroll; height:400px;">
 
                     <form name="vehicleForm" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
 
                             <div class="row clearfix">
-                                <div class="col-sm-4">
-                                    <b>Vehicle*</b>
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_vehicle" onkeyup="searchOptionList('select_vehicle','myUL1','{{url('default_select')}}','search_vehicle','vehicle');" name="select_vehicle" placeholder="Select Vehicle">
+                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT) || \App\Helpers\Utility::moduleAccessCheck('vehicle_fleet_access'))
+                                    <div class="col-sm-4">
+                                        <b>Vehicle*</b>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class="form-control" autocomplete="off" id="select_vehicle" onkeyup="searchOptionList('select_vehicle','myUL1','{{url('default_select')}}','search_vehicle','vehicle');" name="select_vehicle" placeholder="Select Vehicle">
 
-                                            <input type="hidden" class="vehicle_class" name="vehicle" id="vehicle" />
+                                                <input type="hidden" class="vehicle_class" name="vehicle" id="vehicle" />
+                                            </div>
+                                        </div>
+                                        <ul id="myUL1" class="myUL"></ul>
+                                    </div>
+                                @else
+
+                                    <div class="col-sm-4">
+                                        <b>Vehicle*</b>
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <select class="form-control" name="vehicle"  required>
+                                                    <option value="">Select Select Vehicle</option>
+                                                    @foreach(\App\Helpers\Utility::driverVehicles() as $data)
+                                                        <option value="{{$data->id}}">{{$data->make->make_name}} {{$data->model->model_name}} ({{$data->license_plate}})</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <ul id="myUL1" class="myUL"></ul>
-                                </div>
+
+                                @endif
 
                                 <div class="col-sm-4">
                                     <b>Service Type*</b>
@@ -86,7 +104,7 @@
                                     <b>Location</b>
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="location" id="liter_price" placeholder="Location" required>
+                                            <input type="text" class="form-control" name="location" id="" placeholder="Location" required>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +113,7 @@
                                     <b>Service Date*</b>
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control datepicker" name="service_date" placeholder="Purchase Date" required>
+                                            <input type="text" class="form-control datepicker" name="service_date" placeholder="Service Date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -176,7 +194,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                 </div>
-                <div class="modal-body" id="edit_content" style="overflow-y:scroll; height:500px;">
+                <div class="modal-body" id="edit_content" style="overflow-y:scroll; height:400px;">
 
                 </div>
                 <div class="modal-footer">
@@ -190,10 +208,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Print Transact Default Size -->
-    @include('includes.print_preview')
-
 
     <!-- Bordered Table -->
     <div class="row clearfix">
@@ -251,6 +265,7 @@
                             <th>Mileage Out(Miles)</th>
                             <th>Location</th>
                             <th>Service Date</th>
+                            <th>Comment</th>
                             <th>Invoice Reference</th>
                             <th>Created by</th>
                             <th>Updated by</th>
@@ -281,6 +296,7 @@
                             <td>{{number_format($data->mileage_out)}}</td>
                             <td>{{$data->location}}</td>
                             <td>{{$data->service_date}}</td>
+                            <td>{{$data->comment}}</td>
                             <td>{{$data->invoice_reference}}</td>
                             <td>
                                 @if($data->created_by != '0')

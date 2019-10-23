@@ -4,10 +4,15 @@
 
     const LoadingIcon = "public/icons/loading_icon.gif";
     const META = $('meta[name="csrf-token"]');
-    const CRSF_TOKEN =  META.attr('content');
+    const CSRF_TOKEN =  META.attr('content');
 
     function _(e){
         return document.getElementById(e);
+    }
+
+    function getId(elementId){
+        var el = $('#'+elementId);
+        return el;
     }
 
     $.ajaxSetup({
@@ -27,21 +32,21 @@
     function sendRequest(linko,token,postVars){
         ajax.open("POST", linko, true);
         ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        ajax.setRequestHeader("X-CSRF-TOKEN", token);
+        ajax.setRequestHeader("X-CSRF-TOKEN", CSRF_TOKEN);
         ajax.send(postVars);
     }
 
     function sendRequestForm(linko,token,postVars){
         ajax.open("POST", linko, true);
         ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        ajax.setRequestHeader("X-CSRF-TOKEN", token);
+        ajax.setRequestHeader("X-CSRF-TOKEN", CSRF_TOKEN);
         ajax.send(postVars);
 
     }
 
     function sendRequestMediaForm(linko,token,postVars){
         ajax.open("POST", linko, true);
-        ajax.setRequestHeader("X-CSRF-TOKEN", token);
+        ajax.setRequestHeader("X-CSRF-TOKEN", CSRF_TOKEN);
         ajax.send(postVars);
 
     }
@@ -184,6 +189,21 @@
         }else{
             return false;
         }
+    }
+
+    function sumClassToArray(getClass){
+        var classArray = classToArray(getClass);
+        return sumArrayItems(classArray);
+    }
+
+    function replaceInputWithClassArraySum(getClass, idElem){
+        var sum = sumClassToArray(getClass);
+        getId(idElem).val(sum);
+    }
+
+    function replaceElemWithClassArraySum(getClass, idElem){
+        var sum = sumClassToArray(getClass);
+        getId(idElem).html(sum);
     }
 
     //CATCH ALL DATA FROM INPUT WITH CSS CLASS
@@ -384,7 +404,7 @@
     var summerNote = '';
     var postVars = inputVars+'&editor_input='+summerNote;
     $('#loading_modal').modal('show');
-    sendRequestForm(submitUrl,token,postVars)
+    sendRequestForm(submitUrl,token,postVars);
     ajax.onreadystatechange = function(){
         if(ajax.readyState == 4 && ajax.status == 200) {
 
@@ -542,10 +562,19 @@
             });
     }
 
-    function fillNextInputParam(value_id,displayId,page,moduleType,param){
+    function fillNextInputParam(value,displayId,page,moduleType,param){
 
         $.ajax({
-            url:  page+'?pickedVal='+value_id+'&type='+moduleType+'&param='+param
+            url:  page+'?pickedVal='+value+'&type='+moduleType+'&param='+param
+        }).done(function(data){
+            $('#'+displayId).html(data);
+        });
+    }
+
+    function fillNextInputParamId(valueId,displayId,page,moduleType,param){
+        var pickedVal = $('#'+valueId).val();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
         }).done(function(data){
             $('#'+displayId).html(data);
         });
@@ -1352,6 +1381,35 @@
 
     }
 
+    function dynamicStatusEffect(klass,reloadId,reloadUrl,submitUrl,token,status,category) {
+    var items = group_val(klass);
+    if (items.length > 0){
+        swal({
+                title: "Are you sure you want to "+category+" ?",
+                text: "This will permanently "+category+"!",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-danger",
+                confirmButtonText: "Yes, continue!",
+                cancelButtonText: "No, cancel!",
+                closeOnConfirm: true,
+                closeOnCancel: false
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    changeStatusMethod(klass, reloadId, reloadUrl, submitUrl, token,status);
+                    //swal("Processed!", "process complete.", "success");
+                } else {
+                    swal(" Cancelled", category, "error");
+                }
+            });
+
+    }else{
+        alert('Please select an entry to continue');
+    }
+
+}
+
     function changeItemStatus(klass,reloadId,reloadUrl,submitUrl,token,status) {
         var items = group_val(klass);
         if (items.length > 0){
@@ -1665,6 +1723,14 @@
         }
     }
 
+    function fetchModal(dataId,requestId,modalId){
+
+        $('#'+modalId).modal('show');
+
+        $('#'+requestId).val(dataId);
+
+    }
+
     function fetchHtml(dataId,displayId,modalId,submitUrl,token){
 
         var postVars = "dataId="+dataId;
@@ -1865,16 +1931,16 @@
     }
 
 
-function print_content(el){
-        var restorepage = document.body.innerHTML;
+    function print_content(el){
+            var restorepage = document.body.innerHTML;
 
-        var printcontent = document.getElementById(el).outerHTML;
-        document.body.innerHTML = printcontent;
-        window.print();
-        window.close();
-        document.body.innerHTML = restorepage;
-        location.reload();
-    }
+            var printcontent = document.getElementById(el).outerHTML;
+            document.body.innerHTML = printcontent;
+            window.print();
+            window.close();
+            document.body.innerHTML = restorepage;
+            location.reload();
+        }
 
     function print_table(divdata)
     {
@@ -2117,28 +2183,12 @@ function print_content(el){
                     }
                 });
 
-        }  //END OF IF STATUS IS FOR DENIAL AND NOT APPROVAL
+            }  //END OF IF STATUS IS FOR DENIAL AND NOT APPROVAL
 
-    }else{
-        alert('Please select an entry to continue');
-    }
-
-}
-
-    function sumArray(input){
-
-        if (toString.call(input) !== "[object Array]")
-            return false;
-
-        var total =  0;
-        for(var i=0;i<input.length;i++)
-        {
-            if(isNaN(input[i])){
-                continue;
-            }
-            total += Number(input[i]);
+        }else{
+            alert('Please select an entry to continue');
         }
-        return total;
+
     }
 
     function sumArrayItems(input){

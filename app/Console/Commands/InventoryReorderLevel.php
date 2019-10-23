@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\model\Inventory;
 use Illuminate\Console\Command;
 use DB;
 use App\Helpers\Utility;
@@ -15,7 +16,7 @@ class InventoryReorderLevel extends Command
      *
      * @var string
      */
-    protected $signature = 'Inventory:reorder';
+    protected $signature = 'command:InventoryReorder';
 
     /**
      * The console command description.
@@ -48,7 +49,7 @@ class InventoryReorderLevel extends Command
             ->orderBy('inventory_access.id','DESC')->get();
         //$inventoryUsers = Utility::getAllData('inventory_access');
 
-        $inventoryItems = Utility::getAllData('inventory');
+        $inventoryItems = Inventory::getAllData();
         if(!empty($inventoryItems)){
             foreach($inventoryItems as $item){
                 if($item->re_order_level >= $item->qty){

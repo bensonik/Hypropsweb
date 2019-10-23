@@ -17,6 +17,7 @@
         <th>liter</th>
         <th>Mileage (Miles)</th>
         <th>Purchase Date</th>
+        <th>Comment</th>
         <th>Invoice Reference</th>
         <th>Created by</th>
         <th>Updated by</th>
@@ -46,6 +47,7 @@
             <td>{{number_format($data->liter)}}</td>
             <td>{{number_format($data->mileage)}}</td>
             <td>{{$data->purchase_date}}</td>
+            <td>{{$data->comment}}</td>
             <td>{{$data->invoice_reference}}</td>
             <td>
                 @if($data->created_by != '0')
