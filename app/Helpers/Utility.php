@@ -93,6 +93,7 @@ class Utility
     const ONGOING = 1, WON = 2, LOST = 3; //FOR CRM MODULE
     const READY_FOR_APPROVAL = 1, NOT_READY_FOR_APPROVAL = 2; //FOR BUDGET MODULE
 
+    const REQUEST_CATEGORY_DIMENSION = 1, ACCOUNT_CHART_DIMENSION = 2;
 
     public static function IMG_URL(){
         return public_path() . '/images/';

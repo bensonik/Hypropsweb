@@ -224,6 +224,13 @@ class Budget extends Model
 
     }
 
+    public static function defaultUpdate2($column, $postId, $column2, $postId2, $arrayDataUpdate=[])
+    {
+
+        return static::where($column , $postId)->where($column2 , $postId2)->update($arrayDataUpdate);
+
+    }
+
     ///////////////////////////////
 
     public static function specialArrayColumnsPageDate($column, $post,$dateArray)

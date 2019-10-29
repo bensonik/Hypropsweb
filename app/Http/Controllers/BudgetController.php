@@ -169,34 +169,49 @@ class BudgetController extends Controller
             $month = $this->monthName($request->input('monthName'));
             $quarter = $request->input('quarterName');
 
-            $checkCat = Budget::firstRow('request_cat_id',$request->input('requestCat'));
-            if(!empty($checkCat)) {
-                $dbDATA = [
+            if($request->input('requestCat') != '') { // DO THIS IF REQUEST CATEGORY IS NOT EMPTY
+                $checkCat = Budget::firstRow('request_cat_id', $request->input('requestCat'));
+                if (!empty($checkCat)) {
+                    $dbDATA = [
+                        $month => $request->input('monthCatAmount'),
+                        $quarter => $request->input('quarterAmount'),
+                        'total_cat_amount' => $request->input('totalCatAmount'),
+                        'budget_id' => $request->input('budget'),
+                        'request_cat_id' => $request->input('requestCat'),
+                        'fin_year_id' => $request->input('finYear'),
+                        'updated_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    Budget::defaultUpdate('request_cat_id', $request->input('requestCat'), $dbDATA);
+
+                } else {
+
+                    $dbDATA = [
+                        $month => $request->input('monthCatAmount'),
+                        $quarter => $request->input('quarterAmount'),
+                        'total_cat_amount' => $request->input('totalCatAmount'),
+                        'budget_id' => $request->input('budget'),
+                        'request_cat_id' => $request->input('requestCat'),
+                        'fin_year_id' => $request->input('finYear'),
+                        'dept_id' => $request->input('deptId'),
+                        'dimension' => Utility::REQUEST_CATEGORY_DIMENSION,
+                        'created_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    Budget::create($dbDATA);
+
+                }
+
+            }else{  //IF AMOUNT WAS ENTERED FROM THE ACCOUNT CHART DIMENSION DO THIS
+                $dbUpdateDATA = [
                     $month => $request->input('monthCatAmount'),
                     $quarter => $request->input('quarterAmount'),
                     'total_cat_amount' => $request->input('totalCatAmount'),
                     'budget_id' => $request->input('budget'),
-                    'request_cat_id' => $request->input('requestCat'),
                     'fin_year_id' => $request->input('finYear'),
                     'updated_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
                 ];
-                Budget::defaultUpdate('request_cat_id', $request->input('requestCat'), $dbDATA);
-
-            }else{
-
-                $dbDATA = [
-                    $month => $request->input('monthCatAmount'),
-                    $quarter => $request->input('quarterAmount'),
-                    'total_cat_amount' => $request->input('totalCatAmount'),
-                    'budget_id' => $request->input('budget'),
-                    'request_cat_id' => $request->input('requestCat'),
-                    'fin_year_id' => $request->input('finYear'),
-                    'deptId' => $request->input('deptId'),
-                    'created_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
-                Budget::create($dbDATA);
+                Budget::defaultUpdate2('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION, $dbUpdateDATA);
 
             }
 
@@ -219,41 +234,54 @@ class BudgetController extends Controller
         //
 
         $budgetApproval = BudgetSummary::firstRow('id',$request->input('budget'));
-        if($budgetApproval->approval_status != Utility::APPROVED){
+        if($budgetApproval->approval_status != Utility::APPROVED){  //CHECK IF BUDGET HAVE BEEN APPROVED
             $month = $this->monthName($request->input('monthName'));
             $quarter = $request->input('quarterName');
 
-            $acctData = AccountChart::firstRow('id', $request->input('accountId'));
-            if(!empty($request->input('dbDataId'))) {
-                $dbDATA = [
-                    $month => $request->input('monthCatAmount'),
-                    $quarter => $request->input('quarterAmount'),
-                    'total_cat_amount' => $request->input('totalCatAmount'),
-                    'budget_id' => $request->input('budget'),
-                    'request_cat_id' => $request->input('requestCat'),
-                    'fin_year_id' => $request->input('finYear'),
-                    'updated_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
-                Budget::defaultUpdate('id', $request->input('dbDataId'), $dbDATA);
 
-            }else{
+            $dbUpdateDATA = [
+                $month => $request->input('monthCatAmount'),
+                $quarter => $request->input('quarterAmount'),
+                'total_cat_amount' => $request->input('totalCatAmount'),
+                'budget_id' => $request->input('budget'),
+                'fin_year_id' => $request->input('finYear'),
+                'updated_by' => Auth::user()->id,
+            ];
 
-                $dbDATA = [
-                    $month => $request->input('monthCatAmount'),
-                    $quarter => $request->input('quarterAmount'),
-                    'acct_id' => $request->input('accountId'),
-                    'acct_cat_id' => $acctData->acct_cat_id,
-                    'acct_detail_id' => $acctData->detail_id,
-                    'total_cat_amount' => $request->input('totalCatAmount'),
-                    'budget_id' => $request->input('budget'),
-                    'request_cat_id' => $request->input('requestCat'),
-                    'fin_year_id' => $request->input('finYear'),
-                    'dept_id' => $request->input('deptId'),
-                    'created_by' => Auth::user()->id,
-                    'status' => Utility::STATUS_ACTIVE
-                ];
-                Budget::create($dbDATA);
+            if(!empty($request->input('dbDataId'))){   //CHECK WHETHER IS A DEFAULT UPDATE REQUEST
+
+                Budget::defaultUpdate('id', $request->input('dbDataId'), $dbUpdateDATA);
+
+            }else { //IF NOT DEFAULT UPDATE REQUEST, CHECK WHETHER THE ACCOUNT DIMENSION WITH THE DEPT AND ACCOUNT ID EXISTS
+
+                $acctExist = Budget::firstRow2('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION);
+
+                if (!empty($acctExist)) {   //IF DATA ENTRY ALREADY EXISTS, THEN UPDATE
+
+                    Budget::defaultUpdate2('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION, $dbUpdateDATA);
+
+                } else {    //IF DATA ENTRY DOESN'T EXIST THEN CREATE
+
+                    $acctData = AccountChart::firstRow('id', $request->input('accountId'));
+
+                    $dbDATA = [
+                        $month => $request->input('monthCatAmount'),
+                        $quarter => $request->input('quarterAmount'),
+                        'acct_id' => $request->input('accountId'),
+                        'acct_cat_id' => $acctData->acct_cat_id,
+                        'acct_detail_id' => $acctData->detail_id,
+                        'total_cat_amount' => $request->input('totalCatAmount'),
+                        'budget_id' => $request->input('budget'),
+                        'request_cat_id' => $request->input('requestCat'),
+                        'fin_year_id' => $request->input('finYear'),
+                        'dept_id' => $request->input('deptId'),
+                        'dimension' => Utility::ACCOUNT_CHART_DIMENSION,
+                        'created_by' => Auth::user()->id,
+                        'status' => Utility::STATUS_ACTIVE
+                    ];
+                    Budget::create($dbDATA);
+
+                }
 
             }
 
@@ -314,6 +342,7 @@ class BudgetController extends Controller
                         'budget_id' => $request->input('budget'),
                         'dept_id' => $request->input('deptId'),
                         'fin_year_id' => $request->input('finYear'),
+                        'dimension' => Utility::REQUEST_CATEGORY_DIMENSION,
                         'created_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];

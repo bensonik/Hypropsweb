@@ -178,7 +178,7 @@ class AccountChart extends Model
     public static function massDataAlphaOrder($column, $post)
     {
         return static::join('account_category', 'account_category.id', '=', 'Account_chart.acct_cat_id')
-            ->join('detail_type', 'detail_type.id', '=', 'Account_chart.detail_id')
+            ->select('account_category.category_name','account_chart.acct_cat_id','account_chart.acct_name','account_chart.detail_id','account_chart.acct_no','account_chart.id')
         ->where('account_chart.status', Utility::STATUS_ACTIVE)->whereIn($column, $post)
             ->orderBy('account_category.category_name','ASC')->get();
 
@@ -199,9 +199,9 @@ class AccountChart extends Model
 
     }
 
-    public static function firstRow2($table,$column, $post,$column2, $post2)
+    public static function firstRow2($column, $post,$column2, $post2)
     {
-        return Utility::firstRow2($table,$column, $post,$column2, $post2);
+        return Utility::firstRow2(self::table(),$column, $post,$column2, $post2);
 
     }
 

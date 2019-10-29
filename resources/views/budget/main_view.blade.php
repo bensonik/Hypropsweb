@@ -349,7 +349,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control" id="account_{{$data->id}}" onchange="changeAccount('account_{{$data->id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}','')" id="acct_cat_{{$data->id}}" name="account_category" >
+                                            <select class="form-control" id="account_{{$data->id}}" onchange="changeAccount('account_{{$data->id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" id="acct_cat_{{$data->id}}" name="account_category" >
                                                 <option value="">Select Account</option>
                                                 @foreach($data->accountCategories as $d)
                                                     <option value="{{$d->id}}">{{$d->acct_name}}</option>

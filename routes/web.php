@@ -1245,6 +1245,6 @@ Route::post('/delete_budget_item', 'BudgetController@destroy')->name('delete_bud
 
 Route::any('/budget_item/account_chart_dimension/view/{id}', 'BudgetController@budgetViewAccountDimension')->name('budget_item_view_account_chart')->middleware('auth');
 Route::any('/budget_item/account_chart_dimension/modify/{id}', 'BudgetController@budgetAccountChartDimension')->name('budget_item_modify_account_chart')->middleware('auth');
-Route::post('/create_modify_budget_item', 'BudgetController@createModifyAccountChartDimension')->name('create_modify_budget_item_account_chart');
+Route::post('/create_modify_budget_item_account_chart', 'BudgetController@createModifyAccountChartDimension')->name('create_modify_budget_item_account_chart');
 Route::post('/delete_budget_item_account_chart', 'BudgetController@destroyAccountChartDimension')->name('delete_budget_item_account_chart');
 

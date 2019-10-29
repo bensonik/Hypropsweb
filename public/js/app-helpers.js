@@ -10,6 +10,11 @@
         return document.getElementById(e);
     }
 
+    function idVal(elementId){
+        var elVal = $('#'+elementId);
+        return elVal.val();
+    }
+
     function getId(elementId){
         var el = $('#'+elementId);
         return el;

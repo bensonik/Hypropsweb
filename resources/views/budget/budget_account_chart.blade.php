@@ -82,10 +82,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_1 cat_{{$enum}} first_quarter_{{$enum}}"  id="month_1_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_1_cat_{{$enum}}','first_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'first_quarter','month_1','total_cat','first_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_first_quarter_view','month_total_1',
+                                                    <input type="number" class="month_1 cat_{{$enum}}_{{$data->acct_id}} first_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_1_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_1_cat_{{$enum}}_{{$data->acct_id}}','first_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'first_quarter','month_1','total_cat','first_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_first_quarter_view','month_total_1',
                                                                    'annual_total_budget_view','month_1','first_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->jan}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -96,10 +96,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_2 cat_{{$enum}} first_quarter_{{$enum}}"  id="month_2_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_2_cat_{{$enum}}','first_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'first_quarter','month_2','total_cat','first_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_first_quarter_view','month_total_2',
+                                                    <input type="number" class="month_2 cat_{{$enum}}_{{$data->acct_id}} first_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_2_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_2_cat_{{$enum}}_{{$data->acct_id}}','first_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'first_quarter','month_2','total_cat','first_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_first_quarter_view','month_total_2',
                                                                    'annual_total_budget_view','month_2','first_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->feb}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -110,10 +110,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_3 cat_{{$enum}} first_quarter_{{$enum}}"  id="month_3_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_3_cat_{{$enum}}','first_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'first_quarter','month_3','total_cat','first_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_first_quarter_view','month_total_3',
+                                                    <input type="number" class="month_3 cat_{{$enum}}_{{$data->acct_id}} first_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_3_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_3_cat_{{$enum}}_{{$data->acct_id}}','first_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'first_quarter','month_3','total_cat','first_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_first_quarter_view','month_total_3',
                                                                    'annual_total_budget_view','month_3','first_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->march}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -126,7 +126,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="first_quarter" disabled id="first_quarter_view_{{$enum}}" value="{{$data->first_quarter}}" name="first_quarter" placeholder="First Quarter Total">
+                                                    <input type="text" class="first_quarter" disabled id="first_quarter_view_{{$enum}}_{{$data->acct_id}}" value="{{$data->first_quarter}}" name="first_quarter" placeholder="First Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -137,10 +137,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_4 cat_{{$enum}} second_quarter_{{$enum}}"  id="month_4_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_4_cat_{{$enum}}','second_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'second_quarter','month_4','total_cat','second_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_second_quarter_view','month_total_4',
+                                                    <input type="number" class="month_4 cat_{{$enum}}_{{$data->acct_id}} second_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_4_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_4_cat_{{$enum}}_{{$data->acct_id}}','second_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'second_quarter','month_4','total_cat','second_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_second_quarter_view','month_total_4',
                                                                    'annual_total_budget_view','month_4','second_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->april}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -151,10 +151,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_5 cat_{{$enum}} second_quarter_{{$enum}}"  id="month_5_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_5_cat_{{$enum}}','second_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'second_quarter','month_5','total_cat','second_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_second_quarter_view','month_total_5',
+                                                    <input type="number" class="month_5 cat_{{$enum}}_{{$data->acct_id}} second_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_5_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_5_cat_{{$enum}}_{{$data->acct_id}}','second_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'second_quarter','month_5','total_cat','second_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_second_quarter_view','month_total_5',
                                                                    'annual_total_budget_view','month_5','second_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->may}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -165,10 +165,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_6 cat_{{$enum}} second_quarter_{{$enum}}"  id="month_6_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_6_cat_{{$enum}}','second_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'second_quarter','month_6','total_cat','second_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_second_quarter_view','month_total_6',
+                                                    <input type="number" class="month_6 cat_{{$enum}}_{{$data->acct_id}} second_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_6_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_6_cat_{{$enum}}_{{$data->acct_id}}','second_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'second_quarter','month_6','total_cat','second_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_second_quarter_view','month_total_6',
                                                                    'annual_total_budget_view','month_6','second_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->june}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -181,7 +181,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="second_quarter " disabled id="second_quarter_view_{{$enum}}" value="{{$data->second_quarter}}" name="second_quarter" placeholder="Second Quarter Total">
+                                                    <input type="text" class="second_quarter " disabled id="second_quarter_view_{{$enum}}_{{$data->acct_id}}" value="{{$data->second_quarter}}" name="second_quarter" placeholder="Second Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -192,10 +192,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_7 cat_{{$enum}} third_quarter_{{$enum}}"  id="month_7_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_7_cat_{{$enum}}','third_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'third_quarter','month_7','total_cat','third_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_third_quarter_view','month_total_7',
+                                                    <input type="number" class="month_7 cat_{{$enum}}_{{$data->acct_id}} third_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_7_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_7_cat_{{$enum}}_{{$data->acct_id}}','third_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'third_quarter','month_7','total_cat','third_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_third_quarter_view','month_total_7',
                                                                    'annual_total_budget_view','month_7','third_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->july}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -206,10 +206,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_8 cat_{{$enum}} third_quarter_{{$enum}}"  id="month_8_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_8_cat_{{$enum}}','third_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'third_quarter','month_8','total_cat','third_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_third_quarter_view','month_total_8',
+                                                    <input type="number" class="month_8 cat_{{$enum}}_{{$data->acct_id}} third_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_8_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_8_cat_{{$enum}}_{{$data->acct_id}}','third_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'third_quarter','month_8','total_cat','third_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_third_quarter_view','month_total_8',
                                                                    'annual_total_budget_view','month_8','third_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->august}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -220,10 +220,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_9 cat_{{$enum}} third_quarter_{{$enum}}"  id="month_9_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_9_cat_{{$enum}}','third_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'third_quarter','month_9','total_cat','third_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_third_quarter_view','month_total_9',
+                                                    <input type="number" class="month_9 cat_{{$enum}}_{{$data->acct_id}} third_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_9_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_9_cat_{{$enum}}_{{$data->acct_id}}','third_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'third_quarter','month_9','total_cat','third_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_third_quarter_view','month_total_9',
                                                                    'annual_total_budget_view','month_9','third_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->sept}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -236,7 +236,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="third_quarter " disabled id="third_quarter_view_{{$enum}}" value="{{$data->third_quarter}}" name="third_quarter" placeholder="Third Quarter Total">
+                                                    <input type="text" class="third_quarter " disabled id="third_quarter_view_{{$enum}}_{{$data->acct_id}}" value="{{$data->third_quarter}}" name="third_quarter" placeholder="Third Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -247,10 +247,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_10 cat_{{$enum}} fourth_quarter_{{$enum}}"  id="month_10_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_10_cat_{{$enum}}','fourth_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'fourth_quarter','month_10','total_cat','fourth_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_fourth_quarter_view','month_total_10',
+                                                    <input type="number" class="month_10 cat_{{$enum}}_{{$data->acct_id}} fourth_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_10_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_10_cat_{{$enum}}_{{$data->acct_id}}','fourth_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'fourth_quarter','month_10','total_cat','fourth_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_fourth_quarter_view','month_total_10',
                                                                    'annual_total_budget_view','month_10','fourth_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->oct}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -261,10 +261,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_11 cat_{{$enum}} fourth_quarter_{{$enum}}"  id="month_11_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_11_cat_{{$enum}}','fourth_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'fourth_quarter','month_11','total_cat','fourth_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_fourth_quarter_view','month_total_11',
+                                                    <input type="number" class="month_11 cat_{{$enum}}_{{$data->acct_id}} fourth_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_11_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_11_cat_{{$enum}}_{{$data->acct_id}}','fourth_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'fourth_quarter','month_11','total_cat','fourth_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_fourth_quarter_view','month_total_11',
                                                                    'annual_total_budget_view','month_11','fourth_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->nov}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -275,10 +275,10 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="number" class="month_12 cat_{{$enum}} fourth_quarter_{{$enum}}"  id="month_12_cat_{{$enum}}"
-                                                           onkeyup="saveBudget('month_12_cat_{{$enum}}','fourth_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                   'fourth_quarter','month_12','total_cat','fourth_quarter_view_{{$enum}}',
-                                                                   'total_cat_view_{{$enum}}','total_fourth_quarter_view','month_total_12',
+                                                    <input type="number" class="month_12 cat_{{$enum}}_{{$data->acct_id}} fourth_quarter_{{$enum}}_{{$data->acct_id}}"  id="month_12_cat_{{$enum}}_{{$data->acct_id}}"
+                                                           onkeyup="saveBudget('month_12_cat_{{$enum}}_{{$data->acct_id}}','fourth_quarter_{{$enum}}_{{$data->acct_id}}','cat_{{$enum}}_{{$data->acct_id}}',
+                                                                   'fourth_quarter','month_12','total_cat','fourth_quarter_view_{{$enum}}_{{$data->acct_id}}',
+                                                                   'total_cat_view_{{$enum}}_{{$data->acct_id}}','total_fourth_quarter_view','month_total_12',
                                                                    'annual_total_budget_view','month_12','fourth_quarter','{{$budgetDetail->id}}',
                                                                    '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->dec}}" name="amount" placeholder="Budget Amount">
                                                 </div>
@@ -290,7 +290,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="fourth_quarter " disabled id="fourth_quarter_view_{{$enum}}" value="{{$data->fourth_quarter}}" name="fourth_quarter" placeholder="Fourth Quarter Total">
+                                                    <input type="text" class="fourth_quarter " disabled id="fourth_quarter_view_{{$enum}}_{{$data->acct_id}}" value="{{$data->fourth_quarter}}" name="fourth_quarter" placeholder="Fourth Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -300,7 +300,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="total_cat total_cat_{{$enum}} " disabled id="total_cat_view_{{$enum}}" value="{{$data->total_cat_amount}}" name="total_cat" placeholder="Annual Category Total">
+                                                    <input type="text" class="total_cat total_cat_{{$enum}}_{{$data->acct_id}} " disabled id="total_cat_view_{{$enum}}_{{$data->acct_id}}" value="{{$data->total_cat_amount}}" name="total_cat" placeholder="Annual Category Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -337,12 +337,12 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="number" class="month_{{$i}} cat_{{$enum}} first_quarter_{{$enum}}"  id="month_{{$i}}_cat_{{$enum}}"
-                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}','first_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                       'first_quarter','month_{{$i}}','total_cat','first_quarter_view_{{$enum}}',
-                                                                       'total_cat_view_{{$enum}}','total_first_quarter_view','month_total_{{$i}}',
+                                                        <input type="number" class="month_{{$i}} cat_{{$enum}}_{{$data->id}} first_quarter_{{$enum}}_{{$data->id}}"  id="month_{{$i}}_cat_{{$enum}}_{{$data->id}}"
+                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}_{{$data->id}}','first_quarter_{{$enum}}_{{$data->id}}','cat_{{$enum}}_{{$data->id}}',
+                                                                       'first_quarter','month_{{$i}}','total_cat','first_quarter_view_{{$enum}}_{{$data->id}}',
+                                                                       'total_cat_view_{{$enum}}_{{$data->id}}','total_first_quarter_view','month_total_{{$i}}',
                                                                        'annual_total_budget_view','month_{{$i}}','first_quarter','{{$budgetDetail->id}}',
-                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
+                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -353,7 +353,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="first_quarter" disabled id="first_quarter_view_{{$enum}}" name="first_quarter" placeholder="First Quarter Total">
+                                                    <input type="text" class="first_quarter" disabled id="first_quarter_view_{{$enum}}_{{$data->id}}" name="first_quarter" placeholder="First Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -364,12 +364,12 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="number" class="month_{{$i}} cat_{{$enum}} second_quarter_{{$enum}}"  id="month_{{$i}}_cat_{{$enum}}"
-                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}','second_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                       'second_quarter','month_{{$i}}','total_cat','second_quarter_view_{{$enum}}',
-                                                                       'total_cat_view_{{$enum}}','total_second_quarter_view','month_total_{{$i}}',
+                                                        <input type="number" class="month_{{$i}} cat_{{$enum}}_{{$data->id}} second_quarter_{{$enum}}_{{$data->id}}"  id="month_{{$i}}_cat_{{$enum}}_{{$data->id}}"
+                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}_{{$data->id}}','second_quarter_{{$enum}}_{{$data->id}}','cat_{{$enum}}_{{$data->id}}',
+                                                                       'second_quarter','month_{{$i}}','total_cat','second_quarter_view_{{$enum}}_{{$data->id}}',
+                                                                       'total_cat_view_{{$enum}}_{{$data->id}}','total_second_quarter_view','month_total_{{$i}}',
                                                                        'annual_total_budget_view','month_{{$i}}','second_quarter','{{$budgetDetail->id}}',
-                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
+                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -380,7 +380,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="second_quarter " disabled id="second_quarter_view_{{$enum}}" name="second_quarter" placeholder="Second Quarter Total">
+                                                    <input type="text" class="second_quarter " disabled id="second_quarter_view_{{$enum}}_{{$data->id}}" name="second_quarter" placeholder="Second Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -391,12 +391,12 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="number" class="month_{{$i}} cat_{{$enum}} third_quarter_{{$enum}}"  id="month_{{$i}}_cat_{{$enum}}"
-                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}','third_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                       'third_quarter','month_{{$i}}','total_cat','third_quarter_view_{{$enum}}',
-                                                                       'total_cat_view_{{$enum}}','total_third_quarter_view','month_total_{{$i}}',
+                                                        <input type="number" class="month_{{$i}} cat_{{$enum}}_{{$data->id}} third_quarter_{{$enum}}_{{$data->id}}"  id="month_{{$i}}_cat_{{$enum}}_{{$data->id}}"
+                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}_{{$data->id}}','third_quarter_{{$enum}}_{{$data->id}}','cat_{{$enum}}_{{$data->id}}',
+                                                                       'third_quarter','month_{{$i}}','total_cat','third_quarter_view_{{$enum}}_{{$data->id}}',
+                                                                       'total_cat_view_{{$enum}}_{{$data->id}}','total_third_quarter_view','month_total_{{$i}}',
                                                                        'annual_total_budget_view','month_{{$i}}','third_quarter','{{$budgetDetail->id}}',
-                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
+                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -407,7 +407,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="third_quarter " disabled id="third_quarter_view_{{$enum}}" name="third_quarter" placeholder="Third Quarter Total">
+                                                    <input type="text" class="third_quarter " disabled id="third_quarter_view_{{$enum}}_{{$data->id}}" name="third_quarter" placeholder="Third Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -418,12 +418,12 @@
                                             <div class="col-sm-12">
                                                 <div class="form-group">
                                                     <div class="form-line">
-                                                        <input type="number" class="month_{{$i}} cat_{{$enum}} fourth_quarter_{{$enum}}"  id="month_{{$i}}_cat_{{$enum}}"
-                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}','fourth_quarter_{{$enum}}','cat_{{$enum}}',
-                                                                       'fourth_quarter','month_{{$i}}','total_cat','fourth_quarter_view_{{$enum}}',
-                                                                       'total_cat_view_{{$enum}}','total_fourth_quarter_view','month_total_{{$i}}',
+                                                        <input type="number" class="month_{{$i}} cat_{{$enum}}_{{$data->id}} fourth_quarter_{{$enum}}_{{$data->id}}"  id="month_{{$i}}_cat_{{$enum}}_{{$data->id}}"
+                                                               onkeyup="saveBudget('month_{{$i}}_cat_{{$enum}}_{{$data->id}}','fourth_quarter_{{$enum}}_{{$data->id}}','cat_{{$enum}}_{{$data->id}}',
+                                                                       'fourth_quarter','month_{{$i}}','total_cat','fourth_quarter_view_{{$enum}}_{{$data->id}}',
+                                                                       'total_cat_view_{{$enum}}_{{$data->id}}','total_fourth_quarter_view','month_total_{{$i}}',
                                                                        'annual_total_budget_view','month_{{$i}}','fourth_quarter','{{$budgetDetail->id}}',
-                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->acct_id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
+                                                                       '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                                     </div>
                                                 </div>
                                             </div>
@@ -434,7 +434,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="fourth_quarter " disabled id="fourth_quarter_view_{{$enum}}" name="fourth_quarter" placeholder="Fourth Quarter Total">
+                                                    <input type="text" class="fourth_quarter " disabled id="fourth_quarter_view_{{$enum}}_{{$data->id}}" name="fourth_quarter" placeholder="Fourth Quarter Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -444,7 +444,7 @@
                                         <div class="col-sm-12">
                                             <div class="form-group">
                                                 <div class="form-line">
-                                                    <input type="text" class="total_cat total_cat_{{$enum}} " disabled id="total_cat_view_{{$enum}}" name="total_cat" placeholder="Annual Category Total">
+                                                    <input type="text" class="total_cat total_cat_{{$enum}}_{{$data->id}} " disabled id="total_cat_view_{{$enum}}_{{$data->id}}" name="total_cat" placeholder="Annual Category Total">
                                                 </div>
                                             </div>
                                         </div>
@@ -781,11 +781,6 @@
     <script>
         /*==================== PAGINATION =========================*/
 
-        function idVal(elementId){
-            var elVal = $('#'+elementId);
-            return elVal.val();
-        }
-
         function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,acctId,deptId,dbDataId){
 
             replaceInputWithClassArraySum(quarterClass,quarterViewId);
@@ -798,7 +793,7 @@
             var totalCat = getId(totalCatViewId).val();
             var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&deptId='+deptId+'&accountId='+acctId
 
-            sendRequestForm("{{url('create_modify_budget_item')}}",CSRF_TOKEN,postVars)
+            sendRequestForm("{{url('create_modify_budget_item_account_chart')}}",CSRF_TOKEN,postVars)
             ajax.onreadystatechange = function(){
                 if(ajax.readyState == 4 && ajax.status == 200) {
 
