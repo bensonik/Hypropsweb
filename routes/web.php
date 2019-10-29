@@ -1237,9 +1237,14 @@ Route::any('/budget_approval', 'BudgetSummaryController@budgetApprovalView')->na
 
 
 // -------------BUDGET MODULE-----------
-Route::any('/budget_item/view/{id}', 'BudgetController@budgetView')->name('budget_item_view')->middleware('auth');
-Route::any('/budget_item/modify/{id}', 'BudgetController@index')->name('budget_item_modify')->middleware('auth');
+Route::any('/budget_item/view/{id}', 'BudgetController@budgetViewRequestCategoryDimension')->name('budget_item_view')->middleware('auth');
+Route::any('/budget_item/modify/{id}', 'BudgetController@budgetRequestCategoryDimension')->name('budget_item_modify')->middleware('auth');
 Route::post('/create_modify_budget_item', 'BudgetController@createModify')->name('create_modify_budget_item');
 Route::post('/create_modify_budget_account', 'BudgetController@createModifyAcct')->name('create_modify_budget_account');
+Route::post('/delete_budget_item', 'BudgetController@destroy')->name('delete_budget_item');
 
+Route::any('/budget_item/account_chart_dimension/view/{id}', 'BudgetController@budgetViewAccountDimension')->name('budget_item_view_account_chart')->middleware('auth');
+Route::any('/budget_item/account_chart_dimension/modify/{id}', 'BudgetController@budgetAccountChartDimension')->name('budget_item_modify_account_chart')->middleware('auth');
+Route::post('/create_modify_budget_item', 'BudgetController@createModifyAccountChartDimension')->name('create_modify_budget_item_account_chart');
+Route::post('/delete_budget_item_account_chart', 'BudgetController@destroyAccountChartDimension')->name('delete_budget_item_account_chart');
 

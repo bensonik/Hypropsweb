@@ -78,6 +78,14 @@ class Budget extends Model
 
     }
 
+    public static function getAllDataOrderByGroupBy()
+    {
+        return static::join('AccountCategory', 'AccountCategory.id', '=', 'AccountChart.acct_cat_id')
+            ->where('budget.status', '=','1')->groupBy('AccountCategory.category_name')
+            ->orderBy('AccountCategory.category_name','ASC')->get();
+
+    }
+
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);
@@ -106,6 +114,15 @@ class Budget extends Model
 
     }
 
+    public static function specialColumnsOrderByGroupBy($column,$post)
+    {
+        return static::join('Account_category', 'Account_category.id', '=', 'budget.acct_cat_id')
+            ->where($column, '=',$post)
+            ->where('budget.status', '=',Utility::STATUS_ACTIVE)->groupBy('Account_category.category_name')
+            ->orderBy('Account_category.category_name','ASC')->get();
+
+    }
+
     public static function specialColumnsPage($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);
@@ -118,6 +135,22 @@ class Budget extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumns2Asc($column, $post, $column2, $post2)
+    {
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->orderBy('id','ASC')->get();
+
+    }
+
+    public static function specialColumns2OneRow($column, $post,$column2, $post2,$row)
+    {
+        //Utility::specialColumns(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->orderBy('id','DESC')->get([$row]);
 
     }
 

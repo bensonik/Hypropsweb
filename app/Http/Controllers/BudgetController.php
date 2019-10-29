@@ -35,11 +35,11 @@ class BudgetController extends Controller
      * @return \Illuminate\Http\Response
 
      */
-    public function index(Request $request, $id)
+    public function budgetRequestCategoryDimension(Request $request, $id)
     {
         //
         $bExist = []; $bNotExist = [];
-        $existingBudget = Budget::specialColumnsOneRow('budget_id',$id,'request_cat_id');
+        $existingBudget = Budget::specialColumns2OneRow('budget_id',$id,'dept_id',Auth::user()->dept_id,'request_cat_id');
         $deptRequest = RequestCategory::specialColumnsOr2('dept_id',Auth::user()->dept_id,'general',Utility::DETECT);
 
         foreach($deptRequest as $data){
@@ -49,7 +49,68 @@ class BudgetController extends Controller
             $bExist[] = $data->request_cat_id;
         }
 
-        $budgetData = Budget::specialColumnsAsc('budget_id',$id);
+        $budgetData = Budget::specialColumns2Asc('budget_id',$id,'dept_id',Auth::user()->dept_id);
+        $emptyRequestIdArr = array_diff($bNotExist,$bExist);
+
+        $mainData = RequestCategory::massDataAlphaOrder('id',$emptyRequestIdArr);
+        $this->addCorrespondingAccountChart($mainData);
+        $this->addCorrespondingAccountChart2($budgetData);
+        //print_r($emptyRequestIdArr); exit();
+        $detectHod = Utility::detectHOD(Auth::user()->id);
+        $budgetDetail = BudgetSummary::firstRow('id',$id);
+
+            return view::make('budget.main_view')->with('mainData',$mainData)
+                ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
+
+    }
+
+    public function budgetAccountChartDimension(Request $request, $id)
+    {
+        //
+        $bExist = []; $bNotExist = [];
+        $existingBudget = Budget::specialColumns2OneRow('budget_id',$id,'dept_id',Auth::user()->dept_id,'acct_id');
+        $deptAcctChart = AccountChart::getAllData();
+
+        foreach($deptAcctChart as $data){
+            $bNotExist[] = $data->id;
+        }
+        foreach($existingBudget as $data){
+            $bExist[] = $data->acct_id;
+        }
+
+        $budgetData = Budget::specialColumns2Asc('budget_id',$id,'dept_id',Auth::user()->dept_id);
+        $this->processAccountChartBudget($budgetData);
+        $emptyAcctChartIdArr = array_diff($bNotExist,$bExist);
+
+        $mainData = AccountChart::massDataAlphaOrder('account_chart.id',$emptyAcctChartIdArr);
+        //print_r($emptyRequestIdArr); exit();
+        $detectHod = Utility::detectHOD(Auth::user()->id);
+        $budgetDetail = BudgetSummary::firstRow('id',$id);
+        //print_r($mainData);exit();
+
+
+
+        return view::make('budget.budget_account_chart')->with('mainData',$mainData)
+            ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
+
+    }
+
+
+    public function budgetViewRequestCategoryDimension(Request $request, $id)
+    {
+        //
+        $bExist = []; $bNotExist = [];
+        $existingBudget = Budget::specialColumns2OneRow('budget_id',$id,'dept_id',Auth::user()->dept_id,'request_cat_id');
+        $deptRequest = RequestCategory::specialColumnsOr2('dept_id',Auth::user()->dept_id,'general',Utility::DETECT);
+
+        foreach($deptRequest as $data){
+            $bNotExist[] = $data->id;
+        }
+        foreach($existingBudget as $data){
+            $bExist[] = $data->request_cat_id;
+        }
+
+        $budgetData = Budget::specialColumns2Asc('budget_id',$id,'dept_id',Auth::user()->dept_id);
         $emptyRequestIdArr = array_diff($bNotExist,$bExist);
 
         $mainData = RequestCategory::massDataAlphaOrder('id',$emptyRequestIdArr);
@@ -60,10 +121,36 @@ class BudgetController extends Controller
         $budgetDetail = BudgetSummary::firstRow('id',$id);
 
 
+        return view::make('budget.budget_view')->with('mainData',$mainData)
+            ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
 
+    }
 
-            return view::make('budget.main_view')->with('mainData',$mainData)
-                ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
+    public function budgetViewAccountChartDimension(Request $request, $id)
+    {
+        //
+        $bExist = []; $bNotExist = [];
+        $existingBudget = Budget::specialColumns2OneRow('budget_id',$id,'dept_id',Auth::user()->dept_id,'acct_id');
+        $deptAcctChart = AccountChart::getAllData();
+
+        foreach($deptAcctChart as $data){
+            $bNotExist[] = $data->id;
+        }
+        foreach($existingBudget as $data){
+            $bExist[] = $data->acct_id;
+        }
+
+        $budgetData = Budget::specialColumns2Asc('budget_id',$id,'dept_id',Auth::user()->dept_id);
+        $this->processAccountChartBudget($budgetData);
+        $emptyAcctChartIdArr = array_diff($bNotExist,$bExist);
+
+        $mainData = AccountChart::massDataAlphaOrder('account_chart.id',$emptyAcctChartIdArr);
+        //print_r($emptyRequestIdArr); exit();
+        $detectHod = Utility::detectHOD(Auth::user()->id);
+        $budgetDetail = BudgetSummary::firstRow('id',$id);
+
+        return view::make('budget.budget_view')->with('mainData',$mainData)
+            ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
 
     }
 
@@ -105,6 +192,7 @@ class BudgetController extends Controller
                     'budget_id' => $request->input('budget'),
                     'request_cat_id' => $request->input('requestCat'),
                     'fin_year_id' => $request->input('finYear'),
+                    'deptId' => $request->input('deptId'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -120,8 +208,65 @@ class BudgetController extends Controller
         }
 
         return response()->json([
-            'message2' => 'warning',
-            'message' => 'Budget have been approved and cannot be modified at the moment'
+            'message' => 'warning',
+            'message2' => 'Budget have been approved and cannot be modified at the moment'
+        ]);
+
+    }
+
+    public function createModifyAccountChartDimension(Request $request)
+    {
+        //
+
+        $budgetApproval = BudgetSummary::firstRow('id',$request->input('budget'));
+        if($budgetApproval->approval_status != Utility::APPROVED){
+            $month = $this->monthName($request->input('monthName'));
+            $quarter = $request->input('quarterName');
+
+            $acctData = AccountChart::firstRow('id', $request->input('accountId'));
+            if(!empty($request->input('dbDataId'))) {
+                $dbDATA = [
+                    $month => $request->input('monthCatAmount'),
+                    $quarter => $request->input('quarterAmount'),
+                    'total_cat_amount' => $request->input('totalCatAmount'),
+                    'budget_id' => $request->input('budget'),
+                    'request_cat_id' => $request->input('requestCat'),
+                    'fin_year_id' => $request->input('finYear'),
+                    'updated_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+                Budget::defaultUpdate('id', $request->input('dbDataId'), $dbDATA);
+
+            }else{
+
+                $dbDATA = [
+                    $month => $request->input('monthCatAmount'),
+                    $quarter => $request->input('quarterAmount'),
+                    'acct_id' => $request->input('accountId'),
+                    'acct_cat_id' => $acctData->acct_cat_id,
+                    'acct_detail_id' => $acctData->detail_id,
+                    'total_cat_amount' => $request->input('totalCatAmount'),
+                    'budget_id' => $request->input('budget'),
+                    'request_cat_id' => $request->input('requestCat'),
+                    'fin_year_id' => $request->input('finYear'),
+                    'dept_id' => $request->input('deptId'),
+                    'created_by' => Auth::user()->id,
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+                Budget::create($dbDATA);
+
+            }
+
+            return response()->json([
+                'message2' => 'saved',
+                'message' => 'success'
+            ]);
+
+        }
+
+        return response()->json([
+            'message' => 'warning',
+            'message2' => 'Budget have been approved and cannot be modified at the moment'
         ]);
 
     }
@@ -167,6 +312,7 @@ class BudgetController extends Controller
                         'acct_cat_id' => $acctData->acct_cat_id,
                         'acct_detail_id' => $acctData->detail_id,
                         'budget_id' => $request->input('budget'),
+                        'dept_id' => $request->input('deptId'),
                         'fin_year_id' => $request->input('finYear'),
                         'created_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
@@ -207,9 +353,9 @@ class BudgetController extends Controller
         //
         $deleteId = $request->input('dataId');
         $budgetApproval = BudgetSummary::firstRow('id',$request->input('param'));
-        if($budgetApproval->approval_status == Utility::APPROVED) {
-            Budget::destroy($deleteId);
+        if($budgetApproval->approval_status != Utility::APPROVED) {
 
+            $delete = Budget::destroy($deleteId);
             return response()->json([
                 'message2' => 'deleted',
                 'message' => 'Data deleted successfully'
@@ -218,8 +364,30 @@ class BudgetController extends Controller
         }
 
         return response()->json([
-            'message2' => 'warning',
-            'message' => 'Budget have been approved and cannot be modified at the moment'
+            'message' => 'warning',
+            'message2' => 'Budget have been approved and cannot be modified at the moment'
+        ]);
+
+    }
+
+    public function destroyAccountChartDimension(Request $request)
+    {
+        //
+        $deleteId = $request->input('dataId');
+        $budgetApproval = BudgetSummary::firstRow('id',$request->input('param'));
+        if($budgetApproval->approval_status != Utility::APPROVED) {
+
+            $delete = Budget::destroy($deleteId);
+            return response()->json([
+                'message2' => 'deleted',
+                'message' => 'Data deleted successfully'
+            ]);
+
+        }
+
+        return response()->json([
+            'message' => 'warning',
+            'message2' => 'Budget have been approved and cannot be modified at the moment'
         ]);
 
     }
@@ -233,16 +401,107 @@ class BudgetController extends Controller
     }
 
     public function addCorrespondingAccountChart2($mainData){
+        $jan = 0; $feb = 0; $march = 0; $april = 0; $may = 0; $june = 0; $july = 0; $august = 0;
+        $sept = 0; $oct = 0; $nov = 0; $dec = 0; $fiQuarter = 0; $sQuarter = 0; $tQuarter = 0; $foQuarter = 0;
+        $totalBudget = 0;
+
         foreach($mainData as $data){
             $accountCategories = AccountChart::specialColumns('acct_cat_id',$data->acct_cat_id);
             $data->accountCategories = $accountCategories;
+
+            $jan += $data->jan;
+            $feb += $data->feb;
+            $march += $data->march;
+            $april += $data->april;
+            $may += $data->may;
+            $june += $data->june;
+            $july += $data->july;
+            $august += $data->august;
+            $sept += $data->sept;
+            $oct += $data->oct;
+            $nov += $data->nov;
+            $dec += $data->dec;
+            $fiQuarter += $data->first_quarter;
+            $sQuarter += $data->second_quarter;
+            $tQuarter += $data->third_quarter;
+            $foQuarter += $data->fourth_quarter;
+            $totalBudget += $data->total_cat_amount;
+
         }
+
+        $mainData->totalJan = $jan;
+        $mainData->totalFeb = $feb;
+        $mainData->totalMarch = $march;
+        $mainData->totalApril = $april;
+        $mainData->totalMay = $may;
+        $mainData->totalJune = $june;
+        $mainData->totalJuly = $july;
+        $mainData->totalAugust = $august;
+        $mainData->totalSept = $sept;
+        $mainData->fiQuarter = $fiQuarter;
+        $mainData->totalOct = $oct;
+        $mainData->totalNov = $nov;
+        $mainData->totalDec = $dec;
+        $mainData->sQuarter = $sQuarter;
+        $mainData->tQuarter = $tQuarter;
+        $mainData->foQuarter = $foQuarter;
+        $mainData->totalBudget = $totalBudget;
+
+
+        return $mainData;
+    }
+
+    public function processAccountChartBudget($mainData){
+        $jan = 0; $feb = 0; $march = 0; $april = 0; $may = 0; $june = 0; $july = 0; $august = 0;
+        $sept = 0; $oct = 0; $nov = 0; $dec = 0; $fiQuarter = 0; $sQuarter = 0; $tQuarter = 0; $foQuarter = 0;
+        $totalBudget = 0;
+
+        foreach($mainData as $data){
+
+            $jan += $data->jan;
+            $feb += $data->feb;
+            $march += $data->march;
+            $april += $data->april;
+            $may += $data->may;
+            $june += $data->june;
+            $july += $data->july;
+            $august += $data->august;
+            $sept += $data->sept;
+            $oct += $data->oct;
+            $nov += $data->nov;
+            $dec += $data->dec;
+            $fiQuarter += $data->first_quarter;
+            $sQuarter += $data->second_quarter;
+            $tQuarter += $data->third_quarter;
+            $foQuarter += $data->fourth_quarter;
+            $totalBudget += $data->total_cat_amount;
+
+        }
+
+        $mainData->totalJan = $jan;
+        $mainData->totalFeb = $feb;
+        $mainData->totalMarch = $march;
+        $mainData->totalApril = $april;
+        $mainData->totalMay = $may;
+        $mainData->totalJune = $june;
+        $mainData->totalJuly = $july;
+        $mainData->totalAugust = $august;
+        $mainData->totalSept = $sept;
+        $mainData->fiQuarter = $fiQuarter;
+        $mainData->totalOct = $oct;
+        $mainData->totalNov = $nov;
+        $mainData->totalDec = $dec;
+        $mainData->sQuarter = $sQuarter;
+        $mainData->tQuarter = $tQuarter;
+        $mainData->foQuarter = $foQuarter;
+        $mainData->totalBudget = $totalBudget;
+
+
         return $mainData;
     }
 
     public function monthName($monthNum){
-        //$explode = explode('_',$monthNum);
-        //$month = '';
+
         switch ($monthNum) {
             case 'month_1' :
                 $month = 'Jan';

@@ -2204,7 +2204,7 @@
             }
             total += Number(input[i]);
         }
-        return total;
+        return decPoints(total,2);
     }
 
     function decPoints(param,decP){

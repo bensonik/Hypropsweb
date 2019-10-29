@@ -250,6 +250,11 @@
 	
 	/*END STYLE FOR SMALL FIXED TABLE HEAD*/
 	
+	.tbl_scroll {
+		height:500px;
+		overflow-y:scroll;
+	}
+	
 	
 	
 	

@@ -594,7 +594,7 @@
                         </div>
                     </div>
 
-                <div class=" table-responsive" id="reload_data">
+                <div class=" table-responsive" id="reload_data" style="height:500px; overflow:scroll;">
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>

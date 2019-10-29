@@ -1,60 +1,449 @@
-<table class="table table-bordered table-hover table-striped" id="main_table">
-    <thead>
-    <tr>
-        <th>
-            <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                   name="check_all" class="" />
+@extends('layouts.app')
 
-        </th>
+@section('content')
 
-        <th>Request Category</th>
-        <th>Account Category</th>
-        <th>Department</th>
-        <th>General</th>
-        <th>Created by</th>
-        <th>Updated by</th>
-        <th>Created at</th>
-        <th>Updated at</th>
-        <th>Manage</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($mainData as $data)
-        <tr>
-            <td scope="row">
-                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+    <!-- Bordered Table -->
+    <div class="row clearfix">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        View budget (Request Category Dimension)
+                    </h2>
+                    <ul class="header-dropdown m-r--5">
 
-            </td>
-            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->request_name}}</td>
-            <td>{{$data->account_cat->category_name}}</td>
-            <td>{{$data->department->dept_name}}</td>
-            <td>
-                @if($data->general == '1')
-                    <i class="fa fa-check-square-o fa-2x"></i>
-                @endif
-            </td>
-            <td>
-                @if($data->created_by != '0')
-                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                @endif
-            </td>
-            <td>
-                @if($data->updated_by != '0')
-                    {{$data->user_u->firstname}} {{$data->user_u->lastname}}
-                @endif
-            </td>
-            <td>{{$data->created_at}}</td>
-            <td>{{$data->updated_at}}</td>
-            <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_request_cat_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-            </td>
-        </tr>
-    @endforeach
-    </tbody>
-</table>
+                        <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                <i class="material-icons">more_vert</i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
+                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
+                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
+                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
+                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
 
-<div class=" pagination pull-right">
-    {!! $mainData->render() !!}
-</div>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="body table-responsive" id="reload_data" >
+                    <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
+                        <thead>
+                        <tr>
+                            <th>
+                                <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
+                                       name="check_all" class="" />
+
+                            </th>
+
+                            <th>Request Name</th>
+                            <th>Account Category</th>
+                            <th>January ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>February ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>March ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>1st Quarter ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>April ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>May ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>June ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>2nd Quarter ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>July ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>August ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>September ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>3rd Quarter ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>October ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>November ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>December ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>4th Quarter ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>Annual Category Total ({{\App\Helpers\Utility::defaultCurrency()}})</th>
+                            <th>Created by</th>
+                            <th>Updated by</th>
+                            <th>Created at</th>
+                            <th>Updated at</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if(!empty($budget))
+
+                            @foreach($budget as $data)
+                                <tr id="tr_{{$data->id}}">
+                                    <td scope="row">
+                                        <input value="{{$data->id}}" type="checkbox" id="remove_{{$data->id}}" class="kid_checkbox" />
+
+                                    </td>
+                                    <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    <td>{{$data->requestCategory->request_name}}</td>
+                                    <td>
+                                        {{$data->account->acct_name}}
+                                    </td>
+
+
+                                    <td>
+                                        {{$data->jan}}
+                                    </td>
+                                    <td>
+                                        {{$data->feb}}
+                                    </td>
+                                    <td>
+                                        {{$data->march}}
+                                    </td>
+
+
+                                    <td>
+                                        {{$data->first_quarter}}
+
+                                    </td>
+
+                                    <td>
+                                        {{$data->april}}
+                                    </td>
+                                    <td>
+                                        {{$data->may}}
+                                    </td>
+                                    <td>
+                                        {{$data->june}}
+                                    </td>
+
+
+                                    <td>
+                                        {{$data->second_quarter}}
+
+                                    </td>
+
+                                    <td>
+                                        {{$data->july}}
+                                    </td>
+                                    <td>
+                                        {{$data->august}}
+                                    </td>
+                                    <td>
+                                        {{$data->sept}}
+                                    </td>
+
+
+                                    <td>
+                                        {{$data->third_quarter}}
+                                    </td>
+
+                                    <td>
+                                        {{$data->oct}}
+                                    </td>
+                                    <td>
+                                        {{$data->nov}}
+                                    </td>
+                                    <td>
+                                        {{$data->dec}}
+                                    </td>
+
+                                    <td>
+                                        {{$data->fourth_quarter}}
+                                    </td>
+                                    <td>
+                                        {{$data->total_cat_amount}}
+
+                                    </td>
+                                    <td>{{$data->user_c->firstname}} {{$data->user_c->lastname}}</td>
+                                    <td>{{$data->user_u->firstname}} {{$data->user_u->lastname}}</td>
+                                    <td>{{$data->created_at}}</td>
+                                    <td>{{$data->created_at}}</td>
+                                    <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                </tr>
+                            @endforeach
+
+                        @endif
+
+                        <!-- MONTH AND QUARTERLY TOTAL AMOUNT -->
+
+                        @if(!empty($budget))
+                            <tr>
+                                <td scope="row">
+                                    <input value="0" type="checkbox" id="0" class="kid_checkbox" />
+
+                                </td>
+                                <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                <td>Sum Total of Month and Quarterly Amount</td>
+                                <td></td>
+
+                                <td>
+                                   {{$budget->totalJan}}
+                                </td>
+                                <td>
+                                    {{$budget->totalFeb}}
+                                </td>
+                                <td>
+                                    {{$budget->totalMarch}}
+                                </td>
+
+                                <td>
+                                    {{$budget->fiQuarter}}
+
+                                </td>
+
+                                <td>
+                                    {{$budget->totalApril}}
+                                </td>
+                                <td>
+                                    {{$budget->totalMay}}
+                                </td>
+                                <td>
+                                    {{$budget->totalJune}}
+                                </td>
+
+
+                                <td>
+                                    {{$budget->sQuarter}}
+                                </td>
+
+                                <td>
+                                    {{$budget->totalJuly}}
+                                </td>
+                                <td>
+                                    {{$budget->totalAugust}}
+                                </td>
+                                <td>
+                                    {{$budget->totalSept}}
+                                </td>
+
+
+                                <td>
+                                    {{$budget->tQuarter}}
+
+                                </td>
+
+                                <td>
+                                    {{$budget->totalOct}}
+                                </td>
+                                <td>
+                                    {{$budget->totalNov}}
+                                </td>
+                                <td>
+                                    {{$budget->totalDec}}
+                                </td>
+
+
+                                <td>
+                                    {{$budget->foQuarter}}
+
+                                </td>
+                                <td>
+                                    {{$budget->totalBudget}}
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endif
+                        <!-- END OF MONTH AND QUARTERLY TOTAL AMOUNT -->
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- #END# Bordered Table -->
+
+    <script>
+        /*==================== PAGINATION =========================*/
+
+        function idVal(elementId){
+            var elVal = $('#'+elementId);
+            return elVal.val();
+        }
+
+        function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,requestCat,dbDataId){
+
+            replaceInputWithClassArraySum(quarterClass,quarterViewId);
+            replaceInputWithClassArraySum(totalCatClass,totalCatViewId);
+            replaceInputWithClassArraySum(totalQuarterClass,totalQuarterViewId);
+            replaceInputWithClassArraySum(monthClass,monthTotalSumId);
+            replaceInputWithClassArraySum(totalSumCatClass,totalSumViewId);
+
+            var thisInput = getId(thisInputId).val(); var quarter = getId(quarterViewId).val();
+            var totalCat = getId(totalCatViewId).val();
+            var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+
+            sendRequestForm("{{url('create_modify_budget_item')}}",CSRF_TOKEN,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    var rollback = JSON.parse(ajax.responseText);
+                    var message2 = rollback.message2;
+                    if(message2 == 'fail'){
+
+                        //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                        var serverError = phpValidationError(rollback.message);
+
+                        var messageError = swalFormError(serverError);
+                        swal("Error",messageError, "error");
+
+                    }else if(message2 == 'saved'){
+
+                        var successMessage = swalSuccess('Data saved successfully');
+                        //swal("Success!", "Data saved successfully!", "success");
+
+                    }else if(message2 == 'token_mismatch'){
+
+                        location.reload();
+
+                    }else {
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
+                    }
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+                }
+            }
+
+        }
+
+        function changeAccount(inputId,budgetId,finYear,requestCat,dbDataId){
+
+            var getInput = getId(inputId).val();
+            var postVars = 'dbDataId='+dbDataId+'&accountId='+getInput+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+
+            sendRequestForm("{{url('create_modify_budget_account')}}",CSRF_TOKEN,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    var rollback = JSON.parse(ajax.responseText);
+                    var message2 = rollback.message2;
+                    if(message2 == 'fail'){
+
+                        //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                        var serverError = phpValidationError(rollback.message);
+
+                        var messageError = swalFormError(serverError);
+                        swal("Error",messageError, "error");
+
+                    }else if(message2 == 'saved'){
+
+                        var successMessage = swalSuccess('Data saved successfully');
+                        //swal("Success!", "Data saved successfully!", "success");
+
+                    }else if(message2 == 'token_mismatch'){
+
+                        location.reload();
+
+                    }else {
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
+                    }
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+                }
+            }
+
+
+        }
+
+        function deleteSingleItemWithParamBudget(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token,divDataIdOnModalForRemoval) {
+
+            swal({
+                        title: "Are you sure you want to delete?",
+                        text: "You will not be able to recover this data entry!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonClass: "btn-danger",
+                        confirmButtonText: "Yes, delete it!",
+                        cancelButtonText: "No, cancel delete!",
+                        closeOnConfirm: true,
+                        closeOnCancel: false
+                    },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            deleteSingleEntryWithParamBudget(dataHtmlId, param, reloadId, reloadUrl, submitUrl, token,divDataIdOnModalForRemoval);
+
+
+                            //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                        } else {
+                            swal("Delete Cancelled", "Your data is safe :)", "error");
+                        }
+                    });
+
+        }
+
+
+        function deleteSingleEntryWithParamBudget(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token,divDataIdOnModalForRemoval){
+            var dataVal = $('#'+dataHtmlId).val();
+            var postVars = "dataId="+dataVal+"&param="+param;
+            $('#loading_modal').modal('show');
+            sendRequestForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+                    $('#loading_modal').modal('hide');
+                    var rollback = JSON.parse(ajax.responseText);
+                    var message2 = rollback.message2;
+                    if(message2 == 'fail'){
+
+                        //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                        var serverError = phpValidationError(rollback.message);
+
+                        var messageError = swalDefaultError(serverError);
+                        swal("Error",messageError, "error");
+
+                    }else if(message2 == 'deleted'){
+
+                        var successMessage = swalSuccess(rollback.message);
+                        swal("Success!", successMessage, "success");
+
+                        if(divDataIdOnModalForRemoval != ''){
+                            $('#'+divDataIdOnModalForRemoval).remove();
+
+                            for(var i = 1; i<=12;i++){
+                                replaceInputWithClassArraySum('month_'+i,'month_total_'+i);
+
+                            }
+
+                            replaceInputWithClassArraySum('first_quarter','total_first_quarter');
+                            replaceInputWithClassArraySum('second_quarter','total_second_quarter');
+                            replaceInputWithClassArraySum('third_quarter','total_third_quarter');
+                            replaceInputWithClassArraySum('fourth_quarter','total_fourth_quarter');
+                            replaceInputWithClassArraySum('total_cat','annual_total_budget_view');
+
+                        }
+
+                    }else{
+
+                        var infoMessage = swalWarningError(message2);
+                        swal("Warning!", infoMessage, "warning");
+
+                    }
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                    if(reloadUrl != '') {
+                        reloadContent(reloadId, reloadUrl);
+                    }
+                }
+            }
+
+
+        }
+    </script>
+
+    <script>
+
+        /*$('table').on('scroll', function () {
+         $("table > *").width($("table").width() + $("table").scrollLeft());
+         });*/
+
+        /*$(function() {
+         $( ".datepicker" ).datepicker({
+         /!*changeMonth: true,
+         changeYear: true*!/
+         });
+         });*/
+    </script>
+
+@endsection
+

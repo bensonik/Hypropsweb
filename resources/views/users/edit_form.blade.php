@@ -227,7 +227,7 @@
                 <div class="form-group">
                     <div class="form-line">
                         <select class="form-control" name="marital_status"  >
-                            <option value="{{$edit->id}}" selected>{{$edit->marital}}</option>
+                            <option value="{{$edit->marital}}" selected>{{$edit->marital}}</option>
                             <option value="Married">Married</option>
                             <option value="Single">Single</option>
                             <option value="Divorced">Divorced</option>

@@ -70,9 +70,9 @@
                         @if(!empty($budget))
 
                         @foreach($budget as $data)
-                            <tr>
+                            <tr id="tr_{{$data->id}}">
                                 <td scope="row">
-                                    <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                    <input value="{{$data->id}}" type="checkbox" id="remove_{{$data->id}}" class="kid_checkbox" />
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -81,7 +81,7 @@
                                     <div class="col-sm-12">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <select class="form-control" id="acct_cat_{{$data->request_cat_id}}" onchange="changeAccount('account_{{$data->request_cat_id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" name="account_category" >
+                                                <select class="form-control" id="acct_cat_{{$data->request_cat_id}}" onchange="changeAccount('account_{{$data->request_cat_id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" name="account_category" >
                                                     <option value="{{$data->acct_id}}">{{$data->account->acct_name}}</option>
                                                     @foreach($data->accountCategories as $d)
                                                         <option value="{{$d->id}}">{{$d->acct_name}}</option>
@@ -102,7 +102,7 @@
                                                                    'first_quarter','month_1','total_cat','first_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_first_quarter_view','month_total_1',
                                                                    'annual_total_budget_view','month_1','first_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->jan}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->jan}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -116,7 +116,7 @@
                                                                    'first_quarter','month_2','total_cat','first_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_first_quarter_view','month_total_2',
                                                                    'annual_total_budget_view','month_2','first_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->feb}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->feb}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -130,7 +130,7 @@
                                                                    'first_quarter','month_3','total_cat','first_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_first_quarter_view','month_total_3',
                                                                    'annual_total_budget_view','month_3','first_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->march}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->march}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -157,7 +157,7 @@
                                                                    'second_quarter','month_4','total_cat','second_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_second_quarter_view','month_total_4',
                                                                    'annual_total_budget_view','month_4','second_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->april}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->april}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -171,7 +171,7 @@
                                                                    'second_quarter','month_5','total_cat','second_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_second_quarter_view','month_total_5',
                                                                    'annual_total_budget_view','month_5','second_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->may}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->may}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -185,7 +185,7 @@
                                                                    'second_quarter','month_6','total_cat','second_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_second_quarter_view','month_total_6',
                                                                    'annual_total_budget_view','month_6','second_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->june}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->june}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -212,7 +212,7 @@
                                                                    'third_quarter','month_7','total_cat','third_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_third_quarter_view','month_total_7',
                                                                    'annual_total_budget_view','month_7','third_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->july}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->july}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -226,7 +226,7 @@
                                                                    'third_quarter','month_8','total_cat','third_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_third_quarter_view','month_total_8',
                                                                    'annual_total_budget_view','month_8','third_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->august}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->august}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -240,7 +240,7 @@
                                                                    'third_quarter','month_9','total_cat','third_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_third_quarter_view','month_total_9',
                                                                    'annual_total_budget_view','month_9','third_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->sept}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->sept}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@
                                                                    'fourth_quarter','month_10','total_cat','fourth_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_fourth_quarter_view','month_total_10',
                                                                    'annual_total_budget_view','month_10','fourth_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->oct}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->oct}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -281,7 +281,7 @@
                                                                    'fourth_quarter','month_11','total_cat','fourth_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_fourth_quarter_view','month_total_11',
                                                                    'annual_total_budget_view','month_11','fourth_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->nov}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->nov}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -295,7 +295,7 @@
                                                                    'fourth_quarter','month_12','total_cat','fourth_quarter_view_{{$data->request_cat_id}}',
                                                                    'total_cat_view_{{$data->request_cat_id}}','total_fourth_quarter_view','month_total_12',
                                                                    'annual_total_budget_view','month_12','fourth_quarter','{{$budgetDetail->id}}',
-                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$data->id}}')" value="{{$data->dec}}" name="amount" placeholder="Budget Amount">
+                                                                   '{{$budgetDetail->fin_year_id}}','{{$data->request_cat_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}')" value="{{$data->dec}}" name="amount" placeholder="Budget Amount">
                                                 </div>
                                             </div>
                                         </div>
@@ -322,14 +322,14 @@
 
                                 </td>
                                 <td>
-                                    @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || Auth::user()->dept_id == $data->dept_id)
-                                        <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_request_cat_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $detectHod == \App\Helpers\Utility::HOD_DETECTOR)
+                                        <a style="cursor: pointer;" onclick="deleteSingleItemWithParamBudget('remove_{{$data->id}}','{{$budgetDetail->id}}','','','<?php echo url('delete_budget_item') ?>','<?php echo csrf_token(); ?>','tr_{{$data->id}}')"> <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i></a>
                                     @endif
                                 </td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>{{$data->user_c->firstname}} {{$data->user_c->lastname}}</td>
+                                <td>{{$data->user_u->firstname}} {{$data->user_u->lastname}}</td>
+                                <td>{{$data->created_at}}</td>
+                                <td>{{$data->created_at}}</td>
                                 <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             </tr>
                         @endforeach
@@ -340,7 +340,7 @@
                         @foreach($mainData as $data)
                         <tr>
                             <td scope="row">
-                                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                <input value="{{$data->id}}" type="checkbox" id="" class="kid_checkbox" />
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -349,7 +349,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control" id="account_{{$data->id}}" onchange="changeAccount('account_{{$data->id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$data->id}}','')" id="acct_cat_{{$data->id}}" name="account_category" >
+                                            <select class="form-control" id="account_{{$data->id}}" onchange="changeAccount('account_{{$data->id}}','{{$budgetDetail->id}}','{{$budgetDetail->fin_year_id}}','{{$budgetDetail->dept_id}}','{{$data->id}}','')" id="acct_cat_{{$data->id}}" name="account_category" >
                                                 <option value="">Select Account</option>
                                                 @foreach($data->accountCategories as $d)
                                                     <option value="{{$d->id}}">{{$d->acct_name}}</option>
@@ -370,7 +370,7 @@
                                                            'first_quarter','month_{{$i}}','total_cat','first_quarter_view_{{$data->id}}',
                                                            'total_cat_view_{{$data->id}}','total_first_quarter_view','month_total_{{$i}}',
                                                            'annual_total_budget_view','month_{{$i}}','first_quarter','{{$budgetDetail->id}}',
-                                                           '{{$budgetDetail->fin_year_id}}','{{$data->id}}','')" name="amount" placeholder="Budget Amount">
+                                                           '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                         </div>
                                     </div>
                                 </div>
@@ -397,7 +397,7 @@
                                                         'second_quarter','month_{{$i}}','total_cat','second_quarter_view_{{$data->id}}',
                                                         'total_cat_view_{{$data->id}}','total_second_quarter_view','month_total_{{$i}}',
                                                         'annual_total_budget_view','month_{{$i}}','second_quarter','{{$budgetDetail->id}}',
-                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','')" name="amount" placeholder="Budget Amount">
+                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                             </div>
                                         </div>
                                     </div>
@@ -424,7 +424,7 @@
                                                         'third_quarter','month_{{$i}}','total_cat','third_quarter_view_{{$data->id}}',
                                                         'total_cat_view_{{$data->id}}','total_third_quarter_view','month_total_{{$i}}',
                                                         'annual_total_budget_view','month_{{$i}}','third_quarter','{{$budgetDetail->id}}',
-                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','')" name="amount" placeholder="Budget Amount">
+                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                             </div>
                                         </div>
                                     </div>
@@ -451,7 +451,7 @@
                                                         'fourth_quarter','month_{{$i}}','total_cat','fourth_quarter_view_{{$data->id}}',
                                                         'total_cat_view_{{$data->id}}','total_fourth_quarter_view','month_total_{{$i}}',
                                                         'annual_total_budget_view','month_{{$i}}','fourth_quarter','{{$budgetDetail->id}}',
-                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','')" name="amount" placeholder="Budget Amount">
+                                                               '{{$budgetDetail->fin_year_id}}','{{$data->id}}','{{$budgetDetail->dept_id}}','')" name="amount" placeholder="Budget Amount">
                                             </div>
                                         </div>
                                     </div>
@@ -476,12 +476,9 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </td>
                             <td>
-                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || Auth::user()->dept_id == $data->dept_id)
-                                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_request_cat_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                @endif
+
                             </td>
                             <td></td>
                             <td></td>
@@ -494,6 +491,8 @@
 
                         <!-- MONTH AND QUARTERLY TOTAL AMOUNT -->
 
+                        @if(!empty($budget))
+                        <tr>
                         <td scope="row">
                             <input value="0" type="checkbox" id="0" class="kid_checkbox" />
 
@@ -502,89 +501,159 @@
                         <td>Sum Total of Month and Quarterly Amount</td>
                         <td></td>
 
-                        @for($i=1;$i<=3;$i++)
                             <td>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                            <input type="number" class="month_total " value="{{$budget->totalJan}}" disabled id="month_total_1" name="amount" placeholder="Sum Total of Month">
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                        @endfor
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalFeb}}" disabled id="month_total_2" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalMarch}}" disabled id="month_total_3" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
 
                         <td>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="total_first_quarter " disabled id="total_first_quarter_view" name="total_first_quarter" placeholder="Sum Total of First Quarter">
+                                        <input type="text" class="total_first_quarter " value="{{$budget->fiQuarter}}" disabled id="total_first_quarter_view" name="total_first_quarter" placeholder="Sum Total of First Quarter">
                                     </div>
                                 </div>
                             </div>
 
                         </td>
-                        @for($i=4;$i<=6;$i++)
+
                             <td>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                            <input type="number" class="month_total " value="{{$budget->totalApril}}" disabled id="month_total_4" name="amount" placeholder="Sum Total of Month">
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                        @endfor
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalMay}}" disabled id="month_total_5" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalJune}}" disabled id="month_total_6" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
 
                         <td>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="total_second_quarter  " disabled id="total_second_quarter_view" name="total_second_quarter" placeholder="Sum Total of Second Quarter">
+                                        <input type="text" class="total_second_quarter  "  value="{{$budget->sQuarter}}" disabled id="total_second_quarter_view" name="total_second_quarter" placeholder="Sum Total of Second Quarter">
                                     </div>
                                 </div>
                             </div>
 
                         </td>
-                        @for($i=7;$i<=9;$i++)
+
                             <td>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                            <input type="number" class="month_total " value="{{$budget->totalJuly}}" disabled id="month_total_7" name="amount" placeholder="Sum Total of Month">
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                        @endfor
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalAugust}}" disabled id="month_total_8" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalSept}}" disabled id="month_total_9" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
 
                         <td>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="total_third_quarter " disabled id="total_third_quarter_view" name="total_third_quarter" placeholder="Sum Total of Third Quarter">
+                                        <input type="text" class="total_third_quarter " value="{{$budget->tQuarter}}" disabled id="total_third_quarter_view" name="total_third_quarter" placeholder="Sum Total of Third Quarter">
                                     </div>
                                 </div>
                             </div>
 
                         </td>
-                        @for($i=10;$i<=12;$i++)
+
                             <td>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="month_total " disabled  id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                            <input type="number" class="month_total " value="{{$budget->totalOct}}" disabled  id="month_total_10" name="amount" placeholder="Sum Total of Month">
                                         </div>
                                     </div>
                                 </div>
                             </td>
-                        @endfor
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalNov}}" disabled  id="month_total_11" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="number" class="month_total " value="{{$budget->totalDec}}" disabled  id="month_total_12" name="amount" placeholder="Sum Total of Month">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
 
                         <td>
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="total_fourth_quarter " disabled id="total_fourth_quarter_view" name="total_fourth_quarter" placeholder="Sum Total of Fourth Quarter">
+                                        <input type="text" class="total_fourth_quarter " disabled value="{{$budget->foQuarter}}" id="total_fourth_quarter_view" name="total_fourth_quarter" placeholder="Sum Total of Fourth Quarter">
                                     </div>
                                 </div>
                             </div>
@@ -594,7 +663,7 @@
                             <div class="col-sm-12">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class=" " disabled id="annual_total_budget_view" name="annual_total_budget" placeholder="Overall Annual Total Budget">
+                                        <input type="text" class=" " value="{{$budget->totalBudget}}" disabled id="annual_total_budget_view" name="annual_total_budget" placeholder="Overall Annual Total Budget">
                                     </div>
                                 </div>
                             </div>
@@ -605,7 +674,124 @@
                         <td></td>
                         <td></td>
                         <td></td>
+                        </tr>
 
+                        @else
+
+                        <tr>
+                                <td scope="row">
+                                    <input value="0" type="checkbox" id="0" class="kid_checkbox" />
+
+                                </td>
+                                <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                <td>Sum Total of Month and Quarterly Amount</td>
+                                <td></td>
+
+                                @for($i=1;$i<=3;$i++)
+                                    <td>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endfor
+
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class="total_first_quarter " disabled id="total_first_quarter_view" name="total_first_quarter" placeholder="Sum Total of First Quarter">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                @for($i=4;$i<=6;$i++)
+                                    <td>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endfor
+
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class="total_second_quarter  " disabled id="total_second_quarter_view" name="total_second_quarter" placeholder="Sum Total of Second Quarter">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                @for($i=7;$i<=9;$i++)
+                                    <td>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="number" class="month_total " disabled id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endfor
+
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class="total_third_quarter " disabled id="total_third_quarter_view" name="total_third_quarter" placeholder="Sum Total of Third Quarter">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                @for($i=10;$i<=12;$i++)
+                                    <td>
+                                        <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <div class="form-line">
+                                                    <input type="number" class="month_total " disabled  id="month_total_{{$i}}" name="amount" placeholder="Sum Total of Month">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                @endfor
+
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class="total_fourth_quarter " disabled id="total_fourth_quarter_view" name="total_fourth_quarter" placeholder="Sum Total of Fourth Quarter">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td>
+                                    <div class="col-sm-12">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" class=" " disabled id="annual_total_budget_view" name="annual_total_budget" placeholder="Overall Annual Total Budget">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        @endif
                         <!-- END OF MONTH AND QUARTERLY TOTAL AMOUNT -->
 
                         </tbody>
@@ -628,7 +814,7 @@
         return elVal.val();
     }
 
-    function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,requestCat,dbDataId){
+    function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,requestCat,deptId,dbDataId){
 
         replaceInputWithClassArraySum(quarterClass,quarterViewId);
         replaceInputWithClassArraySum(totalCatClass,totalCatViewId);
@@ -638,7 +824,7 @@
 
          var thisInput = getId(thisInputId).val(); var quarter = getId(quarterViewId).val();
          var totalCat = getId(totalCatViewId).val();
-         var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+         var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat+'&deptId='+deptId
 
         sendRequestForm("{{url('create_modify_budget_item')}}",CSRF_TOKEN,postVars)
         ajax.onreadystatechange = function(){
@@ -675,10 +861,10 @@
 
     }
 
-    function changeAccount(inputId,budgetId,finYear,requestCat,dbDataId){
+    function changeAccount(inputId,budgetId,finYear,requestCat,deptId,dbDataId){
 
         var getInput = getId(inputId).val();
-        var postVars = 'dbDataId='+dbDataId+'&accountId='+getInput+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+        var postVars = 'dbDataId='+dbDataId+'&accountId='+getInput+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat+'&deptId='+deptId
 
         sendRequestForm("{{url('create_modify_budget_account')}}",CSRF_TOKEN,postVars)
         ajax.onreadystatechange = function(){
@@ -716,6 +902,88 @@
 
     }
 
+    function deleteSingleItemWithParamBudget(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token,divDataIdOnModalForRemoval) {
+
+        swal({
+                    title: "Are you sure you want to delete?",
+                    text: "You will not be able to recover this data entry!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel delete!",
+                    closeOnConfirm: true,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        deleteSingleEntryWithParamBudget(dataHtmlId, param, reloadId, reloadUrl, submitUrl, token,divDataIdOnModalForRemoval);
+
+
+                        //swal("Deleted!", "Your item(s) has been deleted.", "success");
+                    } else {
+                        swal("Delete Cancelled", "Your data is safe :)", "error");
+                    }
+                });
+
+    }
+
+
+    function deleteSingleEntryWithParamBudget(dataHtmlId,param,reloadId,reloadUrl,submitUrl,token,divDataIdOnModalForRemoval){
+        var dataVal = $('#'+dataHtmlId).val();
+        var postVars = "dataId="+dataVal+"&param="+param;
+        $('#loading_modal').modal('show');
+        sendRequestForm(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+                $('#loading_modal').modal('hide');
+                var rollback = JSON.parse(ajax.responseText);
+                var message2 = rollback.message2;
+                if(message2 == 'fail'){
+
+                    //OBTAIN ALL ERRORS FROM PHP WITH LOOP
+                    var serverError = phpValidationError(rollback.message);
+
+                    var messageError = swalDefaultError(serverError);
+                    swal("Error",messageError, "error");
+
+                }else if(message2 == 'deleted'){
+
+                    var successMessage = swalSuccess(rollback.message);
+                    swal("Success!", successMessage, "success");
+
+                    if(divDataIdOnModalForRemoval != ''){
+                        $('#'+divDataIdOnModalForRemoval).remove();
+
+                        for(var i = 1; i<=12;i++){
+                            replaceInputWithClassArraySum('month_'+i,'month_total_'+i);
+
+                        }
+
+                        replaceInputWithClassArraySum('first_quarter','total_first_quarter');
+                        replaceInputWithClassArraySum('second_quarter','total_second_quarter');
+                        replaceInputWithClassArraySum('third_quarter','total_third_quarter');
+                        replaceInputWithClassArraySum('fourth_quarter','total_fourth_quarter');
+                        replaceInputWithClassArraySum('total_cat','annual_total_budget_view');
+
+                    }
+
+                }else{
+
+                    var infoMessage = swalWarningError(message2);
+                    swal("Warning!", infoMessage, "warning");
+
+                }
+
+                //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+                if(reloadUrl != '') {
+                    reloadContent(reloadId, reloadUrl);
+                }
+            }
+        }
+
+
+    }
 </script>
 
     <script>
@@ -733,3 +1001,4 @@
     </script>
 
 @endsection
+

@@ -242,11 +242,13 @@
                                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_budget_summary_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <td>
-                                <a class="fa fa-eye pull-right" href="<?php echo url('budget_item/view/'.$data->id) ?>">View</a>
+                                <a class="fa fa-eye pull-left" href="<?php echo url('budget_item/view/'.$data->id) ?>">View</a>|
+                                <a class="fa fa-eye pull-right" href="<?php echo url('budget_item/account_chart_dimension/view/'.$data->id) ?>">Chart of accounts view</a>
                             </td>
                             @if($data->created_by == Auth::user()->id)
                             <td>
-                                <a class="fa fa-plus-circle pull-left" href="<?php echo url('budget_item/modify/'.$data->id) ?>">Add</a>
+                                <a class="fa fa-plus-circle pull-left" href="<?php echo url('budget_item/modify/'.$data->id) ?>">Add</a> |
+                                <a class="fa fa-plus-circle pull-right" href="<?php echo url('budget_item/account_chart_dimension/modify/'.$data->id) ?>">Add using chart of accounts</a>
                             </td>
                             @else
                                 <td></td>
