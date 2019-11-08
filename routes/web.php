@@ -1243,8 +1243,35 @@ Route::post('/create_modify_budget_item', 'BudgetController@createModify')->name
 Route::post('/create_modify_budget_account', 'BudgetController@createModifyAcct')->name('create_modify_budget_account');
 Route::post('/delete_budget_item', 'BudgetController@destroy')->name('delete_budget_item');
 
-Route::any('/budget_item/account_chart_dimension/view/{id}', 'BudgetController@budgetViewAccountDimension')->name('budget_item_view_account_chart')->middleware('auth');
+Route::any('/budget_item/account_chart_dimension/view/{id}', 'BudgetController@budgetViewAccountChartDimension')->name('budget_item_view_account_chart')->middleware('auth');
 Route::any('/budget_item/account_chart_dimension/modify/{id}', 'BudgetController@budgetAccountChartDimension')->name('budget_item_modify_account_chart')->middleware('auth');
 Route::post('/create_modify_budget_item_account_chart', 'BudgetController@createModifyAccountChartDimension')->name('create_modify_budget_item_account_chart');
 Route::post('/delete_budget_item_account_chart', 'BudgetController@destroyAccountChartDimension')->name('delete_budget_item_account_chart');
+
+
+// -------------BUDGET REPORT MODULE-----------
+Route::any('/budget_archive', 'BudgetReportController@budgetArchive')->name('budget_archive')->middleware('auth.admin');
+Route::post('/search_budget_archive', 'BudgetReportController@searchBudgetArchive')->name('search_budget_archive');
+
+Route::any('/budget_request_compare', 'BudgetReportController@budgetRequisitionReport')->name('budget_request_compare')->middleware('auth');
+Route::post('/search_budget_request_compare', 'BudgetReportController@searchBudgetRequestCompare')->name('search_budget_request_compare');
+
+Route::any('/budget_budget_compare', 'BudgetReportController@budgetBudgetReport')->name('budget_request_compare')->middleware('auth');
+Route::post('/search_budget_budget_compare', 'BudgetReportController@searchBudgetBudgetCompare')->name('search_budget_budget_compare');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

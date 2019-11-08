@@ -78,11 +78,18 @@ class Budget extends Model
 
     }
 
+    public static function getAllDataOneRow($row)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get([$row]);
+
+    }
+
     public static function getAllDataOrderByGroupBy()
     {
-        return static::join('AccountCategory', 'AccountCategory.id', '=', 'AccountChart.acct_cat_id')
-            ->where('budget.status', '=','1')->groupBy('AccountCategory.category_name')
-            ->orderBy('AccountCategory.category_name','ASC')->get();
+        return static::join('Account_category', 'Account_category.id', '=', 'budget.acct_cat_id')
+            ->where('budget.status', '=','1')->groupBy('Account_category.category_name')
+            ->orderBy('Account_category.category_name','ASC')->get();
 
     }
 
@@ -188,12 +195,59 @@ class Budget extends Model
 
     public static function massData($column, $post)
     {
-        return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->get();
 
     }
+
+    public static function massDataOneRow($column, $post,$row)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->get([$row]);
+
+    }
+
+    public static function massDataOrderByGroupBy($column,$post)
+    {
+        return static::join('Account_category', 'Account_category.id', '=', 'budget.acct_cat_id')
+            ->whereIn($column,$post)
+            ->where('budget.status', '=',Utility::STATUS_ACTIVE)->groupBy('Account_category.category_name')
+            ->orderBy('Account_category.category_name','ASC')->get();
+
+    }
+
+
+    public static function massData2($column, $post,$column2, $post2)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereIn($column2, $post2)->get();
+
+    }
+
+    public static function massData2OneRow($column, $post,$column2, $post2,$row)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereIn($column2, $post2)->get([$row]);
+
+    }
+
+    public static function massData2Condition($column,$post,$column2,$post2,$column3,$post3)
+    {
+        return static::whereIn($column,$post)->whereIn($column2,$post2)->whereIn($column3,$post3)
+            ->where('budget.status', '=',Utility::STATUS_ACTIVE)->groupBy('Account_category.category_name')
+            ->orderBy('Account_category.category_name','ASC')->get();
+
+    }
+
+    public static function massData3($column, $post,$column2, $post2,$column3, $post3)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereIn($column2, $post2)->whereIn($column3, $post3)->get();
+
+    }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
-        return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->where($column2, $post2)->get();
 
     }
 
@@ -208,6 +262,13 @@ class Budget extends Model
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->first();
+
+    }
+
+    public static function firstRow3($column, $post,$column2, $post2,$column3, $post3)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->first();
 
     }
 

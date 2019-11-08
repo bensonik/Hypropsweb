@@ -19,12 +19,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -39,6 +34,7 @@
                                        name="check_all" class="" />
 
                             </th>
+                            <th>Department</th>
                             <th>Account Category</th>
                             <th>Account Name (Detail Type)</th>
                             <th>January ({{\App\Helpers\Utility::defaultCurrency()}})</th>
@@ -69,12 +65,14 @@
                         @if(!empty($budget))
                             @php $enum = 0; $num = 0;  @endphp
                             @foreach($budget as $data)
+                                @php $enum++ @endphp
                                 <tr id="tr_{{$data->id}}">
                                     <td scope="row">
                                         <input value="{{$data->id}}" type="checkbox" id="remove_{{$data->id}}" class="kid_checkbox" />
 
                                     </td>
                                     <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    <td>{{$data->department->dept_name}}</td>
                                     <td>{{$data->acctCat->category_name}}</td>
                                     <td>{{$data->account->acct_name}} ({{$data->acctDetail->detail_type}})</td>
 
@@ -323,6 +321,7 @@
 
                         @if(!empty($mainData))
                             @foreach($mainData as $data)
+                                @php $enum++ @endphp
                                 <tr>
                                     <td scope="row">
                                         <input value="{{$data->id}}" type="checkbox" id="" class="kid_checkbox" />

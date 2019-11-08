@@ -155,9 +155,17 @@ class BudgetSummary extends Model
 
     public static function massData($column, $post)
     {
-        return Utility::massData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)->get();
 
     }
+
+    public static function massData2($column, $post,$column2, $post2)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereIn($column, $post)
+            ->whereIn($column2, $post2)->get();
+
+    }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);

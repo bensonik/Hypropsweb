@@ -177,24 +177,19 @@
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
-                        @endif
                         <li>
                             <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('budget_summary'); ?>',
                                     '<?php echo url('delete_budget_summary'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
+                        @endif
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                               @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -213,8 +208,8 @@
 
                             <th>Manage</th>
                             <th>Manage Docs</th>
-                            <th>View</th>
-                            <th>Add to Budget</th>
+                            <th>View/Add to Budget (Request Category)</th>
+                            <th>View/Add to Budget (Chart of Accounts)</th>
                             <th>Name</th>
                             <th>Financial Year</th>
                             <th>Department</th>
@@ -235,24 +230,32 @@
                                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
                             </td>
+
+                            @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $detectHod == \App\Helpers\Utility::HOD_DETECTOR)
                             <td>
                                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_budget_summary_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
+                            @else
+                            <td></td>
+                            @endif
+
                             <td>
                                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_budget_summary_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <td>
-                                <a class="fa fa-eye pull-left" href="<?php echo url('budget_item/view/'.$data->id) ?>">View</a>|
-                                <a class="fa fa-eye pull-right" href="<?php echo url('budget_item/account_chart_dimension/view/'.$data->id) ?>">Chart of accounts view</a>
-                            </td>
-                            @if($data->created_by == Auth::user()->id)
+                                <a class="fa fa-eye pull-left" href="<?php echo url('budget_item/view/'.$data->id) ?>">View</a><br/>
+                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $detectHod == \App\Helpers\Utility::HOD_DETECTOR)
+                                <a class="fa fa-plus-circle pull-left" href="<?php echo url('budget_item/modify/'.$data->id) ?>">Add</a>
+                                @endif
+                               </td>
+
                             <td>
-                                <a class="fa fa-plus-circle pull-left" href="<?php echo url('budget_item/modify/'.$data->id) ?>">Add</a> |
-                                <a class="fa fa-plus-circle pull-right" href="<?php echo url('budget_item/account_chart_dimension/modify/'.$data->id) ?>">Add using chart of accounts</a>
+                                <a class="fa fa-eye pull-left" href="<?php echo url('budget_item/account_chart_dimension/view/'.$data->id) ?>">View</a><br/>
+                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS) || $detectHod == \App\Helpers\Utility::HOD_DETECTOR)
+                                <a class="fa fa-plus-circle pull-left" href="<?php echo url('budget_item/account_chart_dimension/modify/'.$data->id) ?>">Add</a>
+                                @endif
                             </td>
-                            @else
-                                <td></td>
-                            @endif
+
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->name}} </td>
                             <td>{{$data->financialYear->fin_name}}</td>

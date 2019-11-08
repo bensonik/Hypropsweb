@@ -25,7 +25,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control datepicker" name="date" placeholder="Date">
+                                            <input type="text" class="form-control datepicker" name="date" placeholder="Start Date/Year">
                                         </div>
                                     </div>
                                 </div>

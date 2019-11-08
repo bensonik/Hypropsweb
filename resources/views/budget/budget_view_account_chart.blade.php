@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        View budget (Request Category Dimension)
+                        Add to budget (Chart of Account Dimension)
                     </h2>
                     <ul class="header-dropdown m-r--5">
 
@@ -32,10 +32,9 @@
                                        name="check_all" class="" />
 
                             </th>
-
                             <th>Department</th>
-                            <th>Request Name</th>
                             <th>Account Category</th>
+                            <th>Account Name (Detail Type)</th>
                             <th>January ({{\App\Helpers\Utility::defaultCurrency()}})</th>
                             <th>February ({{\App\Helpers\Utility::defaultCurrency()}})</th>
                             <th>March ({{\App\Helpers\Utility::defaultCurrency()}})</th>
@@ -63,6 +62,7 @@
                         @if(!empty($budget))
 
                             @foreach($budget as $data)
+
                                 <tr id="tr_{{$data->id}}">
                                     <td scope="row">
                                         <input value="{{$data->id}}" type="checkbox" id="remove_{{$data->id}}" class="kid_checkbox" />
@@ -70,11 +70,8 @@
                                     </td>
                                     <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                     <td>{{$data->department->dept_name}}</td>
-                                    <td>{{$data->requestCategory->request_name}}</td>
-                                    <td>
-                                        {{$data->account->acct_name}}
-                                    </td>
-
+                                    <td>{{$data->acctCat->category_name}}</td>
+                                    <td>{{$data->account->acct_name}} ({{$data->acctDetail->detail_type}})</td>
 
                                     <td>
                                         {{$data->jan}}
@@ -159,12 +156,11 @@
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td></td>
                                 <td>Sum Total of Month and Quarterly Amount</td>
                                 <td></td>
 
                                 <td>
-                                   {{$budget->totalJan}}
+                                    {{$budget->totalJan}}
                                 </td>
                                 <td>
                                     {{$budget->totalFeb}}
@@ -234,6 +230,7 @@
                                 <td></td>
                                 <td></td>
                             </tr>
+
                         @endif
                         <!-- END OF MONTH AND QUARTERLY TOTAL AMOUNT -->
 
@@ -252,12 +249,7 @@
     <script>
         /*==================== PAGINATION =========================*/
 
-        function idVal(elementId){
-            var elVal = $('#'+elementId);
-            return elVal.val();
-        }
-
-        function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,requestCat,dbDataId){
+        function saveBudget(thisInputId,quarterClass,totalCatClass,totalQuarterClass,monthClass,totalSumCatClass,quarterViewId,totalCatViewId,totalQuarterViewId,monthTotalSumId,totalSumViewId,realMonth,realQuarter,budgetId,finYear,acctId,deptId,dbDataId){
 
             replaceInputWithClassArraySum(quarterClass,quarterViewId);
             replaceInputWithClassArraySum(totalCatClass,totalCatViewId);
@@ -267,9 +259,9 @@
 
             var thisInput = getId(thisInputId).val(); var quarter = getId(quarterViewId).val();
             var totalCat = getId(totalCatViewId).val();
-            var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+            var postVars = 'monthCatAmount='+thisInput+'&quarterAmount='+quarter+'&totalCatAmount='+totalCat+'&dbDataId='+dbDataId+'&monthName='+realMonth+'&quarterName='+realQuarter+'&finYear='+finYear+'&budget='+budgetId+'&deptId='+deptId+'&accountId='+acctId
 
-            sendRequestForm("{{url('create_modify_budget_item')}}",CSRF_TOKEN,postVars)
+            sendRequestForm("{{url('create_modify_budget_item_account_chart')}}",CSRF_TOKEN,postVars)
             ajax.onreadystatechange = function(){
                 if(ajax.readyState == 4 && ajax.status == 200) {
 
@@ -304,10 +296,10 @@
 
         }
 
-        function changeAccount(inputId,budgetId,finYear,requestCat,dbDataId){
+        function changeAccount(inputId,budgetId,finYear,requestCat,deptId,dbDataId){
 
             var getInput = getId(inputId).val();
-            var postVars = 'dbDataId='+dbDataId+'&accountId='+getInput+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat
+            var postVars = 'dbDataId='+dbDataId+'&accountId='+getInput+'&finYear='+finYear+'&budget='+budgetId+'&requestCat='+requestCat+'&deptId='+deptId
 
             sendRequestForm("{{url('create_modify_budget_account')}}",CSRF_TOKEN,postVars)
             ajax.onreadystatechange = function(){

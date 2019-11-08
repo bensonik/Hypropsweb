@@ -86,9 +86,6 @@ class BudgetController extends Controller
         //print_r($emptyRequestIdArr); exit();
         $detectHod = Utility::detectHOD(Auth::user()->id);
         $budgetDetail = BudgetSummary::firstRow('id',$id);
-        //print_r($mainData);exit();
-
-
 
         return view::make('budget.budget_account_chart')->with('mainData',$mainData)
             ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
@@ -149,7 +146,7 @@ class BudgetController extends Controller
         $detectHod = Utility::detectHOD(Auth::user()->id);
         $budgetDetail = BudgetSummary::firstRow('id',$id);
 
-        return view::make('budget.budget_view')->with('mainData',$mainData)
+        return view::make('budget.budget_view_account_chart')->with('mainData',$mainData)
             ->with('detectHod',$detectHod)->with('budgetDetail',$budgetDetail)->with('budget',$budgetData);
 
     }
@@ -170,7 +167,7 @@ class BudgetController extends Controller
             $quarter = $request->input('quarterName');
 
             if($request->input('requestCat') != '') { // DO THIS IF REQUEST CATEGORY IS NOT EMPTY
-                $checkCat = Budget::firstRow('request_cat_id', $request->input('requestCat'));
+                $checkCat = Budget::firstRow2('request_cat_id', $request->input('requestCat'),'dept_id', $request->input('deptId'));
                 if (!empty($checkCat)) {
                     $dbDATA = [
                         $month => $request->input('monthCatAmount'),
@@ -211,7 +208,7 @@ class BudgetController extends Controller
                     'fin_year_id' => $request->input('finYear'),
                     'updated_by' => Auth::user()->id,
                 ];
-                Budget::defaultUpdate2('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION, $dbUpdateDATA);
+                Budget::defaultUpdate('id', $request->input('dbDataId'), $dbUpdateDATA);
 
             }
 
@@ -254,7 +251,7 @@ class BudgetController extends Controller
 
             }else { //IF NOT DEFAULT UPDATE REQUEST, CHECK WHETHER THE ACCOUNT DIMENSION WITH THE DEPT AND ACCOUNT ID EXISTS
 
-                $acctExist = Budget::firstRow2('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION);
+                $acctExist = Budget::firstRow3('acct_id', $request->input('accountId'),'dimension', Utility::ACCOUNT_CHART_DIMENSION,'dept_id', $request->input('deptId'));
 
                 if (!empty($acctExist)) {   //IF DATA ENTRY ALREADY EXISTS, THEN UPDATE
 
@@ -316,7 +313,7 @@ class BudgetController extends Controller
 
             $acctData = AccountChart::firstRow('id', $request->input('accountId'));
 
-            $checkCat = Budget::firstRow('request_cat_id',$request->input('requestCat'));
+            $checkCat = Budget::firstRow2('request_cat_id',$request->input('requestCat'),'dept_id',$request->input('deptId'));
             if(!empty($checkCat)) {
                 $dbDATA = [
                     'acct_id' => $request->input('accountId'),
@@ -365,12 +362,6 @@ class BudgetController extends Controller
     }
 
 
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -398,29 +389,6 @@ class BudgetController extends Controller
         ]);
 
     }
-
-    public function destroyAccountChartDimension(Request $request)
-    {
-        //
-        $deleteId = $request->input('dataId');
-        $budgetApproval = BudgetSummary::firstRow('id',$request->input('param'));
-        if($budgetApproval->approval_status != Utility::APPROVED) {
-
-            $delete = Budget::destroy($deleteId);
-            return response()->json([
-                'message2' => 'deleted',
-                'message' => 'Data deleted successfully'
-            ]);
-
-        }
-
-        return response()->json([
-            'message' => 'warning',
-            'message2' => 'Budget have been approved and cannot be modified at the moment'
-        ]);
-
-    }
-
     public function addCorrespondingAccountChart($mainData){
         foreach($mainData as $data){
             $accountCategories = AccountChart::specialColumns('acct_cat_id',$data->acct_id);

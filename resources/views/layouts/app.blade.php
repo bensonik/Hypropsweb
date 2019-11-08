@@ -67,7 +67,7 @@
     <script type="text/javascript">
         var csrfToken = $('[name="csrf_token"]').attr('content');
 
-        setInterval(refreshToken, 3600000); // 1 hour
+        //setInterval(refreshToken, 3600000); // 1 hour
 
         function refreshToken(){
             $.get('refresh-csrf').done(function(data){
@@ -989,12 +989,15 @@
                         <li>
                             <a href="{{url('budget_approval')}}">Budget Approval</a>
                         </li>
+                        <li>
+                            <a href="{{url('budget_budget_compare')}}">Budget/Budget Comparison</a>
+                        </li>
                         @endif
                         <li>
-                            <a href="{{url('my_admin_requests')}}">Budget Report</a>
+                            <a href="{{url('budget_archive')}}">Budget Archive</a>
                         </li>
                         <li>
-                            <a href="{{url('approved_admin_requests')}}">Requisition/Budget Report</a>
+                            <a href="{{url('budget_request_compare')}}">Requisition/Budget Comparison</a>
                         </li>
                     </ul>
                 </li>
@@ -1915,35 +1918,19 @@
 <!-- Calculator JS-->
 <script src="{{ asset('calculator/jsRapCalculator.js') }}"></script>
 
+<!-- EXPORT HTML TO WORD JS-->
+<script src="{{ asset('export-html-to-word/FileSaver.js') }}"></script>
+<script src="{{ asset('export-html-to-word/jquery.wordexport.js') }}"></script>
+
+<!-- App Custom Helpers -->
+<script src="{{ asset('js/custom.js') }}"></script>
 <script>
 
-    $('.tbl_order').on('scroll', function () {
-        $(".tbl_order > *").width($(".tbl_order").width() + $(".tbl_order").scrollLeft());
-    });
-
-    $(document).ready(function(){
-        $('#quick_calculator').jsRapCalculator({name:'ERP Calculator'});
-    });
-
-    var li_class = document.getElementsByClassName("myUL");
-    $(window).click(function() {
-        for (var i = 0; i < li_class.length; i++){
-            li_class[i].style.display = 'none';
-        }
-
-    });
-</script>
-<script>
-    /*$(function() {
-        $( ".datepicker" ).datepicker();
-    });*/
 
     getCurrency('{{url('get_currency')}}','{{csrf_token()}}');
 
     //exchangeRate('vendorCust','curr_rate','posting_date','<?php echo url('exchange_rate'); ?>')
-</script>
 
-<script>
     $(function() {
         $( ".datepicker1" ).datepicker({
             /*changeMonth: true,

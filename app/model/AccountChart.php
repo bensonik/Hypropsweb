@@ -88,27 +88,15 @@ class AccountChart extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 
     public static function getAllDataOrderByGroupBy()
     {
         return static::join('AccountCategory', 'AccountCategory.id', '=', 'AccountChart.acct_cat_id')
-            ->where('status', '=','1')->groupBy('AccountCategory.category_name')
+            ->where('status', '=',Utility::STATUS_ACTIVE)->groupBy('AccountCategory.category_name')
             ->orderBy('AccountCategory.category_name','ASC')->get();
-
-    }
-
-    public static function paginateData($column, $post)
-    {
-        return Utility::paginateData(self::table(),$column, $post);
-
-    }
-
-    public static function paginateData2($column, $post, $column2, $post2)
-    {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
 
     }
 
@@ -169,6 +157,7 @@ class AccountChart extends Model
         return Utility::massData(self::table(),$column, $post);
 
     }
+
     public static function massDataCondition($column, $post, $column2, $post2)
     {
         return Utility::massDataCondition(self::table(),$column, $post, $column2, $post2);

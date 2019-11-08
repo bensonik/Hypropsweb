@@ -936,6 +936,13 @@
 <script src="{{ asset('export/jspdf/jspdf.js') }}"></script>
 <script src="{{ asset('export/jspdf/libs/base64.js') }}"></script>
 
+<!-- EXPORT HTML TO WORD JS-->
+<script src="{{ asset('export-html-to-word/FileSaver.js') }}"></script>
+<script src="{{ asset('export-html-to-word/jquery.wordexport.js') }}"></script>
+
+<!-- App Custom Helpers -->
+<script src="{{ asset('js/custom.js') }}"></script>
+
 <script>
     var li_class = document.getElementsByClassName("myUL");
     $(window).click(function() {

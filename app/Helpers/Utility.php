@@ -1567,5 +1567,37 @@ class Utility
 
     }
 
+    public static function budgetRequestCompare($requisitions,$budget){
+        $holdComparison = [];
+        foreach($requisitions as $rKey => $request){
+
+            foreach ($budget as $bKey => $b){
+                if($rKey == $bKey){
+                    $holdComparison[$rKey] = $request.'|'.$b;
+                }
+            }
+
+        }
+
+        return $holdComparison;
+
+    }
+
+    public static function budgetBudgetCompare($budget1,$budget2){
+        $holdComparison = [];
+        foreach($budget1 as $rKey => $b1){
+
+            foreach ($budget2 as $bKey => $b2){
+                if($rKey == $bKey){
+                    $holdComparison[$rKey] = $b1.'|'.$b2;
+                }
+            }
+
+        }
+
+        return $holdComparison;
+
+    }
+
 
 }

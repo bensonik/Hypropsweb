@@ -13,7 +13,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker_edit" value="{{$edit->fin_date}}" name="date" placeholder="Name">
+                        <input type="text" class="form-control datepicker1" value="{{$edit->fin_date}}" name="date" placeholder="Start Date/Year">
                     </div>
                 </div>
             </div>

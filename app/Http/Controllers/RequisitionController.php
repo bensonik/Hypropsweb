@@ -1028,7 +1028,6 @@ class RequisitionController extends Controller
         $fromDate = Utility::standardDate($request->input('from_date'));
         $toDate = Utility::standardDate($request->input('to_date'));
         $code = $this->valdDeptUsers($dept,$user).$this->allOrSome($category).$this->valReqType($type);
-        //return $this->valdDeptUsers($dept,$user).$this->allOrSome($category).$this->valReqType($type);
         $dateArray = [$fromDate,$toDate];
         $query = [];
 
@@ -1435,7 +1434,6 @@ class RequisitionController extends Controller
 
 
     }
-
 
     /**
      * Remove the specified resource from storage.

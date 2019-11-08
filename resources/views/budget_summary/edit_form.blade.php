@@ -106,7 +106,7 @@
                 <b>Reviewer's Comment</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea class="form-control" rows="10"  name="reviewer_comment" placeholder="Comment Here" >{{$edit->reviewer_comment}}</textarea>
+                        <textarea class="form-control" rows="10" disabled name="reviewer_comment" placeholder="Comment Here" >{{$edit->reviewer_comment}}</textarea>
                     </div>
                 </div>
             </div>
