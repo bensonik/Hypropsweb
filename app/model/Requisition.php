@@ -100,7 +100,28 @@ class Requisition extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function customDataPaginate($numberOfItems)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
+
+    }
+
+    public static function customDataPaginate2($column, $post,$numberOfItems)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
+
+    }
+
+    public static function getAllDataByMonthYear($month,$year)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereMonth('created_at', $month)
+            ->whereYear('created_at', $year)->orderBy('id','DESC')->get();
 
     }
 
@@ -121,6 +142,13 @@ class Requisition extends Model
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->paginate(Utility::P35);
+
+    }
+
+    public static function specialColumnsByMonthYear($column,$post,$month,$year)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, $post)
+            ->whereMonth('created_at', $month)->whereYear('created_at', $year)->orderBy('id','DESC')->get();
 
     }
 

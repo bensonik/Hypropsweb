@@ -89,15 +89,20 @@ class VehicleFuelLogReportController extends Controller
     public function report($mainData,$chartObject){
 
         $totalLiters = []; $totalPurchasePrice = []; $allMileage = []; $firstMileage = 0; $lastMileage = 0;
-        foreach($mainData as $val){
-            $totalLiters[] = $val->liter;
-            $totalPurchasePrice[] = $val->total_price;
-            $allMileage[] = $val->mileage;
+        $totalMileage = 0;
+        if(!empty($mainData)) {
+            foreach ($mainData as $val) {
+                $totalLiters[] = $val->liter;
+                $totalPurchasePrice[] = $val->total_price;
+                $allMileage[] = $val->mileage;
 
+            }
+            $lastMileage = $allMileage[0];
+            $firstMileage = $allMileage[count($allMileage) - 1]; //LAST MILEAGE IS KEY 0 COS THE DATA QUERY IS ORDERED BY DESCENDING
+
+            $totalMileage = $lastMileage - $firstMileage;
         }
-        $lastMileage = $allMileage[0];  $firstMileage = $allMileage[count($allMileage)-1]; //LAST MILEAGE IS KEY 0 COS THE DATA QUERY IS ORDERED BY DESCENDING
 
-        $totalMileage = $lastMileage - $firstMileage;
         $chartObject->totalMileage = $totalMileage;
         $chartObject->totalLiters = array_sum($totalLiters);
         $chartObject->totalPurchasePrice = array_sum($totalPurchasePrice);

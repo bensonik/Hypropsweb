@@ -8,7 +8,7 @@
         </th>
 
         <th>Department</th>
-        <th>HOD</th>
+        <th></th>
         <th>Approval System</th>
         <th>Created by</th>
         <th>Updated by</th>

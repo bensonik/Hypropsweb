@@ -75,6 +75,20 @@ class LeaveLog extends Model
 
     }
 
+    public static function customDataPaginate($numberOfItems)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
+
+    }
+
+    public static function customDataPaginate2($column, $post,$numberOfItems)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
+
+    }
+
     public static function getAllData()
     {
         return static::where('status', '=','1')->orderBy('id','DESC')->get();

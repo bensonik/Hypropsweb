@@ -322,7 +322,7 @@
     }
 
     function reloadContent(id,page){
-
+        $('#'+id).html('Loading...');
         $.ajax({
             type:'POST',
             url: page,

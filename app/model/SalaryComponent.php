@@ -32,7 +32,7 @@ class SalaryComponent extends Model
 
     public static function getAllData()
     {
-        return Utility::getAllData(self::table());
+        return static::where('status', '=','1')->orderBy('id','DESC')->get();
 
     }
 

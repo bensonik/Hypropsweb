@@ -74,20 +74,20 @@ class CompetencyMapController extends Controller
                 $cog_exp = json_decode($request->input('cog_exp'));
                 $yr_post_cert = json_decode($request->input('yr_post_cert'));
 
-                if (count($dept) == count($min_aca_qual) && count($dept) == count($position) && count($dept) == count($pro_qual) && count($dept) == count($cog_exp) && count($dept) == count($yr_post_cert)) {
+                if (!empty($compCat) && !empty($position) && !empty($dept)) {
 
 
                     for ($i = 0; $i < count($dept); $i++) {
 
                         $dbDATA = [
-                            'dept_id' => $dept[$i],
-                            'position_id' => $position[$i],
-                            'min_aca_qual' => $min_aca_qual[$i],
+                            'dept_id' => Utility::checkEmptyArrayItem($dept,$i,0),
+                            'position_id' => Utility::checkEmptyArrayItem($position,$i,0),
+                            'min_aca_qual' => Utility::checkEmptyArrayItem($min_aca_qual,$i,0),
                             'comp_category' => $compType,
-                            'pro_qual' => $pro_qual[$i],
-                            'cog_exp' => $cog_exp[$i],
+                            'pro_qual' =>Utility::checkEmptyArrayItem($pro_qual,$i,''),
+                            'cog_exp' => Utility::checkEmptyArrayItem($cog_exp,$i,0),
                             'user_id' => $userId,
-                            'yr_post_cert' => $yr_post_cert[$i],
+                            'yr_post_cert' => Utility::checkEmptyArrayItem($yr_post_cert,$i,0),
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
                         ];
@@ -122,20 +122,18 @@ class CompetencyMapController extends Controller
                     'message' => 'warning',
                     'message2' => count($techDesc).$request->input('tech_desc')
                 ]);*/
-                if (count($compCat) == count($level)
-                    && count($compCat) == count($position) && count($compCat) == count($techDesc)
-                ) {
+                if (!empty($compCat) && !empty($position) && !empty($dept)) {
 
 
-                    for ($i = 0; $i < count($compCat); $i++) {
+                    for ($i = 0; $i < count($dept); $i++) {
 
                         $dbDATA = [
-                            'dept_id' => $dept[$i],
-                            'position_id' => $position[$i],
+                            'dept_id' => Utility::checkEmptyArrayItem($dept,$i,0),
+                            'position_id' => Utility::checkEmptyArrayItem($position,$i,0),
                             'comp_category' => $compType,
-                            'sub_comp_cat' => $compCat[$i],
-                            'comp_level' => $level[$i],
-                            'item_desc' => $techDesc[$i],
+                            'sub_comp_cat' => Utility::checkEmptyArrayItem($compCat,$i,0),
+                            'comp_level' => Utility::checkEmptyArrayItem($level,$i,0),
+                            'item_desc' => Utility::checkEmptyArrayItem($techDesc,$i,''),
                             'user_id' => $userId,
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
@@ -167,18 +165,18 @@ class CompetencyMapController extends Controller
                 $position = json_decode($request->input('position'));
                 $level = json_decode($request->input('level'));
 
-                if (count($compCat) == count($dept) && count($compCat) == count($catDesc) && count($compCat) == count($level) && count($compCat) == count($position)) {
+                if (!empty($compCat) && !empty($position) && !empty($dept)) {
 
 
-                    for ($i = 0; $i < count($compCat); $i++) {
+                    for ($i = 0; $i < count($dept); $i++) {
 
                         $dbDATA = [
-                            'dept_id' => $dept[$i],
-                            'position_id' => $position[$i],
+                            'dept_id' => Utility::checkEmptyArrayItem($dept,$i,0),
+                            'position_id' => Utility::checkEmptyArrayItem($position,$i,0),
                             'comp_category' => $compType,
-                            'sub_comp_cat' => $compCat[$i],
-                            'comp_level' => $level[$i],
-                            'item_desc' => $catDesc[$i],
+                            'sub_comp_cat' => Utility::checkEmptyArrayItem($compCat,$i,0),
+                            'comp_level' => Utility::checkEmptyArrayItem($level,$i,0),
+                            'item_desc' => Utility::checkEmptyArrayItem($catDesc,$i,''),
                             'user_id' => $userId,
                             'created_by' => Auth::user()->id,
                             'status' => Utility::STATUS_ACTIVE
@@ -339,17 +337,17 @@ class CompetencyMapController extends Controller
 
 
             if ($compType == Utility::PRO_QUAL) {
-                $mainData = CompetencyMap::paginateData3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
+                $mainData = CompetencyMap::specialColumns3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
                 return view::make('competency_map.search_frame')->with('mainData', $mainData)->with('type', Utility::PRO_QUAL);
 
             }
             if($compType == Utility::TECH_COMP) {
-                $mainData = CompetencyMap::paginateData3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
+                $mainData = CompetencyMap::specialColumns3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
                 return view::make('competency_map.search_frame')->with('mainData', $mainData)->with('type', Utility::TECH_COMP);
 
             }
             if($compType == Utility::BEHAV_COMP) {
-                $mainData = CompetencyMap::paginateData3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
+                $mainData = CompetencyMap::specialColumns3('dept_id', $dept, 'user_id', $user, 'comp_category', $compType);
                 return view::make('competency_map.search_frame')->with('mainData', $mainData)->with('type', Utility::BEHAV_COMP);
 
             }

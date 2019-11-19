@@ -46,27 +46,27 @@ class CompetencyFramework extends Model
     }
 
     public function department(){
-        return $this->belongsTo('App\model\Department','dept_id','id');
+        return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
 
     }
 
     public function position(){
-        return $this->belongsTo('App\model\Position','position_id','id');
+        return $this->belongsTo('App\model\Position','position_id','id')->withDefault();
 
     }
 
     public function hod(){
-        return $this->belongsTo('App\User','dept_head','id');
+        return $this->belongsTo('App\User','dept_head','id')->withDefault();
 
     }
 
     public function compCat(){
-        return $this->belongsTo('App\model\SkillCompCat','sub_comp_cat','id');
+        return $this->belongsTo('App\model\SkillCompCat','sub_comp_cat','id')->withDefault();
 
     }
 
     public function compFrame(){
-        return $this->belongsTo('App\model\SkillCompFrame','comp_category','id');
+        return $this->belongsTo('App\model\SkillCompFrame','comp_category','id')->withDefault();
 
     }
 

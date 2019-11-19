@@ -17,12 +17,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('reload_data');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('reload_data');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#reload_data').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#reload_data').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#reload_data').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'reload_data', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -322,7 +317,7 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-4">
-                                        <b>Gaurantor</b>
+                                        <b>Guarantor</b>
                                         <div class="form-group">
                                             <div class="form-line">
                                                 <input type="text" class="form-control" value="{{$edit->guarantor}}" name="guarantor" placeholder="Guarantor" >

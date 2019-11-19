@@ -13,14 +13,7 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>
                         </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('createMainForm');" ><i class="fa fa-print"></i>Print</a></li>
-                            <li><a class="btn bg-red waves-effect" onClick ="print_content('createMainForm');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                            <li><a class="btn btn-warning" onClick ="$('#createMainForm').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#createMainForm').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                            <li><a class="btn btn-info" onClick ="$('#createMainForm').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
-                        </ul>
+                        @include('includes/print_pdf',[$exportId = 'createMainForm', $exportDocId = 'createMainForm'])
                     </li>
 
                 </div>
@@ -331,7 +324,7 @@
 
                     </div>
 
-                <div class="body table-responsive" id="reload_data">
+                <div class="body table-responsive tbl_scroll" id="reload_data">
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>

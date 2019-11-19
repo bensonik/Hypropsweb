@@ -137,6 +137,27 @@
         </div>
     </div>
 
+    <!-- Default Size -->
+    <div class="modal fade" id="detail_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Report</h4>
+                    @include('includes/print_pdf',[$exportId = 'print_preview_data', $exportDocId = 'print_preview_data'])
+
+                </div>
+                <div class="modal-body" id="detail_id" style="height:450px; overflow:scroll;">
+
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
          <!-- Bordered Table -->
     <div class="row clearfix">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -161,18 +182,13 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
                     </ul>
                 </div>
-                <div class="body table-responsive" id="reload_data">
+                <div class="body table-responsive tbl_scroll" id="reload_data">
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>
@@ -183,11 +199,12 @@
                             </th>
 
                             <th>Manage</th>
+                            <th>View Report</th>
                             <th>Source Type</th>
                             <th>Full Name</th>
                             <th>Report Type</th>
                             <th>Location</th>
-                            <th>Response Date</th>
+                            <th>Date of Occurrence</th>
                             <th>Report Detail</th>
                             <th>Response</th>
                             <th>Response Status</th>
@@ -205,6 +222,9 @@
                                 </td>
                                 <td>
                                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_hse_report_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                </td>
+                                <td>
+                                    <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','detail_id','detail_modal','<?php echo url('fetch_hse_report') ?>','{{csrf_token()}}')">View/Export</a>
                                 </td>
 
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

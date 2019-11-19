@@ -357,6 +357,35 @@ class Utility
 
     }
 
+    public static function specialColumns5($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5)
+    {
+
+        return DB::table($table)
+            ->where('status', '=',self::STATUS_ACTIVE)
+            ->where($column, '=',$post)
+            ->where($column2, '=',$post2)
+            ->where($column3, '=',$post3)
+            ->where($column4, '=',$post4)
+            ->where($column5, '=',$post5)
+            ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumns6($table,$column, $post, $column2, $post2, $column3, $post3, $column4, $post4, $column5, $post5, $column6, $post6)
+    {
+
+        return DB::table($table)
+            ->where('status', '=',self::STATUS_ACTIVE)
+            ->where($column, '=',$post)
+            ->where($column2, '=',$post2)
+            ->where($column3, '=',$post3)
+            ->where($column4, '=',$post4)
+            ->where($column5, '=',$post5)
+            ->where($column6, '=',$post6)
+            ->orderBy('id','DESC')->get();
+
+    }
+
     public static function sumColumnDataCondition($table,$column, $post,$sumColumn)
     {
         return DB::table($table)
@@ -853,6 +882,18 @@ class Utility
             ->where('status', self::STATUS_ACTIVE)
             ->where('active_status', self::STATUS_ACTIVE)->first();
 
+        if(empty($data)){
+            $emptyData = new \stdClass();
+            $emptyData->name = 'Name of organisation';
+            $emptyData->address = 'Enter address';
+            $emptyData->email = 'Enter Email';
+            $emptyData->phone1 = 'Enter phone 1';
+            $emptyData->phone2 = 'Enter phone 2';
+            $emptyData->active_status = 'No active status';
+
+            return $emptyData;
+        }
+
         return $data;
 
     }
@@ -1015,7 +1056,7 @@ class Utility
         if(session('currency')){
             return '('.session('currency')['code'].')'.session('currency')['symbol'];
         }else{
-            return 'None';
+            return '';
         }
     }
 

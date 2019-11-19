@@ -331,6 +331,7 @@ class BudgetReportController extends Controller
         $approveSys = ApprovalSys::getAllData();
         $approveAccess = Approve::approveAccess($approveSys);
 
+
         return view::make('budget_report.budget_requisition')->with('financialYear',$financialYear)
             ->with('department',$department)->with('budget',$budget)->with('reqType',$requestType)
             ->with('project',$project)->with('reqCat',$reqCat)->with('appAccess',$approveAccess)
@@ -446,7 +447,9 @@ class BudgetReportController extends Controller
             return  'Please ensure that the start/from date is less than the end/to date';
         }
 
-
+        if(empty($budgetId)){
+            return  'Please select a budget to continue the search report';
+        }
 
         //FIRST CONDITION
         //SELECT FROM WHEN DEPARTMENT IS NOT EMPTY AND TYPE IS SELECTED BUT NOT ALL, CATEGORY SELECTED ALSO NOT ALL

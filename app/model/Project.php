@@ -78,6 +78,20 @@ class Project extends Model
 
     }
 
+    public static function getAllDataByMonthYear($month,$year)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->whereMonth('created_at', $month)->whereYear('created_at', $year)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function getAllDataByYear($year)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->whereYear('created_at', $year)->orderBy('id','DESC')->get();
+
+    }
+
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);

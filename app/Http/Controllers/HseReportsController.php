@@ -86,6 +86,15 @@ class HseReportsController extends Controller
 
     }
 
+    //FETCH HSE REPORT ITEM
+    public function fetchHseReportItem(Request $request)
+    {
+        //
+        $hseReport = HseReports::firstRow('id',$request->input('dataId'));
+        return view::make('hse_report.report_item')->with('data',$hseReport);
+
+    }
+
     //FETCH HSE REPORT SEARCH FORM
     public function report(Request $request)
     {

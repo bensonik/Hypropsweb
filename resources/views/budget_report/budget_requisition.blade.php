@@ -59,7 +59,7 @@
                                 <div class="form-group">
                                     <div class="form-line">
                                         <select  class="form-control show-tick" multiple name="request_category[]" data-selected-text-format="count">
-                                            <option value="">Request Category</option>
+
                                             <option value="0">All Category</option>
                                             @foreach($reqCat as $ap)
                                             <option value="{{$ap->id}}">{{$ap->request_name}}({{$ap->department->dept_name}})</option>
@@ -143,7 +143,7 @@
                                 <div class="form-group">
                                     <div class="form-line">
                                         <select  class="form-control show-tick" id="budget" multiple="multiple" name="budget[]" data-selected-text-format="count">
-                                            <option value="">Select Budget</option>
+                                            <option value="" selected>Select Budget</option>
                                             @foreach($budget as $ap)
                                                 <option value="{{$ap->id}}">{{$ap->name}}</option>
                                             @endforeach

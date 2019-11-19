@@ -8,11 +8,12 @@
         </th>
 
         <th>Manage</th>
+        <th>View Report</th>
         <th>Source Type</th>
         <th>Full Name</th>
         <th>Report Type</th>
         <th>Location</th>
-        <th>Response Date</th>
+        <th>Date of Occurrence</th>
         <th>Report Detail</th>
         <th>Response</th>
         <th>Response Status</th>
@@ -30,6 +31,9 @@
             </td>
             <td>
                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_hse_report_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+            </td>
+            <td>
+                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','detail_id','detail_modal','<?php echo url('fetch_hse_report') ?>','{{csrf_token()}}')">View/Export</a>
             </td>
 
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

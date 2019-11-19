@@ -44,6 +44,12 @@ class SurveyAnsCat extends Model
 
     }
 
+    public static function getAllData()
+    {
+        return static::where('status', '=','1')->orderBy('id','DESC')->get();
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

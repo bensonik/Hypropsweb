@@ -22,10 +22,12 @@ class Documents extends Model
 
     public static $mainRules = [
         'document_name' => 'required',
+        'document_category' => 'required',
     ];
 
     public static $mainRulesEdit = [
         'document_name' => 'required',
+        'document_category' => 'required',
     ];
 
     public function user_c(){
@@ -40,6 +42,11 @@ class Documents extends Model
 
     public function department(){
         return $this->belongsTo('App\model\Department','dept_id','id')->withDefault();
+
+    }
+
+    public function docCategory(){
+        return $this->belongsTo('App\model\DocumentCategory','category_id','id')->withDefault();
 
     }
 
@@ -184,6 +191,14 @@ class Documents extends Model
     {
         return static::where('status', '=',$type)->whereBetween('created_at',$dateArray)
             ->orderBy('id','DESC')->get();
+
+    }
+
+    public static function massDataConditionDate($column, $post, $type, $dateArray)
+    {
+
+        return static::where('status', '=',$type)->whereIn($column, $post)
+            ->whereIn($column, $post)->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
 

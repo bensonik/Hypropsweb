@@ -13,14 +13,7 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert </i>Export
                         </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('createMainForm');" ><i class="fa fa-print"></i>Print</a></li>
-                            <li><a class="btn bg-red waves-effect" onClick ="print_content('createMainForm');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                            <li><a class="btn btn-warning" onClick ="$('#createMainForm').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#createMainForm').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                            <li><a class="btn btn-info" onClick ="$('#createMainForm').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
-                        </ul>
+                        @include('includes/print_pdf',[$exportId = 'createMainForm', $exportDocId = 'createMainForm'])
                     </li>
 
                 </div>
@@ -286,14 +279,7 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>Export
                         </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('editMainForm');" ><i class="fa fa-print"></i>Print</a></li>
-                            <li><a class="btn bg-red waves-effect" onClick ="print_content('editMainForm');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                            <li><a class="btn btn-warning" onClick ="$('#editMainForm').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#editMainForm').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                            <li><a class="btn btn-info" onClick ="$('#editMainForm').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
-                        </ul>
+                        @include('includes/print_pdf',[$exportId = 'editMainForm', $exportDocId = 'editMainForm'])
                     </li>
 
                     <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('purchase_order'); ?>',
@@ -335,14 +321,7 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert </i>Export
                         </a>
-                        <ul class="dropdown-menu pull-right">
-                            <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('convertRfqForm');" ><i class="fa fa-print"></i>Print</a></li>
-                            <li><a class="btn bg-red waves-effect" onClick ="print_content('convertRfqForm');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                            <li><a class="btn btn-warning" onClick ="$('#convertRfqForm').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                            <li><a class="btn  bg-light-green waves-effect" onClick ="$('#convertRfqForm').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                            <li><a class="btn btn-info" onClick ="$('#convertRfqForm').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
-                        </ul>
+                        @include('includes/print_pdf',[$exportId = 'convertRfqForm', $exportDocId = 'convertRfqForm'])
                     </li>
 
                 </div>
@@ -437,12 +416,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -502,7 +476,7 @@
                     </div>
                 </div>
 
-                <div class="body table-responsive" id="reload_data">
+                <div class="body table-responsive tbl_scroll" id="reload_data">
                     <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
                         <thead>
                         <tr>

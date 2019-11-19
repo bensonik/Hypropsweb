@@ -81,8 +81,8 @@
                         {{$data->salary->salary_name}}
                     @endif
                 </td>
-                <td>{{$data->dob}}</td>
                 <td>{{$data->job_role}}</td>
+                <td>{{$data->dob}}</td>
                 <td>{{$data->dob}}</td>
                 <td>{{$data->address}}</td>
                 <td>{{$data->state}}</td>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\model\Department;
 use App\Helpers\Utility;
+use App\model\DocumentCategory;
+use App\model\DocumentComments;
 use App\model\Documents;
 use App\User;
 use Auth;
@@ -30,14 +32,16 @@ class DocumentsController extends Controller
 
         $mainData = Documents::paginateAllData();
         $dept = Department::getAllData();
+        $docCategory = DocumentCategory::getAllData();
         $this->processData($mainData);
 
         if ($request->ajax()) {
             return \Response::json(view::make('document.reload',array('mainData' => $mainData,
-                'dept' => $dept))->render());
+                'dept' => $dept,'docCategory' => $docCategory))->render());
 
         }else{
-            return view::make('document.main_view')->with('mainData',$mainData)->with('dept',$dept);
+            return view::make('document.main_view')->with('mainData',$mainData)->with('dept',$dept)
+                ->with('docCategory',$docCategory);
         }
 
     }
@@ -47,15 +51,17 @@ class DocumentsController extends Controller
         //
         //$req = new Request();
         $mainData = Documents::paginateDocumentArchive();
+        $docCategory = DocumentCategory::getAllData();
         $dept = Department::getAllData();
         $this->processData($mainData);
 
         if ($request->ajax()) {
             return \Response::json(view::make('document.archive_reload',array('mainData' => $mainData,
-                'dept' => $dept))->render());
+                'dept' => $dept,'docCategory' => $docCategory))->render());
 
         }else{
-            return view::make('document.archive')->with('mainData',$mainData)->with('dept',$dept);
+            return view::make('document.archive')->with('mainData',$mainData)->with('dept',$dept)
+                ->with('docCategory',$docCategory);
         }
 
     }
@@ -109,6 +115,8 @@ class DocumentsController extends Controller
 
                 $dbDATA = [
                     'doc_name' => ucfirst($request->input('document_name')),
+                    'category_id' => $request->input('document_category'),
+                    'doc_desc' => ucfirst($request->input('document_name')),
                     'docs' => json_encode($attachment),
                     'departments' => json_encode($deptArr),
                     'tags' => implode(',',$deptArr),
@@ -145,8 +153,9 @@ class DocumentsController extends Controller
     {
         //
         $document = Documents::firstRow('id',$request->input('dataId'));
+        $docCategory = DocumentCategory::getAllData();
         $this->processItemData($document);
-        return view::make('document.edit_form')->with('edit',$document);
+        return view::make('document.edit_form')->with('edit',$document)->with('docCategory',$docCategory);
 
     }
 
@@ -279,6 +288,8 @@ class DocumentsController extends Controller
 
             $dbDATA = [
                 'doc_name' => ucfirst($request->input('document_name')),
+                'category_id' => $request->input('document_category'),
+                'doc_desc' => ucfirst($request->input('document_details')),
                 'accessible_users' => $usersAccessibleToDocuments,
                 'updated_by' => Auth::user()->id,
             ];
@@ -358,10 +369,18 @@ class DocumentsController extends Controller
         $startDate = Utility::standardDate($request->input('from_date'));
         $endDate = Utility::standardDate($request->input('to_date'));
         $type = $request->input('param');
+        $docCategory = $request->input('document_category');
         $dateArray = [$startDate,$endDate];
-
+        $mainData = [];
         //PROCESS SEARCH REQUEST
+        if(in_array(0,$docCategory)){
             $mainData = Documents::searchUsingDate($dateArray,$type);
+        }
+
+        if(!in_array(0,$docCategory)){
+            $mainData = Documents::massDataConditionDate('category_id', $docCategory,$type, $dateArray);
+        }
+
         $this->processData($mainData);
         if($type == Utility::STATUS_ACTIVE){
             return view::make('document.search_document')->with('mainData',$mainData);
@@ -496,6 +515,66 @@ class DocumentsController extends Controller
             $val->userAccess = '';
         }
 
+    }
+
+    public function viewComments(Request $request, $id)
+    {
+        //
+        $mainData = Documents::firstRow('id',$id);
+        $this->logComments($mainData,$id);
+
+        if ($request->ajax()) {
+            return \Response::json(view::make('document.view_comment_reload'),array('mainData' => $mainData,
+            ))->render();
+
+        }
+        return view::make('document.view_comment')->with('mainData',$mainData);
+
+    }
+
+    public function comment(Request $request)
+    {
+        //
+        $validator = Validator::make($request->all(),DocumentComments::$mainRules);
+        if($validator->passes()){
+
+            $dbDATA = [
+                'document_id' => $request->input('document_id'),
+                'user_id' => Auth::user('')->id,
+                'comment' => ucfirst($request->input('comment')),
+                'status' => Utility::STATUS_ACTIVE,
+                'created_by' => Utility::checkAuth('temp_user')->id,
+            ];
+            $newComment = DocumentComments::create($dbDATA);
+
+            return view::make('document.view_comment_reload')->with('data',$newComment);
+
+
+        }
+
+        return '';
+
+    }
+
+    public function freshComments(Request $request)
+    {
+        //
+        $documentId = $request->input('postId');
+        $freshComments = DocumentComments::specialColumnsAsc('document_id',$documentId);
+        if(!empty($freshComments)){
+
+            return view::make('document.fresh_comments')->with('mainData',$freshComments);
+
+        }
+        return '';
+
+
+    }
+
+    public function logComments($mainData,$id){
+        $comments = DocumentComments::specialColumnsAsc('document_id',$id);
+        $mainData->allComments = $comments;
+        return $mainData;
     }
 
 }

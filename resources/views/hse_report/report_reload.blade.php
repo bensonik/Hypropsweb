@@ -8,11 +8,12 @@
         </th>
 
         <th>Manage Response</th>
+        <th>View Report</th>
         <th>Source Type</th>
         <th>Full Name</th>
         <th>Report Type</th>
         <th>Location</th>
-        <th>Response Date</th>
+        <th>Report Date</th>
         <th>Report Detail</th>
         <th>Response</th>
         <th>Response Status</th>
@@ -34,6 +35,9 @@
                 @else
                     <a style="cursor: pointer;" class="btn btn-primary" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('hse_report_response_form') ?>','<?php echo csrf_token(); ?>')">Respond</a>
                 @endif
+            </td>
+            <td>
+                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','detail_id','detail_modal','<?php echo url('fetch_hse_report') ?>','{{csrf_token()}}')">View/Export</a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->source->source_name}}</td>

@@ -119,7 +119,7 @@ class CrmReportController extends Controller
                 $wonOpportAmount[] = $val->expected_revenue;
             }
 
-            if($currDate > $val->closing_date){
+            if($currDate > $val->closing_date && $val->opportunity_status != Utility::WON){
                 $overdueOpport[] = $val->closing_date;
             }
             if($currDate == $val->closing_date && $val->opportunity_status == Utility::ONGOING){

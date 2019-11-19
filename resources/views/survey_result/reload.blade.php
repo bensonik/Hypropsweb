@@ -23,9 +23,7 @@
                             <i class="material-icons">more_vert</i>
                         </a>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);">Action</a></li>
-                            <li><a href="javascript:void(0);">Another action</a></li>
-                            <li><a href="javascript:void(0);">Something else here</a></li>
+                            @include('includes/export',[$exportId = 'reload_data', $exportDocId = 'reload_data'])
                         </ul>
                     </li>
                 </ul>

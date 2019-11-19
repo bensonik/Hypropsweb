@@ -14,6 +14,29 @@
 
         </div>
 
+        <div class="row clearfix">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <div class="form-line">
+                        <textarea type="text" class="form-control" name="document_details" placeholder="Document Details">{{$edit->doc_desc}}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="form-group">
+                    <div class="form-line">
+                        <select  class="form-control" name="document_category" >
+                            <option value="{{$edit->category_id}}">{{$edit->docCategory->category_name}} </option>
+                            @foreach($docCategory as $ap)
+                                <option value="{{$ap->id}}">{{$ap->category_name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div><hr/>
+
         @if(!empty($edit->userAccess))
             @foreach($edit->userAccess as $user)
                 <div class="row clearfix" id="remove_user{{$user->id}}">

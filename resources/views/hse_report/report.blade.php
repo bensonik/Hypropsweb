@@ -2,6 +2,27 @@
 
 @section('content')
 
+    <!-- Default Size -->
+    <div class="modal fade" id="detail_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Report</h4>
+                    @include('includes/print_pdf',[$exportId = 'print_preview_data', $exportDocId = 'print_preview_data'])
+
+                </div>
+                <div class="modal-body" id="detail_id" style="height:450px; overflow:scroll;">
+
+
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Default Size Response Form-->
     <div class="modal fade" id="attachModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
@@ -40,12 +61,7 @@
                                 <i class="material-icons">more_vert</i>Export
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -118,7 +134,7 @@
 
 
                 </div>
-                <div class="body table-responsive" id="reload_data">
+                <div class="body table-responsive tbl_scroll" id="reload_data">
 
                 </div>
 

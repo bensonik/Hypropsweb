@@ -119,7 +119,11 @@
         <div class="navbar-header">
             <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
             <a href="javascript:void(0);"  class="bars" ></a>
-            <a class="navbar-brand" href="{{ url('/dashboard') }}">HYPROPS ERP</a>
+            @if(!empty(\App\Helpers\Utility::companyInfo()))
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">{{\App\Helpers\Utility::companyInfo()->name}}</a>
+            @else
+            <a class="navbar-brand" href="{{ url('/dashboard') }}">Name of Organisation</a>
+            @endif
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
@@ -708,6 +712,9 @@
                             <a href="{{url('document')}}">Documents</a>
                         </li>
                         @if(in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
+                            <li>
+                                <a href="{{url('document_category')}}">Document Category</a>
+                            </li>
                             <li>
                                 <a href="{{url('document_archive')}}">Document Archives</a>
                             </li>
@@ -1626,10 +1633,14 @@
         <!-- Footer -->
         <div class="legal">
             <div class="copyright">
-                &copy; 2016 - 2017 <a href="javascript:void(0);">Hyprops Nigeria Limited</a>.
+                @if(!empty(\App\Helpers\Utility::companyInfo()))
+                &copy; {{date('Y')}} <a href="javascript:void(0);">{{\App\Helpers\Utility::companyInfo()->name}}</a>.
+                @else
+                &copy; Copyright Name of Organisation
+                @endif
             </div>
             <div class="version">
-                <b>Version: </b> 1.0.5
+                <!--<b>Version: </b> 1.0.5 -->
             </div>
         </div>
         <!-- #Footer -->

@@ -10,7 +10,10 @@
         <th>Manage</th>
         <th>Manage Department(s)</th>
         <th>Manage Document(s)</th>
+        <th>Comment</th>
         <th>Document Name</th>
+        <th>Category</th>
+        <th>Details</th>
         <th>Department Access</th>
         <th>User(s) Access</th>
         <th>Created by</th>
@@ -41,8 +44,13 @@
                 <td>
                     <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_document_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
+                <td>
+                    <a href="<?php echo url('document/'.$data->id) ?>">View/Comment</a>
+                </td>
                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                 <td>{{$data->doc_name}}</td>
+                <td>{{$data->docCategory->category_name}}</td>
+                <td>{{$data->doc_desc}}</td>
                 <td>
                     @if(!empty($data->deptAccess))
                         <table>
@@ -80,5 +88,4 @@
     @endforeach
     </tbody>
 </table>
-
 

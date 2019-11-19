@@ -70,11 +70,6 @@
         </tbody>
     </table>
 
-    <div class="search_framework  pull-right">
-        {!! $mainData->render() !!}
-    </div>
-
-
 @endif
 
 @if($type == \App\Helpers\Utility::TECH_COMP)
@@ -140,11 +135,6 @@
         @endforeach
         </tbody>
     </table>
-
-    <div class="search_framework  pull-right">
-        {!! $mainData->render() !!}
-    </div>
-
 
 @endif
 
@@ -219,10 +209,5 @@
         @endforeach
         </tbody>
     </table>
-
-    <div class="search_framework pull-right">
-        {!! $mainData->render() !!}
-    </div>
-
 
 @endif

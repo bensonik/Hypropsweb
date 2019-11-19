@@ -69,6 +69,13 @@ class VehicleFuelLog extends Model
 
     }
 
+    public static function getAllDataByMonthYear($month,$year)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->whereMonth('purchase_date', $month)
+            ->whereYear('purchase_date', $year)->orderBy('id','DESC')->get();
+
+    }
+
     public static function countData($column, $post)
     {
         return Utility::countData(self::table(),$column, $post);

@@ -134,7 +134,7 @@ class ProjectStatusController extends Controller
             if($val->task_status == $statusClosed){
                 $closedTask[] = $val->task_status;
             }
-            if($currDate > $val->end_date){
+            if($currDate > $val->end_date && $val->task_status != $statusClosed){
                 $overdueTask[] = $val->end_date;
             }
             if($currDate <= $val->end_date && $val->task_status != $statusClosed){
@@ -158,7 +158,7 @@ class ProjectStatusController extends Controller
             if($val->task_status == $statusClosed){
                 $closedUserTask[] = $val->task_status;
             }
-            if($currDate > $val->end_date){
+            if($currDate > $val->end_date && $val->task_status != $statusClosed){
                 $overdueUserTask[] = $val->end_date;
             }
             if($currDate <= $val->end_date && $val->task_status != $statusClosed){
@@ -182,7 +182,7 @@ class ProjectStatusController extends Controller
             if($val->list_status == $statusClosed){
                 $closedList[] = $val->list_status;
             }
-            if($currDate > $val->end_date){
+            if($currDate > $val->end_date && $val->list_status != $statusClosed){
                 $overdueList[] = $val->end_date;
             }
             if($currDate <= $val->end_date && $val->list_status != $statusClosed){
@@ -205,10 +205,10 @@ class ProjectStatusController extends Controller
             if($val->milestone_status == $statusClosed){
                 $closedMilestone[] = $val->milestone_status;
             }
-            if($currDate > $val->end_date){
+            if($currDate > $val->end_date && $val->milestone_status != $statusClosed){
                 $overdueMilestone[] = $val->end_date;
             }
-            if($currDate <= $val->end_date && $val->list_status != $statusClosed){
+            if($currDate <= $val->end_date && $val->milestone_status != $statusClosed){
                 $todayMilestone[] = $currDate;
             }
         }

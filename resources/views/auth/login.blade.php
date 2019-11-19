@@ -27,10 +27,17 @@
 
 <body class="login-page">
 <div class="login-box">
+    @if(!empty(\App\Helpers\Utility::companyInfo()))
     <div class="logo">
         <a href="javascript:void(0);"><b>{{\App\Helpers\Utility::companyInfo()->name}}</b></a>
         <small>{{\App\Helpers\Utility::companyInfo()->address}}</small>
     </div>
+    @else
+        <div class="logo">
+            <a href="javascript:void(0);"><b>Enter Company Name</b></a>
+            <small>Enter Company Address</small>
+        </div>
+    @endif
     <div class="card">
         <div class="body">
             <form id="sign_in" method="POST" action="{{ route('login_user') }}">

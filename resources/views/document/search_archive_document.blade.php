@@ -8,6 +8,8 @@
         </th>
 
         <th>Document Name</th>
+        <th>Category</th>
+        <th>Details</th>
         <th>Department Access</th>
         <th>User(s) Access</th>
         <th>Created by</th>
@@ -25,6 +27,8 @@
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->doc_name}}</td>
+            <td>{{$data->docCategory->category_name}}</td>
+            <td>{{$data->doc_desc}}</td>
             <td>
                 @if(!empty($data->deptAccess))
                     <table>

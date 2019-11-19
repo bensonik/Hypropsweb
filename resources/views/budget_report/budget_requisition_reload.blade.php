@@ -40,14 +40,14 @@
                             <tr>
                                 <th>Month</th>
                                 <th>
-                                    Requisition
+                                    Requisition {{\App\Helpers\Utility::defaultCurrency()}}
                                     (Department :- {{$deptN}},
                                     Category :- {{$categoryN}},
                                     Type :- {{$typeN}},
                                     Project :- {{$projectN}},
                                     User :- {{$userN}})
                                 </th>
-                                <th>Budget</th>
+                                <th>Budget {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             </tr>
                             </thead>
 
@@ -74,14 +74,14 @@
                             <tr>
                                 <th>Month</th>
                                 <th>
-                                    Requisition
+                                    Requisition {{\App\Helpers\Utility::defaultCurrency()}}
                                     (Department :- {{$deptN}},
                                     Category :- {{$categoryN}},
                                     Type :- {{$typeN}},
                                     Project :- {{$projectN}},
                                     User :- {{$userN}})
                                 </th>
-                                <th>Budget</th>
+                                <th>Budget {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             </tr>
                             </thead>
 
@@ -108,14 +108,14 @@
                             <tr>
                                 <th>Month</th>
                                 <th>
-                                    Requisition
+                                    Requisition {{\App\Helpers\Utility::defaultCurrency()}}
                                     (Department :- {{$deptN}},
                                     Category :- {{$categoryN}},
                                     Type :- {{$typeN}},
                                     Project :- {{$projectN}},
                                     User :- {{$userN}})
                                 </th>
-                                <th>Budget</th>
+                                <th>Budget {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             </tr>
                             </thead>
 
@@ -142,14 +142,14 @@
                             <tr>
                                 <th>Month</th>
                                 <th>
-                                    Requisition
+                                    Requisition {{\App\Helpers\Utility::defaultCurrency()}}
                                     (Department :- {{$deptN}},
                                     Category :- {{$categoryN}},
                                     Type :- {{$typeN}},
                                     Project :- {{$projectN}},
                                     User :- {{$userN}})
                                 </th>
-                                <th>Budget</th>
+                                <th>Budget {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             </tr>
                             </thead>
 

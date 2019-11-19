@@ -28,12 +28,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -46,7 +41,18 @@
                         <div class="body">
 
                             <div class="row clearfix">
-
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select  class="form-control" multiple name="document_category[]" >
+                                                <option value="0" selected>All Document Category </option>
+                                                @foreach($docCategory as $ap)
+                                                    <option value="{{$ap->id}}">{{$ap->category_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-sm-3">
                                     <div class="form-group">
                                         <div class="form-line">
@@ -64,13 +70,16 @@
                                 </div>
                                 <input type="hidden" value="0" name="param"/>
 
-                                <div class="col-sm-4" id="" style="">
+                            </div>
+
+                            <div class="row clearfix">
+
+                                <div class="col-sm-8" id="" style="">
                                     <div class="form-group">
-                                        <button class="btn btn-info col-sm-8" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_document_using_date'); ?>','reload_data',
+                                        <button class="btn btn-info col-sm-10" type="button" onclick="searchUsingDate('searchMainForm','<?php echo url('search_document_using_date'); ?>','reload_data',
                                                 '<?php echo url('document_archive'); ?>','<?php echo csrf_token(); ?>','start_date','end_date')" id="search_hse_button">Search</button>
                                     </div>
                                 </div>
-
                             </div>
 
                         </div>
@@ -96,7 +105,7 @@
                 <!-- BEGIN OF SEARCH WITH DOCUMENT NAME -->
 
 
-                <div class="body table-responsive" id="reload_data">
+                <div class="body table-responsive tbl_scroll" id="reload_data">
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>
@@ -107,6 +116,8 @@
                             </th>
 
                             <th>Document Name</th>
+                            <th>Category</th>
+                            <th>Details</th>
                             <th>Department Access</th>
                             <th>User(s) Access</th>
                             <th>Created by</th>
@@ -124,6 +135,8 @@
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                 <td>{{$data->doc_name}}</td>
+                                <td>{{$data->docCategory->category_name}}</td>
+                                <td>{{$data->doc_desc}}</td>
                                 <td>
                                     @if(!empty($data->deptAccess))
                                         <table>

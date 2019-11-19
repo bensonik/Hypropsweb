@@ -930,6 +930,8 @@ Route::post('/edit_hse_report', 'HseReportsController@edit')->name('edit_hse_rep
 Route::post('/delete_hse_report', 'HseReportsController@destroy')->name('delete_hse_report');
 Route::any('/search_hse_report', 'HseReportsController@searchReport')->name('search_hse_report');
 Route::any('/hse_report_filter', 'HseReportsController@report')->name('hse_report_filter');
+Route::post('/fetch_hse_report', 'HseReportsController@fetchHseReportItem')->name('fetch_hse_report');
+
 
 // -------------HSE ACCESS MODULE-----------
 Route::any('/hse_access', 'HseAccessController@index')->name('request_access')->middleware('auth.admin');
@@ -957,6 +959,18 @@ Route::any('/search_document_using_date', 'DocumentsController@searchDocumentUsi
 Route::any('/remove_document_user', 'DocumentsController@removeAccessibleUser')->name('remove_document_user');
 Route::any('/restore_document_archive', 'DocumentsController@restoreDocumentArchive')->name('restore_document_archive');
 
+// -------------DOCUMENT CATEGORY MODULE-----------
+Route::any('/document_category', 'DocumentCategoryController@index')->name('document_category')->middleware('auth');
+Route::post('/create_document_cat', 'DocumentCategoryController@create')->name('create_document_cat');
+Route::post('/edit_document_cat_form', 'DocumentCategoryController@editForm')->name('edit_document_cat_form');
+Route::post('/edit_document_cat', 'DocumentCategoryController@edit')->name('edit_document_cat');
+Route::post('/delete_document_cat', 'DocumentCategoryController@destroy')->name('delete_document_cat');
+
+//--------------------- DOCUMENT COMMENTS   --------------------
+Route::any('/document/{id}/', 'DocumentsController@viewComments')->name('discuss_comments')->middleware('auth');
+Route::any('/comment_document', 'DocumentsController@comment')->name('comment_discuss');
+Route::any('/fetch_fresh_document_comments', 'DocumentsController@freshComments')->name('fetch_fresh_comments');
+
 // -------------EVENTS MODULE-----------
 Route::any('/events', 'EventsController@index')->name('events')->middleware('auth');
 Route::any('/my_events_calendar', 'EventsController@myCalendar')->name('my_events_calendar')->middleware('auth');
@@ -968,6 +982,7 @@ Route::post('/delete_events', 'EventsController@destroy')->name('delete_events')
 Route::any('/change_calendar', 'EventsController@changeCalendar')->name('change_calendar')->middleware('auth');
 Route::any('/load_my_calendar', 'EventsController@loadMyCalendar')->name('load_my_calendar');
 Route::any('/load_general_calendar', 'EventsController@loadGeneralCalendar')->name('load_general_calendar');
+Route::any('/load_dashboard_general_calendar', 'EventsController@loadDashboardGeneralCalendar')->name('load_dashboard_general_calendar');
 
 // -------------CRM ACTIVITY TYPE MODULE-----------
 Route::any('/crm_activity_type', 'CrmActivityTypeController@index')->name('crm_activity_type')->middleware('auth');
@@ -1260,9 +1275,9 @@ Route::any('/budget_budget_compare', 'BudgetReportController@budgetBudgetReport'
 Route::post('/search_budget_budget_compare', 'BudgetReportController@searchBudgetBudgetCompare')->name('search_budget_budget_compare');
 
 
-
-
-
+//  ------------------DASHBOARD REPORTING MODULE---------------------
+Route::any('/load_dashboard_general_calendar', 'EventsController@loadDashboardGeneralCalendar')->name('load_dashboard_general_calendar');
+Route::any('/dashboard_report', 'HomeController@dashboardReport')->name('dashboard_report');
 
 
 

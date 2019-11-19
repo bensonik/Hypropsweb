@@ -64,7 +64,7 @@ class EventsController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Events::specialColumnsPage('user_id',Auth::user()->id);
+        $mainData = Events::specialColumns('user_id',Auth::user()->id);
         $dataArray = [];
         foreach($mainData as $data){
             $dataArray[] = [
@@ -93,7 +93,28 @@ class EventsController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = Events::specialColumnsPage('event_type',Utility::GENERAL_SCHEDULE);
+        $mainData = Events::specialColumns('event_type',Utility::GENERAL_SCHEDULE);
+        $dataArray = [];
+        foreach($mainData as $data){
+            $dataArray[] = [
+                'title' => $data->event_title,
+                'start' => $data->start_event,
+                'end' => $data->end_event,
+                'id' => $data->id,
+            ];
+        }
+        $dataJson = json_encode($dataArray);
+
+        echo $dataJson;
+
+    }
+
+    public function loadDashboardGeneralCalendar(Request $request)
+    {
+        //
+        //$req = new Request();
+        $currDate = date('Y-m-d');
+        $mainData = Events::specialColumnsDate('event_type',Utility::GENERAL_SCHEDULE,'created_at',$currDate);
         $dataArray = [];
         foreach($mainData as $data){
             $dataArray[] = [

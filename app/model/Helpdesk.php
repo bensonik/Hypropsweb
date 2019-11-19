@@ -72,15 +72,17 @@ class Helpdesk extends Model
 
     }
 
-    public static function paginateData($column, $post)
+    public static function customDataPaginate($numberOfItems)
     {
-        return Utility::paginateData(self::table(),$column, $post);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
 
     }
 
-    public static function paginateData2($column, $post, $column2, $post2)
+    public static function customDataPaginate2($column, $post,$numberOfItems)
     {
-        return  Utility::paginateData2(self::table(),$column, $post, $column2, $post2);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->orderBy('id','DESC')->paginate($numberOfItems);
 
     }
 
