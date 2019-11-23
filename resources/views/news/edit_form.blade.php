@@ -15,6 +15,16 @@
             <div class="col-sm-12">
                 <div class="form-group">
                     <div class="form-line">
+                        <textarea class="form-control" name="embed_video" placeholder="Embed video (Youtube,Vimeo etc.)">{{$edit->embed_video}}</textarea>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row clearfix">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <div class="form-line">
                         <textarea type="text" id="edit_details" class="form-control " name="details" placeholder="Details">{{$edit->news_desc}}</textarea>
                         <script>
                             CKEDITOR.replace('edit_details');

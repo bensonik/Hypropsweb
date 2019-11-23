@@ -205,7 +205,7 @@
                                         Inventory Item
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" class="form-control" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Select User">
+                                                <input type="text" class="form-control" autocomplete="off" id="select_inv" onkeyup="searchOptionList('select_inv','myUL500','{{url('default_select')}}','search_inventory','inv500');" name="select_user" placeholder="Select Inventory Item">
 
                                                 <input type="hidden" class="inv_class" value="" name="user" id="inv500" />
                                             </div>

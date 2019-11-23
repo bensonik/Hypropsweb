@@ -911,6 +911,7 @@ Route::any('/news', 'NewsController@index')->name('news')->middleware('auth');
 Route::post('/create_news', 'NewsController@create')->name('create_news');
 Route::post('/edit_news_form', 'NewsController@editForm')->name('edit_news_form');
 Route::post('/edit_news', 'NewsController@edit')->name('edit_news');
+Route::post('/fetch_news', 'NewsController@fetchNews')->name('fetch_news');
 Route::post('/delete_news', 'NewsController@destroy')->name('delete_news');
 
 // -------------HSE SOURCE TYPE MODULE-----------
@@ -1280,6 +1281,18 @@ Route::any('/load_dashboard_general_calendar', 'EventsController@loadDashboardGe
 Route::any('/dashboard_report', 'HomeController@dashboardReport')->name('dashboard_report');
 
 
+// -------------WAREHOUSE INVENTORY MODULE-----------
+Route::any('/warehouse_inventory', 'WarehouseInventoryController@index')->name('warehouse_inventory')->middleware('auth');
+Route::post('/create_warehouse_inventory', 'WarehouseInventoryController@create')->name('create_warehouse_inventory');
+Route::post('/warehouse_inventory_contents', 'WarehouseInventoryController@warehouseInventoryContents')->name('warehouse_inventory_contents');
+
+Route::any('/warehouse_inventory_bin', 'WarehouseInventoryController@warehouseZoneBin')->name('warehouse_inventory_bin')->middleware('auth');
+Route::post('/warehouse_inventory_bin_content', 'WarehouseInventoryController@binContents')->name('warehouse_inventory_bin_content');
+
+Route::any('/warehouse_inventory_zone', 'WarehouseInventoryController@warehouseZone')->name('warehouse')->middleware('auth');
+
+Route::post('/search_warehouse_inventory_items', 'WarehouseInventoryController@searchWarehouseInventoryItems')->name('search_warehouse_inventory_items');
+Route::post('/search_warehouse_inventory', 'WarehouseInventoryController@searchWarehouseInventory')->name('search_warehouse_inventory');
 
 
 

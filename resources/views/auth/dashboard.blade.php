@@ -8,10 +8,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">News Content</h4>
+                    @include('includes/print_pdf',[$exportId = 'export_news', $exportDocId = 'export_news'])
+
                 </div>
-                <div class="modal-body" id="" style="height:450px; overflow:scroll;">
-                    <h5 id="news_title_id"></h5>
-                    <span id="news_detail_id"></span>
+                <div class="modal-body" id="display_news" style="height:450px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">

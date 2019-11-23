@@ -9,7 +9,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Add News</h4>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" style="height:400px; overflow:scroll;">
 
                     <form name="import_excel" id="createMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
@@ -18,6 +18,16 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="text" class="form-control" name="news_title" placeholder="News Title">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <textarea class="form-control" name="news_title" placeholder="Embed video (Youtube,Vimeo etc.)"></textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -59,7 +69,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                 </div>
-                <div class="modal-body" id="edit_content">
+                <div class="modal-body" id="edit_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -80,14 +90,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">News Content</h4>
-                    @include('includes/print_pdf',[$exportId = 'display_news', $exportDocId = 'display_news'])
+                    @include('includes/print_pdf',[$exportId = 'export_news', $exportDocId = 'export_news'])
 
                 </div>
-                <div class="modal-body" id="" style="height:450px; overflow:scroll;">
-                    <div id="display_news">
-                        <h5 id="news_title_id"></h5>
-                        <span id="news_detail_id"></span>
-                    </div>
+                <div class="modal-body" id="display_news" style="height:450px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
@@ -157,7 +163,7 @@
 
                             </td>
                             <td>
-                                <a style="cursor: pointer;" onclick="readNews('{{$data->news_title}}','{!!$data->news_desc!!}','news_title_id','news_detail_id','news_modal')">Read News</a>
+                                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','display_news','news_modal','<?php echo url('fetch_news') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-eye fa-2x"></i></a>
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -198,14 +204,6 @@
     <!-- #END# Bordered Table -->
 
 <script>
-
-    //READ NEWS
-    function readNews(title,detail,titleId,detailId,modalId){
-        $('#'+modalId).modal('show');
-        $('#'+titleId).html(title);
-        $('#'+detailId).html(detail);
-
-    }
 
     //SUBMIT FORM WITH A FILE
     function submitMediaFormRequest(formModal,formId,submitUrl,reload_id,reloadUrl,token,editorId){

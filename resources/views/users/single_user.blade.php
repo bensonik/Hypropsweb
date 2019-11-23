@@ -8,7 +8,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        My Info
+                        Info
                     </h2>
                     <ul class="header-dropdown m-r--5">
 

@@ -321,11 +321,8 @@ class WarehouseReceiptController extends Controller
                     if ($data->inventory->whse_status == 1) {
                         $receiptBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['receipt_bin_code']);
 
-                        $realWhse = (empty($checkPo)) ? $data->ship_to_whse : $checkPo->whse_id;
-                        $realZone = (empty($checkPo)) ? '0' : $checkPo->zone_id;
-                        $realBin = (empty($checkPo)) ? $receiptBin->receipt_bin_code : $checkPo->bin_id;
-
-                        $qty = (empty($checkPo)) ? $poQty : $checkPo->qty_to_receive;
+                        $realWhse = $data->ship_to_whse;
+                        $realBin = $receiptBin->receipt_bin_code;
 
                         $dbData = [
                             'item_id' => $data->item_id,
@@ -333,10 +330,9 @@ class WarehouseReceiptController extends Controller
                             'po_ext_id' => $data->po_id,
                             'pick_put_type' => Utility::PUT_AWAY,
                             'to_whse' => $realWhse,
-                            'to_zone' => $realZone,
                             'to_bin' => $realBin,
-                            'qty' => $qty,
-                            'qty_to_handle' => $qty,
+                            'qty' => $poQty,
+                            'qty_to_handle' => $poQty,
                             'pick_put_status' => Utility::ZERO,
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
@@ -480,7 +476,7 @@ class WarehouseReceiptController extends Controller
 
                 } //END OF CREATE WAREHOUSE RECEIPT
 
-            }   //END OF FOREACH POST RECEIPT
+            }   //END OF FOREACH POST OR CREATE RECEIPT
 
 
         }

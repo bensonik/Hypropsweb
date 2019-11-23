@@ -25,7 +25,7 @@
 
             </td>
             <td>
-                <a style="cursor: pointer;" onclick="readNews('{{$data->news_title}}','{!!$data->news_desc!!}','news_title_id','news_detail_id','news_modal')">Read News</a>
+                <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','display_news','news_modal','<?php echo url('fetch_news') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-eye fa-2x"></i></a>
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

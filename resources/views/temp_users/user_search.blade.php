@@ -35,7 +35,6 @@
                 <td>
                     <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_user_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 </td>
-                <td>{{$data->updated_at}}</td>
                 <td>
                 @if($data->cv != '')
                     <a target="_blank" href="<?php echo URL::to('temp_user_cv?file='); ?>{{$data->cv}}">

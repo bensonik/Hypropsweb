@@ -413,7 +413,7 @@
 
                 <div class="body ">
                     <div class="row">
-                        <div class="col-sm-18 ">
+                        <div class="col-sm-8 ">
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" id="search_user" class="form-control"

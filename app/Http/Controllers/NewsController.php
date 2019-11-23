@@ -63,6 +63,7 @@ class NewsController extends Controller
                 $dbDATA = [
                     'news_title' => ucfirst($request->input('news_title')),
                     'news_desc' => $request->input('detail'),
+                    'embed_video' => $request->input('embed_video'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
@@ -114,6 +115,14 @@ class NewsController extends Controller
 
     }
 
+    public function fetchNews(Request $request)
+    {
+        //
+        $request = News::firstRow('id',$request->input('dataId'));
+        return view::make('news.news_item')->with('edit',$request);
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -129,6 +138,7 @@ class NewsController extends Controller
             $dbDATA = [
                 'news_title' => ucfirst($request->input('news_title')),
                 'news_desc' => $request->input('detail'),
+                'embed_video' => $request->input('embed_video'),
                 'updated_by' => Auth::user()->id,
             ];
             $rowData = News::specialColumns('news_title', $request->input('news_title'));

@@ -959,6 +959,14 @@ class GeneralController extends Controller
         }
         //END OF ADDING BILL OF MATERIALS
 
+        //START OF ADDING INVENTORY ITEMS TO WAREHOUSE
+        if($type == 'warehouse_items'){
+
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING INVENTORY ITEMS TO WAREHOUSE
+
         //START OF ASSIGN INVENTORY
         if($type == 'assign_inv'){
 
