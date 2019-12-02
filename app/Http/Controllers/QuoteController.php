@@ -305,6 +305,7 @@ class QuoteController extends Controller
         $type = $request->input('type');
         $quote = QuoteExtension::firstRow('id',$request->input('dataId'));
         $poData = Quote::specialColumns('quote_id',$quote->id);
+        Utility::fetchBOMItems($poData);
         if($type == 'vendor' && !empty($quote)){
             $data = Currency::firstRow('id',$quote->trans_curr);
             $currency = $data->code;

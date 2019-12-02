@@ -36,7 +36,7 @@
             </td>
 
             <td>
-                <a style="cursor: pointer;" onclick="newWindow('{{$data->zone_id}}','manageBin','<?php echo url('warehouse_bin') ?>','<?php echo csrf_token(); ?>','manageBinModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="fetchHtml2('{{$data->zone_id}}','manageBin','manageBinModal','<?php echo url('warehouse_bin') ?>','<?php echo csrf_token(); ?>','{{$warehouseId}}')"><i class="fa fa-eye fa-2x"></i></a>
             </td>
 
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

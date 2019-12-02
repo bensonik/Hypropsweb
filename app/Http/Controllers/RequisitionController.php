@@ -298,7 +298,7 @@ class RequisitionController extends Controller
                 $rowData = LoanRates::specialColumns('loan_status', Utility::STATUS_ACTIVE);
                 if(count($rowData) > 0) {
                     $hrAccessible = Utility::LOAN_REQUEST;
-                    $accessibleStatus = Utility::STATUS_ACTIVE;
+                    $accessibleStatus = Utility::STATUS_ACTIVE; //ALL ACCESSIBLE STATUS WITH 1 IN THE TABLE IS A LOAN REQUEST
                     $loanId = $rowData[0]->id;
                     $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*$rowData[0]->duration;
                     $loanMonthlyDeduction = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate);

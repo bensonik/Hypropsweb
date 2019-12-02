@@ -60,10 +60,13 @@
         </thead>
         <tbody>
         @foreach($poData as $data)
-
+            @php $bomItem = (count($data->bomData) >0) ? 'Click to view Bill of Materials' : '' ; @endphp
             @if($data->item_id != '')
-                <tr>
-                    <td>{{$data->inventory->item_name}} ({{$data->inventory->item_no}})</td>
+                <tr onclick="idDisplayClass('bom_{{$data->id}}');">
+                    <td>
+                        {{$data->inventory->item_name}} ({{$data->inventory->item_no}})
+                        <h6>{{$bomItem}}</h6>
+                    </td>
                     <td>{{$data->rfq_desc}}</td>
                     <td>{{$data->quantity}}</td>
                     <td>{{$data->unit_measurement}}</td>
@@ -74,6 +77,7 @@
                     <td></td>
                     <td></td>
                 </tr>
+                @include('includes.display_bom_items',['bomData' => $data->bomData, 'data' => $data])
             @endif
 
         @endforeach

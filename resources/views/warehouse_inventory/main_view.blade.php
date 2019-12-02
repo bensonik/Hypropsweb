@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <!-- Default Size -->
+    <!-- ADD FORM MODAL -->
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
@@ -23,9 +23,6 @@
                                             <select class=" warehouse" name="warehouse" id="warehouse_id" onchange="fillNextInput('warehouse_id','zone_display_id','<?php echo url('default_select'); ?>','w_zones')" >
                                                 <option value="">Select Receipt Warehouse</option>
                                                 @foreach($warehouse as $inv)
-                                                    @if($edit->whse_id == $inv->id)
-                                                        <option selected value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
-                                                    @endif
                                                     <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
                                                 @endforeach
                                             </select>
@@ -38,10 +35,8 @@
                                         <b>Zone</b>
                                         <div class="form-line" id="zone_display_id">
                                             <select class=" " id="zone_id" name="zone" onchange="fillNextInput('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')">
-                                                <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
-                                                @foreach($zones as $z)
-                                                    <option value="{{$z->id}}">{{$z->zone->name}}</option>
-                                                @endforeach
+
+                                                    <option value="">Select Zone</option>
                                             </select>
                                         </div>
                                     </div>
@@ -52,7 +47,7 @@
                                         <b>Receipt Bin</b>
                                         <div class="form-line" id="bin_id">
                                             <select class=" " name="bin"  >
-                                                <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
+                                                <option value="">Select Bin</option>
 
                                             </select>
                                         </div>
@@ -106,11 +101,15 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="saveInventory('createModal','createMainForm','<?php echo url('create_inventory'); ?>','reload_data',
-                            '<?php echo url('inventory'); ?>','<?php echo csrf_token(); ?>','inv_class','bom_qty','bom_amount')" type="button" class="btn btn-link waves-effect">
-                        SAVE
+                    <button onclick="saveInventory('createModal','createMainForm','<?php echo url('create_warehouse_inventory'); ?>','reload_data',
+                            '<?php echo url('warehouse_inventory'); ?>','<?php echo csrf_token(); ?>','inv_class','bom_qty','bom_amount')" type="button" class="btn btn-success waves-effect">
+                        Add Inventory to Warehouse
                     </button>
-                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                    <button onclick="saveInventory('createModal','createMainForm','<?php echo url('remove_warehouse_inventory'); ?>','reload_data',
+                            '<?php echo url('warehouse_inventory'); ?>','<?php echo csrf_token(); ?>','inv_class','bom_qty','bom_amount')" type="button" class="btn btn-danger waves-effect">
+                        Remove Inventory from Warehouse
+                    </button>
+                    <button type="button" class="btn btn-danger waves-effect" data-dismiss="modal">CLOSE</button>
                 </div>
             </div>
         </div>
@@ -128,13 +127,11 @@
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>Export
                             </a>
-                            <ul class="dropdown-menu pull-right">
-                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
-                            </ul>
+                            @include('includes/print_pdf',[$exportId = 'main_table_whse_items', $exportDocId = 'reload_data_whse_items'])
                         </li>
                     </ul>
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageWhse">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="manageWhse">
 
                 </div>
                 <div class="modal-footer">
@@ -149,17 +146,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header header">
-                    <h4 class="modal-title" id="defaultModalLabel">Manage Warehouse Zone(s)</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Zone(s)</h4>
                     <ul class="header-dropdown m-r--5 pull-right" style="display:inline;">
 
-                        <li class="dropdown">
-                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                <i class="material-icons">more_vert</i>Export
-                            </a>
-                            <ul class="dropdown-menu pull-right">
-                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
-                            </ul>
-                        </li>
+
                     </ul>
                 </div>
                 <div class="modal-body" style="height:400px; overflow:scroll;" id="manageZone">
@@ -177,19 +167,10 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Manage Bin</h4>
-
-                    <li class="dropdown pull-right">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">more_vert</i>Export
-                        </a>
-                        <ul class="dropdown-menu pull-right">
-                            @include('includes/export',[$exportId = 'main_table_', $exportDocId = 'reload_data'])
-                        </ul>
-                    </li>
+                    <h4 class="modal-title" id="defaultModalLabel">Zone Contents (Bin)</h4>
 
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageBin">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="manageBin">
 
                 </div>
                 <div class="modal-footer">
@@ -200,13 +181,14 @@
     </div>
 
     <!--Warehouse Bin Inventory Content -->
-    <div class="modal fade" id="addBinModal" tabindex="-1" role="dialog">
+    <div class="modal fade" id="binContentModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Add Bin to Zone</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Bin Contents</h4>
+                    @include('includes/print_pdf',[$exportId = 'bin_content_export', $exportDocId = 'bin_content_export'])
                 </div>
-                <div class="modal-body" style="height:400px; overflow:scroll;" id="addBin">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="binContent">
 
                 </div>
                 <div class="modal-footer">
@@ -226,37 +208,15 @@
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
-                            <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
+                            <button class="btn btn-info" data-toggle="modal" data-target="#createModal"><i class="fa fa-pencil-square-o fa-2x"></i>Update Warehouse Inventory</button>
                         </li>
-                        <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('inventory'); ?>',
-                                    '<?php echo url('delete_inventory'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
-                                <i class="fa fa-trash-o"></i>Delete
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('inventory'); ?>',
-                                    '<?php echo url('change_inventory_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
-                                <i class="fa fa-check-square-o"></i>Enable Inventory Item
-                            </button>
-                        </li>
-                        <li>
-                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('inventory'); ?>',
-                                    '<?php echo url('change_inventory_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
-                                <i class="fa fa-close"></i>Disable Inventory Item
-                            </button>
-                        </li>
+
                         <li class="dropdown">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -265,41 +225,37 @@
 
                 <div class="body ">
                     <div class="row">
+                        <form name="InventorySearchForm" id="InventorySearchForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="col-sm-4">
-                            Inventory Item
                             <div class="form-group">
                                 <div class="form-line">
                                     <input type="text" class="form-control" autocomplete="off" id="select_inventory" onkeyup="searchOptionList('select_inventory','myUL','{{url('default_select')}}','search_inventory','inventory_item');" name="select_user" placeholder="Select Inventory Item">
 
-                                    <input type="hidden" class="inv_class" value="" name="user" id="inventory_item" />
+                                    <input type="hidden" class="inv_class" value="" name="inventory_item" id="inventory_item" />
                                 </div>
                             </div>
                             <ul id="myUL" class="myUL"></ul>
                         </div>
-
+                        </form>
                         <div class="col-sm-4 ">
                             <div class="form-group">
-                                <div class="form-line">
-                                    <button type="text" id="" class="form-control"
-                                           onclick="searchItem('inventory_item','reload_data','<?php echo url('search_warehouse_items') ?>','{{url('user')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_button">Search Item</button>
-                                </div>
+                                <button type="text" id="" class="form-control btn btn-info"
+                                        onclick="searchReport('InventorySearchForm','<?php echo url('search_warehouse_inventory_items') ?>','reload_data','','<?php echo csrf_token(); ?>')"
+                                        name="search_button">Search</button>
                             </div>
-                        </div>
 
+                        </div>
                     </div>
+                    <hr/>
                     <div class="row clearfix">
                         <form name="warehouseSearchForm" id="warehouseSearchForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="col-sm-4">
                                 <div class="form-group">
-                                    Warehouse
+                                    <b>Warehouse</b>
                                     <div class="form-line" >
-                                        <select class=" warehouse" name="warehouse" id="warehouse_id_search" onchange="fillNextInput('warehouse_id_search','zone_display_id_search','<?php echo url('default_select'); ?>','w_zones')" >
+                                        <select class=" warehouse" name="warehouse" id="warehouse_id_search" onchange="fillNextInput('warehouse_id_search','zone_display_id_search','<?php echo url('default_select'); ?>','w_zones_search')" >
                                             <option value="">Select Receipt Warehouse</option>
                                             @foreach($warehouse as $inv)
-                                                @if($edit->whse_id == $inv->id)
-                                                    <option selected value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
-                                                @endif
                                                 <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
                                             @endforeach
                                         </select>
@@ -311,11 +267,8 @@
                                 <div class="form-group">
                                     <b>Zone</b>
                                     <div class="form-line" id="zone_display_id_search">
-                                        <select class=" " id="zone_id_search" name="zone" onchange="fillNextInput('zone_id_search','bin_id_search','<?php echo url('default_select'); ?>','z_bins')">
-                                            <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
-                                            @foreach($zones as $z)
-                                                <option value="{{$z->id}}">{{$z->zone->name}}</option>
-                                            @endforeach
+                                        <select class=" " id="zone_id_search" name="zone">
+                                            <option value="">Select Zone</option>
                                         </select>
                                     </div>
                                 </div>
@@ -326,7 +279,7 @@
                                     <b>Receipt Bin</b>
                                     <div class="form-line" id="bin_id_search">
                                         <select class=" " name="bin"  >
-                                            <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
+                                            <option value="">Select Bin</option>
 
                                         </select>
                                     </div>
@@ -337,16 +290,10 @@
                         </div>
 
                         <div class="row clearfix">
-                            <div class="col-sm-4 ">
-                                <div class="form-group">
-                                    <div class="form-line">
-                                        <button onclick="searchReport('warehouseSearchForm','<?php echo url('search_warehouse_inventory'); ?>','reload_data',
-                                                '','<?php echo csrf_token(); ?>')" type="button" class="btn btn-info waves-effect">
-                                            SAVE
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <button onclick="searchReport('warehouseSearchForm','<?php echo url('search_warehouse_inventory'); ?>','reload_data',
+                                    '','<?php echo csrf_token(); ?>')" type="button" class="col-sm-10  btn btn-info waves-effect">
+                                Search for Inventory Items
+                            </button>
                         </div>
 
                 </div>
@@ -361,18 +308,13 @@
                                        name="check_all" class="" />
 
                             </th>
-                            <th>Manage Zones</th>
+                            <th>View Zones</th>
                             <th>Name</th>
-
                             <th>Code</th>
                             <th>Address</th>
                             <th>Country</th>
                             <th>Contact</th>
                             <th>Contact Phone</th>
-                            <th>Created by</th>
-                            <th>Updated by</th>
-                            <th>Created at</th>
-                            <th>Updated at</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -383,7 +325,7 @@
 
                                 </td>
                                 <td>
-                                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageZone','<?php echo url('warehouse_inventory_zone') ?>','<?php echo csrf_token(); ?>','manageZoneModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageZone','<?php echo url('warehouse_inventory_zone') ?>','<?php echo csrf_token(); ?>','manageZoneModal')"><i class="fa fa-eye fa-2x"></i></a>
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
@@ -459,49 +401,10 @@
             //location.hash = page;
         });
 
-        $(document).on('click','.warehouse_pagination a', function(e){
-            e.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            getDataWarehouseItems(page);
-            //location.hash = page;
-        });
-
-        $(document).on('click','.stock_pagination a', function(e){
-            e.preventDefault();
-            var page = $(this).attr('href').split('page=')[1];
-            getDataStockItems(page);
-            //location.hash = page;
-        });
-
         function getData(page){
-           var searchVal = $('#search_inventory').val();
-            var pageData = '';
-            if(searchVal == ''){
-                pageData = '?page=' + page;
-            }else{
-                pageData = '<?php echo url('search_inventory') ?>?page=' + page+'&searchVar='+searchVal;
-            }
 
             $.ajax({
-                url: pageData
-            }).done(function(data){
-                $('#reload_data').html(data);
-            });
-        }
-
-        function getDataWarehouseItems(page){
-            var whseId = $('whseId').val();
-            $.ajax({
-                url: '<?php echo url('warehouse_inventory') ?>?page=' + page +'&dataId='+whseId
-            }).done(function(data){
-                $('#reload_data').html(data);
-            });
-        }
-
-        function getDataStockItems(page){
-            var stockId = $('stockId').val();
-            $.ajax({
-                url: '<?php echo url('stock_inventory') ?>?page=' + page +'&dataId='+stockId
+                url: '?page=' + page
             }).done(function(data){
                 $('#reload_data').html(data);
             });
@@ -568,65 +471,6 @@
 
     <script>
 
-        function saveMethod(formModal,formId,submitUrl,reload_id,reloadUrl,token,itemId,Qty,Amt) {
-            var inputVars = $('#' + formId).serialize();
-            var summerNote = '';
-            var htmlClass = document.getElementsByClassName('t-editor');
-            if (htmlClass.length > 0) {
-                summerNote = $('.summernote').eq(0).summernote('code');
-
-            }
-
-            var itemId1 = classToArray2(itemId);
-            var jItem = sanitizeData(itemId);
-            var jQty = sanitizeData(Qty);
-            var jAmt = sanitizeData(Amt);
-            //alert(jinputClass);
-            if(arrayItemEmpty(itemId1) == false){
-                var postVars = inputVars + '&editor_input=' + summerNote+'&item_id='+jItem+'&bom_qty='+jQty+'&bom_amt='+jAmt;
-                //alert(postVars);
-                $('#loading_modal').modal('show');
-                $('#' + formModal).modal('hide');
-                sendRequestForm(submitUrl, token, postVars)
-                ajax.onreadystatechange = function () {
-                    if (ajax.readyState == 4 && ajax.status == 200) {
-
-                        $('#loading_modal').modal('hide');
-                        var rollback = JSON.parse(ajax.responseText);
-                        var message2 = rollback.message2;
-                        if (message2 == 'fail') {
-
-                            //OBTAIN ALL ERRORS FROM PHP WITH LOOP
-                            var serverError = phpValidationError(rollback.message);
-
-                            var messageError = swalFormError(serverError);
-                            swal("Error", messageError, "error");
-
-                        } else if (message2 == 'saved') {
-
-                            var successMessage = swalSuccess('Data saved successfully');
-                            swal("Success!", "Data saved successfully!", "success");
-                            //location.reload();
-
-                        } else {
-
-                            var infoMessage = swalWarningError(message2);
-                            swal("Warning!", infoMessage, "warning");
-
-                        }
-
-                        //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
-                        reloadContent(reload_id,reloadUrl);
-                    }
-                }
-                //END OF OTHER VALIDATION CONTINUES HERE
-            }else{
-                swal("Warning!","Please, fill in all required fields to continue","warning");
-            }
-
-        }
-
-
         function newWindow(dataId,displayId,submitUrl,token,modalId){
             //alert(dataId);
             var postVars = "dataId="+dataId;
@@ -644,16 +488,6 @@
 
         }
 
-        function reloadContentId(id,intId,page){
-
-
-            $.ajax({
-                url: page+'?dataId='+intId
-            }).done(function(data){
-                $('#'+id).html(data);
-            });
-
-        }
 
     </script>
 

@@ -19,7 +19,7 @@
                                     <div class="form-group">
                                         <div class="form-line">
                                             <select class="form-control service_class" name="reminder"  required>
-                                                <option value="">Select Service Type</option>
+                                                <option value="">Select Maintenance Reminder</option>
                                                 @foreach($maintenanceReminder as $data)
                                                     <option value="{{$data->id}}">{{$data->name}}</option>
                                                 @endforeach

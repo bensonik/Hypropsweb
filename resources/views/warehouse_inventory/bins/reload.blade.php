@@ -2,14 +2,6 @@
 
 <div class=" table-responsive" id="reload_data_bin">
 
-    <a style="cursor: pointer;" onclick="newWindow('{{$zoneId}}','addBin','<?php echo url('add_warehouse_bin_form') ?>','<?php echo csrf_token(); ?>','addBinModal')"><i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></a>
-    <hr>
-    <button type="button" onclick="deleteItemsFetchId('kid_checkbox_bin','reload_data_bin','<?php echo url('warehouse_bin'); ?>',
-            '<?php echo url('delete_warehouse_bin'); ?>','<?php echo csrf_token(); ?>','{{$zoneId}}');" class="btn btn-danger">
-        <i class="fa fa-trash-o"></i>Delete
-    </button>
-    <hr>
-
 <table class="table table-bordered table-hover table-striped" id="main_table_bin">
     <thead>
     <tr>
@@ -18,6 +10,7 @@
                    name="check_all" class="" />
 
         </th>
+        <th>View Inventory</th>
         <th>Zone</th>
         <th>Bin</th>
         <th>Created by</th>
@@ -33,7 +26,9 @@
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox_bin" />
 
             </td>
-
+            <td>
+                <a style="cursor: pointer;" onclick="fetchHtml3('{{$data->bin_id}}','{{$zoneId}}','binContent','binContentModal','<?php echo url('warehouse_inventory_bin_content') ?>','<?php echo csrf_token(); ?>','{{$warehouseId}}')"><i class="fa fa-eye fa-2x"></i></a>
+            </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
             <td>{{$data->zone->name}}</td>

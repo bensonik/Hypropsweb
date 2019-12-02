@@ -696,23 +696,36 @@ class GeneralController extends Controller
             //print_r($pickedVal);exit();
             $optionArray = WarehouseZone::specialColumns('warehouse_id',$pickedVal);
 
-            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type)
+                ->with('warehouseId',$pickedVal);
         }
 
         //FOR SELECTING BINS OF A ZONE
         if($type == 'z_bins'){
             //print_r($pickedVal);exit();
-            $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
+            $warehouse = $_GET['param'];
+            $optionArray = ZoneBin::specialColumns2('warehouse_id',$warehouse,'zone_id',$pickedVal);
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type);
         }
 
         //FOR SELECTING BINS OF A ZONE WITH PARAMETER
         if($type == 'z_bins_param'){
-            $param = $_GET['param'];
-            $optionArray = ZoneBin::specialColumns('zone_id',$pickedVal);
+            $warehouse = $_GET['param'];
+            $param = $_GET['paramId'];
+            $optionArray = ZoneBin::specialColumns2('warehouse_id',$warehouse,'zone_id',$pickedVal);
             return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type)
-                ->with('param',$param);
+                ->with('param',$param)->with('warehouseId',$warehouse);
         }
+
+        //FOR SELECTING ZONES OF A WAREHOUSE IN A TABLE SEARCH
+        if($type == 'w_zones_search'){
+            //print_r($pickedVal);exit();
+            $optionArray = WarehouseZone::specialColumns('warehouse_id',$pickedVal);
+
+            return view::make('general.selectOptions')->with('optionArray',$optionArray)->with('type',$type)
+                ->with('warehouseId',$pickedVal);
+        }
+
 
         //FOR DEPARTMENTS OF A SURVEY
         if($type == 'survey_dept'){

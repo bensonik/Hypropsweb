@@ -7,7 +7,7 @@
                    name="check_all" class="" />
 
         </th>
-        <th>Manage Zones</th>
+        <th>View Items</th>
         <th>Name</th>
 
         <th>Code</th>
@@ -29,7 +29,7 @@
 
             </td>
             <td>
-                <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageZone','<?php echo url('warehouse_inventory_zone') ?>','<?php echo csrf_token(); ?>','manageZoneModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="fetchHtml2('{{$itemId}}','manageWhse','manageWhseModal','<?php echo url('warehouse_inventory_contents') ?>','<?php echo csrf_token(); ?>','{{$data->id}}')"><i class="fa fa-eye fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 

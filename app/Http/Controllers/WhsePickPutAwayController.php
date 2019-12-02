@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\model\WarehouseInventory;
+use App\model\WarehouseZone;
 use App\model\WhsePickPutAway;
 use App\model\Warehouse;
 use App\model\Inventory;
@@ -58,7 +60,7 @@ class WhsePickPutAwayController extends Controller
         //
         $mainData = WhsePickPutAway::firstRow('id',$request->input('dataId'));
         $poItems = WhsePickPutAway::specialColumns('po_ext_id',$mainData->po_ext_id);
-        $zone = Zone::getAllData();
+        $zone = WarehouseZone::specialColumns('warehouse_id',$mainData->to_whse);
         return view::make('warehouse_pick_put_away.edit_form')->with('edit',$mainData)->with('zone',$zone)
             ->with('poItems',$poItems);
 
@@ -118,6 +120,32 @@ class WhsePickPutAwayController extends Controller
                 $newQty = $itemQty->qty + $quantity;
                 $changeQty = ['qty' => $newQty];
                 Inventory::defaultUpdate('id',$itemId,$changeQty);
+
+                //UPDATE OR CREATE WAREHOUSE INVENTORY FOR TRACKING PURPOSES IN WAREHOUSE INVENTORY TABLE
+                $whseInvData = [
+                    'qty' => $newQty
+                ];
+
+                $whseInvDataCreate = [
+                    'item_id' => $itemId,
+                    'qty' => $newQty,
+                    'warehouse_id' => $request->input('warehouse'),
+                    'zone_id' => $request->input('zone'.$i),
+                    'bin_id' => $request->input('bin'.$i),
+                    'status' => Utility::STATUS_ACTIVE
+                ];
+
+                $checkDbData = WarehouseInventory::firstRow4('item_id',$itemId,'warehouse_id',$request->input('warehouse'),
+                    'zone_id',$request->input('zone'.$i),'bin_id',$request->input('bin'.$i));
+                if(!empty($checkDbData) > 0){
+                    WarehouseInventory::defaultUpdate4('item_id',$itemId,'warehouse_id',$request->input('warehouse'),
+                        'zone_id',$request->input('zone'.$i),'bin_id',$request->input('bin'.$i),$whseInvData);
+                }else{
+                    WarehouseInventory::create($whseInvDataCreate);
+                }
+
+
+
 
             }
 

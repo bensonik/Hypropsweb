@@ -11,16 +11,11 @@
                    name="check_all" class="" />
 
         </th>
-        <th>Item Name</th>
+        <th>Inventory Item</th>
         <th>Warehouse</th>
         <th>Zone</th>
         <th>Bin</th>
-        <th>Quantity Received</th>
-        <th>Quantity Remaining</th>
-        <th>Created by</th>
-        <th>Updated by</th>
-        <th>Created at</th>
-        <th>Updated at</th>
+        <th>Quantity</th>
     </tr>
     </thead>
     <tbody>
@@ -33,24 +28,11 @@
 
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
 
-            <td>{{$data->inventory->item_name}} </td>
-            <td>{{$data->warehouse->name}}</td>
+            <td>{{$data->item->item_name}} ({{$data->item->item_no}})</td>
+            <td>{{$data->warehouse->name}} ({{$data->warehouse->code}})</td>
             <td>{{$data->zone->name}}</td>
             <td>{{$data->bin->code}}</td>
             <td>{{$data->qty}}</td>
-            <td>{{$data->qty_outstanding}}</td>
-            <td>
-                @if($data->created_by != '0')
-                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                @endif
-            </td>
-            <td>
-                @if($data->updated_by != '0')
-                    {{$data->user_u->firstname}} {{$data->user_u->lastname}}
-                @endif
-            </td>
-            <td>{{$data->created_at}}</td>
-            <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 
         </tr>
@@ -58,9 +40,6 @@
     </tbody>
 </table>
 
-    <div class="warehouse_pagination pull-right">
-        {!! $mainData->render() !!}
-    </div>
 
 </div>
 

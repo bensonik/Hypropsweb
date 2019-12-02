@@ -14,6 +14,7 @@ use App\model\PhysicalInvCount;
 use App\Helpers\Utility;
 use App\model\TransferOrder;
 use App\model\Stock;
+use App\model\WarehouseInventory;
 use App\model\WhsePickPutAway;
 use App\User;
 use Auth;
@@ -210,7 +211,7 @@ class InventoryController extends Controller
     public function warehouseInventory(Request $request)
     {
         //
-        $warehouse = WhsePickPutAway::specialColumnsPage2('item_id',$request->input('dataId'),'pick_put_status',Utility::STATUS_ACTIVE);
+        $warehouse = WarehouseInventory::specialColumns('item_id',$request->input('dataId'));
         return view::make('inventory.warehouse.items')->with('mainData',$warehouse)->with('itemId',$request->input('dataId'));
 
     }
@@ -486,7 +487,7 @@ class InventoryController extends Controller
         //print_r($obtain_array); die();
         if (count($user_ids) > 0) {
 
-            return view::make('inventory_record.inventory_search')->with('mainData',$mainData);
+            return view::make('inventory.inventory_search')->with('mainData',$mainData);
         }else{
             return 'No match found, please search again with sensitive words';
         }

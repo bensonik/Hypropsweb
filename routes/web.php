@@ -563,7 +563,7 @@ Route::post('/delete_inventory_cat', 'InventoryCategoryController@destroy')->nam
 Route::any('/inventory', 'InventoryController@index')->name('inventory')->middleware('auth');
 Route::any('/ext_amount', 'InventoryController@extendedAmount')->name('ext_amount');
 Route::post('/edit_inventory_form', 'InventoryController@editForm')->name('edit_inventory_form');
-Route::any('/warehouse_inventory', 'InventoryController@warehouseInventory')->name('warehouse_inventory');
+Route::any('/warehouse_item_inventory', 'InventoryController@warehouseInventory')->name('warehouse_inventory');
 Route::any('/stock_inventory', 'InventoryController@stockInventory')->name('stock_inventory');
 Route::post('/create_inventory', 'InventoryController@create')->name('create_inventory');
 Route::post('/edit_inventory', 'InventoryController@edit')->name('edit_inventory');
@@ -1284,6 +1284,7 @@ Route::any('/dashboard_report', 'HomeController@dashboardReport')->name('dashboa
 // -------------WAREHOUSE INVENTORY MODULE-----------
 Route::any('/warehouse_inventory', 'WarehouseInventoryController@index')->name('warehouse_inventory')->middleware('auth');
 Route::post('/create_warehouse_inventory', 'WarehouseInventoryController@create')->name('create_warehouse_inventory');
+Route::post('/remove_warehouse_inventory', 'WarehouseInventoryController@removeWarehouseInventory')->name('remove_warehouse_inventory');
 Route::post('/warehouse_inventory_contents', 'WarehouseInventoryController@warehouseInventoryContents')->name('warehouse_inventory_contents');
 
 Route::any('/warehouse_inventory_bin', 'WarehouseInventoryController@warehouseZoneBin')->name('warehouse_inventory_bin')->middleware('auth');

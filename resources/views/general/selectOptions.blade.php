@@ -263,7 +263,7 @@
 
 @if($type == 'w_zones')
 
-    <select name="zone"  class="form-control " id="zone_id" onchange="fillNextInput('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')" >
+    <select name="zone"  class="form-control " id="zone_id" onchange="fillNextInputParamGetVal('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins','{{$warehouseId}}')" >
         @if(count($optionArray) > 0)
             <option value="">Select</option>
             @foreach($optionArray as $data)
@@ -305,6 +305,22 @@
         @endif
     </select>
 @endif
+
+@if($type == 'w_zones_search')
+
+    <select name="zone"  class="form-control " id="zone_id_search" onchange="fillNextInputParamGetVal('zone_id_search','bin_id_search','<?php echo url('default_select'); ?>','z_bins','{{$warehouseId}}')" >
+        @if(count($optionArray) > 0)
+            <option value="">Select</option>
+            @foreach($optionArray as $data)
+                <option value="{{$data->zone_id}}">{{$data->zone->name}}</option>
+            @endforeach
+
+        @else
+            <option value="">No Zones found</option>
+        @endif
+    </select>
+@endif
+
 
 @if($type == 'search_rfq_select')
     @foreach($optionArray as $data)

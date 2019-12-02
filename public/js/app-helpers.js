@@ -567,6 +567,15 @@
             });
     }
 
+    function fillNextInputParamGetVal(value_id,displayId,page,moduleType,param){
+        var pickedVal = $('#'+value_id).val();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
+        }).done(function(data){
+            $('#'+displayId).html(data);
+        });
+    }
+
     function fillNextInputParam(value,displayId,page,moduleType,param){
 
         $.ajax({
@@ -576,10 +585,10 @@
         });
     }
 
-    function fillNextInputParamId(valueId,displayId,page,moduleType,param){
+    function fillNextInputParamId(valueId,displayId,page,moduleType,param,paramId){
         var pickedVal = $('#'+valueId).val();
         $.ajax({
-            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param+'&paramId='+paramId
         }).done(function(data){
             $('#'+displayId).html(data);
         });
@@ -1770,9 +1779,10 @@
 
     }
 
-    function fetchHtml3(dataId,displayId,submitUrl,token,type){
+    function fetchHtml3(dataId,dataId2,displayId,modalId,submitUrl,token,type){
 
-        var postVars = "dataId="+dataId+"&type="+type;
+        var postVars = "dataId="+dataId+"&dataId2="+dataId2+"&type="+type;
+        $('#'+modalId).modal('show');
         sendRequest(submitUrl,token,postVars);
         ajax.onreadystatechange = function(){
             if(ajax.readyState == 4 && ajax.status == 200) {
@@ -2267,7 +2277,7 @@
         var totalAmt = $('#'+totalAmtId);
         var totalTax = $('#'+totalTaxId);
         var taxVal = (totalTax.val() == '') ? 0.00 : totalTax.val();
-        var newAmt = parseFloat(totalAmt.val())+parseFloat(taxVal);
+        var newAmt = parseFloat(totalAmt.val())-parseFloat(taxVal);
         $('#'+exclTaxId).val(decPoints(newAmt,2));
     }
 
@@ -2341,7 +2351,7 @@
 
 
             $.ajax({
-                url:  page+'?search_id='+pickedVal+'&bill_invoice'+bill_invoice
+                url:  page+'?search_id='+pickedVal+'&bill_invoice_type='+bill_invoice
             }).done(function(data){
 
                 $('#'+descId).val(data.item_desc);
@@ -2408,18 +2418,18 @@
                     var qtyVal = (qty.val() != '') ? qty.val() : 0;
                     var real_amount = qtyVal*rate;
 
-                    var discountVal = (discount != '') ? discount.val() : 0;
-                    var discountPerctVal = (discountPerct.val()/100)*real_amount;
-                    var discountA = (discountPerct.val() == '') ? discountVal: discountPerctVal ;
+                    var discountVal = (discount.val() != '') ? discount.val() : 0;
+                    var discountPerctVal = (discountPerct.val() != '') ?(discountPerct.val()/100)*real_amount : 0;
+                    var discountA = (discountPerct.val() != '') ? discountPerctVal : discountVal ;
                     var taxVal = (tax.val() != '') ? tax.val() : 0;
-                    var taxPerctVal = (taxPerct.val()/100)*real_amount;
+                    var taxPerctVal = (taxPerct.val() != '') ? (taxPerct.val()/100)*real_amount : 0;
                     var taxA = (taxPerct.val() == '') ? taxVal: taxPerctVal ;
                     discount.val(decPoints(discountA,2));
                     tax.val(decPoints(taxA,2));
 
 
 
-                    var new_amount = (real_amount-discountA) - taxA;
+                    var new_amount = (parseFloat(real_amount)-discountA) + parseFloat(taxA);
                     amount.val(decPoints(new_amount,2));
                     var sumToArray = classToArray(sharedSumClass);
                     var sumArray = sumArrayItems(sumToArray);
@@ -2461,19 +2471,19 @@
             var qtyVal = (qty.val() != '') ? qty.val() : 0;
             var real_amount = qtyVal*rate;
 
-            var discountVal = (discount != '') ? discount.val() : 0;
-            var discountPerctVal = (discountPerct.val()/100)*real_amount;
+            var discountVal = (discount.val() != '') ? discount.val() : 0;
+            var discountPerctVal = (discountPerct.val() != '') ?(discountPerct.val()/100)*real_amount : 0;
             var discountA = (discountPerct.val() == '') ? discountVal: discountPerctVal ;
             var taxVal = (tax.val() != '') ? tax.val() : 0;
-            var taxPerctVal = (taxPerct.val()/100)*real_amount;
+            var taxPerctVal = (taxPerct.val() != '') ? (taxPerct.val()/100)*real_amount : 0;
             var taxA = (taxPerct.val() == '') ? taxVal: taxPerctVal ;
             discount.val(decPoints(discountA,2));
             tax.val(decPoints(taxA,2));
-            console.log(taxPerct.val());
+            //console.log(taxPerct.val());
 
             if(rate != '' && item != ''){
                 //var real_amount = (event.target.id == qtyId) ? rate : qtyVal*rate;
-                var new_amount = (real_amount-discountA) - taxA;
+                var new_amount = (real_amount-discountA)+parseInt(taxA);
                 amount.val(decPoints(new_amount,2));
                 var sumToArray = classToArray(sharedSumClass);
                 var sumArray = sumArrayItems(sumToArray);
@@ -2521,7 +2531,7 @@
         tax.val(decPoints(taxA,2));
 
         if(account.val() != '' && $('#'+postDateId).val() != ''){
-            var new_amount = (rate-discountA) - taxA;
+            var new_amount = (rate-discountA) + parseFloat(taxA);
             amount.val(decPoints(new_amount,2));
             var sumToArray = classToArray(sharedSumClass);
             var sumArray = sumArrayItems(sumToArray);
@@ -2564,7 +2574,7 @@
             perctAmount.val(decPoints(percentage,2));
             var discountA = (discount.val() != '') ? discount.val() : 0;
             var taxA = (tax.val() != '') ? tax.val() : 0;
-            var new_amount = (real_amount-discountA) - taxA;
+            var new_amount = (real_amount-discountA)+parseInt(taxA);
 
             amount.val(decPoints(new_amount,2));
 
@@ -2716,7 +2726,7 @@
 
     }
 
-    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId,foreignSumId,currPage,vendorCustId,postDateId,discountSharedClass){
+    function genPercentage(perctId,perctAmountId,overallSumId,sharedSumClass,vendCustId,odaPerctAmountId,foreignSumId,currPage,vendorCustId,postDateId,discountSharedClass,sharedRate){
         var perct = $('#'+perctId);
         var overallSum = $('#'+overallSumId);
         var overallSumExcl = $('#excl_'+overallSumId);
@@ -2725,20 +2735,25 @@
         var sumToArrayDiscount = classToArray(discountSharedClass);
         var sumArrayDiscount = sumArrayItems(sumToArrayDiscount);
 
+        var sumToArraySharedRate = classToArray(sharedRate);
+        var sumArraySharedRate = sumArrayItems(sumToArraySharedRate);
+
         var sumToArray = classToArray(sharedSumClass);
         var sumArrayInclTax = sumArrayItems(sumToArray);
 
         var vendCustVal = $('#'+vendCustId).val();
         if(vendCustVal != '' && overallSum.val() != ''){
             //GET OVERALL SUM WITHOUT TAX AND DISCOUNT INCLUSIVE
-            var overallSumVal = parseInt(sumArrayInclTax)+parseInt(odaperctAmount.val())+sumArrayDiscount;
+            var overallSumVal = parseFloat(sumArraySharedRate)+parseFloat(odaperctAmount.val());
+            var overallSumExclVal = parseFloat(sumArraySharedRate);
 
             //GET PERCENTAGE DISCOUNT AMOUNT
-            var percentage = (perct.val()*overallSumVal)/100;
+            var percentage = (perct.val()*overallSumExclVal)/100;
             perctAmount.val(decPoints(percentage,2));   // DISPLAY PERCENTAGE AMOUNT
-            overallSum.val(decPoints((overallSumVal-percentage)-odaperctAmount.val(),2)); //DISPLAY OVERALL SUM INCLUDING TAX AND DISCOUNT AMOUNT
-            overallSumExcl.val(decPoints((overallSumVal-percentage),2)); //DISPLAY OVERALL SUM WITHOUT TAX
+            overallSum.val(decPoints(overallSumExclVal+parseFloat(odaperctAmount.val())-parseFloat(percentage),2)); //DISPLAY OVERALL SUM INCLUDING TAX AND DISCOUNT AMOUNT
+            overallSumExcl.val(decPoints((overallSumExclVal-parseFloat(percentage)),2)); //DISPLAY OVERALL SUM WITHOUT TAX
 
+            console.log(overallSumExclVal+'discount='+percentage+'2nd='+overallSumExclVal);
 
             convertToDefaultCurr(foreignSumId,overallSumId,currPage,vendorCustId,postDateId);
 
@@ -2755,13 +2770,14 @@
         var perctAmount = $('#'+perctAmountId);
         var odaperctAmount = $('#'+odaPerctAmountId);
         var vendCustVal = $('#'+vendCustId).val();
-        console.log(vendorCustId);
+        //console.log(vendorCustId);
         if(vendCustVal != '' && overallSum.val() != ''){
             var overallSumVal = overallSumExcl.val();
             var percentage = (perct.val()*overallSumVal)/100;
+            var newTotal = parseInt(overallSumVal)+parseFloat(decPoints(percentage,2));
             perctAmount.val(decPoints(percentage,2));
-            overallSum.val(decPoints(((overallSumVal)-percentage),2));
-            var newTotal = (overallSumVal-percentage);
+            overallSum.val(newTotal.toFixed(2));
+            console.log(overallSumVal+'perct='+percentage+'TOTAL='+newTotal);
             //exclTax(overallSumId,perctAmountId,'excl_'+overallSumId);
             convertToDefaultCurr(foreignSumId,overallSumId,currPage,vendorCustId,postDateId);
 
@@ -2805,8 +2821,7 @@
 
         var postDate = $('#'+postDateId).val();
         var vendorCust = $('#'+vendorCustId).val();
-        alert( page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust+'&dbTable='+dbTable
-    );
+        //alert( page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust+'&dbTable='+dbTable);
 
        $.ajax({
             url: page+'?dataId='+dataId+'&grandTotal='+totalVal+'&totalTax='+totalTax+'&totalDiscount='+totalDiscount+'&postDate='+postDate+'&vendorCust='+vendorCust+'&dbTable='+dbTable
@@ -3033,7 +3048,9 @@
 
     }
 
-
+    function idDisplayClass(getClass){
+        $('.'+getClass).toggle();
+    }
 
 
 

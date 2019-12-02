@@ -85,6 +85,13 @@
     </section>
 
 </div>
+
+<script>
+    function idDisplayClass(getClass){
+        $('.'+getClass).toggle();
+    }
+</script>
+
 <!-- Jquery Core Js -->
 <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 <!-- Bootstrap Core Js -->

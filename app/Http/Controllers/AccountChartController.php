@@ -402,8 +402,8 @@ class AccountChartController extends Controller
 
         if(Utility::checkArraySimilarity($all_id,Utility::DEFAULT_ACCOUNT_CHART) == true){
             return response()->json([
-                'message' => 'You cannot delete any selected default account, please deselect default accounts to continue this process',
-                'message2' => 'warning'
+                'message2' => 'You cannot delete any selected default account, please deselect default accounts to continue this process',
+                'message' => 'warning'
             ]);
         }
 
@@ -431,8 +431,8 @@ class AccountChartController extends Controller
             $delete = AccountChart::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
-                'message2' => 'deleted',
-                'message' => count($in_use).' data(s) has been deleted '.$message
+                'message' => 'deleted',
+                'message2' => count($in_use).' data(s) has been deleted '.$message
             ]);
 
         }else{

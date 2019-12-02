@@ -34,7 +34,8 @@ class WarehouseZoneController extends Controller
         $warehouseId = $request->input('dataId');
 
         if ($request->ajax()) {
-            return \Response::json(view::make('warehouse.zones.reload',array('mainData' => $mainData,'warehouseId' => $warehouseId))->render());
+            return \Response::json(view::make('warehouse.zones.reload',array('mainData' => $mainData,
+                'warehouseId' => $warehouseId))->render());
 
         }else{
             return view::make('warehouse.zones.reload')->with('mainData',$mainData)->with('warehouseId',$warehouseId);

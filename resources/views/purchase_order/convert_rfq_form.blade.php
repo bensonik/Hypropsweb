@@ -700,7 +700,7 @@
                     <b>Total Discount Percentage</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="number" class="form-control" value="{{$edit->discount_perct}}" id="total_discount_perct_edit" onkeyup="genPercentage('total_discount_perct_edit','total_discount_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_tax_amount_edit','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','vendorCust_edit','posting_date_edit','shared_discount_amount_edit')" name="one_time_discount_perct_edit" placeholder="Percentage" >
+                            <input type="number" class="form-control" value="{{$edit->discount_perct}}" id="total_discount_perct_edit" onkeyup="genPercentage('total_discount_perct_edit','total_discount_amount_edit','overall_sum_edit','shared_sub_total_edit','vendorCust_edit','total_tax_amount_edit','foreign_overall_sum','<?php echo url('amount_to_default_curr') ?>','vendorCust_edit','posting_date_edit','shared_discount_amount_edit','shared_rate')" name="one_time_discount_perct_edit" placeholder="Percentage" >
                         </div>
                     </div>
                 </div>

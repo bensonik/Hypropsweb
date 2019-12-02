@@ -6,6 +6,7 @@ use App\Helpers\Utility;
 use App\Helpers\Notify;
 use App\model\Currency;
 use App\model\Inventory;
+use App\model\InventoryBom;
 use App\model\PoExtension;
 use App\model\PurchaseOrder;
 use App\model\Stock;
@@ -264,6 +265,7 @@ class PurchaseOrderController extends Controller
                         $poId = $mainPo->id;
                         $getPo = PoExtension::firstRow('id',$poId);
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                        Utility::fetchBOMItems($getPoData);
                         $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                         $mailContent = [];
@@ -335,6 +337,7 @@ class PurchaseOrderController extends Controller
         $type = $request->input('type');
         $po = PoExtension::firstRow('id',$request->input('dataId'));
         $poData = PurchaseOrder::specialColumns('po_id',$po->id);
+        Utility::fetchBOMItems($poData);  //ADD BOM ITEMS TO INVENTORY ITEM
         if($type == 'vendor' && !empty($po)){
             $data = Currency::firstRow('id',$po->trans_curr);
             $currency = $data->code;
@@ -672,6 +675,7 @@ class PurchaseOrderController extends Controller
                         $poId = $editId;
                         $getPo = PoExtension::firstRow('id',$poId);
                         $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                        Utility::fetchBOMItems($getPoData);
                         $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                         $mailContent = [];
@@ -1020,6 +1024,7 @@ class PurchaseOrderController extends Controller
                 $poId = $mainPo->id;
                 $getPo = PoExtension::firstRow('id',$poId);
                 $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                Utility::fetchBOMItems($getPoData);
                 $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                 $mailContent = [];
@@ -1368,6 +1373,7 @@ class PurchaseOrderController extends Controller
                 $poId = $mainPo->id;
                 $getPo = PoExtension::firstRow('id',$poId);
                 $getPoData = PurchaseOrder::specialColumns('uid',$getPo->uid);
+                Utility::fetchBOMItems($getPoData);
                 $currencyData = Currency::firstRow('id',$getPo->trans_curr);
 
                 $mailContent = [];
@@ -1504,5 +1510,6 @@ class PurchaseOrderController extends Controller
         ]);
 
     }
+
 
 }

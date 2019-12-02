@@ -47,6 +47,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('command:EventReminder')
             ->everyMinute();
 
+        $schedule->command('command:LoanDeduction')
+            ->everyMinute();
+
 
     }
 

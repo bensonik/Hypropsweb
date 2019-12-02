@@ -328,6 +328,7 @@
 
                                     </td>
                                     <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                    <td></td>
                                     <td>{{$data->category->category_name}}</td>
                                     <td>{{$data->acct_name}} ({{$data->detail->detail_type}})</td>
 
@@ -469,6 +470,7 @@
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                <td></td>
                                 <td>Sum Total of Month and Quarterly Amount</td>
                                 <td></td>
 
@@ -654,6 +656,7 @@
                                     <input value="0" type="checkbox" id="0" class="kid_checkbox" />
 
                                 </td>
+                                <td></td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                                 <td>Sum Total of Month and Quarterly Amount</td>
                                 <td></td>

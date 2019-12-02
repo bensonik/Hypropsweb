@@ -10,9 +10,6 @@
         </thead>
         <tbody>
         <tr>
-            <td>Invoice #</td>
-            <td>{{$data->id}}</td>
-        <tr>
             <td>Date</td>
             <td>{{\App\Helpers\Utility::standardDate($data->created_at)}}</td>
         </tr>

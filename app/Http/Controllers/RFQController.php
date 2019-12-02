@@ -259,6 +259,7 @@ class RFQController extends Controller
         $type = $request->input('type');
         $rfq = RFQExtension::firstRow('id',$request->input('dataId'));
         $rfqData = RFQ::specialColumns('rfq_id',$rfq->id);
+        Utility::fetchBOMItems($rfqData);
 
         return view::make('rfq.print_preview_default')->with('po',$rfq)->with('poData',$rfqData)
             ->with('currency',$currency);

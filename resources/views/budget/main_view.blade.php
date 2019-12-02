@@ -345,6 +345,7 @@
 
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <td></td>
                             <td>{{$data->request_name}}</td>
                             <td>
                                 <div class="col-sm-12">
@@ -499,6 +500,7 @@
 
                         </td>
                         <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                        <td></td>
                         <td>Sum Total of Month and Quarterly Amount</td>
                         <td></td>
 

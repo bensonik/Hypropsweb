@@ -593,6 +593,9 @@
                         <li>
                             <a href="{{url('picks')}}">Pick(s)</a>
                         </li>
+                        <li>
+                            <a href="{{url('warehouse_inventory')}}">Warehouse Inventory</a>
+                        </li>
                     </ul>
                 </li>
                 @endif
@@ -604,7 +607,7 @@
                         <span>Inventory System</span>
                     </a>
                     <ul class="ml-menu">
-                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_SCM_WHSE_MANAGEMENT))
+                        @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_SCM_WHSE_MANAGEMENT)  || \App\Helpers\Utility::moduleAccessCheck('inventory_access'))
                         <li>
                             <a href="{{url('physical_inv_count')}}">Physical Inventory Count Setup </a>
                         </li>
@@ -622,6 +625,9 @@
                         </li>
                         <li>
                             <a href="{{url('inventory_record')}}">Record Inventory Items</a>
+                        </li>
+                        <li>
+                            <a href="{{url('warehouse_inventory')}}">Warehouse Inventory</a>
                         </li>
                         @else
                             <li>

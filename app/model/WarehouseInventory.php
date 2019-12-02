@@ -90,14 +90,6 @@ class WarehouseInventory extends Model
 
     }
 
-    public static function specialColumns2Qty($column, $post, $column2, $post2)
-    {
-        //Utility::specialColumns(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '>=',$post2)->orderBy('id','DESC')->get();
-
-    }
-
     public static function specialColumnsPage($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);
@@ -126,6 +118,14 @@ class WarehouseInventory extends Model
         //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
             ->where($column2, '=',$post2)->where($column3, '=',$post3)->orderBy('id','DESC')->get();
+
+    }
+
+    public static function specialColumns3Qty($column, $post, $column2, $post2,$column3, $post3)
+    {
+
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '>=',$post2)->where($column3, '>=',$post3)->orderBy('id','DESC')->get();
 
     }
 
@@ -204,6 +204,13 @@ class WarehouseInventory extends Model
 
     }
 
+    public static function firstRow4($column, $post,$column2, $post2,$column3, $post3,$column4, $post4)
+    {
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
+            ->where($column2, '=',$post2)->where($column3, '=',$post3)->where($column4, '=',$post4)->first();
+
+    }
+
     public static function massUpdate($column, $arrayPost, $arrayDataUpdate=[])
     {
         return static::whereIn($column , $arrayPost)->update($arrayDataUpdate);
@@ -214,6 +221,14 @@ class WarehouseInventory extends Model
     {
 
         return static::where($column , $postId)->update($arrayDataUpdate);
+
+    }
+
+    public static function defaultUpdate4($column, $postId, $column2, $postId2, $column3, $postId3, $column4, $postId4, $arrayDataUpdate=[])
+    {
+
+        return static::where($column , $postId)->where($column2 , $postId2)->where($column3 , $postId3)
+            ->where($column4 , $postId4)->update($arrayDataUpdate);
 
     }
 

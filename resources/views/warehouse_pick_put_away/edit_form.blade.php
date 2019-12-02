@@ -220,10 +220,10 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line" >
-                                    <select class=" " id="zone_display_id"  name="zone{{$num}}" onchange="fillNextInputParamId('zone_display_id','bin_display_id','<?php echo url('default_select'); ?>','z_bins_param','{{$num}}')" >
+                                    <select class=" " id="zone_display_id"  name="zone{{$num}}" onchange="fillNextInputParamId('zone_display_id','bin_display_id','<?php echo url('default_select'); ?>','z_bins_param','{{$edit->to_whse}}','{{$num}}')" >
                                         <option value="{{$edit->to_zone}}">{{$edit->zone->name}}</option>
                                         @foreach($zone as $z)
-                                            <option value="{{$z->id}}">{{$z->name}}</option>
+                                            <option value="{{$z->zone->id}}">{{$z->zone->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>

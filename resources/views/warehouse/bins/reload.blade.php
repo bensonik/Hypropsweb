@@ -2,7 +2,7 @@
 
 <div class=" table-responsive" id="reload_data_bin">
 
-    <a style="cursor: pointer;" onclick="newWindow('{{$zoneId}}','addBin','<?php echo url('add_warehouse_bin_form') ?>','<?php echo csrf_token(); ?>','addBinModal')"><i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></a>
+    <a style="cursor: pointer;" onclick="fetchHtml2('{{$zoneId}}','addBin','addBinModal','<?php echo url('add_warehouse_bin_form') ?>','<?php echo csrf_token(); ?>','{{$warehouseId}}')"><i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></a>
     <hr>
     <button type="button" onclick="deleteItemsFetchId('kid_checkbox_bin','reload_data_bin','<?php echo url('warehouse_bin'); ?>',
             '<?php echo url('delete_warehouse_bin'); ?>','<?php echo csrf_token(); ?>','{{$zoneId}}');" class="btn btn-danger">

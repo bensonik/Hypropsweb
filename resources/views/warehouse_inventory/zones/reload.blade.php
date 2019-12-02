@@ -2,14 +2,6 @@
 
 <div class=" table-responsive" id="reload_data_zone">
 
-    <a style="cursor: pointer;" onclick="newWindow('{{$warehouseId}}','addZone','<?php echo url('add_warehouse_zone_form') ?>','<?php echo csrf_token(); ?>','addZoneModal')"><i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></a>
-    <hr>
-
-    <button type="button" onclick="deleteItemsFetchId('kid_checkbox_zone','manageZone','<?php echo url('warehouse_zone'); ?>',
-            '<?php echo url('delete_warehouse_zone'); ?>','<?php echo csrf_token(); ?>','{{$warehouseId}}');" class="btn btn-danger">
-        <i class="fa fa-trash-o"></i>Delete
-    </button><hr>
-
 <table class="table table-bordered table-hover table-striped" id="main_table_zone">
     <thead>
     <tr>
@@ -18,7 +10,7 @@
                    name="check_all" class="" />
 
         </th>
-        <th>Manage Bin</th>
+        <th>View Bin(s)</th>
         <th>Warehouse</th>
         <th>Zone</th>
         <th>Created by</th>
@@ -36,7 +28,7 @@
             </td>
 
             <td>
-                <a style="cursor: pointer;" onclick="newWindow('{{$data->zone_id}}','manageBin','<?php echo url('warehouse_bin') ?>','<?php echo csrf_token(); ?>','manageBinModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="fetchHtml2('{{$data->zone_id}}','manageBin','manageBinModal','<?php echo url('warehouse_inventory_bin') ?>','<?php echo csrf_token(); ?>','{{$warehouseId}}')"><i class="fa fa-eye fa-2x"></i></a>
             </td>
 
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

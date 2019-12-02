@@ -30,14 +30,17 @@ class ZoneBinController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = ZoneBin::specialColumns('zone_id',$request->input('dataId'));
+        $warehouseId = $request->input('type');
+        $mainData = ZoneBin::specialColumns2('warehouse_id',$warehouseId,'zone_id',$request->input('dataId'));
         $zoneId = $request->input('dataId');
 
         if ($request->ajax()) {
-            return \Response::json(view::make('warehouse.bins.reload',array('mainData' => $mainData,'zoneId' => $zoneId))->render());
+            return \Response::json(view::make('warehouse.bins.reload',array('mainData' => $mainData,
+                'zoneId' => $zoneId,'warehouseId' => $warehouseId))->render());
 
         }else{
-            return view::make('warehouse.bins.reload')->with('mainData',$mainData)->with('zoneId',$zoneId);
+            return view::make('warehouse.bins.reload')->with('mainData',$mainData)->with('zoneId',$zoneId)
+                ->with('warehouseId',$warehouseId);
         }
 
     }
@@ -57,6 +60,7 @@ class ZoneBinController extends Controller
             for($i=0;$i<count($inputValues);$i++){
                 $dbDATA = [
                     'zone_id' => $request->input('edit_id'),
+                    'warehouse_id' => $request->input('warehouse'),
                     'bin_id' => $inputValues[$i],
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
@@ -92,10 +96,11 @@ class ZoneBinController extends Controller
     public function addForm(Request $request)
     {
         //
+        $warehouseId = $request->input('type');
         $zone = Zone::firstRow('id',$request->input('dataId'));
         $bin = Bin::getAllData();
         //return $zone; exit();
-        return view::make('warehouse.bins.add_form')->with('edit',$zone)->with('bin',$bin);
+        return view::make('warehouse.bins.add_form')->with('edit',$zone)->with('bin',$bin)->with('warehouseId',$warehouseId);
 
     }
 

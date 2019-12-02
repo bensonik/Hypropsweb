@@ -12,6 +12,7 @@
         <th>Item Name</th>
         <th>Unit Cost</th>
         <th>Unit Price</th>
+        <th>Quantity</th>
         <th>Inventory Category</th>
         <th>Inventory Type</th>
         <th>Photo</th>
@@ -35,7 +36,7 @@
 
             <td>
                 @if($data->whse_status == 1)
-                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageWhse','<?php echo url('warehouse_inventory') ?>','<?php echo csrf_token(); ?>','manageWhseModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageWhse','<?php echo url('warehouse_item_inventory') ?>','<?php echo csrf_token(); ?>','manageWhseModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 @else
                     <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageStock','<?php echo url('stock_inventory') ?>','<?php echo csrf_token(); ?>','manageStockModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 @endif
@@ -58,6 +59,7 @@
             </td>
             <td>{{$data->currency->symbol}} {{$data->unit_cost}}</td>
             <td>{{$data->currency->symbol}} {{$data->unit_price}}</td>
+            <td>{{$data->qty}}</td>
             <td>{{$data->category->category_name}}</td>
             <td>{{$data->inv_type->name}}</td>
             <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="photo" /></td>

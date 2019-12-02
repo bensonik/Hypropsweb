@@ -8,6 +8,7 @@
 
 namespace App\Helpers;
 
+use App\model\InventoryBom;
 use App\model\QuickNote;
 use App\model\Vehicle;
 use App\User;
@@ -1637,6 +1638,20 @@ class Utility
         }
 
         return $holdComparison;
+
+    }
+
+    public static function fetchBOMItems($mainData){
+
+        foreach($mainData as $data){
+            $bomData = [];
+            if($data->item_id != '') {
+                if ($data->inventory->assemble_bom == 'checked') {
+                    $bomData = InventoryBom::specialColumns('inventory_id', $data->item_id);
+                }
+            }
+            $data->bomData = $bomData;
+        }
 
     }
 

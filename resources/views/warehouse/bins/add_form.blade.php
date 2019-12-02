@@ -31,6 +31,7 @@
     </div>
 
     <input type="hidden" name="edit_id" value="{{$edit->id}}" >
+    <input type="hidden" value="{{$warehouseId}}" name="warehouse" />
 
     </div>
 

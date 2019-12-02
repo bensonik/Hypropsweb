@@ -486,7 +486,7 @@
                         </li>
                     </ul>
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageWhse">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="manageWhse">
 
                 </div>
                 <div class="modal-footer">
@@ -508,18 +508,11 @@
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                 <i class="material-icons">more_vert</i>Export
                             </a>
-                            <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table_zone');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table_zone');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table_zone').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table_zone').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table_zone').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
-                            </ul>
+                            @include('includes/print_pdf',[$exportId = 'main_table_zone', $exportDocId = 'main_table_zone'])
                         </li>
                     </ul>
                 </div>
-                <div class="modal-body" style="height:500px; overflow:scroll;" id="manageStock">
+                <div class="modal-body" style="height:400px; overflow:scroll;" id="manageStock">
 
                 </div>
                 <div class="modal-footer">
@@ -564,12 +557,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -604,6 +592,7 @@
                             <th>Item Name</th>
                             <th>Unit Cost</th>
                             <th>Unit Price</th>
+                            <th>Quantity</th>
                             <th>Inventory Category</th>
                             <th>Inventory Type</th>
                             <th>Photo</th>
@@ -627,7 +616,7 @@
 
                             <td>
                                 @if($data->whse_status == 1)
-                                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageWhse','<?php echo url('warehouse_inventory') ?>','<?php echo csrf_token(); ?>','manageWhseModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                    <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageWhse','<?php echo url('warehouse_item_inventory') ?>','<?php echo csrf_token(); ?>','manageWhseModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 @else
                                     <a style="cursor: pointer;" onclick="newWindow('{{$data->id}}','manageStock','<?php echo url('stock_inventory') ?>','<?php echo csrf_token(); ?>','manageStockModal')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 @endif
@@ -650,6 +639,7 @@
                             </td>
                             <td>{{$data->currency->symbol}} {{$data->unit_cost}}</td>
                             <td>{{$data->currency->symbol}} {{$data->unit_price}}</td>
+                            <td>{{$data->qty}}</td>
                             <td>{{$data->category->category_name}}</td>
                             <td>{{$data->inv_type->name}}</td>
                             <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="photo" /></td>
