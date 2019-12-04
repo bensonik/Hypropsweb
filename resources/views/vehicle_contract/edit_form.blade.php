@@ -56,7 +56,7 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <b>Mileage before contract</b>
+                <b>Mileage({{\App\Helpers\Utility::odometerMeasure()->name}}) before contract</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class="form-control" value="{{$edit->mileage_start}}" id="" name="mileage_before_contract" placeholder="Mileage before contract" >
@@ -68,7 +68,7 @@
 
         <div class="row clearfix">
             <div class="col-sm-4">
-                <b>Mileage after contract</b>
+                <b>Mileage({{\App\Helpers\Utility::odometerMeasure()->name}}) after contract</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class="form-control" value="{{$edit->mileage_end}}" id="" name="mileage_after_contract" placeholder="Mileage after contract">

@@ -69,7 +69,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <b>Mileage before contract</b>
+                                    <b>Mileage({{\App\Helpers\Utility::odometerMeasure()->name}}) before contract</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="number" class="form-control" value="0" id="" name="mileage_before_contract" placeholder="Mileage before contract" >
@@ -81,7 +81,7 @@
 
                             <div class="row clearfix">
                                 <div class="col-sm-4">
-                                    <b>Mileage after contract</b>
+                                    <b>Mileage({{\App\Helpers\Utility::odometerMeasure()->name}}) after contract</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="number" class="form-control" value="0" id="" name="mileage_after_contract" placeholder="Mileage after contract">
@@ -271,8 +271,8 @@
                             <th>Recurring Cost {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Status</th>
                             <th>contractor</th>
-                            <th>Mileage Before (Miles)</th>
-                            <th>Mileage After(Miles)</th>
+                            <th>Mileage Before ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Mileage After({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Recurring Interval</th>

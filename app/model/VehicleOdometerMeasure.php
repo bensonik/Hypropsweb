@@ -2,16 +2,16 @@
 
 namespace App\model;
 
-use App\Helpers\Utility;
 use Illuminate\Database\Eloquent\Model;
+use App\Helpers\Utility;
 
-class JobApplicants extends Model
+class VehicleOdometerMeasure extends Model
 {
     //
-    protected  $table = 'job_applicants';
+    protected  $table = 'vehicle_odometer_measure';
 
     private static function table(){
-        return 'job_applicants';
+        return 'vehicle_odometer_measure';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,26 +21,16 @@ class JobApplicants extends Model
     protected $guarded = [];
 
     public static $mainRules = [
-        'firstname' => 'required',
-        'lastname' => 'required',
-        'address' => 'required',
-        'phone' => 'required',
-        'email' => 'required',
-        'cv_file' => 'required|mimes:docx,doc,pdf|max:2048',
-        ];
+        'name' => 'required',
+    ];
 
     public function user_c(){
-        return $this->belongsTo('App\User','created_by','id');
+        return $this->belongsTo('App\User','created_by','id')->withDefault();
 
     }
 
     public function user_u(){
-        return $this->belongsTo('App\User','updated_by','id');
-
-    }
-
-    public function job(){
-        return $this->belongsTo('App\model\Jobs','job_id','id');
+        return $this->belongsTo('App\User','updated_by','id')->withDefault();
 
     }
 
@@ -53,12 +43,7 @@ class JobApplicants extends Model
 
     public static function getAllData()
     {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get();
-
-    }
-    public static function getAllData2()
-    {
-        return static::where('status', '=','1')->orderBy('id','DESC')->get(['id','job_title']);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->get();
 
     }
 
@@ -68,18 +53,16 @@ class JobApplicants extends Model
 
     }
 
+    public static function countData2($column, $post,$column2, $post2)
+    {
+        return Utility::countData2(self::table(),$column, $post,$column2, $post2);
+
+    }
+
     public static function specialColumns($column, $post)
     {
         //Utility::specialColumns(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->orderBy('id','DESC')->get();
-
-    }
-
-    public static function specialColumnsDate($column, $post,$dateArray)
-    {
-        //Utility::specialColumns(self::table(),$column, $post);
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
 
     }
 
@@ -105,11 +88,11 @@ class JobApplicants extends Model
 
     }
 
-    public static function specialColumns2Date($column, $post, $column2, $post2,$dateArray)
+    public static function specialColumnsOr2($column, $post, $column2, $post2)
     {
-        //Utility::specialColumns(self::table(),$column, $post);
+        //return Utility::specialColumns2(self::table(),$column, $post, $column2, $post2);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->whereBetween('created_at',$dateArray)->orderBy('id','DESC')->get();
+            ->orWhere($column2, '=',$post2)->orderBy('id','DESC')->get();
 
     }
 
@@ -174,5 +157,7 @@ class JobApplicants extends Model
         return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
+
+
 
 }

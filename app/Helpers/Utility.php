@@ -899,6 +899,24 @@ class Utility
 
     }
 
+    public static function odometerMeasure(){
+
+        $data = DB::table('vehicle_odometer_measure')
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('active_status', self::STATUS_ACTIVE)->first();
+
+        if(empty($data)){
+            $emptyData = new \stdClass();
+            $emptyData->name = 'Miles';
+            $emptyData->status = '0';
+
+            return $emptyData;
+        }
+
+        return $data;
+
+    }
+
     public static function convertAmount($currCurrencyCode,$newCurrencyCode,$amount){
         $defaultCurrStatus = self::firstRow2('currency','default_curr_status',self::STATUS_ACTIVE,'code',$newCurrencyCode);
         if(!empty($defaultCurrStatus)){

@@ -14,8 +14,8 @@
         <th>Recurring Cost {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>Status</th>
         <th>contractor</th>
-        <th>Mileage Before (Miles)</th>
-        <th>Mileage After(Miles)</th>
+        <th>Mileage Before ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+        <th>Mileage After({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Start Date</th>
         <th>End Date</th>
         <th>Recurring Interval</th>

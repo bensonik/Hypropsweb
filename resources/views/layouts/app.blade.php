@@ -1081,6 +1081,12 @@
                             <a href="{{url('vehicle_fuel_station')}}">Fuel Station</a>
                         </li>
                         <li>
+                            <a href="{{url('vehicle_workshop')}}">Vehicle Workshop(s)</a>
+                        </li>
+                            <li>
+                                <a href="{{url('vehicle_odometer_measure')}}">Vehicle Odometer Measure</a>
+                            </li>
+                        <li>
                             <a href="{{url('vehicle_odometer_log')}}">Vehicle Odometer Mileage Log</a>
                         </li>
                         <li>
@@ -1950,8 +1956,9 @@
 
     $(function() {
         $( ".datepicker1" ).datepicker({
-            /*changeMonth: true,
-             changeYear: true*/
+            changeMonth: true,
+            changeYear: true,
+            dateFormat: "yy-mm-dd"
         });
     });
 </script>

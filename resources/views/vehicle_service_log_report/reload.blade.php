@@ -20,7 +20,7 @@
                     <i class="material-icons">equalizer</i>
                 </div>
                 <div class="content">
-                    <div class="text">Total Mileage Spent in Workshop(s)</div>
+                    <div class="text">Total Mileage({{\App\Helpers\Utility::odometerMeasure()->name}}) Spent in Workshop(s)</div>
                     <div class="number">{{number_format($chartObject->workshopMileage)}}</div>
                 </div>
             </div>
@@ -138,8 +138,8 @@
                             <th>Total Bill {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Driver</th>
                             <th>Workshop</th>
-                            <th>Mileage In(Miles)</th>
-                            <th>Mileage Out(Miles)</th>
+                            <th>Mileage In({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Mileage Out({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Location</th>
                             <th>Service Date</th>
                             <th>Comment</th>

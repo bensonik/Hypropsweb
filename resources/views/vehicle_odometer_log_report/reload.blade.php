@@ -10,7 +10,7 @@
                 </div>
                 <div class="content">
                     <div class="text">Total Accumulated Mileage on Vehicle(s) Within Date Interval</div>
-                    <div class="number">{{number_format($chartObject->totalDailyMileage)}} Miles</div>
+                    <div class="number">{{number_format($chartObject->totalDailyMileage)}} ({{\App\Helpers\Utility::odometerMeasure()->name}})</div>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Total Accumulated Mileage On Vehicle By Month
+                        Total Accumulated Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}}) On Vehicle By Month
                         <small></small>
                     </h2>
 
@@ -47,7 +47,7 @@
                                 <tr>
                                     <th>Month</th>
                                     <th>
-                                        Total Accumulated Mileage
+                                        Total Accumulated Mileage({{\App\Helpers\Utility::odometerMeasure()->name}})
                                     </th>
                                 </tr>
                                 </thead>
@@ -72,7 +72,7 @@
                                 <tr>
                                     <th>Month</th>
                                     <th>
-                                        Total Accumulated Mileage
+                                        Total Accumulated Mileage({{\App\Helpers\Utility::odometerMeasure()->name}})
                                     </th>
                                 </tr>
                                 </thead>
@@ -124,9 +124,9 @@
                             <th>Attachment</th>
                             <th>Vehicle</th>
                             <th>Driver</th>
-                            <th>Mileage Before(Miles)</th>
-                            <th>Mileage After(Miles)</th>
-                            <th>Total Derived Mileage</th>
+                            <th>Mileage Before({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Mileage After({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Total Derived Mileage({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Log Date</th>
                             <th>Comment</th>
                             <th>Created by</th>

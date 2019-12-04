@@ -125,30 +125,26 @@ class JobsController extends Controller
     public function searchApplicants(Request $request)
     {
         //
-        /*$searchResultRules = [
-            'project' => 'required',
-            'report_type' => 'required',
-            'from_date' => 'required',
-            'to_date' => 'required',
-        ];
-        $validator = Validator::make($request->all(),$searchResultRules);
-        if($validator->passes()) {*/
+
 
         $job = $request->input('job');
         $exp = $request->input('experience');
+        $startDate = Utility::standardDate($request->input('from_date'));
+        $endDate = Utility::standardDate($request->input('to_date'));
+        $dateArray = [$startDate,$endDate];
         $mainData = [];
 
             if($job != '' && $exp != ''){
-                $mainData = JobApplicants::specialColumns2('job_id', $job, 'experience', $exp);
+                $mainData = JobApplicants::specialColumns2Date('job_id', $job, 'experience', $exp,$dateArray);
             }
-            if($job != '' && $exp == ''){
-                $mainData = JobApplicants::specialColumns('job_id', $job);
+            if($job != '' && $exp == '00'){
+                $mainData = JobApplicants::specialColumnsDate('job_id', $job,$dateArray);
             }
-            if($exp != ''){
-                $mainData = JobApplicants::specialColumns('experience', $exp);
+            if($exp != '00' && $job == ''){
+                $mainData = JobApplicants::specialColumnsDate('experience', $exp,$dateArray);
             }
 
-
+        //return $exp.$job;exit();
         return view::make('jobs.search_applicants')->with('mainData',$mainData);
 
         /*}else{

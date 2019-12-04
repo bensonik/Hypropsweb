@@ -30,7 +30,7 @@
                     <i class="material-icons">equalizer</i>
                 </div>
                 <div class="content">
-                    <div class="text">Total Mileage Accrued With Total Liters</div>
+                    <div class="text">Total {{\App\Helpers\Utility::odometerMeasure()->name}} Accrued With Total Liters</div>
                     <div class="number">{{number_format($chartObject->totalMileage)}}</div>
                 </div>
             </div>
@@ -149,7 +149,7 @@
                             <th>Driver</th>
                             <th>Price Per Liter {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>liter</th>
-                            <th>Mileage (Miles)</th>
+                            <th>Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Purchase Date</th>
                             <th>Comment</th>
                             <th>Invoice Reference</th>

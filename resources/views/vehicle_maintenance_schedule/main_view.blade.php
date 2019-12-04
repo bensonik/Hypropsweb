@@ -63,7 +63,7 @@
                                 @endif
 
                                 <div class="col-sm-5">
-                                    <b>Vehicle Current Mileage(Miles)</b>
+                                    <b>Vehicle Current Mileage({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="number" class="form-control mileage_class" value="0" name="mileage" id="" placeholder="Mileage" required>
@@ -181,7 +181,7 @@
                             <th>Manage</th>
                             <th>Vehicle</th>
                             <th>Maintenance Reminder</th>
-                            <th>Vehicle Mileage During Schedule(Miles)</th>
+                            <th>Vehicle Mileage During Schedule({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Created by</th>
                             <th>Updated by</th>
                             <th>Created at</th>

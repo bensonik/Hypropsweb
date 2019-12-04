@@ -52,6 +52,24 @@
                         <div class="body">
 
                             <div class="row clearfix">
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" autocomplete="off" id="start_date" name="from_date" placeholder="From e.g 2019-02-22">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" autocomplete="off" id="end_date" name="to_date" placeholder="To e.g 2019-04-21">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
                                 <div class="col-sm-3" id="">
                                     <div class="form-group">
                                         <div class="form-line">
@@ -70,6 +88,7 @@
                                         <div class="form-line">
                                             <select class="form-control" name="experience" >
                                                 <option value="">Select Experience</option>
+                                                <option value="00">All Experience</option>
                                                 @for($i=0;$i<30;$i++)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                 @endfor
@@ -84,8 +103,8 @@
 
                                 <div class="col-sm-12" id="" style="">
                                     <div class="form-group">
-                                        <button id="search_applicants" class="btn btn-info col-sm-8" type="button" onclick="searchReport('searchMainForm','<?php echo url('search_job_applicants'); ?>','reload_data',
-                                                '<?php echo url('applicants') ?>','<?php echo csrf_token(); ?>')">Search</button>
+                                        <button id="search_applicants" class="btn btn-info col-sm-8" type="button" onclick="searchJobReport('searchMainForm','<?php echo url('search_job_applicants'); ?>','reload_data',
+                                                '<?php echo url('applicants') ?>','<?php echo csrf_token(); ?>','start_date','end_date')">Search</button>
                                     </div>
                                 </div>
 
@@ -191,6 +210,41 @@
         $('#'+modalId).modal('show');
         $('#'+divId).html(letter);
     }
+
+    function searchJobReport(formId,submitUrl,reload_id,reloadUrl,token,fromId,toId){
+
+        var from = $('#'+fromId).val();
+        var to = $('#'+toId).val();
+
+        var inputVars = $('#'+formId).serialize();
+
+        if(from != '' && to !=''){
+
+            var postVars = inputVars;
+            $('#loading_modal').modal('show');
+            sendRequestForm(submitUrl,token,postVars)
+            ajax.onreadystatechange = function(){
+                if(ajax.readyState == 4 && ajax.status == 200) {
+
+                    $('#loading_modal').modal('hide');
+                    var result = ajax.responseText;
+                    $('#'+reload_id).html(result);
+
+                    //END OF IF CONDITION FOR OUTPUTING AJAX RESULTS
+
+                }
+            }
+
+        }else{
+            swal("warning!", "Please ensure to select start and end date.", "warning");
+
+        }
+
+
+
+
+    }
+
 
     /*==================== PAGINATION =========================*/
 

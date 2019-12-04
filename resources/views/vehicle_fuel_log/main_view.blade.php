@@ -60,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
-                                    <b>Mileage (Miles)</b>
+                                    <b>Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="number" class="form-control" name="mileage" placeholder="Mileage" >
@@ -249,7 +249,7 @@
                             <th>Driver</th>
                             <th>Price Per Liter {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>liter</th>
-                            <th>Mileage (Miles)</th>
+                            <th>Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Purchase Date</th>
                             <th>Comment</th>
                             <th>Invoice Reference</th>

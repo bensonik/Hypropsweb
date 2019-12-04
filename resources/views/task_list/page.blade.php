@@ -58,7 +58,7 @@
                         </div>
 
 
-                        <input type="checkbox" class="change_task" name="change_task" value="1" onclick="changeUserT('currentTList','formerTList','change_task','task_input','task_dropdown');" id="change_task" />Check to task(s) to existing task list
+                        <input type="checkbox" class="change_task" name="change_task" value="1" onclick="changeUserT('currentTList','formerTList','change_task','task_input','task_dropdown');" id="change_task" />Check to add to existing task list
                         <hr/>
                         <h4>Add task(s) to list</h4>
                         @include('includes.task_form',['itemId' => $item->id])

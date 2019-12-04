@@ -4,9 +4,10 @@ namespace App\Http\Controllers;
 
 use App\model\AccountJournal;
 use App\model\BudgetSummary;
-use App\model\FinancialYear;
 use App\model\Inventory;
 use App\Helpers\Utility;
+use App\model\VehicleOdometerLog;
+use App\model\VehicleOdometerMeasure;
 use App\User;
 use Auth;
 use View;
@@ -20,7 +21,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class FinancialYearController extends Controller
+class VehicleOdometerMeasureController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -31,13 +32,13 @@ class FinancialYearController extends Controller
     {
         //
         //$req = new Request();
-        $mainData = FinancialYear::paginateAllData();
+        $mainData = VehicleOdometerMeasure::paginateAllData();
 
         if ($request->ajax()) {
-            return \Response::json(view::make('financial_year.reload',array('mainData' => $mainData))->render());
+            return \Response::json(view::make('vehicle_odometer_measure.reload',array('mainData' => $mainData))->render());
 
         }
-                return view::make('financial_year.main_view')->with('mainData',$mainData);
+        return view::make('vehicle_odometer_measure.main_view')->with('mainData',$mainData);
 
     }
 
@@ -49,10 +50,10 @@ class FinancialYearController extends Controller
     public function create(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),FinancialYear::$mainRules);
+        $validator = Validator::make($request->all(),VehicleOdometerMeasure::$mainRules);
         if($validator->passes()){
 
-            $countData = FinancialYear::specialColumns('fin_name',$request->input('name'));
+            $countData = VehicleOdometerMeasure::specialColumns('name',$request->input('name'));
             if($countData->count() > 0){
 
                 return response()->json([
@@ -62,13 +63,12 @@ class FinancialYearController extends Controller
 
             }else{
                 $dbDATA = [
-                    'fin_name' => $request->input('name'),
-                    'fin_date' => Utility::standardDate($request->input('date')),
+                    'name' => $request->input('name'),
                     'created_by' => Auth::user()->id,
                     'status' => Utility::STATUS_ACTIVE
                 ];
 
-                $pro = FinancialYear::create($dbDATA);
+                $pro = VehicleOdometerMeasure::create($dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -96,8 +96,8 @@ class FinancialYearController extends Controller
     public function editForm(Request $request)
     {
         //
-        $dept = FinancialYear::firstRow('id',$request->input('dataId'));
-        return view::make('financial_year.edit_form')->with('edit',$dept);
+        $dept = VehicleOdometerMeasure::firstRow('id',$request->input('dataId'));
+        return view::make('vehicle_odometer_measure.edit_form')->with('edit',$dept);
 
     }
 
@@ -110,19 +110,18 @@ class FinancialYearController extends Controller
     public function edit(Request $request)
     {
         //
-        $validator = Validator::make($request->all(),FinancialYear::$mainRules);
+        $validator = Validator::make($request->all(),VehicleOdometerMeasure::$mainRules);
         if($validator->passes()) {
 
             $dbDATA = [
-                'fin_name' => $request->input('name'),
-                'fin_date' => Utility::standardDate($request->input('date')),
+                'name' => $request->input('name'),
                 'updated_by' => Auth::user()->id
             ];
-            $rowData = FinancialYear::specialColumns('fin_name',$request->input('name'));
+            $rowData = VehicleOdometerMeasure::specialColumns('name',$request->input('name'));
             if(count($rowData) > 0){
                 if ($rowData[0]->id == $request->input('edit_id')) {
 
-                    FinancialYear::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                    VehicleOdometerMeasure::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                     return response()->json([
                         'message' => 'good',
@@ -138,7 +137,7 @@ class FinancialYearController extends Controller
                 }
 
             } else{
-                FinancialYear::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
+                VehicleOdometerMeasure::defaultUpdate('id', $request->input('edit_id'), $dbDATA);
 
                 return response()->json([
                     'message' => 'good',
@@ -174,14 +173,14 @@ class FinancialYearController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function finYearStatus(Request $request)
+    public function odometerMeasureStatus(Request $request)
     {
         //
         $idArray = json_decode($request->input('all_data'));
         $id = $idArray[0];
-        $check = FinancialYear::countData2('id', $id, 'active_status', '0');
+        $check = VehicleOdometerMeasure::countData2('id', $id, 'active_status', '0');
         if ($check > 0) {
-            $activeYear = FinancialYear::firstRow('active_status','1');
+            $activeYear = VehicleOdometerMeasure::firstRow('active_status','1');
             $dbData1 = [
                 'active_status' => '0'
             ];
@@ -189,9 +188,9 @@ class FinancialYearController extends Controller
                 'active_status' => Utility::STATUS_ACTIVE,
             ];
             if(!empty($activeYear)){
-                $cancelActive = FinancialYear::defaultUpdate('id', $activeYear->id, $dbData1);
+                $cancelActive = VehicleOdometerMeasure::defaultUpdate('id', $activeYear->id, $dbData1);
             }
-            $update = FinancialYear::defaultUpdate('id', $idArray, $dbData);
+            $update = VehicleOdometerMeasure::defaultUpdate('id', $idArray, $dbData);
 
 
             return response()->json([
@@ -201,7 +200,7 @@ class FinancialYearController extends Controller
         }else{
             return response()->json([
                 'message2' => 'rejected',
-                'message' => 'Financial Year already active'
+                'message' => 'Odometer already active'
             ]);
         }
 
@@ -218,10 +217,9 @@ class FinancialYearController extends Controller
         $in_use = [];
         $unused = [];
         for($i=0;$i<count($all_id);$i++){
-            $rowDataJournal = AccountJournal::specialColumns('fin_year', $all_id[$i]);
-            $rowDataBudget = BudgetSummary::specialColumns('fin_year_id', $all_id[$i]);
-            $rowDataActiveFinYear = FinancialYear::specialColumns2('fin_year_id', $all_id[$i],'active_status',Utility::STATUS_ACTIVE);
-            if(count($rowDataJournal)>0 || count($rowDataBudget)>0  || count($rowDataActiveFinYear)>0){
+
+            $rowDataActiveMeasure = VehicleOdometerMeasure::specialColumns2('id', $all_id[$i],'active_status',Utility::STATUS_ACTIVE);
+            if(count($rowDataActiveMeasure)>0){
                 $unused[$i] = $all_id[$i];
             }else{
                 $in_use[$i] = $all_id[$i];
@@ -230,7 +228,7 @@ class FinancialYearController extends Controller
         $message = (count($unused) > 0) ? ' and '.count($unused).
             ' bin type has been used in another module and cannot be deleted' : '';
         if(count($in_use) > 0){
-            $delete = FinancialYear::massUpdate('id',$in_use,$dbData);
+            $delete = VehicleOdometerMeasure::massUpdate('id',$in_use,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',

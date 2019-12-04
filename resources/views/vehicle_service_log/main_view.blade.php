@@ -130,11 +130,15 @@
                             <hr/>
 
                             <div class="row clearfix">
-                                <div class="col-sm-6">
-                                    <b>Workshop</b>
+                                <div class="col-sm-4">
+                                    <b>Workshop*</b>
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="workshop" id="" placeholder="workshop" required>
+                                            <select class="form-control" name="workshop"  required>
+                                                @foreach($workshop as $data)
+                                                    <option value="{{$data->id}}">{{$data->name}}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -256,8 +260,8 @@
                             <th>Total Bill {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Driver</th>
                             <th>Workshop</th>
-                            <th>Mileage In(Miles)</th>
-                            <th>Mileage Out(Miles)</th>
+                            <th>Mileage In({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Mileage Out({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Location</th>
                             <th>Service Date</th>
                             <th>Comment</th>
@@ -286,7 +290,7 @@
                             <td>{{$data->service->name}}</td>
                             <td>{{number_format($data->total_price)}}</td>
                             <td>{{$data->driver->firstname}} &nbsp; {{$data->driver->lastname}}</td>
-                            <td>{{$data->workshop}}</td>
+                            <td>{{$data->workshopDetail->name}}</td>
                             <td>{{number_format($data->mileage_in)}}</td>
                             <td>{{number_format($data->mileage_out)}}</td>
                             <td>{{$data->location}}</td>

@@ -9,7 +9,7 @@
 
         <th>Manage</th>
         <th>Name</th>
-        <th>Mileage Interval</th>
+        <th>Mileage Interval ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Notification Date</th>
         <th>Notification Interval</th>
         <th>Services</th>

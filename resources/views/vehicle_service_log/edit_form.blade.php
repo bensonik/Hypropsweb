@@ -67,7 +67,7 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <b>Mileage In</b>
+                <b>Mileage In({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class="form-control" value="{{$edit->mileage_in}}" id="" name="mileage_in" placeholder="Mileage In" >
@@ -75,7 +75,7 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <b>Mileage Out</b>
+                <b>Mileage Out({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" id="" class="form-control" value="{{$edit->mileage_out}}" id="" name="mileage_out" placeholder="Mileage Out">
@@ -88,10 +88,15 @@
 
         <div class="row clearfix">
             <div class="col-sm-4">
-                <b>Workshop</b>
+                <b>Workshop*</b>
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->workshop}}" name="workshop" id="" placeholder="Workshop" required>
+                        <select class="form-control" name="workshop"  required>
+                            <option value="{{$edit->workshop}}">{{$edit->workshopDetail->name}}</option>
+                            @foreach($workshop as $data)
+                                <option value="{{$data->id}}">{{$data->name}}</option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>

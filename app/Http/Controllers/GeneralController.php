@@ -380,15 +380,15 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
-        //SEARCH VENDOR
-        if($type == 'search_vendor'){
+        //SEARCH CUSTOMER
+        if($type == 'search_customer'){
 
             $searchId = $_GET['searchId'];
             $hiddenId = $_GET['hiddenId'];
             $listId = $_GET['listId'];
 
             if($pickedVal != '') {
-                $search = VendorCustomer::searchVendor($pickedVal);
+                $search = VendorCustomer::searchCustomer($pickedVal);
                 $obtain_array = [];
 
                 foreach ($search as $data) {

@@ -14,8 +14,8 @@
         <th>Total Bill {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>Driver</th>
         <th>Workshop</th>
-        <th>Mileage In(Miles)</th>
-        <th>Mileage Out(Miles)</th>
+        <th>Mileage In({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+        <th>Mileage Out({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Location</th>
         <th>Service Date</th>
         <th>Comment</th>
@@ -44,7 +44,7 @@
             <td>{{$data->service->name}}</td>
             <td>{{number_format($data->total_price)}}</td>
             <td>{{$data->driver->firstname}} &nbsp; {{$data->driver->lastname}}</td>
-            <td>{{$data->workshop}}</td>
+            <td>{{$data->workshopDetail->name}}</td>
             <td>{{number_format($data->mileage_in)}}</td>
             <td>{{number_format($data->mileage_out)}}</td>
             <td>{{$data->location}}</td>

@@ -7,14 +7,13 @@
 
         </th>
 
-        <th>Manage</th>
-        <th>Vehicle</th>
-        <th>Maintenance Reminder</th>
-        <th>Vehicle Mileage During Schedule({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+        <th>Name</th>
+        <th>Location</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>
         <th>Updated at</th>
+        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
@@ -24,17 +23,9 @@
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
             </td>
-            @if($data->created_by == Auth::user()->id || in_array(Auth::user()->role,\App\Helpers\Utility::TOP_USERS))
-                <td>
-                    <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_vehicle_maintenance_schedule_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                </td>
-            @else
-                <td></td>
-        @endif
-        <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->vehicle_make}} {{$data->vehicle_model}} ({{$data->vehicleDetail->license_plate}})</td>
-            <td>{{$data->reminder->name}}</td>
-            <td>{{$data->mileage}}</td>
+            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+            <td>{{$data->name}}</td>
+            <td>{{$data->location}}</td>
             <td>
                 {{$data->user_c->firstname}} {{$data->user_c->lastname}}
             </td>
@@ -44,7 +35,10 @@
             <td>{{$data->created_at}}</td>
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+            <td>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_vehicle_workshop_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
 
+            </td>
         </tr>
     @endforeach
     </tbody>

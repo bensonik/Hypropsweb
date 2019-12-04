@@ -133,7 +133,7 @@
                                                     <td>{{$data->project->project_name}}</td>
                                                     <td>{{$data->decision_desc}}</td>
                                                     <td>
-                                                        <a href="<?php echo url('project/'.$item->id.'/decision/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Change</a>
+                                                        <a href="<?php echo url('project/'.$item->id.'/decision/'.$data->id.\App\Helpers\Utility::authLink('temp_user')) ?>">View/Comment on Decision</a>
                                                     </td>
                                                     <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                                                     @if($item->project_head == \App\Helpers\Utility::checkAuth('temp_user')->id)

@@ -41,7 +41,7 @@
                             </div>
 
                         </div>
-                        <input type="checkbox" class="change_milestone" name="change_milestone" value="1" onclick="changeUserT('currentMilestone','formerMilestone','change_milestone','milestone_input','milestone_dropdown');" id="change_milestone" />Check to task(s) to existing task list
+                        <input type="checkbox" class="change_milestone" name="change_milestone" value="1" onclick="changeUserT('currentMilestone','formerMilestone','change_milestone','milestone_input','milestone_dropdown');" id="change_milestone" />Check to add to existing milestone
                         <hr/>
 
                         <div class="row clearfix">

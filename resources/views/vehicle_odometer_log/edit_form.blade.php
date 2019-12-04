@@ -34,7 +34,7 @@
             @endif
 
             <div class="col-sm-4">
-                <b>Mileage Before</b>
+                <b>Mileage Before ({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" class="form-control" value="{{$edit->start_mileage}}" id="" name="mileage_before" placeholder="Mileage Before" >
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div class="col-sm-4">
-                <b>Mileage After</b>
+                <b>Mileage After ({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                 <div class="form-group">
                     <div class="form-line">
                         <input type="number" id="" class="form-control" value="{{$edit->end_mileage}}" id="" name="mileage_after" placeholder="Mileage After">

@@ -7,6 +7,7 @@ use App\model\VehicleServiceLog;
 use App\Helpers\Utility;
 use App\model\VehicleCategory;
 use App\model\VehicleServiceType;
+use App\model\VehicleWorkshop;
 use App\User;
 use Auth;
 use Monolog\Handler\Curl\Util;
@@ -34,15 +35,16 @@ class VehicleServiceLogController extends Controller
         //$req = new Request();
         $mainData = VehicleServiceLog::specialColumnsPage('created_by',Auth::user()->id);
         $serviceType = VehicleServiceType::getAllData();
+        $workshop = VehicleWorkshop::getAllData();
         $this->processData($mainData);
 
         if ($request->ajax()) {
             return \Response::json(view::make('vehicle_service_log.reload',array('mainData' => $mainData,
-                'serviceType' => $serviceType))->render());
+                'serviceType' => $serviceType,'workshop' => $workshop))->render());
 
         }else{
             return view::make('vehicle_service_log.main_view')->with('mainData',$mainData)
-                ->with('serviceType',$serviceType);
+                ->with('serviceType',$serviceType)->with('workshop',$workshop);
         }
 
     }
@@ -121,8 +123,9 @@ class VehicleServiceLogController extends Controller
         //
         $request = VehicleServiceLog::firstRow('id',$request->input('dataId'));
         $serviceType = VehicleServiceType::getAllData();
+        $workshop = VehicleWorkshop::getAllData();
         return view::make('vehicle_service_log.edit_form')->with('edit',$request)
-            ->with('serviceType',$serviceType);
+            ->with('serviceType',$serviceType)->with('workshop',$workshop);
 
     }
 

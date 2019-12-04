@@ -1132,6 +1132,21 @@ Route::post('/edit_vehicle_service_type_form', 'VehicleServiceTypeController@edi
 Route::post('/edit_vehicle_service_type', 'VehicleServiceTypeController@edit')->name('edit_vehicle_service_type');
 Route::post('/delete_vehicle_service_type', 'VehicleServiceTypeController@destroy')->name('delete_vehicle_service_type');
 
+// -------------VEHICLE WORKSHOP MODULE-----------
+Route::any('/vehicle_workshop', 'VehicleWorkshopController@index')->name('vehicle_workshop')->middleware('auth');
+Route::post('/create_vehicle_workshop', 'VehicleWorkshopController@create')->name('create_vehicle_workshop');
+Route::post('/edit_vehicle_workshop_form', 'VehicleWorkshopController@editForm')->name('edit_vehicle_workshop_form');
+Route::post('/edit_vehicle_workshop', 'VehicleWorkshopController@edit')->name('edit_vehicle_workshop');
+Route::post('/delete_vehicle_workshop', 'VehicleWorkshopController@destroy')->name('delete_vehicle_workshop');
+
+// -------------VEHICLE ODOMETER MEASURE MODULE-----------
+Route::any('/vehicle_odometer_measure', 'VehicleOdometerMeasureController@index')->name('vehicle_odometer_measure')->middleware('auth');
+Route::post('/create_vehicle_odometer_measure', 'VehicleOdometerMeasureController@create')->name('create_vehicle_odometer_measure');
+Route::post('/edit_vehicle_odometer_measure_form', 'VehicleOdometerMeasureController@editForm')->name('edit_vehicle_odometer_measure_form');
+Route::post('/edit_vehicle_odometer_measure', 'VehicleOdometerMeasureController@edit')->name('edit_vehicle_odometer_measure');
+Route::post('/vehicle_odometer_measure_status', 'VehicleOdometerMeasureController@odometerMeasureStatus')->name('vehicle_odometer_measure_status');
+Route::post('/delete_vehicle_odometer_measure', 'VehicleOdometerMeasureController@destroy')->name('delete_vehicle_odometer_measure');
+
 // -------------VEHICLE STATUS MODULE-----------
 Route::any('/vehicle_status', 'VehicleStatusController@index')->name('vehicle_status')->middleware('auth');
 Route::post('/create_vehicle_status', 'VehicleStatusController@create')->name('create_vehicle_status');

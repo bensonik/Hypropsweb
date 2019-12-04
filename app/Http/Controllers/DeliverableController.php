@@ -195,7 +195,7 @@ class DeliverableController extends Controller
         if($validator->passes()) {
 
             $dbDATA = [
-                'del_desc' => ucfirst($request->input('change_description')),
+                'del_desc' => ucfirst($request->input('deliverable')),
                 'updated_by' => Utility::checkAuth('temp_user')->id,
             ];
 

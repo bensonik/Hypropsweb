@@ -204,9 +204,9 @@
                             <th>Attachment</th>
                             <th>Vehicle</th>
                             <th>Driver</th>
-                            <th>Mileage Before(Miles)</th>
-                            <th>Mileage After(Miles)</th>
-                            <th>Total Derived Mileage</th>
+                            <th>Mileage Before({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Mileage After({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
+                            <th>Total Derived Mileage({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
                             <th>Log Date</th>
                             <th>Comment</th>
                             <th>Created by</th>

@@ -15,7 +15,7 @@
         <th>Driver</th>
         <th>License Plate</th>
         <th>Model Year</th>
-        <th>Mileage (Miles)</th>
+        <th>Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Transmission</th>
         <th>Fuel Type</th>
         <th>Registration Date</th>

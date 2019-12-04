@@ -29,7 +29,7 @@ class ProjectDocsController extends Controller
         $project = Project::firstRow('id',$id);
         Utility::processProjectItem($project);
         $active = 0;
-        if(Utility::authColumn('temp_user') == 'user_id'){
+        if(Utility::authColumn('temp_user') == 'assigned_user'){
             if(in_array(Utility::checkAuth('temp_user')->id,Utility::TOP_USERS))
             $active = 1;
         }

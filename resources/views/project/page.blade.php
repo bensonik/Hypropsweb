@@ -34,7 +34,7 @@
                                 <b>Start Date</b>
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="form-control datepicker" name="start_date" placeholder="Start Date">
+                                        <input type="text" class="form-control datepicker1" name="start_date" placeholder="Start Date">
                                     </div>
                                 </div>
                             </div>
@@ -43,7 +43,7 @@
                                 <b>End Date</b>
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="form-control datepicker" name="end_date" placeholder="End Date">
+                                        <input type="text" class="form-control datepicker1" name="end_date" placeholder="End Date">
                                     </div>
                                 </div>
                             </div>
@@ -64,7 +64,7 @@
                                 Customer/Client
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="form-control" autocomplete="off" id="select_customer" onkeyup="searchOptionList('select_customer','myUL2','{{url('default_select')}}','search_customer','customer');" name="select_user" placeholder="Select Customer">
+                                        <input type="text" class="form-control" autocomplete="off" id="select_customer" onkeyup="searchOptionList('select_customer','myUL2','{{url('default_select')}}','search_customer','customer');" name="select_customer" placeholder="Select Customer">
 
                                         <input type="hidden" class="user_class" name="customer" id="customer" />
                                     </div>

@@ -15,7 +15,7 @@
         <th>Driver</th>
         <th>Price Per Liter {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>liter</th>
-        <th>Mileage (Miles)</th>
+        <th>Mileage ({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Purchase Date</th>
         <th>Comment</th>
         <th>Invoice Reference</th>

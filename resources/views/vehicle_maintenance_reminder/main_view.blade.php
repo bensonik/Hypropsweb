@@ -43,7 +43,7 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <b>Mileage Interval (Miles)</b>
+                                    <b>Mileage Interval ({{\App\Helpers\Utility::odometerMeasure()->name}})</b>
                                     <div class="form-group">
                                         <div class="form-line">
                                             <input type="number" class="form-control" value="0" name="mileage" id="" placeholder="Mileage" required>

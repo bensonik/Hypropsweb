@@ -10,7 +10,7 @@
         <th>Manage</th>
         <th>Vehicle</th>
         <th>Maintenance Reminder</th>
-        <th>Vehicle Mileage During Schedule(Miles)</th>
+        <th>Vehicle Mileage During Schedule({{\App\Helpers\Utility::odometerMeasure()->name}})</th>
         <th>Created by</th>
         <th>Updated by</th>
         <th>Created at</th>

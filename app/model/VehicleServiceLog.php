@@ -55,6 +55,11 @@ class VehicleServiceLog extends Model
 
     }
 
+    public function workshopDetail(){
+        return $this->belongsTo('App\model\VehicleWorkshop','workshop','id')->withDefault();
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
