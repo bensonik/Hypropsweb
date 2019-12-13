@@ -572,6 +572,37 @@ Route::post('/delete_inventory', 'InventoryController@destroy')->name('delete_in
 Route::any('/delete_bom_item', 'InventoryController@permDelete')->name('delete_bom_item');
 Route::post('/change_inventory_status', 'InventoryController@changeStatus')->name('change_inventory_status');
 
+// -------------INVENTORY CONTRACT MODULE-----------
+Route::any('/inventory_contract', 'InventoryContractController@index')->name('inventory_contract')->middleware('auth');
+Route::any('/inventory_contract_ext_amount', 'InventoryContractController@extendedAmount')->name('ext_amount');
+Route::post('/edit_inventory_contract_form', 'InventoryContractController@editForm')->name('edit_inventory_contract_form');
+Route::post('/create_inventory_contract', 'InventoryContractController@create')->name('create_inventory_contract');
+Route::post('/edit_inventory_contract', 'InventoryContractController@edit')->name('edit_inventory_contract');
+Route::any('/search_inventory_contract', 'InventoryContractController@searchInventory')->name('search_inventory_contract');
+Route::post('/delete_inventory_contract', 'InventoryContractController@destroy')->name('delete_inventory_contract');
+Route::any('/delete_inventory_contract_item', 'InventoryContractController@permDelete')->name('delete_inventory_contract_item');
+Route::post('/edit_inventory_contract_attachment', 'InventoryContractController@editAttachment')->name('edit_inventory_contract_attachment');
+Route::post('/remove_inventory_contract_attachment', 'InventoryContractController@removeAttachment')->name('remove_inventory_contract_attachment');
+Route::any('/download_inventory_contract_attachment', 'InventoryContractController@downloadAttachment')->name('download_inventory_contract_attachment');
+Route::post('/edit_inventory_contract_attachment_form', 'InventoryContractController@attachmentForm')->name('edit_inventory_contract_attachment_form');
+Route::post('/change_inventory_contract_status', 'InventoryContractController@changeStatus')->name('change_inventory_contract_status');
+
+
+// -------------INVENTORY CONTRACT TYPE MODULE-----------
+Route::any('/inventory_contract_type', 'InventoryContractTypeController@index')->name('inventory_contract_type')->middleware('auth');
+Route::post('/create_inventory_contract_type', 'InventoryContractTypeController@create')->name('create_inventory_contract_type');
+Route::post('/edit_inventory_contract_type_form', 'InventoryContractTypeController@editForm')->name('edit_inventory_contract_type_form');
+Route::post('/edit_inventory_contract_type', 'InventoryContractTypeController@edit')->name('edit_inventory_contract_type');
+Route::post('/delete_inventory_contract_type', 'InventoryContractTypeController@destroy')->name('delete_inventory_contract_type');
+
+// -------------INVENTORY CONTRACT STATUS MODULE-----------
+Route::any('/inventory_contract_status', 'InventoryContractStatusController@index')->name('inventory_contract_status')->middleware('auth');
+Route::post('/create_inventory_contract_status', 'InventoryContractStatusController@create')->name('create_inventory_contract_status');
+Route::post('/edit_inventory_contract_status_form', 'InventoryContractStatusController@editForm')->name('edit_inventory_contract_status_form');
+Route::post('/edit_inventory_contract_status', 'InventoryContractStatusController@edit')->name('edit_inventory_contract_status');
+Route::post('/delete_inventory_contract_status', 'InventoryContractStatusController@destroy')->name('delete_inventory_contract_status');
+
+
 // -------------INVENTORY ACCESS MODULE-----------
 Route::any('/inventory_access', 'InventoryAccessController@index')->name('inventory_access')->middleware('auth.admin');
 Route::post('/create_inventory_access', 'InventoryAccessController@create')->name('create_inventory_access');

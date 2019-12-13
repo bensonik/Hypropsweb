@@ -572,13 +572,5 @@ class InventoryController extends Controller
 
     }
 
-    public function connectBom($data){
-
-            if($data->assemble_bom == 'checked'){
-                $bomItems = InventoryBom::specialColumns('inventory_id',$data->id);
-                $data->bomItems = $bomItems;
-            }
-
-    }
 
 }

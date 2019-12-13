@@ -219,7 +219,7 @@
                     <b>Quantity</b>
                     <div class="form-group">
                         <div class="form-line">
-                            <input type="number" class="form-control bom_qty_class_edit" value="{{$bo->quantity}}" name="bom_qty_edit{{$num}}" onkeyup="extendedAmount('inv500_{{$num}}','{{url('ext_amount')}}','ext_amount{{$num}}{{$bo->id}}','bom_qty{{$num}}{{$bo->id}}','bom_qty_class_edit','bom_amt','unit_cost_edit')" id="bom_qty{{$num}}{{$bo->id}}" placeholder="Quantity" >
+                            <input type="number" class="form-control bom_qty_class_edit" value="{{$bo->quantity}}" name="bom_qty_edit{{$num}}" onkeyup="extendedAmount('inv500_{{$num}}','{{url('ext_amount')}}','ext_amount{{$num}}{{$bo->id}}','bom_qty{{$num}}{{$bo->id}}','bom_qty_class_edit','bom_amt_edit','unit_cost_edit')" id="bom_qty{{$num}}{{$bo->id}}" placeholder="Quantity" >
                         </div>
                     </div>
                 </div>
@@ -229,7 +229,7 @@
                     <div class="input-group">
                         <span class="input-group-addon">{{$currSymbol}}</span>
                         <div class="form-line">
-                            <input type="number" class="form-control bom_amt_edit bom_amt" value="{{$bo->extended_amount}}" id="ext_amount{{$num}}{{$bo->id}}"  name="bom_amount_edit{{$num}}" placeholder="Amount" >
+                            <input type="number" class="form-control bom_amt_edit " value="{{$bo->extended_amount}}" id="ext_amount{{$num}}{{$bo->id}}"  name="bom_amount_edit{{$num}}" placeholder="Amount" >
                         </div>
                     </div>
                 </div>

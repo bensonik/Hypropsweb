@@ -629,6 +629,15 @@
                         <li>
                             <a href="{{url('warehouse_inventory')}}">Warehouse Inventory</a>
                         </li>
+                        <li>
+                            <a href="{{url('inventory_contract_type')}}">Inventory Contract Type</a>
+                        </li>
+                        <li>
+                            <a href="{{url('inventory_contract_status')}}">Inventory Contract Status</a>
+                        </li>
+                        <li>
+                            <a href="{{url('inventory_contract')}}">Inventory and Contract</a>
+                        </li>
                         @else
                             <li>
                                 <a href="{{url('inventory_assign')}}">Inventory Assignment</a>
@@ -636,6 +645,7 @@
                             <li>
                                 <a href="{{url('inventory_record')}}">Record Inventory Items</a>
                             </li>
+
                         @endif
                     </ul>
                 </li>

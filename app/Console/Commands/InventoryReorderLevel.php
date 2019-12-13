@@ -45,6 +45,7 @@ class InventoryReorderLevel extends Command
         //
         $inventoryUsers = DB::table('inventory_access')
             ->where('inventory_access.status', Utility::STATUS_ACTIVE)
+            ->whereIn('users.id', Utility::ACCOUNT_SCM_WHSE_ADMIN)
             ->join('users', 'users.id', '=', 'inventory_access.user_id')
             ->orderBy('inventory_access.id','DESC')->get();
         //$inventoryUsers = Utility::getAllData('inventory_access');

@@ -972,7 +972,7 @@
             <div class="form-line">
                 <input type="text" class="form-control" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','search_inventory','inv{{$num2}}');" name="select_inventory" placeholder="Select Inventory Item">
 
-                <input type="hidden" class="inv_class inv_class_edit" name="inventory" id="inv{{$num2}}" />
+                <input type="hidden" class="inv_class " name="inventory" id="inv{{$num2}}" />
             </div>
         </div>
         <ul id="myUL{{$num2}}" class="myUL"></ul>
@@ -982,7 +982,7 @@
         <b>Quantity</b>
         <div class="form-group">
             <div class="form-line">
-                <input type="number" class="form-control bom_qty bom_qty_edit bom_qty_class" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class','bom_amt','unit_cost')" placeholder="Quantity" >
+                <input type="number" class="form-control bom_qty  bom_qty_class" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class','bom_amt','unit_cost')" placeholder="Quantity" >
             </div>
         </div>
     </div>
@@ -992,7 +992,7 @@
         <div class="input-group">
             <span class="input-group-addon">{{$currSymbol}}</span>
             <div class="form-line">
-                <input type="text" class="form-control bom_amount bom_amount_edit bom_amt" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
+                <input type="text" class="form-control bom_amount  bom_amt" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
             </div>
         </div>
     </div>
@@ -1036,7 +1036,7 @@
             <b>Quantity</b>
             <div class="form-group">
                 <div class="form-line">
-                    <input type="number" class="form-control bom_qty bom_qty_edit bom_qty_class bom_qty_class_edit" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class_edit','bom_amt','unit_cost_edit')" placeholder="Quantity" >
+                    <input type="number" class="form-control bom_qty_edit bom_qty_class_edit" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class_edit','bom_amt_edit','unit_cost_edit')" placeholder="Quantity" >
                 </div>
             </div>
         </div>
@@ -1046,7 +1046,7 @@
             <div class="input-group">
                 <span class="input-group-addon">{{$currSymbol}}</span>
                 <div class="form-line">
-                    <input type="text" class="form-control bom_amount bom_amount_edit bom_amt" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
+                    <input type="text" class="form-control bom_amount_edit bom_amt_edit" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
                 </div>
             </div>
         </div>
@@ -1070,6 +1070,133 @@
     </div>
 @endif
 <!-- END OF ADDING BILL OF MATERIALS -->
+
+<!-- START OF ADDING ITEMS TO CONTRACT -->
+@if($type == 'contract_item')
+    <div class="row clearfix new_inv_bom remove_inv_bom{{$more}}"  >
+
+        <div class="col-sm-4">
+            Inventory Item
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','search_inventory','inv{{$num2}}');" name="select_inventory" placeholder="Select Inventory Item">
+
+                    <input type="hidden" class="inv_class" name="inventory" id="inv{{$num2}}" />
+                </div>
+            </div>
+            <ul id="myUL{{$num2}}" class="myUL"></ul>
+        </div>
+
+        <div class="col-sm-2">
+            <b>Quantity</b>
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="number" class="form-control bom_qty bom_qty_class" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class','bom_amt','unit_cost')" placeholder="Quantity" >
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <b>Amount</b>
+            <div class="input-group">
+                <span class="input-group-addon">{{$currSymbol}}</span>
+                <div class="form-line">
+                    <input type="text" class="form-control bom_amount bom_amt" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <b>Servicing Interval(Days)</b>
+            <div class="input-group">
+                <div class="form-line">
+                    <input type="text" class="form-control bom_servicing bom_servicing_class" id=""  name="bom_servicing" placeholder="Servicing Interval" >
+                </div>
+            </div>
+        </div>
+
+        <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','contract_item','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputInv('{{$add_id}}','remove_inv_bom{{$more}}','{{url('add_more')}}','contract_item','new_inv_bom','{{$more}}','{{$add_id}}','{{$hide_id}}','ext_amount{{$num2}}','unit_cost');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+@endif
+
+<!-- START OF ADDING ITEMS TO CONTRACT -->
+@if($type == 'contract_item_edit')
+    <div class="row clearfix new_inv_bom remove_inv_bom{{$more}}"  >
+
+        <div class="col-sm-4">
+            Inventory Item
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="text" class="form-control" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionList('select_inv{{$num2}}','myUL{{$num2}}','{{url('default_select')}}','search_inventory','inv{{$num2}}');" name="select_inventory" placeholder="Select Inventory Item">
+
+                    <input type="hidden" class=" inv_class_edit" name="inventory" id="inv{{$num2}}" />
+                </div>
+            </div>
+            <ul id="myUL{{$num2}}" class="myUL"></ul>
+        </div>
+
+        <div class="col-sm-2">
+            <b>Quantity</b>
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="number" class="form-control bom_qty_edit bom_qty_class_edit" name="bom_qty" id="bom_qty{{$num2}}" onkeyup="extendedAmount('inv{{$num2}}','{{url('ext_amount')}}','ext_amount{{$num2}}','bom_qty{{$num2}}','bom_qty_class_edit','bom_amt_edit','unit_cost_edit')" placeholder="Quantity" >
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <b>Amount</b>
+            <div class="input-group">
+                <span class="input-group-addon">{{$currSymbol}}</span>
+                <div class="form-line">
+                    <input type="text" class="form-control bom_amount_edit bom_amt_edit" id="ext_amount{{$num2}}"  name="bom_amount" placeholder="Amount" >
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+            <b>Servicing Interval(Days)</b>
+            <div class="input-group">
+                <div class="form-line">
+                    <input type="text" class="form-control bom_servicing_edit bom_servicing_class_edit" id=""  name="bom_servicing" placeholder="Servicing Interval" >
+                </div>
+            </div>
+        </div>
+
+        <div class=" addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','contract_item','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputInv('{{$add_id}}','remove_inv_bom{{$more}}','{{url('add_more')}}','contract_item','new_inv_bom','{{$more}}','{{$add_id}}','{{$hide_id}}','ext_amount{{$num2}}','unit_cost');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+@endif
+
 
 <!-- BEGIN OF ASSIGNING INVENTORY -->
 @if($type == 'assign_inv')

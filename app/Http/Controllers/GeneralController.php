@@ -970,7 +970,27 @@ class GeneralController extends Controller
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
                 ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
         }
+
+        if($type == 'bom_inv_edit'){
+            $currSymbol = session('currency')['symbol'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
         //END OF ADDING BILL OF MATERIALS
+
+        //START OF ADDING ITEMS TO CONTRACT
+        if($type == 'contract_item'){
+            $currSymbol = session('currency')['symbol'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+
+        if($type == 'contract_item_edit'){
+            $currSymbol = session('currency')['symbol'];
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('currSymbol',$currSymbol)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId);
+        }
+        //END OF ADDING ITEMS TO CONTRACT
 
         //START OF ADDING INVENTORY ITEMS TO WAREHOUSE
         if($type == 'warehouse_items'){

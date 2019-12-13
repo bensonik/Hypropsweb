@@ -32,7 +32,8 @@ class Utility
     const PROCESSING = 0, APPROVED = 1, DENIED = 2, COMPLETED = 1;
     const USUAL_REQUEST_TYPE = 1, PROJECT_REQUEST_TYPE = 2;
     const TOP_USERS = [1,2,3], ACCOUNTANTS = 5, HR_MANAGEMENT = [1,2,3,6], ACCOUNT_MANAGEMENT = [1,2,3,5],
-        HR = 6, SCM_MANAGEMENT = [1,2,3,9], ACCOUNT_SCM_WHSE_MANAGEMENT = [1,2,3,5,9,10], ADMIN = 3;
+        HR = 6, SCM_MANAGEMENT = [1,2,3,9], ACCOUNT_SCM_WHSE_MANAGEMENT = [1,2,3,5,9,10], ADMIN = 3,
+        ACCOUNT_SCM_WHSE_ADMIN = [1,3,5,9,10];
     const PRO_QUAL = 1, TECH_COMP = 2, BEHAV_COMP = 3;
     const APP_OBJ_GOAL = 1, COMP_ASSESS = 2, BEHAV_COMP2 = 3, INDI_REV_COMMENT = 4, EMP_COM_APP_PLAT = 5;
     const P25 = '25', P20 = '20', P15 = '15', P50 = '50', P100 = '100', P35 = '35';
@@ -1671,6 +1672,16 @@ class Utility
             $data->bomData = $bomData;
         }
 
+    }
+
+    public static function addDaysToDate($days){
+        $Date = date('Y-m-d');
+        $newDate = date('Y-m-d', strtotime($Date. ' + '.$days.' days'));
+        if($days > 0 && $days != ''){
+            return $newDate;
+        }
+        $newDate = date('Y-m-d', strtotime($Date. ' - 1 days'));
+        return $newDate;
     }
 
 
