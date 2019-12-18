@@ -95,34 +95,7 @@
                 @if(in_array(Auth::user()->role,\App\Helpers\Utility::ACCOUNT_MANAGEMENT))
                 <div class="row">
                     <form name="import_excel" id="payForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <select class="form-control" name="month" >
-                                    <option value="">Select Account</option>
-                                    <option value="">Cash</option>
-                                    <option value="">Bank</option>
-                                    <option value="">Cheque</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <div class="form-line">
-                                <input type="text" class="form-control" name="cheque_no" placeholder="Cheque Number">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-sm-4">
-                        <div class="form-group">
 
-                            <div class="form-line">
-                                Affect General Ledger
-                                <input type="checkbox" class="" name="ledger_valid" placeholder="">
-                            </div>
-                        </div>
-                    </div>
                     <div class="col-sm-4">
                         <div class="form-group">
                             <div class="form-line">
@@ -147,7 +120,7 @@
                             <div class="form-line">
                                 <input type="text" id="search_user" class="form-control"
                                        onkeyup="searchItem('search_user','reload_data','<?php echo url('search_payroll_user') ?>','{{url('user')}}','<?php echo csrf_token(); ?>')"
-                                       name="search_user" placeholder="Search Users" >
+                                       name="search_user" placeholder="Search users for payment" >
                             </div>
                         </div>
                     </div>
@@ -157,11 +130,17 @@
                     <form name="import_excel" id="payrollForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">
                         <div class="body">
                             <div class="row clearfix">
-
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="form-control" name="extra_amount" placeholder="Amount">
+                                            <select class="form-control" name="week[]" multiple="multiple" >
+                                                <option selected value="">Select Week</option>
+                                                <option value="">None</option>
+                                                <option value="1">Week 1</option>
+                                                <option value="2">Week 2</option>
+                                                <option value="3">Week 3</option>
+                                                <option value="4">Week 4</option>
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -177,39 +156,73 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <select class="form-control" name="bonus_deduct_type" >
-                                                <option value="">Bonus/Deduction/None</option>
-                                                <option value="{{\App\Helpers\Utility::ZERO}}">None</option>
-                                                <option value="{{\App\Helpers\Utility::PAYROLL_BONUS}}">Bonus</option>
-                                                <option value="{{\App\Helpers\Utility::PAYROLL_DEDUCTION}}">Deduction</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <div class="form-line">
-                                            <input class="form-control datepicker" name="date" placeholder="Date" >
 
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="year" >
+                                                <option value="">Select Year</option>
+                                                @for($i=1970;$i<=date('Y');$i++)
+                                                    <option value="{{$i}}">{{$i}}</option>
+                                                @endfor
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
-
-                            <div class="row clear-fix">
+                            <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea class="form-control" name="amount_desc" placeholder="Description"></textarea>
+                                            <input type="number" class="form-control" name="extra_amount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <select class="form-control" name="bonus_deduct_type" >
+                                                <option value="">Earning/Deduction/None</option>
+                                                <option value="{{\App\Helpers\Utility::ZERO}}">None</option>
+                                                <option value="{{\App\Helpers\Utility::PAYROLL_BONUS}}">Earning</option>
+                                                <option value="{{\App\Helpers\Utility::PAYROLL_DEDUCTION}}">Deduction</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <textarea class="form-control" name="amount_desc" placeholder="Earning/Deduction Description, if any"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row clear-fix">
+
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" name="date" placeholder="Date of Processing" >
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <input type="checkbox" class="" value="1" name="auto_deduct" placeholder="Deduct Existing Loan and Salary Advance" >
+                                            Deduct User(s) Existing Loan and Salary Advance
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <button type="button" onclick="processPayroll('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
-                                        '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','0','payrollForm');" class="btn btn-success">
+                                        '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','0','payrollForm');" class="btn btn-success pull-right">
                                     <i class="fa fa-check-square-o"></i>Process Salary
                                 </button>
 
@@ -243,52 +256,67 @@
                             <th>Bonus/Deduction {{\App\Helpers\Utility::defaultCurrency()}}</th>
                             <th>Bonus/Deduction Desc</th>
                             <th>Payroll Status</th>
+                            <th>Pay Week(s)</th>
+                            <th>Pay Month</th>
+                            <th>Pay Year</th>
+                            <th>Process Date</th>
                             <th>Pay Date</th>
                             <th>Created By</th>
                             <th>Updated By</th>
                             <th>Created at</th>
                             <th>Updated at</th>
-                            <th>Manage</th>
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
-                        <tr>
-                            <td scope="row">
-                                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                            @php $monthName = date("F", mktime(0, 0, 0, $data->month,10)); @endphp
+                            <tr>
+                                <td scope="row">
+                                    <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
-                            </td>
-                            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>{{$data->userDetail->firstname}}&nbsp;{{$data->userDetail->lastname}} </td>
-                            <td>{{$data->salary->salary_name}}</td>
-                            <td>{{number_format($data->total_amount)}}</td>
-                            <td>{{number_format($data->bonus_deduc)}}</td>
-                            <td>{{$data->bonus_deduc_desc}}</td>
-                            <td>
-                                @if($data->payroll_status == \App\Helpers\Utility::PROCESSING)
-                                Processing
-                                @else
-                                    Paid
-                                @endif
-                            </td>
-                            <td>{{$data->pay_date}}</td>
-                            <td>
-                                @if($data->created_by != '0')
-                                    {{$data->user_c->firstname}} {{$data->user_c->lastname}}
-                                @endif
-                            </td>
-                            <td>
-                                @if($data->updated_by != '0')
-                                    {{$data->user_u->firstname}} {{$data->user_u->lastname}}
-                                @endif
-                            </td>
-                            <td>{{$data->created_at}}</td>
-                            <td>{{$data->updated_at}}</td>
-                            <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <td>
+                                </td>
+                                <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                <td>{{$data->userDetail->firstname}}&nbsp;{{$data->userDetail->lastname}} </td>
+                                <td>{{$data->salary->salary_name}}</td>
+                                <td>{{number_format($data->total_amount)}}</td>
+                                <td> {{number_format($data->bonus_deduc)}}</td>
+                                <td>{{$data->bonus_deduc_desc}}</td>
+                                <td>
+                                    @if($data->payroll_status == \App\Helpers\Utility::PROCESSING)
+                                        Processing
+                                    @else
+                                        Paid
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(!empty($data->week))
+                                        @php $decodeWeek = json_decode($data->week,true); $weeks = implode(',',$decodeWeek); @endphp
+                                        {{$weeks}}
+                                    @else
+
+                                    @endif
+                                </td>
+                                <td>{{$monthName}}</td>
+                                <td>{{$data->pay_year}}</td>
+                                <td>{{$data->process_date}}</td>
+                                <td>{{$data->pay_date}}</td>
+                                <td>
+                                    @if($data->created_by != '0')
+                                        {{$data->user_c->firstname}} {{$data->user_c->lastname}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if($data->updated_by != '0')
+                                        {{$data->user_u->firstname}} {{$data->user_u->lastname}}
+                                    @endif
+                                </td>
+                                <td>{{$data->created_at}}</td>
+                                <td>{{$data->updated_at}}</td>
+                                <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                                <td>
                                 <!--<a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_position_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>-->
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         @endforeach
                         </tbody>
                     </table>

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Jobs | Available Positions</title>
     <!-- Favicon-->
     <link rel="icon" href="../../favicon.ico" type="image/x-icon">
@@ -24,6 +25,24 @@
 
     <!-- Custom Css -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
+    <!-- Jquery Core Js -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+    <script type="text/javascript">
+        var csrfToken = $('[name="csrf_token"]').attr('content');
+
+        //setInterval(refreshToken, 3600000); // 1 hour
+
+        function refreshToken(){
+            $.get('refresh-csrf').done(function(data){
+                csrfToken = data; // the new token
+            });
+        }
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+    </script>
 
 </head>
 
@@ -218,9 +237,6 @@
 
     </div>
 </section>
-
-<!-- Jquery Core Js -->
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
 <!-- Bootstrap Core Js -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>

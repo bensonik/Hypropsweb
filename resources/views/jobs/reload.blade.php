@@ -1,3 +1,6 @@
+
+<h5>Job Application Page Url -- {{url('OByxRFDeOtxHYxnTTfJmSukkJZ7aCY/positions/2y101HS5A2C30Nex/available')}}</h5>
+<hr/>
 <table class="table table-bordered table-hover table-striped" id="main_table">
     <thead>
     <tr>

@@ -45,7 +45,7 @@ class LoanDeduction extends Command
             ->where('accessible_status', Utility::STATUS_ACTIVE)
             ->where('complete_status', Utility::STATUS_ACTIVE)
             ->where('finance_status', Utility::STATUS_ACTIVE)
-            ->where('loan_balance', '>', Utility::ZERO)
+            ->where('loan_balance', '>', '0')
             ->where('status', Utility::STATUS_ACTIVE)
             ->get();
 
@@ -54,7 +54,8 @@ class LoanDeduction extends Command
             foreach ($dbData as $data){
 
                 $newLoanBalance = $data->loanBalance - $data->loan_monthly_deduc;
-                Requisition::defaultUpdate('id',$data->id,['loan_balance' => $newLoanBalance]);
+                $loanStatus = ($newLoanBalance >= 0) ? Utility::STATUS_ACTIVE : Utility::ZERO ;
+                Requisition::defaultUpdate('id',$data->id,['loan_balance' => $newLoanBalance, 'accessible_status' => $loanStatus]);
 
             }
 

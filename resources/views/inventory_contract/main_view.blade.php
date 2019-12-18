@@ -296,9 +296,21 @@
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('inventory'); ?>',
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('inventory_contract'); ?>',
                                     '<?php echo url('delete_inventory_contract'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('inventory_contract'); ?>',
+                                    '<?php echo url('change_inventory_contract_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
+                                <i class="fa fa-check-square-o"></i>Activate
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('inventory_contract'); ?>',
+                                    '<?php echo url('change_inventory_contract_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
+                                <i class="fa fa-close"></i>Deactivate
                             </button>
                         </li>
                         <li class="dropdown">
@@ -369,8 +381,14 @@
                                     <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_inventory_contract_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td>{{$data->name}}</td>
-                                <td>{{$data->customer->name}}</td>
+                                <td>
+                                    @if($data->active_status == 1)
+                                        {{$data->name}}
+                                    @else
+                                        <span class="alert-warning">{{$data->name}}</span>
+                                    @endif
+                                </td>
+                                <td>{{$data->contract->name}}</td>
                                 <td>{{number_format($data->recurring_cost)}}</td>
                                 <td>{{$data->recurring_interval}}</td>
                                 <td>{{$data->statusType->name}}</td>

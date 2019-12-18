@@ -199,10 +199,10 @@ class WarehouseEmployee extends Model
             ->join('warehouse', 'warehouse.id', '=', 'warehouse_employee.warehouse_id')
             ->where('warehouse_employee.status',Utility::STATUS_ACTIVE)
             ->where(function ($query) use($value){
-                $query->where('warehouse.name','LIKE','%'.$value.'%')
-                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
+                $query->where('users.firstname','LIKE','%'.$value.'%')
                     ->orWhere('users.lastname','LIKE','%'.$value.'%')
-                    ->orWhere('users.othername','LIKE','%'.$value.'%');
+                    ->orWhere('users.othername','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse.name','LIKE','%'.$value.'%');
             })->get();
     }
 

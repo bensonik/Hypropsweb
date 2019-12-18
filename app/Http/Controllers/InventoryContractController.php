@@ -558,5 +558,22 @@ class InventoryContractController extends Controller
 
     }
 
+    public function changeStatus(Request $request)
+    {
+        //
+        $idArray = json_decode($request->input('all_data'));
+        $status = $request->input('status');
+        $dbData = [
+            'active_status' => $status
+        ];
+        $delete = InventoryContract::massUpdate('id',$idArray,$dbData);
+
+        return response()->json([
+            'message2' => 'changed successfully',
+            'message' => 'Status change'
+        ]);
+
+    }
+
 
 }

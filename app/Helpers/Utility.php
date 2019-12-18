@@ -52,8 +52,7 @@ class Utility
     const LOAN_REQUEST = 1, SALARY_ADVANCE_REQUEST = 2;
     const PAYROLL_BONUS = 1, PAYROLL_DEDUCTION = 2;
     const PAY_INTERVAL = [1 => 'January',2 => 'February',3 => 'March',4 => 'April',5 => 'May',6 => 'June',
-        7 => 'July',8 => 'August',9 => 'September',10 => 'October',11 => 'November', 12 => 'December', 13 => 'Week1',
-        14 => 'Week2', 15 => 'Week3', 16 => 'Week4'];
+        7 => 'July',8 => 'August',9 => 'September',10 => 'October',11 => 'November', 12 => 'December'];
 
     const COMPONENT_TYPE = [1 => 'Earnings',2 => 'Deduction'];
     const TRAINING_TYPE = [1 => 'Internal',2 => 'External'];
@@ -796,27 +795,28 @@ class Utility
             $salAdvData = DB::table('requisition')
                 ->where('request_user', $userId)
                 ->where('req_cat', self::SALARY_ADVANCE_ID)
-                ->where('accessible_status', self::ZERO)
+                ->where('accessible_status', self::STATUS_ACTIVE)
                 ->where('status', self::STATUS_ACTIVE)->get();
 
             $loanData = DB::table('requisition')
                 ->where('request_user', $userId)
                 ->where('req_cat', self::EMPLOYEE_LOAN_ID)
-                ->where('accessible_status', self::ZERO)
+                ->where('accessible_status', self::STATUS_ACTIVE)
+                ->where('loan_balance', '>', '0')
                 ->where('status', self::STATUS_ACTIVE)->get();
 
             $loan = 0;
             $salAdv = 0;
-            $dbData = ['accessible_status' => self::STATUS_ACTIVE];
+            $dbDataSalAdv = ['accessible_status' => self::ZERO];
             if (count($loanData) > 0 || count($salAdvData) > 0) {
 
                 if (count($loanData) > 0) {
                     $loan = $loanData[0]->loan_monthly_deduc;
-                    self::defaultUpdate('requisition','id',$loanData[0]->id,$dbData);
+                    //self::defaultUpdate('requisition','id',$loanData[0]->id,$dbData);
                 }
                 if (count($salAdvData) > 0) {
                     $salAdv = $salAdvData[0]->amount;
-                    self::defaultUpdate('requisition','id',$salAdvData[0]->id,$dbData);
+                    self::defaultUpdate('requisition','id',$salAdvData[0]->id,$dbDataSalAdv);
                 }
 
                 $extraDeduc = $salAdv + $loan;
@@ -828,6 +828,31 @@ class Utility
 
             }
 
+
+        }
+
+
+        return $newAmount;
+    }
+
+    public static function calculateSalaryWithoutLoanSalAdv($userId,$extraAmount,$bonusDeduc){
+
+        $data = DB::table('users')
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('id', $userId)->first();
+
+        $salaryData = DB::table('salary')
+            ->where('status', self::STATUS_ACTIVE)
+            ->where('id', $data->salary_id)->first();
+
+
+        $newAmount = 0;
+
+        if($bonusDeduc == '0') {
+            $newAmount = $salaryData->net_pay;
+        }else{
+
+                $newAmount = ($bonusDeduc == self::PAYROLL_BONUS) ? $salaryData->net_pay + $extraAmount : $salaryData->net_pay - $extraAmount;
 
         }
 
@@ -1682,6 +1707,16 @@ class Utility
         }
         $newDate = date('Y-m-d', strtotime($Date. ' - 1 days'));
         return $newDate;
+    }
+
+    public static function displayPayInterval($keyInt){
+        $payPeriod = '';
+        foreach(self::PAY_INTERVAL as $key => $var){
+            if($key == $keyInt){
+                $payPeriod = $var;
+            }
+        }
+        return $payPeriod;
     }
 
 

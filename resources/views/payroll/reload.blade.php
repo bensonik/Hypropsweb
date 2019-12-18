@@ -1,3 +1,10 @@
+
+<div class="row clear-fix">
+    @if(count($mainData) >0)
+        Sum of Net Salary Under Process : {{\App\Helpers\Utility::defaultCurrency()}} {{number_format($salarySum)}}
+    @endif
+</div>
+
 <table class="table table-bordered table-hover table-striped" id="main_table">
     <thead>
     <tr>
@@ -13,16 +20,20 @@
         <th>Bonus/Deduction {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>Bonus/Deduction Desc</th>
         <th>Payroll Status</th>
+        <th>Pay Week(s)</th>
+        <th>Pay Month</th>
+        <th>Pay Year</th>
+        <th>Process Date</th>
         <th>Pay Date</th>
         <th>Created By</th>
         <th>Updated By</th>
         <th>Created at</th>
         <th>Updated at</th>
-        <th>Manage</th>
     </tr>
     </thead>
     <tbody>
     @foreach($mainData as $data)
+        @php $monthName = date("F", mktime(0, 0, 0, $data->month,10)); @endphp
         <tr>
             <td scope="row">
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
@@ -41,6 +52,16 @@
                     Paid
                 @endif
             </td>
+            <td>
+                @if(!empty($data->week))
+                    @php $decodeWeek = json_decode($data->week,true); $weeks = implode(',',$decodeWeek); @endphp
+                    {{$weeks}}
+                @else
+
+                @endif
+            </td>
+            <td>{{$monthName}}</td>
+            <td>{{$data->pay_year}}</td>
             <td>{{$data->pay_date}}</td>
             <td>
                 @if($data->created_by != '0')

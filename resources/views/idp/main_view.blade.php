@@ -269,16 +269,12 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <select  class="form-control " name="user" >
-                                            <option value="">Select User</option>
-                                            @if($coachData->count() > 0)
-                                            @foreach($coachData as $ap)
-                                                <option value="{{$ap->user_id}}">{{$ap->user_detail->firstname}} {{$ap->user_detail->lastname}}</option>
-                                            @endforeach
-                                            @endif
-                                        </select>
+                                        <input type="text" class="form-control" autocomplete="off" id="select_user_search" onkeyup="searchOptionList('select_user_search','myUL','{{url('default_select')}}','default_search','user_search');" name="select_user" placeholder="Select User">
+
+                                        <input type="hidden" class="user_class" name="user" id="user_search" />
                                     </div>
                                 </div>
+                                <ul id="myUL" class="myUL"></ul>
                             </div>
 
                         </form>

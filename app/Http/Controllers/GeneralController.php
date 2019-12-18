@@ -68,8 +68,8 @@ class GeneralController extends Controller
      * @return \Illuminate\Http\Response
      */
     //FETCH SELECT OPTIONS METHOD
-    public function selectOptions(){
-        $pickedVal = $_GET['pickedVal'];
+    public function selectOptions(Request $request){
+        $pickedVal = $request->input('pickedVal');
         $type = $_GET['type'];
 
         //SEARCH USER
@@ -310,13 +310,14 @@ class GeneralController extends Controller
 
             if($pickedVal != '') {
                 $search = WarehouseEmployee::searchWarehouseEmployee($pickedVal);
+                //print_r($search.$pickedVal); exit();
                 $obtain_array = [];
 
                 foreach ($search as $data) {
 
                     $obtain_array[] = $data->user_id;
                 }
-                //print_r($search); exit();
+
                 $user_ids = array_unique($obtain_array);
                 $fetchData = (Auth::user()->id == 3) ? WarehouseEmployee::massDataMassCondition('user_id', $user_ids, 'role', Utility::USER_ROLES_ARRAY)
                     : WarehouseEmployee::massData('user_id', $user_ids);

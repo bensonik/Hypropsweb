@@ -1,55 +1,6 @@
-<div id="my_payslip">
-<table class="table table-bordered table-hover table-striped" id="payslip_table">
-    <thead>
-    </thead>
-    <tbody>
-    <tr>
-        @if(!empty($companyInfo))
-        <td>
-            <table>
-                <tbody>
-                <tr>
-                    <td>{{$companyInfo->name}}</td>
-                </tr>
-                <tr>
-                    <td>{{$companyInfo->address}}</td>
-                </tr>
-                <tr>
-                    <td>{{$companyInfo->phone1}}&nbsp; {{$companyInfo->phone2}}</td>
-                </tr>
-                <tr>
-                    <td>{{$companyInfo->email}}</td>
-                </tr>
-                </tbody>
-            </table>
-        </td>
-            <?php $imgUrl = \App\Helpers\Utility::IMG_URL(); ?>
-        <td><img class="pull-right" src="{{ asset('images/'.$companyInfo->logo)}}"> </td>
-        @else
-            <td>
-                <table>
-                    <tbody>
-                    <tr>
-                        <td>Company Name</td>
-                    </tr>
-                    <tr>
-                        <td>Company Address</td>
-                    </tr>
-                    <tr>
-                        <td>Phone</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                    </tr>
-                    </tbody>
-                </table>
-            </td>
+@extends('layouts.letter_head')
 
-            <td><img class="pull-right" src="{{ asset('images/'.\App\Helpers\Utility::DEFAULT_LOGO) }}"></td>
-        @endif
-    </tr>
-    </tbody>
-</table>
+@section('content')
 
 <table class="table table-bordered table-hover table-striped" id="">
     <tbody>
@@ -64,6 +15,20 @@
     </tr>
     <tr>
         <td>Salary Structure</td><td>{{$edit->salary->salary_name}}</td>
+    </tr>
+    @php $monthName = date("F", mktime(0, 0, 0, $edit->month,10)); @endphp
+    <tr>
+        <td> Payment Period </td>
+        <td>
+            @if(!empty($edit->week))
+                @php $decodeWeek = json_decode($edit->week,true); $weeks = implode(',',$decodeWeek); @endphp
+                {{$weeks}}/
+            @else
+
+            @endif
+
+            {{$monthName}}/{{$edit->pay_year}}
+        </td>
     </tr>
 
     </tbody>
@@ -127,10 +92,22 @@
                             <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->bonus_deduc)}}</td>
                         </tr>
                     @endif
-                    {{--<tr>
+                    @if(!empty($edit->sal_adv_deduct))
+                        <tr>
+                            <td>Salary Advance Deduction</td>
+                            <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->sal_adv_deduct)}}</td>
+                        </tr>
+                    @endif
+                    @if(!empty($edit->loan_deduct))
+                        <tr>
+                            <td>Loan Deduction</td>
+                            <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->loan_deduct)}}</td>
+                        </tr>
+                    @endif
+                    <tr>
                         <td>PAYE</td>
-                        <td>{{$edit->currency->symbol}} {{number_format($taxAmount)}}</td>
-                    </tr>--}}
+                        <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($taxAmount)}}</td>
+                    </tr>
 
                     </tbody>
                 </table>
@@ -160,3 +137,4 @@
 </div>
 
 
+@endsection

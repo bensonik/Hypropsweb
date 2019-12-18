@@ -268,7 +268,7 @@ class IdpController extends Controller
                                 'updated_by' => Auth::user()->id,
                             ];
 
-                            idpCompetency::defaultUpdate('id', $request->input('ext_id' . $i), $dbDATA2);
+                            IdpCompetency::defaultUpdate('id', $request->input('ext_id' . $i), $dbDATA2);
                         }
 
 

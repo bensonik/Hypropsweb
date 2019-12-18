@@ -40,8 +40,14 @@
                 <a style="cursor: pointer;" onclick="fetchHtml('{{$data->id}}','attach_content','attachModal','<?php echo url('edit_inventory_contract_attachment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <td>{{$data->name}}</td>
-            <td>{{$data->customer->name}}</td>
+            <td>
+                @if($data->active_status == 1)
+                    {{$data->name}}
+                @else
+                    <span class="alert-warning">{{$data->name}}</span>
+                @endif
+            </td>
+            <td>{{$data->contract->name}}</td>
             <td>{{number_format($data->recurring_cost)}}</td>
             <td>{{$data->recurring_interval}}</td>
             <td>{{$data->statusType->name}}</td>

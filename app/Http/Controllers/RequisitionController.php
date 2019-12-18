@@ -298,7 +298,7 @@ class RequisitionController extends Controller
                 $rowData = LoanRates::specialColumns('loan_status', Utility::STATUS_ACTIVE);
                 if(count($rowData) > 0) {
                     $hrAccessible = Utility::LOAN_REQUEST;
-                    $accessibleStatus = Utility::STATUS_ACTIVE; //ALL ACCESSIBLE STATUS WITH 1 IN THE TABLE IS A LOAN REQUEST
+                    $accessibleStatus = Utility::STATUS_ACTIVE;
                     $loanId = $rowData[0]->id;
                     $loanBalance = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate)*$rowData[0]->duration;
                     $loanMonthlyDeduction = Utility::loanMonthlyDeduction($request->input('amount'),$rowData[0]->interest_rate);
@@ -316,6 +316,7 @@ class RequisitionController extends Controller
 
             if($request->input('request_category') == Utility::SALARY_ADVANCE_ID){
                 $hrAccessible = Utility::SALARY_ADVANCE_REQUEST;
+                $accessibleStatus = Utility::STATUS_ACTIVE;
                 $salary = SalaryStructure::firstRow('id',Auth::user()->salary_id);
                 if($request->input('amount') >= $salary->net_pay){
                     return response()->json([
@@ -534,6 +535,7 @@ class RequisitionController extends Controller
 
             //PROCESS SALARY ADVANCE
             if($request->input('request_category') == Utility::SALARY_ADVANCE_ID){
+                $accessibleStatus = Utility::STATUS_ACTIVE;
                 $hrAccessible = Utility::SALARY_ADVANCE_REQUEST;
                 $salary = SalaryStructure::firstRow('id',Auth::user()->salary_id);
                 if($request->input('amount') >= $salary->net_pay){

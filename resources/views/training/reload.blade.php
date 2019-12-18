@@ -30,7 +30,7 @@
 
             </td>
             <td>
-                @if(in_array(Auth::user()->role,Utility::HR_MANAGEMENT))
+                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
                 <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_training_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                 @endif
             </td>

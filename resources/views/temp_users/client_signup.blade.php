@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Sign Up | Client Account</title>
     <!-- Favicon-->
     <link rel="icon" href="{{ asset('favicon.ico') }}" type="image/x-icon">
@@ -27,6 +28,25 @@
 
     <!-- Sweet Alert Css -->
     <link rel="stylesheet" href="{{ asset('sweetalert/dist/sweetalert.css') }}">
+
+    <!-- Jquery Core Js -->
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+
+    <script type="text/javascript">
+        var csrfToken = $('[name="csrf_token"]').attr('content');
+
+        //setInterval(refreshToken, 3600000); // 1 hour
+
+        function refreshToken(){
+            $.get('refresh-csrf').done(function(data){
+                csrfToken = data; // the new token
+            });
+        }
+
+        setInterval(refreshToken, 3600000); // 1 hour
+
+    </script>
+
 </head>
 
 <body class="signup-page">
@@ -157,9 +177,6 @@
 
     }
 </script>
-
-<!-- Jquery Core Js -->
-<script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
 
 <!-- Bootstrap Core Js -->
 <script src="{{ asset('plugins/bootstrap/js/bootstrap.js') }}"></script>

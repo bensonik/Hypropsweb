@@ -104,6 +104,15 @@ class PayrollController extends Controller
 
     }
 
+    public function removeNullFromArray($array){
+        foreach($array as $key => $val){
+            if($val == 'null' || $val == ''){
+                unset($array[$key]);
+            }
+        }
+        return $array;
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -120,28 +129,24 @@ class PayrollController extends Controller
             $extraAmount = ($request->input('extra_amount') == '') ? Utility::ZERO : $request->input('extra_amount');
             $all_id = json_decode($request->input('all_data'));
             $processDate = $request->input('date');
-            $oldDateUnix = strtotime($processDate);
-            $year = date('Y',$oldDateUnix);
             $month = $request->input('month');
+            $year = $request->input('year');
+            $week = (empty($request->input('week'))) ? '' : json_encode($this->removeNullFromArray($request->input('week')));
 
-            $in_use = [];;
-            $monthInt = date('n',$oldDateUnix);
+            $in_use = [];
             $unused = [];
             $dataExist = [];
             Utility::checkCurrencyActiveStatus();
 
             for($i=0;$i<count($all_id);$i++){
-                $rowDataSalary = Payroll::countData2('user_id',$all_id[$i],'month',$month);
-                $rowDataSalary1 = Payroll::countData('id',$all_id[$i]);
-                if($rowDataSalary>0 || $rowDataSalary1>0){
+                $rowDataSalary = Payroll::countData('user_id',$all_id[$i]);
+                if($rowDataSalary>0 ){
                     $unused[$i] = $all_id[$i];
                 }else{
                     $in_use[$i] = $all_id[$i];
                 }
             }
 
-            $message = (count($unused) > 0) ? ' and '.count($unused).
-                ' user(s) already exist in payroll for the selected period' : '';
 
             if(count($in_use) > 0){
 
@@ -171,7 +176,9 @@ class PayrollController extends Controller
                         'curr_id' => $defaultCurr,
                         'process_date' => Utility::standardDate($processDate),
                         'payroll_status' => Utility::PROCESSING,
-                        'month' => $monthInt,
+                        'pay_year' => $year,
+                        'month' => $month,
+                        'week' => $week,
                         'created_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
@@ -198,7 +205,7 @@ class PayrollController extends Controller
 
                 return response()->json([
                     'message2' => 'saved',
-                    'message' => count($in_use).' data(s) has been sent to accounts for processing '.$message
+                    'message' => count($in_use).' data(s) has been sent to accounts for processing '
                 ]);
 
             }
@@ -227,7 +234,9 @@ class PayrollController extends Controller
                         'curr_id' => $defaultCurr,
                         'process_date' => Utility::standardDate($processDate),
                         'payroll_status' => Utility::PROCESSING,
-                        'month' => $monthInt,
+                        'pay_year' => $year,
+                        'month' => $month,
+                        'week' => $week,
                         'updated_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
@@ -254,7 +263,7 @@ class PayrollController extends Controller
 
                 return response()->json([
                     'message2' => 'saved',
-                    'message' => count($in_use).' data(s) has been sent to accounts for processing '.$message
+                    'message' => count($in_use).' data(s) has been sent to accounts for processing '
                 ]);
 
             }
@@ -292,16 +301,6 @@ class PayrollController extends Controller
             'updated_by' => Auth::user()->id
         ];
 
-        $in_use = [];
-        $unused = [];
-        for($i=0;$i<count($all_id);$i++){
-            $rowDataSalary = AccountJournal::specialColumns('foreign_id', $all_id[$i]);
-            if(count($rowDataSalary)>0){
-                $unused[$i] = $all_id[$i];
-            }else{
-                $in_use[$i] = $all_id[$i];
-            }
-        }
 
         $mailContentApproved = new \stdClass();
         $mailContentApproved->type = 'request_approval';
@@ -310,20 +309,6 @@ class PayrollController extends Controller
 
         $updateApproval = Payroll::massUpdate('id',$all_id,$dbData);
 
-        if(count($in_use) > 0){
-            //CREATE DATA TO GENERAL LEDGER IF JOURNALVALID IS 1 AND CHECKED CREATE THE DATA IN LEDGER
-            if($journalValid == Utility::STATUS_ACTIVE){
-
-            }
-
-        }else{
-
-            //UPDATE LEDGER IF SOME DATA ALREADY EXISTS IN GENERAL LEDGER
-            if(count($unused)>0){
-
-            }
-
-        }
 
         if($status == 1) {
             $hr = User::specialColumns('role', Utility::HR);
@@ -336,7 +321,7 @@ class PayrollController extends Controller
 
         return response()->json([
             'message2' => 'deleted',
-            'message' => 'Payment was made to '.count($in_use).' entry(ies)'
+            'message' => 'Payment was made to '.count($all_id).' entry(ies)'
         ]);
 
 

@@ -1,3 +1,4 @@
+
 <table class="table table-bordered table-hover table-striped" id="main_table">
     <thead>
     <tr>
@@ -13,6 +14,10 @@
         <th>Bonus/Deduction {{\App\Helpers\Utility::defaultCurrency()}}</th>
         <th>Bonus/Deduction Desc</th>
         <th>Payroll Status</th>
+        <th>Pay Week(s)</th>
+        <th>Pay Month</th>
+        <th>Pay Year</th>
+        <th>Process Date</th>
         <th>Pay Date</th>
         <th>Created By</th>
         <th>Updated By</th>
@@ -23,6 +28,7 @@
     </thead>
     <tbody>
     @foreach($mainData as $data)
+        @php $monthName = date("F", mktime(0, 0, 0, $data->month,10)); @endphp
         <tr>
             <td scope="row">
                 <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
@@ -31,7 +37,7 @@
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->userDetail->firstname}}&nbsp;{{$data->userDetail->lastname}} </td>
             <td>{{$data->salary->salary_name}}</td>
-            <td>{{number_format($data->total_amount)}}</td>
+            <td>&nbsp;{{number_format($data->total_amount)}}</td>
             <td>{{number_format($data->bonus_deduc)}}</td>
             <td>{{$data->bonus_deduc_desc}}</td>
             <td>
@@ -41,6 +47,17 @@
                     Paid
                 @endif
             </td>
+            <td>
+                @if(!empty($data->week))
+                    @php $decodeWeek = json_decode($data->week,true); $weeks = implode(',',$decodeWeek); @endphp
+                    {{$weeks}}
+                @else
+
+                @endif
+            </td>
+            <td>{{$monthName}}</td>
+            <td>{{$data->pay_year}}</td>
+            <td>{{$data->process_date}}</td>
             <td>{{$data->pay_date}}</td>
             <td>
                 @if($data->created_by != '0')
@@ -56,7 +73,7 @@
             <td>{{$data->updated_at}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-            <!--<a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_position_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>-->
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('payslip_item') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i>|View</a>
             </td>
         </tr>
     @endforeach
