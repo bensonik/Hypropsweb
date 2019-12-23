@@ -9,8 +9,8 @@
     <thead>
     <tr>
         <th>
-            <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                   name="check_all" class="" />
+            <input type="checkbox" onclick="toggleme(this,'kid_checkbox_payroll');" id="parent_check_payroll"
+                   name="check_all_payroll" class="" />
 
         </th>
 
@@ -36,7 +36,7 @@
         @php $monthName = date("F", mktime(0, 0, 0, $data->month,10)); @endphp
         <tr>
             <td scope="row">
-                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                <input value="{{$data->id}}" type="checkbox" id="payroll_{{$data->id}}" class="kid_checkbox_payroll" />
 
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
@@ -62,6 +62,7 @@
             </td>
             <td>{{$monthName}}</td>
             <td>{{$data->pay_year}}</td>
+            <td>{{$data->process_date}}</td>
             <td>{{$data->pay_date}}</td>
             <td>
                 @if($data->created_by != '0')

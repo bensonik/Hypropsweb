@@ -201,16 +201,19 @@ class SalaryStructureController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function fetchTaxData(Request $request)
     {
-        //
+        //post_date=' + postDate+'&vendor_id='+vendorVal
+        $postDate = $request->input('post_date');
+        $searchId = $request->input('tax_id');
+        $searchData = Tax::firstRow('id',$searchId);
+        $totalPerct = $searchData->sum_percentage;
+
+        return response()->json([
+
+            'perct' => $totalPerct
+        ]);
+
     }
 
     /**

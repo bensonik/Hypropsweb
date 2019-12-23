@@ -860,6 +860,30 @@ class Utility
         return $newAmount;
     }
 
+    public static function userLoanTotal($userId){
+
+        $loanData = DB::table('requisition')
+            ->where('request_user', $userId)
+            ->where('req_cat', self::EMPLOYEE_LOAN_ID)
+            ->where('accessible_status', self::STATUS_ACTIVE)
+            ->where('loan_balance', '>', '0')
+            ->where('status', self::STATUS_ACTIVE)->sum('loan_monthly_deduc');
+        $total = ($loanData > 0) ? $loanData : 0.00;
+        return $total;
+    }
+
+    public static function userSalAdvTotal($userId){
+        $salAdvData = DB::table('requisition')
+            ->where('request_user', $userId)
+            ->where('req_cat', self::SALARY_ADVANCE_ID)
+            ->where('accessible_status', self::STATUS_ACTIVE)
+            ->where('status', self::STATUS_ACTIVE)->sum('amount');
+
+        $total = ($salAdvData > 0) ? $salAdvData : 0.00;
+        return $total;
+
+    }
+
     public static function convertIntToMonth($int){
 
     }
@@ -1707,16 +1731,6 @@ class Utility
         }
         $newDate = date('Y-m-d', strtotime($Date. ' - 1 days'));
         return $newDate;
-    }
-
-    public static function displayPayInterval($keyInt){
-        $payPeriod = '';
-        foreach(self::PAY_INTERVAL as $key => $var){
-            if($key == $keyInt){
-                $payPeriod = $var;
-            }
-        }
-        return $payPeriod;
     }
 
 

@@ -74,7 +74,7 @@
                     <ul class="header-dropdown m-r--5">
 
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
+                            <button type="button" onclick="deleteItems('kid_checkbox_payroll','reload_data','<?php echo url('payroll'); ?>',
                                     '<?php echo url('delete_payroll'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
@@ -222,8 +222,13 @@
                                 </div>
 
                                 <button type="button" onclick="processPayroll('kid_checkbox','reload_data','<?php echo url('payroll'); ?>',
-                                        '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','0','payrollForm');" class="btn btn-success pull-right">
-                                    <i class="fa fa-check-square-o"></i>Process Salary
+                                        '<?php echo url('process_payroll'); ?>','<?php echo csrf_token(); ?>','0','payrollForm');" class="btn btn-success">
+                                    <i class="fa fa-check-square-o"></i>Process Payroll
+                                </button>
+
+                                <button type="button" onclick="processPayroll('kid_checkbox_payroll','reload_data','<?php echo url('payroll'); ?>',
+                                        '<?php echo url('update_payroll'); ?>','<?php echo csrf_token(); ?>','0','payrollForm');" class="btn btn-success pull-right">
+                                    <i class="fa fa-check-square-o"></i>Update Payroll
                                 </button>
 
                             </div>
@@ -245,8 +250,8 @@
                         <thead>
                         <tr>
                             <th>
-                                <input type="checkbox" onclick="toggleme(this,'kid_checkbox');" id="parent_check"
-                                       name="check_all" class="" />
+                                <input type="checkbox" onclick="toggleme(this,'kid_checkbox_payroll');" id="parent_check_payroll"
+                                       name="check_all_payroll" class="" />
 
                             </th>
 
@@ -272,7 +277,7 @@
                             @php $monthName = date("F", mktime(0, 0, 0, $data->month,10)); @endphp
                             <tr>
                                 <td scope="row">
-                                    <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                                    <input value="{{$data->id}}" type="checkbox" id="payroll_{{$data->id}}" class="kid_checkbox_payroll" />
 
                                 </td>
                                 <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->

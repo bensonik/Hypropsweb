@@ -25,7 +25,15 @@ class Payroll extends Model
         'extra_amount' => 'sometimes|nullable|numeric',
         'bonus_deduct_type' => 'required|numeric',
         'date' => 'required',
-        'month' => 'required'
+        'month' => 'required',
+        'year' => 'required'
+    ];
+
+    public static $mainRulesEdit = [
+        'extra_amount' => 'sometimes|nullable|numeric',
+        'bonus_deduct_type' => 'required|numeric',
+        'month' => 'required',
+        'year' => 'required'
     ];
 
     public static $processRules = [

@@ -59,6 +59,7 @@ Route::any('/salary_structure', 'SalaryStructureController@index')->name('salary
 Route::post('/create_structure', 'SalaryStructureController@create')->name('create_structure');
 Route::post('/edit_structure_form', 'SalaryStructureController@editForm')->name('edit_structure_form');
 Route::post('/edit_structure', 'SalaryStructureController@edit')->name('edit_structure');
+Route::post('/fetch_tax_data', 'SalaryStructureController@fetchTaxData')->name('fetch_tax_data');
 Route::post('/delete_structure', 'SalaryStructureController@destroy')->name('delete_structure');
 
 // -------------APPROVAL SYSTEM MODULE-----------
@@ -457,6 +458,7 @@ Route::post('/delete_loan_rate', 'LoanRatesController@destroy')->name('delete_lo
 // -------------PAYROLL MODULE-----------
 Route::any('/payroll', 'PayrollController@index')->name('payroll')->middleware('auth');
 Route::any('/process_payroll', 'PayrollController@process')->name('process_payroll');
+Route::any('/update_payroll', 'PayrollController@updateSalaryProcess')->name('update_payroll');
 Route::get('/payslip', 'PayrollController@payslip')->name('payslip')->middleware('auth');
 Route::any('/payslip_item', 'PayrollController@payslipItem')->name('payslip_item');
 Route::post('/approve_payroll', 'PayrollController@approve')->name('approve_payroll');

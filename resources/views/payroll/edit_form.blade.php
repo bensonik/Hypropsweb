@@ -92,13 +92,13 @@
                             <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->bonus_deduc)}}</td>
                         </tr>
                     @endif
-                    @if(!empty($edit->sal_adv_deduct))
+                    @if(!empty($edit->sal_adv_deduct) || $edit->sal_adv_deduct != 0)
                         <tr>
                             <td>Salary Advance Deduction</td>
                             <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->sal_adv_deduct)}}</td>
                         </tr>
                     @endif
-                    @if(!empty($edit->loan_deduct))
+                    @if(!empty($edit->loan_deduct)  || $edit->loan_deduct != 0)
                         <tr>
                             <td>Loan Deduction</td>
                             <td>{{\App\Helpers\Utility::defaultCurrency()}} {{number_format($edit->loan_deduct)}}</td>

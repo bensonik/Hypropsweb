@@ -49,7 +49,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control"  name="tax_system" >
+                                            <select class="form-control" id="tax_id" name="tax_system" >
                                                 <option value="">select tax</option>
                                                 @foreach($taxSystem as $comp)
                                                     <option value="{{$comp->id}}">{{$comp->tax_name}}</option>
@@ -66,7 +66,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control comp_name"  name="salary_comp" >
+                                            <select class="form-control comp_name" name="salary_comp" >
                                                 <option value="">select</option>
                                             @foreach($salaryComp as $comp)
                                                 <option value="{{$comp->comp_name}}">{{$comp->comp_name}}</option>
@@ -255,6 +255,34 @@
     <!-- #END# Bordered Table -->
 
 <script>
+
+    function taxCtrl(page,grossId,netId,taxId){
+        var tax = $('#'+taxId).val();
+        var net = $('#'+netId);
+        var gross = $('#'+grossId);
+        var netVal = (net.val() == '') ? 0 : net.val();
+        var grossVal = (gross.val() == '') ? 0 : gross.val();
+        if(sessionStorage.get('default_tax') === null) {
+            sessionStorage.setItem('default_tax', 0)
+        }
+
+            $.ajax({
+                url:  page+'?itemId='+pickedVal
+            }).done(function(data){
+                var perct = data.perct;
+                var perctVal = perct/100;
+                var newNet = decPoints(grossVal - (perctVal*grossVal),2);
+                netVal.val(newNet);
+            });
+    }
+
+    function composeSalary(netId,itemAmountId,earnDeductTypeId){
+        var itemAmount = $('#'+itemAmountId).val();
+        var net = $('#'+netId);
+        var earnDeductType = $('#'+earnDeductTypeId).val();
+        var netVal = (net.val() == '') ? 0 : net.val();
+        var tiemAmountVal = (itemAmount.val() == '') ? 0 : itemAmount.val();
+    }
 
     function saveSalaryStructure(formModal,formId,submitUrl,reload_id,reloadUrl,token,comp,amount,compType) {
         var inputVars = $('#' + formId).serialize();

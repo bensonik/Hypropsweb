@@ -133,37 +133,29 @@ class PayrollController extends Controller
             $year = $request->input('year');
             $week = (empty($request->input('week'))) ? '' : json_encode($this->removeNullFromArray($request->input('week')));
 
-            $in_use = [];
-            $unused = [];
             $dataExist = [];
             Utility::checkCurrencyActiveStatus();
 
-            for($i=0;$i<count($all_id);$i++){
-                $rowDataSalary = Payroll::countData('user_id',$all_id[$i]);
-                if($rowDataSalary>0 ){
-                    $unused[$i] = $all_id[$i];
-                }else{
-                    $in_use[$i] = $all_id[$i];
-                }
-            }
-
-
-            if(count($in_use) > 0){
+            if(count($all_id) > 0){
 
                 $defaultCurr = session('currency')['id'];
-                for($i=0;$i<count($in_use);$i++){
-                    $user =  User::firstRow('id',$in_use[$i]);
+                for($i=0;$i<count($all_id);$i++){
+                    $user =  User::firstRow('id',$all_id[$i]);
                     $salaryId = SalaryStructure::firstRow('id',$user->salary_id);
                     $tax = Tax::firstRow('id',$salaryId->id);
                     $taxAmount = ($tax->sum_percentage/100)*$salaryId->gross_pay;
-                    $totalAmount = Utility::calculateSalary($in_use[$i],$extraAmount,$bonusDeduc);
+                    $totalAmount = ($request->input('auto_deduct') != 1) ? Utility::calculateSalaryWithoutLoanSalAdv($all_id[$i],$extraAmount,$bonusDeduc) : Utility::calculateSalary($all_id[$i],$extraAmount,$bonusDeduc);
+
+
+                    $loanDeduct = ($request->input('auto_deduct') != 1) ? '' : Utility::userLoanTotal($all_id[$i]);
+                    $salAdvDeduct =  ($request->input('auto_deduct') != 1) ? '' : Utility::userSalAdvTotal($all_id[$i]);
 
                     /*return response()->json([
                         'message2' => $totalAmount,
                         'message' => 'warning'
                     ]);*/
                     $dbData = [
-                        'user_id' => $in_use[$i],
+                        'user_id' => $all_id[$i],
                         'bonus_deduc' => $extraAmount,
                         'bonus_deduc_type' => $bonusDeduc,
                         'bonus_deduc_desc' => $request->input('amount_desc'),
@@ -173,6 +165,8 @@ class PayrollController extends Controller
                         'position_id' => $user->position_id,
                         'total_amount' => $totalAmount,
                         'tax_amount' => $taxAmount,
+                        'sal_adv_deduct' => $salAdvDeduct,
+                        'loan_deduct' => $loanDeduct,
                         'curr_id' => $defaultCurr,
                         'process_date' => Utility::standardDate($processDate),
                         'payroll_status' => Utility::PROCESSING,
@@ -211,16 +205,51 @@ class PayrollController extends Controller
             }
             /////////////////////////////////////////////////
 
-            if(count($unused) > 0){
+
+        }
+        $errors = $validator->errors();
+        return response()->json([
+            'message2' => 'fail',
+            'message' => $errors
+        ]);
+
+
+    }
+
+    public function updateSalaryProcess(Request $request)
+    {
+        //
+
+        $validator = Validator::make($request->all(),Payroll::$mainRulesEdit);
+        if($validator->passes()){
+
+            $bonusDeduc = ($request->input('extra_amount') == '') ? Utility::ZERO : $request->input('bonus_deduct_type');
+            $extraAmount = ($request->input('extra_amount') == '') ? Utility::ZERO : $request->input('extra_amount');
+            $all_id = json_decode($request->input('all_data'));
+            $processDate = $request->input('date');
+            $month = $request->input('month');
+            $year = $request->input('year');
+            $week = (empty($request->input('week'))) ? '' : json_encode($this->removeNullFromArray($request->input('week')));
+
+            $dataExist = [];
+            Utility::checkCurrencyActiveStatus();
+
+            /////////////////////////////////////////////////
+
+            if(count($all_id) > 0){
 
                 $defaultCurr = session('currency')['id'];
-                for($i=0;$i<count($unused);$i++){
-                    $user =  User::firstRow('id',$unused[$i]);
+                for($i=0;$i<count($all_id);$i++){
+                    $user =  User::firstRow('id',$all_id[$i]);
                     $salaryId = SalaryStructure::firstRow('id',$user->salary_id);
-                    $paid = Payroll::firstRow('id',$unused[$i]);
+                    $paid = Payroll::firstRow('id',$all_id[$i]);
                     $tax = Tax::firstRow('id',$salaryId->id);
                     $taxAmount = ($tax->sum_percentage/100)*$salaryId->gross_pay;
                     $totalAmount = ($bonusDeduc == Utility::PAYROLL_DEDUCTION) ?$paid->total_amount-$extraAmount : $paid->total_amount+$extraAmount;
+                    $totalAmount = ($request->input('auto_deduct') != 1) ? $totalAmount :  ($totalAmount - Utility::userLoanTotal($all_id[$i])) - Utility::userSalAdvTotal($all_id[$i]);
+
+                    $loanDeduct = ($request->input('auto_deduct') != 1) ? '' : Utility::userLoanTotal($all_id[$i]);
+                    $salAdvDeduct =  ($request->input('auto_deduct') != 1) ? '' : Utility::userSalAdvTotal($all_id[$i]);
 
                     $dbData = [
                         'bonus_deduc' => $extraAmount,
@@ -231,6 +260,8 @@ class PayrollController extends Controller
                         'dept_id' => $user->dept_id,
                         'total_amount' => $totalAmount,
                         'tax_amount' => $taxAmount,
+                        'sal_adv_deduct' => $salAdvDeduct,
+                        'loan_deduct' => $loanDeduct,
                         'curr_id' => $defaultCurr,
                         'process_date' => Utility::standardDate($processDate),
                         'payroll_status' => Utility::PROCESSING,
@@ -240,14 +271,11 @@ class PayrollController extends Controller
                         'updated_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
                     ];
-                    $update = Payroll::defaultUpdate('id',$unused[$i],$dbData);
+                    $update = Payroll::defaultUpdate('id',$all_id[$i],$dbData);
 
                 }
 
-                return response()->json([
-                    'message2' => 'saved',
-                    'message' => 'saved successfully'
-                ]);
+
                 $mailContentApproved = new \stdClass();
                 $mailContentApproved->type = 'update_request';
                 $mailContentApproved->desc = 'Payroll for '.$month.' '.$year;
@@ -263,7 +291,7 @@ class PayrollController extends Controller
 
                 return response()->json([
                     'message2' => 'saved',
-                    'message' => count($in_use).' data(s) has been sent to accounts for processing '
+                    'message' => count($all_id).' data(s) has been sent to accounts for processing '
                 ]);
 
             }
