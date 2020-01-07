@@ -178,7 +178,8 @@
                   .addClass(o.barClass)
                   .css({
                       background: o.color,
-                      width: o.size,
+                      //width: o.size,
+                      width: 12,
                       position: 'absolute',
                       top: 0,
                       opacity: o.opacity,

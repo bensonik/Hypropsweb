@@ -203,7 +203,7 @@ class SalaryStructureController extends Controller
 
     public function fetchTaxData(Request $request)
     {
-        //post_date=' + postDate+'&vendor_id='+vendorVal
+
         $postDate = $request->input('post_date');
         $searchId = $request->input('tax_id');
         $searchData = Tax::firstRow('id',$searchId);

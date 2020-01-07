@@ -843,6 +843,13 @@ class GeneralController extends Controller
                 ->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)->with('salaryComp',$salaryComp);
         }
 
+        if($type == 'salary_struct_edit'){
+            $salaryComp = SalaryComponent::getAllData();
+            $num2+=1000;
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('type',$type)
+                ->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)->with('salaryComp',$salaryComp);
+        }
+
         if($type == 'approval_sys'){
             $users = User::getAllData();
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)->with('type',$type)

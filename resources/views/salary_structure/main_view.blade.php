@@ -35,21 +35,21 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="form-control" name="gross_pay" placeholder="Gross Pay">
+                                            <input type="number" class="form-control" id="gross_pay" name="gross_pay" placeholder="Gross Pay">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="form-control"  name="net_pay" placeholder="Net Pay">
+                                            <input type="number" class="form-control" id="net_pay" name="net_pay" placeholder="Net Pay">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control" id="tax_id" name="tax_system" >
+                                            <select class="form-control" id="tax_id" onchange="taxCtrl('{{url('fetch_tax_data')}}','gross_pay','net_pay','tax_id');" name="tax_system" >
                                                 <option value="">select tax</option>
                                                 @foreach($taxSystem as $comp)
                                                     <option value="{{$comp->id}}">{{$comp->tax_name}}</option>
@@ -79,14 +79,15 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="number" class="form-control amount" name="amount" placeholder="Amount">
+                                            <input type="number" class="form-control amount" id="amount1" name="amount" placeholder="Amount">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control comp_type"  name="comp_type" >
+                                            <select class="form-control comp_type" id="comp1" onchange="composeSalary('net_pay','amount1','comp1');" name="comp_type" >
+                                                    <option value="">Select Type</option>
                                                 @foreach(\App\Helpers\Utility::COMPONENT_TYPE as $comp)
                                                     <option value="{{$comp}}">{{$comp}}</option>
                                                 @endforeach
@@ -234,7 +235,7 @@
                             </td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_structure_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editFormSalStr('{{$data->id}}','edit_content','<?php echo url('edit_structure_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                         </tr>
                         @endforeach
@@ -256,24 +257,37 @@
 
 <script>
 
+    $('#createModal').on('click',function(){
+        sessionStorage.setItem('default_tax', 0);
+    });
+
     function taxCtrl(page,grossId,netId,taxId){
         var tax = $('#'+taxId).val();
         var net = $('#'+netId);
         var gross = $('#'+grossId);
         var netVal = (net.val() == '') ? 0 : net.val();
         var grossVal = (gross.val() == '') ? 0 : gross.val();
-        if(sessionStorage.get('default_tax') === null) {
+        /*if(sessionStorage.getItem('default_tax') === null) {
             sessionStorage.setItem('default_tax', 0)
-        }
+        }*/
 
+        if(tax != '') {
             $.ajax({
-                url:  page+'?itemId='+pickedVal
-            }).done(function(data){
+                url: page + '?tax_id=' + tax
+            }).done(function (data) {
                 var perct = data.perct;
-                var perctVal = perct/100;
-                var newNet = decPoints(grossVal - (perctVal*grossVal),2);
-                netVal.val(newNet);
+                var perctVal = perct / 100;
+                var taxAmt = perctVal * grossVal;
+                var defaultTax = parseInt(sessionStorage.getItem('default_tax'));
+
+                //var defaultNet = net.val()-parseFloat(defaultTax);
+                var newNet = decPoints(net.val() - parseFloat(taxAmt), 2);
+                sessionStorage.removeItem('default_tax');
+                sessionStorage.setItem('default_tax', taxAmt);
+                net.val(newNet);
+
             });
+        }
     }
 
     function composeSalary(netId,itemAmountId,earnDeductTypeId){
@@ -281,7 +295,14 @@
         var net = $('#'+netId);
         var earnDeductType = $('#'+earnDeductTypeId).val();
         var netVal = (net.val() == '') ? 0 : net.val();
-        var tiemAmountVal = (itemAmount.val() == '') ? 0 : itemAmount.val();
+        var itemAmountVal = (itemAmount == '') ? 0 : itemAmount;
+        if(earnDeductType != ''){
+            var newNet = (earnDeductType == '{{\App\Helpers\Utility::COMPONENT_TYPE[1]}}') ? parseFloat(net.val())+parseFloat(itemAmountVal) : net.val()-itemAmountVal;
+
+            net.val(decPoints(newNet,2));
+
+        }
+
     }
 
     function saveSalaryStructure(formModal,formId,submitUrl,reload_id,reloadUrl,token,comp,amount,compType) {
@@ -342,6 +363,67 @@
             swal("Warning!","Please, fill in all required fields to continue","warning");
         }
 
+    }
+
+    function editFormSalStr(dataId,displayId,submitUrl,token){
+        sessionStorage.setItem('default_tax', 0)
+        var postVars = "dataId="+dataId;
+        $('#editModal').modal('show');
+        sendRequest(submitUrl,token,postVars)
+        ajax.onreadystatechange = function(){
+            if(ajax.readyState == 4 && ajax.status == 200) {
+
+                var ajaxData = ajax.responseText;
+                $('#'+displayId).html(ajaxData);
+
+            }
+        }
+        $('#'+displayId).html('LOADING DATA');
+
+    }
+
+    function removeInputSalStr(show_id,ghost_class,addUrl,type,all_new_fields_class,unique_num,addButtonId,hideButtonId,netId,itemAmountId,earnDeductTypeId) {
+
+        //REMOVE/ADD AMOUNT FROM/TO NET AMOUNT
+        var itemAmountVal = $('#'+itemAmountId).val();
+        var net = $('#'+netId);
+        var earnDeductType = $('#'+earnDeductTypeId).val();
+        if(earnDeductType != ''){
+            var newNet = (earnDeductType == '{{\App\Helpers\Utility::COMPONENT_TYPE[1]}}') ? parseFloat(net.val())-parseFloat(itemAmountVal) : parseFloat(net.val())+parseFloat(itemAmountVal);
+
+            net.val(decPoints(newNet,2));
+
+        }
+
+        var get_class = document.getElementsByClassName(all_new_fields_class);
+
+        var addButtons = document.getElementsByClassName('addButtons');
+        if(addButtons.length < 1 ) {
+
+            if (addButtons.length < 1) {
+                prevAddId.style.display = 'block';
+            }
+        }
+        $('.' + ghost_class).remove();
+        /*for (var i = 0; i < get_class.length; i++) {
+         //get_class[i].parentNode.removeChild(get_class[i]);
+         }*/
+        //var show_all = document.getElementById(show_id);
+        var show_all = document.getElementById(hideButtonId);
+        var show_button = '';
+
+        show_button += '<tr><td></td><td></td><td></td><td>';
+        show_button += '<div style="cursor: pointer;" onclick="addMore(';
+
+        show_button += "'"+addButtonId+"','"+hideButtonId+"','1','" + addUrl + "','"+type+"','"+hideButtonId+"');";
+        show_button += '">';
+        show_button += '<i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i></div>';
+        show_button += '</tr>';
+        if (get_class.length === 0) {
+
+            show_all.innerHTML =show_button;
+            show_all.style.display = 'block';
+        }
     }
 
 </script>

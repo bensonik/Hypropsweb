@@ -54,7 +54,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <select class="form-control comp_name_edit comp_name"  name="salary_comp" >
+                    <select class="form-control comp_name"  name="salary_comp" >
                         @foreach($salaryComp as $comp)
                             <option value="{{$comp->comp_name}}">{{$comp->comp_name}}</option>
                         @endforeach
@@ -66,7 +66,7 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <input type="number" class="form-control amount_edit amount" name="amount" placeholder="Amount">
+                    <input type="number" class="form-control amount" id="amount{{$num2}}" name="amount" placeholder="Amount">
                 </div>
             </div>
         </div>
@@ -74,7 +74,8 @@
         <div class="col-sm-4">
             <div class="form-group">
                 <div class="form-line">
-                    <select class="form-control comp_type comp_type_edit"  name="comp_type" >
+                    <select class="form-control comp_type " id="comp{{$num2}}" onchange="composeSalary('net_pay','amount{{$num2}}','comp{{$num2}}');" name="comp_type" >
+                        <option value="">Select Type</option>
                         @foreach(\App\Helpers\Utility::COMPONENT_TYPE as $comp)
                             <option value="{{$comp}}">{{$comp}}</option>
                         @endforeach
@@ -93,7 +94,7 @@
 
         <div class="col-sm-4" id="">
             <div class="form-group">
-                <div style="cursor: pointer;" onclick="removeInput('{{$add_id}}','remove_sal{{$more}}','{{url('add_more')}}','salary_struct','new_sal','{{$more}}','{{$add_id}}','{{$hide_id}}');">
+                <div style="cursor: pointer;" onclick="removeInputSalStr('{{$add_id}}','remove_sal{{$more}}','{{url('add_more')}}','salary_struct','new_sal','{{$more}}','{{$add_id}}','{{$hide_id}}','net_pay','amount{{$num2}}','comp{{$num2}}');">
                     <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                 </div>
             </div>
@@ -103,6 +104,64 @@
 
     <div id="add_more"></div>
 
+@endif
+
+<!-- SALARY STRUCTURE EDIT -->
+@if($type == 'salary_struct_edit')
+
+    <div class="row clearfix remove_sal{{$more}} new_sal">
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <select class="form-control comp_name_edit "  name="salary_comp" >
+                        @foreach($salaryComp as $comp)
+                            <option value="{{$comp->comp_name}}">{{$comp->comp_name}}</option>
+                        @endforeach
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <input type="number" class="form-control amount_edit " id="amount_edit{{$num2}}" name="amount" placeholder="Amount">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <div class="form-line">
+                    <select class="form-control comp_type_edit" id="comp_edit{{$num2}}" onchange="composeSalary('net_pay_edit','amount_edit{{$num2}}','comp_edit{{$num2}}');" name="comp_type" >
+                        <option value="">Select Type</option>
+                        @foreach(\App\Helpers\Utility::COMPONENT_TYPE as $comp)
+                            <option value="{{$comp}}">{{$comp}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4 addButtons" id="{{$hide_id}}{{$more}}">
+            <div class="form-group">
+                <div onclick="addMore('{{$add_id}}','{{$hide_id}}{{$more}}','{{$num2}}','<?php echo URL::to('add_more'); ?>','salary_struct_edit','{{$hide_id}}');">
+                    <i style="color:green;" class="fa fa-plus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4" id="">
+            <div class="form-group">
+                <div style="cursor: pointer;" onclick="removeInputSalStr('{{$add_id}}','remove_sal{{$more}}','{{url('add_more')}}','salary_struct_edit','new_sal','{{$more}}','{{$add_id}}','{{$hide_id}}','net_pay_edit','amount_edit{{$num2}}','comp_edit{{$num2}}');">
+                    <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="add_more"></div>
 
 @endif
 

@@ -59,7 +59,7 @@ Route::any('/salary_structure', 'SalaryStructureController@index')->name('salary
 Route::post('/create_structure', 'SalaryStructureController@create')->name('create_structure');
 Route::post('/edit_structure_form', 'SalaryStructureController@editForm')->name('edit_structure_form');
 Route::post('/edit_structure', 'SalaryStructureController@edit')->name('edit_structure');
-Route::post('/fetch_tax_data', 'SalaryStructureController@fetchTaxData')->name('fetch_tax_data');
+Route::any('/fetch_tax_data', 'SalaryStructureController@fetchTaxData')->name('fetch_tax_data');
 Route::post('/delete_structure', 'SalaryStructureController@destroy')->name('delete_structure');
 
 // -------------APPROVAL SYSTEM MODULE-----------
