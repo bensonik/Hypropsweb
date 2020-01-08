@@ -457,12 +457,14 @@ Route::post('/delete_loan_rate', 'LoanRatesController@destroy')->name('delete_lo
 
 // -------------PAYROLL MODULE-----------
 Route::any('/payroll', 'PayrollController@index')->name('payroll')->middleware('auth');
+Route::any('/payroll_report', 'PayrollController@payrollReport')->name('payroll_report')->middleware('auth');
 Route::any('/process_payroll', 'PayrollController@process')->name('process_payroll');
 Route::any('/update_payroll', 'PayrollController@updateSalaryProcess')->name('update_payroll');
 Route::get('/payslip', 'PayrollController@payslip')->name('payslip')->middleware('auth');
 Route::any('/payslip_item', 'PayrollController@payslipItem')->name('payslip_item');
 Route::post('/approve_payroll', 'PayrollController@approve')->name('approve_payroll');
 Route::any('/search_payroll_user', 'PayrollController@searchUser')->name('search_payroll_user');
+Route::any('/search_payroll', 'PayrollController@searchPayroll')->name('search_payroll')->middleware('auth');
 Route::post('/delete_payroll', 'PayrollController@destroy')->name('delete_payroll');
 
 // -------------INDIVIDUAL DEVELOPMENT PLAN MODULE-----------

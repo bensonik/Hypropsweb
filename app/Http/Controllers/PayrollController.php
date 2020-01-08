@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Helpers\Utility;
+use App\model\Department;
 use App\model\Payroll;
 use App\model\Requisition;
 use App\model\Company;
@@ -45,6 +46,16 @@ class PayrollController extends Controller
         }else{
             return view::make('payroll.main_view')->with('mainData',$mainData)->with('salarySum',$salarySum);
         }
+
+    }
+
+    public function payrollReport(Request $request)
+    {
+        //
+        //$req = new Request();
+        $department = Department::getAllData();
+
+            return view::make('payroll.payroll_report')->with('department',$department);
 
     }
 
@@ -308,6 +319,53 @@ class PayrollController extends Controller
 
     }
 
+    //PAYROLL REPORT SEARCH REQUEST AND QUERY
+    public function searchPayroll(Request $request)
+    {
+        //
+
+        $month = $request->input('month');
+        $year = $request->input('year');
+        $dept = $request->input('department');
+        $status = $request->input('payroll_status');
+        $mainData = [];
+
+        //PROCESS SEARCH REQUEST
+
+        if(!empty($year)) {
+            if ($month != '' && $status != '' && $dept != '') {
+                $mainData = Payroll::specialColumns4('month', $month, 'dept_id', $dept, 'payroll_status', $status,'pay_year',$year);
+            }
+            if ($month != '' && $status != '' && $dept == '')  {
+                $mainData = Payroll::specialColumns3('month', $month, 'payroll_status', $status,'pay_year',$year);
+            }
+            if ($month != '' && $status == '' && $dept != '')  {
+                $mainData = Payroll::specialColumns3('month', $month, 'dept_id', $dept,'pay_year',$year);
+            }
+            if ($month == '' && $status != '' && $dept != '')  {
+                $mainData = Payroll::specialColumns3('dept_id', $dept, 'payroll_status', $status,'pay_year',$year);
+            }
+            if ($month == '' && $status != '' && $dept == '')  {
+                $mainData = Payroll::specialColumns2('payroll_status', $status,'pay_year',$year);
+            }
+            if ($month != '' && $status == '' && $dept == '')  {
+                $mainData = Payroll::specialColumns2('month', $month,'pay_year',$year);
+            }
+            if ($month == '' && $status == '' && $dept != '')  {
+                $mainData = Payroll::specialColumns2('dept_id', $dept,'pay_year',$year);
+            }
+            if ($month == '' && $status == '' && $dept == '')  {
+                $mainData = Payroll::specialColumns('pay_year',$year);
+            }
+
+            return view::make('payroll.payroll_report_reload')->with('mainData', $mainData);
+
+        }else{
+            return 'Please ensure to select Year, to continue';
+        }
+
+
+    }
 
     /**
      * Remove the specified resource from storage.

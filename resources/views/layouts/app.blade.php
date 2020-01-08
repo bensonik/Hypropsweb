@@ -1226,6 +1226,11 @@
                                             <span>Process/Pay Salary</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{url('payroll_report')}}">
+                                            <span>Payroll Report</span>
+                                        </a>
+                                    </li>
                                     @endif
                                     <li>
                                         <a href="{{url('payslip')}}">

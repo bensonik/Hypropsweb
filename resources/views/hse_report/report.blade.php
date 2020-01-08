@@ -4,8 +4,8 @@
 
     <!-- Default Size -->
     <div class="modal fade" id="detail_modal" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
+        <div class="modal-dialog " role="document">
+            <div class="modal-content modal-lg">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Report</h4>
                     @include('includes/print_pdf',[$exportId = 'print_preview_data', $exportDocId = 'print_preview_data'])

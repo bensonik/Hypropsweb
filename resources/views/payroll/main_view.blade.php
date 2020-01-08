@@ -162,7 +162,7 @@
                                         <div class="form-line">
                                             <select class="form-control" name="year" >
                                                 <option value="">Select Year</option>
-                                                @for($i=1970;$i<=date('Y');$i++)
+                                                @for($i=date('Y');$i>=1970;$i--)
                                                     <option value="{{$i}}">{{$i}}</option>
                                                 @endfor
                                             </select>
