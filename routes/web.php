@@ -1325,6 +1325,9 @@ Route::post('/search_budget_request_compare', 'BudgetReportController@searchBudg
 Route::any('/budget_budget_compare', 'BudgetReportController@budgetBudgetReport')->name('budget_request_compare')->middleware('auth');
 Route::post('/search_budget_budget_compare', 'BudgetReportController@searchBudgetBudgetCompare')->name('search_budget_budget_compare');
 
+// -------------BUDGET REQUEST TRACKING MODULE-----------
+Route::any('/budget_request_tracking', 'BudgetRequestTrackingController@index')->name('budget_request_tracking')->middleware('auth.admin');
+Route::post('/budget_request_status', 'BudgetRequestTrackingController@changeBudgetStatus')->name('budget_request_status');
 
 //  ------------------DASHBOARD REPORTING MODULE---------------------
 Route::any('/load_dashboard_general_calendar', 'EventsController@loadDashboardGeneralCalendar')->name('load_dashboard_general_calendar');

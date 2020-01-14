@@ -187,14 +187,14 @@ class LoanRatesController extends Controller
         $id = $idArray[0];
         $check = LoanRates::countData2('id', $id, 'loan_status', '0');
         if ($check > 0) {
-            $activeCurr = LoanRates::firstRow('loan_status', '1');
+            $activeLoan = LoanRates::firstRow('loan_status', '1');
             $dbData1 = [
                 'loan_status' => '0'
             ];
             $dbData = [
                 'loan_status' => Utility::STATUS_ACTIVE,
             ];
-            $cancelActive = LoanRates::defaultUpdate('id', $activeCurr->id, $dbData1);
+            $cancelActive = LoanRates::defaultUpdate('id', $activeLoan->id, $dbData1);
             $update = LoanRates::defaultUpdate('id', $idArray, $dbData);
         }
         return response()->json([

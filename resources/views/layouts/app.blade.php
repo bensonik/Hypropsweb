@@ -1015,6 +1015,9 @@
                         <li>
                             <a href="{{url('budget_budget_compare')}}">Budget/Budget Comparison</a>
                         </li>
+                        <li>
+                            <a href="{{url('budget_request_tracking')}}">Track Requisition witn Budget</a>
+                        </li>
                         @endif
                         <li>
                             <a href="{{url('budget_archive')}}">Budget Archive</a>

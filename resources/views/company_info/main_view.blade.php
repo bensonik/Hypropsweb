@@ -130,13 +130,13 @@
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
                                     '<?php echo url('change_company_status'); ?>','<?php echo csrf_token(); ?>','1');" class="btn btn-success">
                                 <i class="fa fa-check-square-o"></i>Activate
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="changeStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
+                            <button type="button" onclick="changeItemStatus('kid_checkbox','reload_data','<?php echo url('company'); ?>',
                                     '<?php echo url('change_company_status'); ?>','<?php echo csrf_token(); ?>','0');" class="btn btn-danger">
                                 <i class="fa fa-close"></i>Deactivate
                             </button>

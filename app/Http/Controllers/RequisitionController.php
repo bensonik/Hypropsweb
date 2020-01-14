@@ -404,6 +404,9 @@ class RequisitionController extends Controller
             $dept_id = ($userInput == null) ? Auth::user()->dept_id : $user->dept_id;
             $reqStatus = ($holdUser == '') ? Utility::APPROVED : Utility::PROCESSING;
 
+            //INITIATE BUDGET TRACKING IF ACTIVATED
+            Utility::budgetRequestTracking($dept_id,$request->input('request_category'),$request->input('amount'));
+
             $dbDATA = [
                   'acct_cat' => $acctCat->acct_id,
                   'req_cat' => $request->input('request_category'),
@@ -509,6 +512,9 @@ class RequisitionController extends Controller
             $previousData = Requisition::firstRow('id',$request->input('edit_id'));
             $approvalSys = ApprovalSys::firstRow('id',$previousData->approval_id);
 
+            //INITIATE BUDGET TRACKING IF ACTIVATED
+            Utility::budgetRequestTracking($previousData->dept_id,$request->input('request_category'),$request->input('amount'));
+
             //PROCESS LOAN REQUEST
             $hrAccessible = Utility::ZERO;
             $accessibleStatus = Utility::ZERO;
@@ -545,7 +551,6 @@ class RequisitionController extends Controller
                     ]);
                 }
             }
-
 
             $dbDATA = [
                 'acct_cat' => $acctCat->id,

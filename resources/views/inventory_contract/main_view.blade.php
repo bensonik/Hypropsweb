@@ -7,7 +7,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Create Inventory Item</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Create Contract</h4>
                 </div>
                 <div class="modal-body" style="height:400px; overflow:scroll;">
 

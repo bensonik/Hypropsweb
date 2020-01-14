@@ -1733,5 +1733,313 @@ class Utility
         return $newDate;
     }
 
+    public static function monthName($monthNum){
+
+        switch ($monthNum) {
+            case 'month_1' :
+                $month = 'Jan';
+                break;
+            case 'month_2':
+                $month = 'Feb';
+                break;
+            case 'month_3':
+                $month = 'March';
+                break;
+            case 'month_4' :
+                $month = 'April';
+                break;
+            case 'month_5':
+                $month = 'May';
+                break;
+            case 'month_6':
+                $month = 'June';
+                break;
+            case 'month_7' :
+                $month = 'July';
+                break;
+            case 'month_8':
+                $month = 'August';
+                break;
+            case 'month_9':
+                $month = 'Sept';
+                break;
+            case 'month_10' :
+                $month = 'Oct';
+                break;
+            case 'month_11':
+                $month = 'Nov';
+                break;
+            case 'month_12':
+                $month = 'Dec';
+                break;
+
+            default:
+                $month = 'Jan';
+                break;
+        }
+        return $month;
+    }
+
+    public static function budgetRequestTracking($department,$requestCategory,$amount){
+
+        $financialYear = self::firstRow('financial_year','active_status',self::STATUS_ACTIVE);
+        if(!empty($financialYear)){
+            $activeBudget = self::firstRow('budget_request_tracking','active_status',self::STATUS_ACTIVE);
+
+            if(!empty($activeBudget)){
+                self::budgetTrack($activeBudget->id,$department,$requestCategory,$amount);
+            }
+
+        }
+
+    }
+
+    public static function budgetTrack($trackType,$department,$requestCategory,$amount){
+        $budget = 0;
+        $monthInt = date('n');
+        $month = date('m');
+        $year = date('Y');
+        $lastDay = date('t',strtotime('today'));
+        $totalReq = 0;
+
+        //MONTHLY
+        if($trackType == 1){
+            $dbDataSum = self::sumColumnDataCondition('budget','dept_id',$department,self::monthName('month_'.$monthInt));
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->whereBetween('created_at', [$year.'-'.$month.'-01',$year.'-'.$month.'-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq = (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your monthly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount,
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+
+        //QUARTERLY
+        if($trackType == 2){
+            $dbDataSum =  self::sumColumnDataCondition('budget','dept_id',$department,self::setQuarterWithMonth($monthInt));
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->whereBetween('created_at', self::dbQuarterDateArr(date('Y-m-d')))
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq = (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your quarterly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount,
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+        //HALF YEAR
+        if($trackType == 3){
+            $dbDataSum = self::sumColumnDataCondition('budget','dept_id',$department,'total_cat_amount');
+            $sum = (empty($dbDataSum)) ? 0 : $dbDataSum;
+            $budget = $sum/2;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->whereBetween('created_at', [$year.'-01-01',$year.'-12-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalSum = (empty($totalReqSum)) ? 0 : $totalReqSum;
+            $totalReq = $totalSum/2;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your half year budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount,
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+
+        //YEARLY
+        if($trackType == 4){
+            $dbDataSum = self::sumColumnDataCondition('budget','dept_id',$department,'total_cat_amount');
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->whereBetween('created_at', [$year.'-01-01',$year.'-12-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq = (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your yearly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount,
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+
+        //MONTHLY CATEGORY
+        if($trackType == 5){
+
+            $dbDataSum = self::sumColumnDataCondition2('budget','dept_id',$department,'request_cat_id',$requestCategory,self::monthName('month_'.$monthInt));
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->where('req_cat', $requestCategory)
+                ->whereBetween('created_at', [$year.'-'.$month.'-01',$year.'-'.$month.'-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq = (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your monthly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount.' for this category',
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+
+        //QUARTERLY CATEGORY
+        if($trackType == 6){
+            $dbDataSum =  self::sumColumnDataCondition2('budget','dept_id',$department,'request_cat_id',$requestCategory,self::setQuarterWithMonth($monthInt));
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->where('req_cat', $requestCategory)
+                ->whereBetween('created_at', self::dbQuarterDateArr(date('Y-m-d')))
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq = (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your quarterly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount.' for this category',
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+        //HALF YEAR CATEGORY
+        if($trackType == 7){
+            $dbDataSum = self::sumColumnDataCondition2('budget','dept_id',$department,'request_cat_id',$requestCategory,'total_cat_amount');
+            $sum = (empty($dbDataSum)) ? 0 : $dbDataSum;
+            $budget = $sum/2;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->where('req_cat', $requestCategory)
+                ->whereBetween('created_at', [$year.'-01-01',$year.'-12-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalSum = (empty($totalReqSum)) ? 0 : $totalReqSum;
+            $totalReq = $totalSum/2;
+
+            if($budget > ($totalReq+$amount)){
+
+            }else{
+                exit(json_encode([
+                    'message2' => 'You have exceeded your half year budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount.' for this category',
+                    'message' => 'currency inactive'
+                ]));
+            }
+
+        }
+
+        //YEARLY CATEGORY
+        if($trackType == 8){
+            $dbDataSum = self::sumColumnDataCondition2('budget','dept_id',$department,'request_cat_id',$requestCategory,'total_cat_amount');
+            $budget = (empty($dbDataSum)) ? 0 : $dbDataSum;
+
+            $totalReqSum = DB::table('requisition')
+                ->where('dept_id', $department)
+                ->where('hr_accessible','!=', '1')
+                ->where('req_cat', $requestCategory)
+                ->whereBetween('created_at', [$year.'-01-01',$year.'-12-'.$lastDay])
+                ->where('status', self::STATUS_ACTIVE)
+                ->sum('amount');
+            $totalReq= (empty($totalReqSum)) ? 0 : $totalReqSum;
+
+        }
+
+        if($budget > ($totalReq+$amount)){
+
+        }else{
+            exit(json_encode([
+                'message2' => 'You have exceeded your yearly budget '.self::defaultCurrency().$budget.' by an addition of'.self::defaultCurrency().$amount.' for this category',
+                'message' => 'currency inactive'
+            ]));
+        }
+
+    }
+
+    public static function setQuarterWithMonth($monthInt){
+        $quarter = 'Nil';
+        if($monthInt <= 3){
+            $quarter = 'first_quarter';
+        }
+        if($monthInt >= 4 && $monthInt <= 6 ){
+            $quarter = 'second_quarter';
+        }
+        if($monthInt >= 7 && $monthInt <= 9 ){
+            $quarter = 'third_quarter';
+        }
+        if($monthInt >= 10 && $monthInt <= 12 ){
+            $quarter = 'fourth_quarter';
+        }
+
+        return $quarter;
+
+    }
+
+    public static function dbQuarterDateArr($date){
+        $quarterDateArr = [];
+        $year = date('Y');
+        $lastDay = date('t',strtotime('today'));
+        if($date <= $year.'-03-'.$lastDay){
+            $quarterDateArr = [$year.'-01-01',$year.'-03-31'];
+        }
+        if($date <= $year.'-06-'.$lastDay && $date >= $year.'-04-'.$lastDay){
+            $quarterDateArr = [$year.'-04-01',$year.'-06-30'];
+        }
+        if($date <= $year.'-09-'.$lastDay && $date >= $year.'-07-'.$lastDay){
+            $quarterDateArr = [$year.'-07-01',$year.'-09-30'];
+        }
+        if($date <= $year.'-09-'.$lastDay && $date >= $year.'-07-'.$lastDay){
+            $quarterDateArr = [$year.'-10-01',$year.'-12-31'];
+        }
+
+        return $quarterDateArr;
+
+    }
+
 
 }

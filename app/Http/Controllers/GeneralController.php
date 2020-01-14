@@ -400,7 +400,7 @@ class GeneralController extends Controller
                 $fetchData = VendorCustomer::massData('id', $dataIds);
             }else{
 
-                $fetchData = VendorCustomer::specialColumns('company_type', Utility::VENDOR);
+                $fetchData = VendorCustomer::specialColumns('company_type', Utility::CUSTOMER);
                 return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
                     ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
             }

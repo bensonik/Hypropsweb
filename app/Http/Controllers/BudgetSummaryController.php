@@ -443,6 +443,7 @@ class BudgetSummaryController extends Controller
 
 
             $delete = BudgetSummary::massUpdate('id',$inactiveBudget,$dbData);
+            $deleteBudgetItems = Budget::massUpdate('budget_id',$inactiveBudget,$dbData);
 
             return response()->json([
                 'message2' => 'deleted',
