@@ -46,7 +46,7 @@ class Bin extends Model
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
-        //return Utility::paginateAllData(self::table());
+
 
     }
 
