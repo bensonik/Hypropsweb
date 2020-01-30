@@ -82,6 +82,7 @@ class Utility
 
     const SALES_DESC = 2, PURCHASE_DESC = 1;    //FOR PO,RFQ,QUOTES,EXPENSES AND OTHER TRANSACTIONS
     const POST_RECEIPT = 1, CREATE_RECEIPT = 2; //FOR WAREHOUSE RECEIPT
+    const POST_SHIPMENT = 1, CREATE_SHIPMENT = 2; //FOR WAREHOUSE SHIPMENT
     const PUT_AWAY = 1, PICK = 2;
     const ALL_DATA = 0, SELECTED = 1;   //FOR REPORT MoDULE IN MOST OF THE MODULES
     const TASK_STATUS = ['Not Started','In Progress','On Hold','Completed','Cancelled','Waiting'];

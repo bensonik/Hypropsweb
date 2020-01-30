@@ -647,7 +647,6 @@
                 </div>--}}
             </div>
         </div>
-    </div>
 
     <!-- Default Size -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">

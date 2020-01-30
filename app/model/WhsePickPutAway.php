@@ -202,12 +202,13 @@ class WhsePickPutAway extends Model
             'to_assembly_bin_code','from_assembly_bin_code','assembly_to_order_ship_bin_code',$post);
     }
 
-    public static function searchWhsePickPutAway($value){
+    public static function searchWhsePutAway($value){
         return static::join('inventory', 'inventory.id', '=', 'whse_pick_put_away.item_id')
             ->join('warehouse', 'warehouse.id', '=', 'whse_pick_put_away.to_whse')
             ->join('po_extention', 'po_extention.id', '=', 'whse_pick_put_away.po_ext_id')
             ->join('users', 'users.id', '=', 'whse_pick_put_away.assigned_user')
             ->where('whse_pick_put_away.status', '=',Utility::STATUS_ACTIVE)
+            ->where('whse_pick_put_away.pick_put_type', '=',Utility::PUT_AWAY)
             ->where('whse_pick_put_away.pick_put_status', '=',Utility::ZERO)
 
             ->where(function ($query) use($value){
@@ -219,5 +220,22 @@ class WhsePickPutAway extends Model
             })->get();
     }
 
+    public static function searchWhsePick($value){
+        return static::join('inventory', 'inventory.id', '=', 'whse_pick_put_away.item_id')
+            ->join('warehouse', 'warehouse.id', '=', 'whse_pick_put_away.to_whse')
+            ->join('po_extention', 'po_extention.id', '=', 'whse_pick_put_away.po_ext_id')
+            ->join('users', 'users.id', '=', 'whse_pick_put_away.assigned_user')
+            ->where('whse_pick_put_away.status', '=',Utility::STATUS_ACTIVE)
+            ->where('whse_pick_put_away.pick_put_type', '=',Utility::PUT_AWAY)
+            ->where('whse_pick_put_away.pick_put_status', '=',Utility::ZERO)
+
+            ->where(function ($query) use($value){
+                $query->where('inventory.item_name','LIKE','%'.$value.'%')
+                    ->orWhere('warehouse.name','LIKE','%'.$value.'%')
+                    ->orWhere('po_extention.po_number','LIKE','%'.$value.'%')
+                    ->orWhere('users.firstname','LIKE','%'.$value.'%')
+                    ->orWhere('users.lastname','LIKE','%'.$value.'%');
+            })->get();
+    }
 
 }

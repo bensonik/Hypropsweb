@@ -84,7 +84,7 @@ Route::post('/edit_tax', 'TaxController@edit')->name('edit_tax');
 Route::post('/delete_tax', 'TaxController@destroy')->name('delete_tax');
 
 // -------------USER MODULE-----------
-Route::any('/user', 'UsersController@index')->name('user')->middleware('auth.admin');
+Route::any('/user', 'UsersController@index')->name('user')->middleware('auth');
 Route::post('/create_user', 'UsersController@create')->name('create_user');
 Route::post('/edit_user_form', 'UsersController@editForm')->name('edit_user_form');
 Route::post('/edit_user', 'UsersController@edit')->name('edit_user');
@@ -395,6 +395,8 @@ Route::post('/status_indi_goal', 'UnitGoalController@statusChange')->name('statu
 // -------------INDIVIDUAL GOAL MODULE-----------
 Route::any('/individual_goal', 'IndiGoalController@index')->name('individual_goal')->middleware('auth');
 Route::any('/mark_indi_goal', 'IndiGoalController@markIndiGoal')->name('mark_indi_goal')->middleware('auth');
+Route::any('/view_unit_head_comments', 'IndiGoalController@viewUnitHeadComments')->name('view_unit_head_comments')->middleware('auth');
+Route::any('/review_unit_head_comments', 'IndiGoalController@reviewUnitHeadComments')->name('review_unit_head_comments')->middleware('auth');
 Route::post('/create_indi_goal', 'IndiGoalController@create')->name('create_indi_goal');
 Route::post('/edit_indi_goal_form', 'IndiGoalController@editForm')->name('edit_indi_goal_form');
 Route::post('/edit_indi_goal', 'IndiGoalController@edit')->name('edit_indi_goal');
@@ -669,7 +671,7 @@ Route::post('/delete_account_chart', 'AccountChartController@destroy')->name('de
 Route::post('/change_account_chart_status', 'AccountChartController@changeStatus')->name('change_account_chart_status');
 
 // -------------PURCHASE ORDER MODULE-----------
-Route::any('/purchase_order', 'PurchaseOrderController@index')->name('inventory')->middleware('auth');
+Route::any('/purchase_order', 'PurchaseOrderController@index')->name('purchase_order')->middleware('auth');
 Route::post('/edit_po_form', 'PurchaseOrderController@editForm')->name('edit_po_form');
 Route::post('/create_po', 'PurchaseOrderController@create')->name('create_po');
 Route::post('/post_create_receipt', 'PurchaseOrderController@postCreateReceipt')->name('post_create_receipt');
@@ -703,12 +705,12 @@ Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchWareho
 Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
 // -------------WAREHOUSE PUT AWAY  MODULE-----------
-Route::any('/put_away', 'WhsePickPutAwayController@index')->name('put_away')->middleware('auth');
-Route::any('/register_put_away', 'WhsePickPutAwayController@putAway')->name('post_put_away');
-Route::post('/edit_put_away_form', 'WhsePickPutAwayController@editForm')->name('edit_put_away_form');
-Route::post('/edit_put_away', 'WhsePickPutAwayController@edit')->name('edit_put_away');
-Route::any('/search_put_away', 'WhsePickPutAwayController@searchWhsePickPutAway')->name('search_put_away');
-Route::post('/delete_put_away', 'WhsePickPutAwayController@destroy')->name('delete_put_away');
+Route::any('/put_away', 'WhsePutAwayController@index')->name('put_away')->middleware('auth');
+Route::any('/register_put_away', 'WhsePutAwayController@putAway')->name('post_put_away');
+Route::post('/edit_put_away_form', 'WhsePutAwayController@editForm')->name('edit_put_away_form');
+Route::post('/edit_put_away', 'WhsePutAwayController@edit')->name('edit_put_away');
+Route::any('/search_put_away', 'WhsePutAwayController@searchWhsePickPutAway')->name('search_put_away');
+Route::post('/delete_put_away', 'WhsePutAwayController@destroy')->name('delete_put_away');
 
 // -------------REQUEST FOR QUOTE (RFQ) MODULE-----------
 Route::any('/rfq', 'RFQController@index')->name('rfq')->middleware('auth');
@@ -1348,9 +1350,32 @@ Route::any('/warehouse_inventory_zone', 'WarehouseInventoryController@warehouseZ
 Route::post('/search_warehouse_inventory_items', 'WarehouseInventoryController@searchWarehouseInventoryItems')->name('search_warehouse_inventory_items');
 Route::post('/search_warehouse_inventory', 'WarehouseInventoryController@searchWarehouseInventory')->name('search_warehouse_inventory');
 
+// -------------SALES ORDER MODULE-----------
+Route::any('/sales_order', 'SalesOrderController@index')->name('sales_order')->middleware('auth');
+Route::post('/edit_sales_form', 'SalesOrderController@editForm')->name('edit_sales_form');
+Route::post('/create_sales', 'SalesOrderController@create')->name('create_sales');
+Route::post('/post_create_receipt', 'SalesOrderController@postCreateReceipt')->name('post_create_receipt');
+Route::post('/edit_sales', 'SalesOrderController@edit')->name('edit_sales');
+Route::post('/sales_print_preview', 'SalesOrderController@printPreview')->name('sales_print_preview');
+Route::post('/convert_quote_sales_form', 'SalesOrderController@convertQuoteForm')->name('convert_quote_sales_form');
+Route::post('/convert_po_sales_form', 'SalesOrderController@convertPoForm')->name('convert_po_sales_form');
+Route::post('/convert_po_sales', 'SalesOrderController@convertPo')->name('convert_po');
+Route::post('/convert_quote_sales', 'SalesOrderController@convertQuote')->name('convert_quote_sales');
+Route::any('/search_sales', 'SalesOrderController@searchSales')->name('search_sales');
+Route::post('/delete_sales', 'SalesOrderController@destroy')->name('delete_sales');
+Route::any('/delete_sales_item', 'SalesOrderController@permDelete')->name('delete_sales_item');
+Route::post('/change_sales_status', 'SalesOrderController@changeStatus')->name('change_sales_status');
+Route::any('/sales_remove_attachment', 'SalesOrderController@removeAttachment')->name('sales_remove_attachment');
+Route::any('/sales_download_attachment', 'SalesOrderController@downloadAttachment')->name('sales_download_attachment');
 
-
-
+// -------------WAREHOUSE SHIPMENT  MODULE-----------
+Route::any('/warehouse_shipment', 'WarehouseShipmentController@index')->name('warehouse_shipment')->middleware('auth');
+Route::any('/post_warehouse_shipment', 'WarehouseShipmentController@postCreateShipment')->name('post_warehouse_shipment');
+Route::any('/post_shipment', 'WarehouseShipmentController@postShipment')->name('post_shipment');
+Route::post('/edit_warehouse_shipment_form', 'WarehouseShipmentController@editForm')->name('edit_warehouse_shipment_form');
+Route::post('/edit_warehouse_shipment', 'WarehouseShipmentController@edit')->name('edit_warehouse_shipment');
+Route::any('/search_warehouse_shipment', 'WarehouseShipmentController@searchWarehouseShipment')->name('search_warehouse_shipment');
+Route::post('/delete_warehouse_shipment', 'WarehouseShipmentController@destroy')->name('delete_warehouse_shipment');
 
 
 

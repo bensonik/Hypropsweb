@@ -329,22 +329,7 @@ class RequisitionController extends Controller
 
 
 
-            if($files != ''){
-                foreach($files as $file){
-                    //return$file;
-                    $file_name = time() . "_" . Utility::generateUID(null, 10) . "." . $file->getClientOriginalExtension();
-                    $real_images[] = $file_name;
-                    $file->move(
-                        Utility::FILE_URL(), $file_name
-                    );
-                        //PUSH FILES TO AN ARRAY AND STORE IN JSON FORMAT IN A LONGTEXT MYSQL COLUMN
-                        //array_push($cdn_images,$file_name);
-                        $attachment[] =  $file_name;
 
-                }
-            }
-
-            $attachJson = json_encode($attachment);
             $defaultCurr = session('currency')['id'];
             $uid = Utility::generateUID('users');
             $userInput = $request->input('user');
@@ -406,6 +391,24 @@ class RequisitionController extends Controller
 
             //INITIATE BUDGET TRACKING IF ACTIVATED
             Utility::budgetRequestTracking($dept_id,$request->input('request_category'),$request->input('amount'));
+
+            //PROCESS FILE UPLOAD
+            if($files != ''){
+                foreach($files as $file){
+                    //return$file;
+                    $file_name = time() . "_" . Utility::generateUID(null, 10) . "." . $file->getClientOriginalExtension();
+                    $real_images[] = $file_name;
+                    $file->move(
+                        Utility::FILE_URL(), $file_name
+                    );
+                    //PUSH FILES TO AN ARRAY AND STORE IN JSON FORMAT IN A LONGTEXT MYSQL COLUMN
+                    //array_push($cdn_images,$file_name);
+                    $attachment[] =  $file_name;
+
+                }
+            }
+
+            $attachJson = json_encode($attachment);
 
             $dbDATA = [
                   'acct_cat' => $acctCat->acct_id,

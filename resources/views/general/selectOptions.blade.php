@@ -332,6 +332,16 @@
     @endforeach
 @endif
 
+@if($type == 'search_po_select')
+    @foreach($optionArray as $data)
+
+        <li>
+            <a href="#" onclick="dropdownItem('{{$searchId}}','{{$data->po_number}}','{{$hiddenId}}','{{$data->id}}','{{$listId}}');">{{$data->po_number}}</a>
+        </li>
+
+    @endforeach
+@endif
+
 @if($type == 'search_quote_select')
     @foreach($optionArray as $data)
 

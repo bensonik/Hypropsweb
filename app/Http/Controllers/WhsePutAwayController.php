@@ -26,7 +26,7 @@ use App\Http\Requests;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Redirector;
 
-class WhsePickPutAwayController extends Controller
+class WhsePutAwayController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -36,7 +36,7 @@ class WhsePickPutAwayController extends Controller
     public function index(Request $request)
     {
 
-        $mainData = WhsePickPutAway::specialColumnsPage('pick_put_status',Utility::ZERO);
+        $mainData = WhsePickPutAway::specialColumnsPage2('pick_put_status',Utility::ZERO,'pick_put_type',Utility::PUT_AWAY);
 
         if ($request->ajax()) {
             return \Response::json(view::make('warehouse_pick_put_away.reload',array('mainData' => $mainData,))->render());
@@ -183,7 +183,7 @@ class WhsePickPutAwayController extends Controller
     {
         //
         //$search = User::searchUser($request->input('searchVar'));
-        $search = WhsePickPutAway::searchWhsePickPutAway($_GET['searchVar']);
+        $search = WhsePickPutAway::searchWhsePutAway($_GET['searchVar']);
         $obtain_array = [];
 
         foreach($search as $data){
@@ -217,7 +217,7 @@ class WhsePickPutAwayController extends Controller
         $all_id = json_decode($request->input('all_data'));
         $status = $request->input('status');
 
-        $allData = WhsePickPutAway::massData('id',$all_id);
+        $allData = WhsePickPutAway::massDataCondition('id',$all_id,'whse_pick_put_type',Utility::PUT_AWAY);
         $updateData = [
             'pick_put_status' => Utility::STATUS_ACTIVE
         ];
@@ -267,7 +267,7 @@ class WhsePickPutAwayController extends Controller
         $dbData = [
             'status' => Utility::STATUS_DELETED
         ];
-        $delete = WarehouseReceipt::massUpdate('id',$idArray,$dbData);
+        $delete = WhsePickPutAway::massUpdate('id',$idArray,$dbData);
 
         return response()->json([
             'message' => 'deleted',

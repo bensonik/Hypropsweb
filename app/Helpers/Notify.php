@@ -101,4 +101,9 @@ class Notify
         }
     }
 
+    public static function salesMail($viewPage,$objContent,$email,$fullName ='',$subject = ''){
+
+        //Mail::to($email)->send(new salesMail($objContent));
+    }
+
 }

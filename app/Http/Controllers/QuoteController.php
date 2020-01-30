@@ -121,7 +121,7 @@ class QuoteController extends Controller
                 }
             }
 
-            $uid = Utility::generateUID('po_extention');
+            $uid = Utility::generateUID('quote_extention');
 
             $dbDATA = [
                 'uid' => $uid,
@@ -589,7 +589,7 @@ class QuoteController extends Controller
                     $mailToArray = explode(',',$emails);
                     if(count($mailToArray) >0){ //SEND MAIL TO ALL INVOLVED IN THE PURCHASE ORDER
                         foreach($mailToArray as $data) {
-                            Notify::poMail('mail_views.quote', $mailContent, $data, Auth::user()->firstname.' '.Auth::user()->lastname, 'Purchase Order');
+                            Notify::quoteMail('mail_views.quote', $mailContent, $data, Auth::user()->firstname.' '.Auth::user()->lastname, 'Purchase Order');
                         }
                     }
                 }
@@ -693,7 +693,7 @@ class QuoteController extends Controller
         $idArray = json_decode($request->input('all_data'));
 
         foreach($idArray as $data){
-            $dataChild = Quote::specialColumns('po_id',$data);
+            $dataChild = Quote::specialColumns('quote_id',$data);
             if(!empty($dataChild)){
                 foreach($dataChild as $child){
                     $delete = Quote::deleteItem($child->id);

@@ -509,6 +509,34 @@ class GeneralController extends Controller
                 ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
         }
 
+        //SEARCH RFQ SELECT
+        if($type == 'search_po_select'){
+
+            $searchId = $_GET['searchId'];
+            $hiddenId = $_GET['hiddenId'];
+            $listId = $_GET['listId'];
+
+            if($pickedVal != '') {
+                $search = PoExtension::searchPo($pickedVal);
+                $obtain_array = [];
+
+                foreach ($search as $data) {
+
+                    $obtain_array[] = $data->id;
+                }
+                $dataIds = array_unique($obtain_array);
+                $fetchData = PoExtension::massData('id', $dataIds);
+            }else{
+
+                $fetchData = PoExtension::getAllData();
+                return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                    ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+            }
+
+            return view::make('general.selectOptions')->with('optionArray',$fetchData)->with('hiddenId',$hiddenId)
+                ->with('listId',$listId)->with('searchId',$searchId)->with('type',$type);
+        }
+
         //SEARCH QUOTE SELECT
         if($type == 'search_quote_select'){
 
@@ -1026,6 +1054,24 @@ class GeneralController extends Controller
         }
 
         if($type == 'po_edit'){
+            $warehouse = Warehouse::getAllData();
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('warehouse',$warehouse)->with('tax',$tax);
+        }
+        //END OF ADDING PURCHASE ORDER
+
+        //START OF ADDING SALES ORDER
+        if($type == 'sales'){
+            $warehouse = Warehouse::getAllData();
+            $tax = Tax::getAllData();
+            return view::make('general.addMore')->with('num2',$num2)->with('more',$more)
+                ->with('type',$type)->with('add_id',$addButtonId)->with('hide_id',$hideButtonId)
+                ->with('warehouse',$warehouse)->with('tax',$tax);
+        }
+
+        if($type == 'sales_edit'){
             $warehouse = Warehouse::getAllData();
             $tax = Tax::getAllData();
             return view::make('general.addMore')->with('num2',$num2)->with('more',$more)

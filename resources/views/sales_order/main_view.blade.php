@@ -7,11 +7,11 @@
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">New Quote</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">New Sales Order</h4>
 
                     <li class="dropdown pull-right">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">more_vert</i>
+                            <i class="material-icons">more_vert </i>Export
                         </a>
                         @include('includes/print_pdf',[$exportId = 'createMainForm', $exportDocId = 'createMainForm'])
                     </li>
@@ -27,19 +27,26 @@
                                     Preferred Customer
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_vendor" onkeyup="searchOptionListVenCust('select_vendor','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum','{{\App\Helpers\Utility::CUSTOMER}}','vendorCust','posting_date','billing_address','curr_rate','foreign_overall_sum');" name="select_user" placeholder="Select Customer">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_customer" onkeyup="searchOptionListVenCust('select_customer','myUL1','{{url('default_select')}}','search_vendor_transact','vendorCust','foreign_amount','<?php echo url('vendor_customer_currency') ?>','overall_sum','{{\App\Helpers\Utility::CUSTOMER}}','vendorCust','posting_date','billing_address','curr_rate','foreign_overall_sum');" name="select_user" placeholder="Select Customer">
 
                                             <input type="hidden" class="user_class" name="pref_customer" id="vendorCust" />
                                         </div>
                                     </div>
                                     <ul id="myUL1" class="myUL"></ul>
                                 </div>
-
                                 <div class="col-sm-4">
                                     <div class="form-group">
-                                        Quote Number
+                                        Vendor PO Number
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="quote_number" placeholder="Quote Number">
+                                            <input type="text" class="form-control" name="customer_sales_no" placeholder="Customer Sales Number">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Sales Order Number
+                                        <div class="form-line">
+                                            <input type="text" class="form-control" name="sales_number" placeholder="Sales Order Number">
                                         </div>
                                     </div>
                                 </div>
@@ -53,9 +60,9 @@
                                     <div class="form-group">
                                         Assign User
                                         <div class="form-line">
-                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL2','{{url('default_select')}}','default_search','user');" name="select_user" placeholder="Select User">
+                                            <input type="text" class="form-control" autocomplete="off" id="select_user" onkeyup="searchOptionList('select_user','myUL2','{{url('default_select')}}','default_search','assigned_user');" name="select_user" placeholder="Select User">
 
-                                            <input type="hidden" class="user_class" name="user" id="user" />
+                                            <input type="hidden" class="user_class" name="user" id="assigned_user" />
                                         </div>
                                     </div>
                                     <ul id="myUL2" class="myUL"></ul>
@@ -68,9 +75,18 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        Due Date
+                                        <div class="form-line">
+                                            <input type="text" class="form-control datepicker" id="due_date" name="due_date" placeholder="Due Date">
+                                        </div>
+                                    </div>
+                                </div>
 
                             </div>
                             <hr/>
+
                             <div class="row clearfix">
                                 <div class="col-sm-4">
                                     <div class="form-group">
@@ -91,9 +107,9 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control ship_status" name="quote_status" >
-                                                <option value="">Select Quote status</option>
-                                                @foreach(\App\Helpers\Utility::QUOTE_STATUS as $key => $val)
+                                            <select class="form-control ship_status" name="po_status" >
+                                                <option value="">Select Sales status</option>
+                                                @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
                                                     <option value="{{$val}}">{{$val}}</option>
                                                 @endforeach
                                             </select>
@@ -173,7 +189,7 @@
                             <hr/>
                             <div class="row clearfix">
                                 <h4>Item Section</h4>
-                                @include('includes.inventory_part')
+                                @include('includes.sales_order')
                             </div>
                             <hr/>
                             <div class="row clearfix">
@@ -224,9 +240,11 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_quote'); ?>','reload_data',
-                            '<?php echo url('quote'); ?>','<?php echo csrf_token(); ?>',[
-                            'inv_class','item_desc','quantity','unit_cost','unit_measure','tax','tax_perct','tax_amount',
+                    <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_po'); ?>','reload_data',
+                            '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
+                            'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
+                            'quantity_reserved','quantity_shipped','planned','expected','promised','b_order_no',
+                            'b_order_line_no','ship_status','status_comment','tax','tax_perct','tax_amount',
                             'discount_perct','discount_amount','sub_total','acc_class','acc_desc','acct_rate',
                             'acc_tax','acc_tax_perct','acc_tax_amount','acc_discount_perct','acc_discount_amount',
                             'acc_sub_total'
@@ -239,26 +257,114 @@
         </div>
     </div>
 
-    <!-- Default Size -->
+    <!-- EDIT MODAL FORM -->
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
+                    <li class="dropdown pull-right">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>Export
+                        </a>
+                        @include('includes/print_pdf',[$exportId = 'editMainForm', $exportDocId = 'editMainForm'])
+                    </li>
+
+                    <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('sales_order'); ?>',
+                                '<?php echo url('post_warehouse_shipment'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_SHIPMENT}}','Post Shipment');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Shipment</button></div>
+
+                    <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('Sales_order'); ?>',
+                                '<?php echo url('post_warehouse_shipment'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::CREATE_SHIPMENT}}','Create Warehouse Shipment');" class="btn btn-success waves-effect" ><i class="fa fa-plus"></i>Create Warehouse Shipment</button></div>
+
                 </div>
                 <div class="modal-body" id="edit_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_quote'); ?>','reload_data',
-                            '<?php echo url('quote'); ?>','<?php echo csrf_token(); ?>',[
-                                    'inv_class_edit','item_desc_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
-                            'tax_edit','tax_perct_edit','tax_amount_edit','discount_perct_edit','discount_amount_edit',
-                            'sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit','acc_tax_edit',
-                            'acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
+                    <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_sales'); ?>','reload_data',
+                            '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
+                                    'inv_class_edit','item_desc_edit','warehouse_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
+                            'quantity_reserved_edit','quantity_shpped_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
+                            'b_order_line_no_edit','ship_status_edit','status_comment_edit','tax_edit','tax_perct_edit','tax_amount_edit',
+                            'discount_perct_edit','discount_amount_edit','sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit',
+                            'acc_tax_edit','acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
                             'acc_sub_total_edit'
                             ],'mail_message_edit')"
                             class="btn btn-link waves-effect">
+                        SAVE CHANGES
+                    </button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONVERT PO MODAL FORM -->
+    <div class="modal fade" id="convertPoModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xlg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Convert to Sales Order</h4>
+                    <li class="dropdown pull-right">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert </i>Export
+                        </a>
+                        @include('includes/print_pdf',[$exportId = 'convertPoForm', $exportDocId = 'convertPoForm'])
+                    </li>
+
+                </div>
+                <div class="modal-body" id="convert_po_content" style="height:400px; overflow:scroll;">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  onclick="submitMediaFormClass('convertPoModal','convertPoForm','<?php echo url('convert_po_sales'); ?>','reload_data',
+                            '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
+                            'inv_class_edit','item_desc_edit','warehouse_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
+                            'quantity_reserved_edit','quantity_shipped_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
+                            'b_order_line_no_edit','ship_status_edit','status_comment_edit','tax_edit','tax_perct_edit','tax_amount_edit',
+                            'discount_perct_edit','discount_amount_edit','sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit',
+                            'acc_tax_edit','acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
+                            'acc_sub_total_edit'
+                            ],'mail_message_po')"
+                            class="btn btn-info waves-effect">
+                        SAVE CHANGES
+                    </button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONVERT QUOTE MODAL FORM -->
+    <div class="modal fade" id="convertQuoteModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xlg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="defaultModalLabel">Convert to Sales Order</h4>
+                    <li class="dropdown pull-right">
+                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                            <i class="material-icons">more_vert</i>Export
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            @include('includes/export',[$exportId = 'convertQuoteForm', $exportDocId = 'convertQuoteForm'])
+                        </ul>
+                    </li>
+
+                </div>
+                <div class="modal-body" id="convert_quote_content" style="height:400px; overflow:scroll;">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button"  onclick="submitMediaFormClass('convertQuoteModal','convertQuoteForm','<?php echo url('convert_quote_sales'); ?>','reload_data',
+                            '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
+                            'inv_class_edit','item_desc_edit','warehouse_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
+                            'quantity_reserved_edit','quantity_shipped_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
+                            'b_order_line_no_edit','ship_status_edit','status_comment_edit','tax_edit','tax_perct_edit','tax_amount_edit',
+                            'discount_perct_edit','discount_amount_edit','sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit',
+                            'acc_tax_edit','acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
+                            'acc_sub_total_edit'
+                            ],'mail_message_quote')"
+                            class="btn btn-info waves-effect">
                         SAVE CHANGES
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -276,15 +382,15 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Quote(s)
+                        Sales Order
                     </h2>
                     <ul class="header-dropdown m-r--5">
                         <li>
                             <button class="btn btn-success" data-toggle="modal" data-target="#createModal"><i class="fa fa-plus"></i>Add</button>
                         </li>
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('quote'); ?>',
-                                    '<?php echo url('delete_quote'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('sales_order'); ?>',
+                                    '<?php echo url('delete_sales'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
@@ -293,12 +399,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                <li><a class="btn bg-blue-grey waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-print"></i>Print</a></li>
-                                <li><a class="btn bg-red waves-effect" onClick ="print_content('main_table');" ><i class="fa fa-file-pdf-o"></i>Pdf</a></li>
-                                <li><a class="btn btn-warning" onClick ="$('#main_table').tableExport({type:'excel',escape:'false'});" ><i class="fa fa-file-excel-o"></i>Excel</a></li>
-                                <li><a class="btn  bg-light-green waves-effect" onClick ="$('#main_table').tableExport({type:'csv',escape:'false'});" ><i class="fa fa-file-o"></i>CSV</a></li>
-                                <li><a class="btn btn-info" onClick ="$('#main_table').tableExport({type:'doc',escape:'false'});" ><i class="fa fa-file-word-o"></i>Msword</a></li>
-
+                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -306,26 +407,60 @@
                 </div>
 
                 <div class="body">
+
+                <div class="row clearfix">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" autocomplete="off" id="select_po" onkeyup="searchOptionList('select_po','myUL10','{{url('default_select')}}','search_po_select','convertPo');" name="select_po" placeholder="Select PO">
+
+                                    <input type="hidden" class="user_class" name="convertPo" id="convertPo" />
+                                </div>
+                            </div>
+                            <ul id="myUL10" class="myUL"></ul>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <button style="cursor: pointer;" class="btn btn-info" onclick="convertForm('convertPo','convert_po_content','<?php echo url('convert_po_sales_form') ?>','<?php echo csrf_token(); ?>','convertPoModal','convert_quote_content')"><i class="fa fa-pencil-square-o "></i>Convert PO to Sales Order</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-12">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <div class="form-line">
+                                    <input type="text" class="form-control" autocomplete="off" id="select_quote" onkeyup="searchOptionList('select_quote','myUL11','{{url('default_select')}}','search_quote_select','convertQuote');" name="select_quote" placeholder="Select Quote">
+
+                                    <input type="hidden" class="user_class" name="convertQuote" id="convertQuote" />
+                                </div>
+                            </div>
+                            <ul id="myUL11" class="myUL"></ul>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <button style="cursor: pointer;" class="btn btn-info" onclick="convertForm('convertQuote','convert_quote_content','<?php echo url('convert_quote_sales_form') ?>','<?php echo csrf_token(); ?>','convertQuoteModal','convert_po_content')"><i class="fa fa-pencil-square-o "></i>Convert Quote to Sales Order</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
                 <div class="row">
                     <div class="col-sm-12 ">
                         <div class="form-group">
                             <div class="form-line">
-                                <input type="text" id="search_quote" class="form-control"
-                                       onkeyup="searchItem('search_quote','reload_data','<?php echo url('search_quote') ?>','{{url('quote')}}','<?php echo csrf_token(); ?>')"
-                                       name="search_quote" placeholder="Search quote" >
+                                <input type="text" id="search_sales" class="form-control"
+                                       onkeyup="searchItem('search_sales','reload_data','<?php echo url('search_sales') ?>','{{url('sales_order')}}','<?php echo csrf_token(); ?>')"
+                                       name="search_po" placeholder="Search Sales Order" >
                             </div>
                         </div>
                     </div>
                 </div>
 
-                    <div class="row clearfix">
-
-
-
-                    </div>
-
                 <div class="body table-responsive tbl_scroll" id="reload_data">
-                    <table class="table table-bordered table-hover table-striped" id="main_table">
+                    <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
                         <thead>
                         <tr>
                             <th>
@@ -334,13 +469,15 @@
 
                             </th>
                             <th>Manage</th>
-                            <th>Vendor Preview</th>
+                            <th>Customer Preview</th>
                             <th>Default Preview</th>
-                            <th>Quote Number</th>
+                            <th>Vendor PO Number</th>
+                            <th>Customer Sales Number</th>
                             <th>Customer</th>
                             <th>Post Date</th>
+                            <th>Due date</th>
                             <th>Ship to Contact</th>
-                            <th>Quote Status</th>
+                            <th>Sales Order Status</th>
                             <th>Assigned User</th>
                             <th>Sum Total</th>
                             <th>Sum Total {{\App\Helpers\Utility::defaultCurrency()}}</th>
@@ -351,35 +488,37 @@
                         </thead>
                         <tbody>
                         @foreach($mainData as $data)
-                            <tr>
-                                <td scope="row">
-                                    <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
+                        <tr>
+                            <td scope="row">
+                                <input value="{{$data->id}}" type="checkbox" id="{{$data->id}}" class="kid_checkbox" />
 
-                                </td>
-                                <td>
-                                    <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_quote_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay','billing_address_edit','curr_rate_edit','','')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
-                                </td>
-                                <td>
-                                    <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('quote_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
-                                </td>
-                                <td>
-                                    <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('quote_print_preview') ?>','<?php echo csrf_token(); ?>','default')"><i class="fa fa-pencil-square-o"></i>Default Preview</a>
-                                </td>
-                                <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <td>{{$data->quote_number}}</td>
-                                <td>{{$data->vendorCon->name}}</td>
-                                <td>{{$data->post_date}}</td>
-                                <td>{{$data->ship_to_contact}}</td>
-                                <td>{{$data->quote_status}}</td>
-                                <td>{{$data->UserDetail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
-                                <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{number_format($data->sum_total)}}</td>
-                                <td>{{number_format($data->trans_total)}}</td>
-                                <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
-                                <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
-                                <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                                <input type="hidden" id="customerDisplay" value="{{$data->customer}}">
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_sales_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay','billing_address_edit','curr_rate_edit','convert_po_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('sales_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
+                            </td>
+                            <td>
+                                <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('sales_print_preview') ?>','<?php echo csrf_token(); ?>','default')"><i class="fa fa-pencil-square-o"></i>Default Preview</a>
+                            </td>
+                            <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <td>{{$data->sales_number}}</td>
+                            <td>{{$data->vendor_po_no}}</td>
+                            <td>{{$data->vendorCon->name}}</td>
+                            <td>{{$data->post_date}}</td>
+                            <td>{{$data->due_date}}</td>
+                            <td>{{$data->ship_to_contact}}</td>
+                            <td>{{$data->sales_status}}</td>
+                            <td>{{$data->UserDetail->firstname}} &nbsp; {{$data->userDetail->lastname}}</td>
+                            <td>({{$data->currency->code}}){{$data->currency->symbol}}&nbsp;{{number_format($data->sum_total)}}</td>
+                            <td>{{number_format($data->trans_total)}}</td>
+                            <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
+                            <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
+                            <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
+                            <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
 
-                            </tr>
+                        </tr>
                         @endforeach
                         </tbody>
                     </table>
@@ -387,7 +526,6 @@
                     <div class=" pagination pull-right">
                         {!! $mainData->render() !!}
                     </div>
-
 
                 </div>
                 </div>
@@ -413,6 +551,9 @@
             console.log(JSON.stringify(postVars));
             $('#loading_modal').modal('show');
             $('#'+formModal).modal('hide');
+            /*$('#'+formModal).on("hidden.bs.modal", function () {
+                $('#edit_content').html('');
+            });*/
             sendRequestMediaForm(submitUrl,token,postVars)
             ajax.onreadystatechange = function(){
                 if(ajax.readyState == 4 && ajax.status == 200) {
@@ -449,12 +590,7 @@
 
         }
 
-        function appendClassToPost(classList,PostVar){
-            for(var i=0; i<classList.length;i++){
-                var classValue = sanitizeData(classList[i]);
-                PostVar.append(classList[i],classValue);
-            }
-        }
+        //appendClassToPost(classList,PostVar);
 
     </script>
 

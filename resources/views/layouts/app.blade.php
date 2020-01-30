@@ -772,7 +772,7 @@
                 <li>
                     <a href="javascript:void(0);" class="menu-toggle">
                         <i class="material-icons">business_center</i>
-                        <span>PO/RFQ/Quotes</span>
+                        <span>PO/RFQ/Quotes/Sales</span>
                     </a>
                     <ul class="ml-menu">
                         <li>
@@ -780,6 +780,9 @@
                         </li>
                         <li>
                             <a href="{{url('quote')}}">Create Quote for Customer</a>
+                        </li>
+                        <li>
+                            <a href="{{url('sales_order')}}">Sales Order</a>
                         </li>
                         <li>
                             <a href="{{url('purchase_order')}}">Purchase Order</a>
@@ -1304,9 +1307,17 @@
                                         <span>Individual Goal</span>
                                     </a>
                                 </li>
+                                @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+                                    <li>
+                                        <a href="{{url('view_unit_head_comments')}}">
+                                            <span>View Unit Head Comments on Individual Goal</span>
+                                        </a>
+                                    </li>
+                                @endif
                             </ul>
                         </li>
                         @if(in_array(Auth::user()->role,\App\Helpers\Utility::HR_MANAGEMENT))
+
                         <li>
                             <a href="javascript:void(0);" class="menu-toggle">
                                 <span>Competency Framework</span>

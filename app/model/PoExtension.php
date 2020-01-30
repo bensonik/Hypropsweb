@@ -60,7 +60,7 @@ class PoExtension extends Model
     }
 
     public function po(){
-        return $this->hasMany('App\model\PurchaseOrder','uid','po_uid');
+        return $this->hasMany('App\model\PurchaseOrder','uid','uid');
 
     }
 

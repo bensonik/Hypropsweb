@@ -1082,6 +1082,32 @@ class IndiGoalController extends Controller
 
     }
 
+    public function viewUnitHeadComments(Request $request){
+
+        $indiGoalSeries = UnitGoalSeries::getAllData();
+
+        return view::make('indi_goals.review_unit_head_comments')->with('mainData',$indiGoalSeries);
+
+    }
+
+    public function reviewUnitHeadComments(Request $request){
+
+        $goalSet = $request->input('goal_set');
+        $deptHeads = ApprovalDept::getAllData();
+        $headIdArr = [];
+        if(!empty($deptHeads)) {
+            foreach ($deptHeads as $id) {
+                $headIdArr[] = $id->dept_head;
+            }
+        }
+        $commentReviews = IndiGoal::massDataCondition('user_id',$headIdArr,'goal_set_id',$goalSet);
+        if(!empty($commentReviews)) {
+            return view::make('indi_goals.review_unit_head_comments_reload')->with('mainData', $commentReviews);
+        }else{
+            return 'Individual goal is yet to be entered by unit heads';
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

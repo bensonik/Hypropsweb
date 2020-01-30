@@ -2,17 +2,16 @@
 
 namespace App\model;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Helpers\Utility;
-use Monolog\Handler\Curl\Util;
+use Illuminate\Database\Eloquent\Model;
 
-class WarehouseShipment extends Model
+class SalesExtension extends Model
 {
     //
-    protected  $table = 'warehouse_shipment';
+    protected  $table = 'sales_extention';
 
     private static function table(){
-        return 'warehouse_shipment';
+        return 'sales_extention';
     }
     /**
      * The attributes that are mass assignable.
@@ -21,10 +20,8 @@ class WarehouseShipment extends Model
      */
     protected $guarded = [];
 
-    public static $mainRulesEdit = [
-        'warehouse' => 'required',
-        'zone' => 'required',
-        'bin' => 'required',
+    public static $mainRules = [
+
     ];
 
     public function user_c(){
@@ -37,8 +34,23 @@ class WarehouseShipment extends Model
 
     }
 
-    public function inventory(){
-        return $this->belongsTo('App\model\Inventory','item_id','id')->withDefault();
+    public function userDetail(){
+        return $this->belongsTo('App\User','assigned_user','id')->withDefault();
+
+    }
+
+    public function vendorCon(){
+        return $this->belongsTo('App\model\VendorCustomer','customer','id')->withDefault();
+
+    }
+
+    public function currency(){
+        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
+
+    }
+
+    public function transCurr(){
+        return $this->belongsTo('App\model\Currency','trans_curr','id')->withDefault();
 
     }
 
@@ -47,35 +59,14 @@ class WarehouseShipment extends Model
 
     }
 
-    public function poItem(){
-        return $this->belongsTo('App\model\PurchaseOrder','po_id','id')->withDefault();
+    public function sales(){
+        return $this->hasMany('App\model\SalesOrder','uid','uid');
 
     }
-
-    public function poExtItem(){
-        return $this->belongsTo('App\model\PoExtention','po_ext_id','id')->withDefault();
-
-    }
-
-    public function warehouse(){
-        return $this->belongsTo('App\model\Warehouse','whse_id','id')->withDefault();
-
-    }
-
-    public function zone(){
-        return $this->belongsTo('App\model\Zone','zone_id','id')->withDefault();
-
-    }
-
-    public function bin(){
-        return $this->belongsTo('App\model\Bin','bin_id','id')->withDefault();
-
-    }
-
 
     public static function paginateAllData()
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate(Utility::P35);
+        return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');
         //return Utility::paginateAllData(self::table());
 
     }
@@ -188,20 +179,15 @@ class WarehouseShipment extends Model
 
     public static function firstRow($column, $post)
     {
+        //return Utility::firstRow(self::table(),$column, $post);
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->first();
 
     }
 
     public static function firstRow2($column, $post,$column2, $post2)
     {
-        return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)->where($column2, '=',$post2)->first();
-
-    }
-
-    public static function firstRow3($column, $post2,$column2, $post,$column3, $post3)
-    {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->where($column, '=',$post)
-            ->where($column2, '=',$post2)->where($column3, '=',$post3)->first();
+            ->where($column2, '=',$post2)->first();
 
     }
 
@@ -217,6 +203,7 @@ class WarehouseShipment extends Model
         return static::where($column , $postId)->update($arrayDataUpdate);
 
     }
+
     public static function deleteItem($postId)
     {
         return Utility::deleteItem(self::table(),$postId);
@@ -229,15 +216,20 @@ class WarehouseShipment extends Model
 
     }
 
-    public static function searchWarehouseShipment($value){
-        return static::where('warehouse_shipment.status',Utility::STATUS_ACTIVE)
-            ->join('inventory', 'inventory.id', '=', 'warehouse_shipment.item_id')
-            ->join('warehouse', 'warehouse.id', '=', 'warehouse_shipment.whse_id')
+    public static function searchSales($value){
+        return static::where('sales_extention.status', '=','1')
+            ->join('vendor_customer', 'vendor_customer.id', '=', 'sales_extention.customer')
             ->where(function ($query) use($value){
-                $query->where('inventory.item_name','LIKE','%'.$value.'%')
-                    ->orWhere('warehouse_shipment.shipment_no','LIKE','%'.$value.'%')
-                    ->orWhere('warehouse_shipment.customer_ship_no','LIKE','%'.$value.'%')
-                    ->orWhere('warehouse.name','LIKE','%'.$value.'%');
+                $query->where('sales_extention.sales_number','LIKE','%'.$value.'%')
+                    ->orWhere('vendor_customer.name','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.vendor_po_no','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_method','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_agent','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_to_country','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_address','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.sales_status','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_to_contact','LIKE','%'.$value.'%')
+                    ->orWhere('sales_extention.ship_agent','LIKE','%'.$value.'%');
             })->get();
     }
 
