@@ -23,6 +23,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    Vendor PO Number
+                    <div class="form-line">
+                        <input type="text" class="form-control" value="" name="vendor_po_no" placeholder="Vendor PO Number">
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -44,7 +52,7 @@
                 <div class="form-group">
                     Posting Date
                     <div class="form-line">
-                        <input type="text" class="form-control datepicker4" value="" id="posting_date_edit" onkeyup="exchangeRate('vendorCust_edit','curr_rate','posting_date_edit','<?php echo url('exchange_rate'); ?>')" name="posting_date" placeholder="Posting Date">
+                        <input type="text" class="form-control datepicker4" value="{{$edit->post_date}}" id="posting_date_edit" onkeyup="exchangeRate('vendorCust_edit','curr_rate','posting_date_edit','<?php echo url('exchange_rate'); ?>')" name="posting_date" placeholder="Posting Date">
                     </div>
                 </div>
             </div>
@@ -80,7 +88,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <select class="form-control ship_status" name="ship_status" >
+                        <select class="form-control sales_status" name="sales_status" >
                             <option value="">Select Sales status</option>
                             @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
                                 <option value="{{$val}}">{{$val}}</option>
@@ -661,6 +669,12 @@
                     <div class="form-group">
                         <div class="form-line">
                             <select class="form-control" name="discount_type" >
+                                @if($edit->discount_type == \App\Helpers\Utility::LINE_ITEM_DISCOUNT)
+
+                                    <option selected value="{{\App\Helpers\Utility::LINE_ITEM_DISCOUNT}}">Line Item Discount</option>
+                                @else
+                                    <option value="{{\App\Helpers\Utility::ONE_TIME_DISCOUNT}}">One time discount excluding line item discount(s)</option>
+                                @endif
                                 <option selected value="{{\App\Helpers\Utility::LINE_ITEM_DISCOUNT}}">Line Item Discount</option>
                                 <option value="{{\App\Helpers\Utility::ONE_TIME_DISCOUNT}}">One time discount excluding line item discount(s)</option>
                             </select>
@@ -672,7 +686,7 @@
                     <b>Total Discount Amount <span class="foreign_amount_edit"></span></b>
                     <div class="form-group ">
                         <div class="form-line">
-                            <input type="number" value="" class="form-control" readonly name="one_time_discount_amount_edit" id="total_discount_amount_edit" placeholder="Discount Amount" >
+                            <input type="number" class="form-control" value="{{$edit->discount_trans}}" readonly name="one_time_discount_amount_edit" id="total_discount_amount_edit" placeholder="Discount Amount" >
                         </div>
                     </div>
                 </div>
@@ -699,17 +713,24 @@
                     <div class="form-group">
                         <div class="form-line">
                             <select class="form-control" name="tax_type" >
+                                @if($edit->tax_type == \App\Helpers\Utility::LINE_ITEM_TAX)
+
+                                    <option selected value="{{\App\Helpers\Utility::LINE_ITEM_TAX}}">Line Item tax</option>
+                                @else
+                                    <option value="{{\App\Helpers\Utility::ONE_TIME_TAX}}">One time tax excluding line item tax(es)</option>
+                                @endif
                                 <option selected value="{{\App\Helpers\Utility::LINE_ITEM_TAX}}">Line Item Tax</option>
                                 <option value="{{\App\Helpers\Utility::ONE_TIME_TAX}}">One time tax excluding line item tax(es)</option>
                             </select>
                         </div>
                     </div>
                 </div>
+                <?php $exclTax = $edit->trans_total - $edit->tax_trans; ?>
                 <div class="col-sm-4 ">
                     <b>Total Tax Amount <span class="foreign_amount_edit"></span></b>
                     <div class="form-group ">
                         <div class="form-line">
-                            <input type="number" class="form-control" value="" readonly name="one_time_tax_amount_edit" id="total_tax_amount_edit" placeholder="Tax Amount" >
+                            <input type="number" class="form-control" value="{{$edit->tax_trans}}" readonly name="one_time_tax_amount_edit" id="total_tax_amount_edit" placeholder="Tax Amount" >
                         </div>
                     </div>
                 </div>
@@ -732,7 +753,7 @@
                 <div class="form-group">
                     Grand Total {{\App\Helpers\Utility::defaultCurrency()}}
                     <div class="form-line">
-                        <input type="text" class="form-control" value="" readonly id="foreign_overall_sum_edit" name="grand_total" placeholder="Grand Total Default Currency">
+                        <input type="text" class="form-control" value="{{$edit->sum_total}}" readonly id="foreign_overall_sum_edit" name="grand_total" placeholder="Grand Total Default Currency">
                     </div>
                 </div>
             </div>
@@ -740,7 +761,7 @@
                 Grand Total(Incl. Tax) <span class="foreign_amount_edit"></span>
                 <div class="form-group ">
                     <div class="form-line">
-                        <input type="text" class="form-control" value="" id="overall_sum_edit" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
+                        <input type="text" class="form-control" value="{{$edit->trans_total}}" id="overall_sum_edit" readonly name="grand_total_vendor_curr" placeholder="Grand Total Vendor Currency">
                     </div>
                 </div>
             </div>
@@ -749,7 +770,7 @@
                 <div class="form-group ">
 
                     <div class="form-line">
-                        <input type="text" class="form-control" id="excl_overall_sum_edit" value="" readonly name="" placeholder="Grand Total(Excl. Tax) Vendor Currency">
+                        <input type="text" class="form-control" id="excl_overall_sum_edit" value="{{$exclTax}}" readonly name="" placeholder="Grand Total(Excl. Tax) Vendor Currency">
                     </div>
                 </div>
             </div>

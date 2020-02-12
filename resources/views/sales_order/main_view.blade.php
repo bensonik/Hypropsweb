@@ -38,7 +38,7 @@
                                     <div class="form-group">
                                         Vendor PO Number
                                         <div class="form-line">
-                                            <input type="text" class="form-control" name="customer_sales_no" placeholder="Customer Sales Number">
+                                            <input type="text" class="form-control" name="vendor_po_no" placeholder="Vendor PO Number">
                                         </div>
                                     </div>
                                 </div>
@@ -107,7 +107,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <select class="form-control ship_status" name="po_status" >
+                                            <select class="form-control ship_status" name="sales_status" >
                                                 <option value="">Select Sales status</option>
                                                 @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
                                                     <option value="{{$val}}">{{$val}}</option>
@@ -240,7 +240,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_po'); ?>','reload_data',
+                    <button onclick="submitMediaFormClass('createModal','createMainForm','<?php echo url('create_sales'); ?>','reload_data',
                             '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
                             'inv_class','item_desc','warehouse','quantity','unit_cost','unit_measure',
                             'quantity_reserved','quantity_shipped','planned','expected','promised','b_order_no',
@@ -264,9 +264,7 @@
                 <div class="modal-header">
                     <h4 class="modal-title" id="defaultModalLabel">Edit Content</h4>
                     <li class="dropdown pull-right">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                            <i class="material-icons">more_vert</i>Export
-                        </a>
+
                         @include('includes/print_pdf',[$exportId = 'editMainForm', $exportDocId = 'editMainForm'])
                     </li>
 
@@ -345,9 +343,9 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>Export
                         </a>
-                        <ul class="dropdown-menu pull-right">
-                            @include('includes/export',[$exportId = 'convertQuoteForm', $exportDocId = 'convertQuoteForm'])
-                        </ul>
+
+                            @include('includes/print_pdf',[$exportId = 'convertQuoteForm', $exportDocId = 'convertQuoteForm'])
+
                     </li>
 
                 </div>
@@ -399,7 +397,7 @@
                                 <i class="material-icons">more_vert</i>
                             </a>
                             <ul class="dropdown-menu pull-right">
-                                @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
+                            @include('includes/export',[$exportId = 'main_table', $exportDocId = 'reload_data'])
                             </ul>
                         </li>
 
@@ -453,13 +451,13 @@
                             <div class="form-line">
                                 <input type="text" id="search_sales" class="form-control"
                                        onkeyup="searchItem('search_sales','reload_data','<?php echo url('search_sales') ?>','{{url('sales_order')}}','<?php echo csrf_token(); ?>')"
-                                       name="search_po" placeholder="Search Sales Order" >
+                                       name="search_sales" placeholder="Search Sales Order" >
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="body table-responsive tbl_scroll" id="reload_data">
+                <div class="body table-responsive " id="reload_data">
                     <table class="table table-bordered table-hover table-striped tbl_order" id="main_table">
                         <thead>
                         <tr>
@@ -494,7 +492,7 @@
 
                             </td>
                             <td>
-                                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_sales_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay','billing_address_edit','curr_rate_edit','convert_po_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_sales_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay','billing_address_edit','curr_rate_edit','convert_po_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <td>
                                 <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('sales_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
@@ -516,7 +514,7 @@
                             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
                             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-                            <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
+                            <input type="hidden" id="customerDisplay" value="{{$data->customer}}">
 
                         </tr>
                         @endforeach
@@ -542,7 +540,7 @@
         function submitMediaFormClass(formModal,formId,submitUrl,reload_id,reloadUrl,token,classList,ckInputId){
             var form_get = $('#'+formId);
             var form = document.forms.namedItem(formId);
-            var ckInput = encodeURIComponent(CKEDITOR.instances[ckInputId].getData());
+            var ckInput = CKEDITOR.instances[ckInputId].getData();
 
             var postVars = new FormData(form);
             postVars.append('token',token);
@@ -611,12 +609,12 @@
     });
 
     function getData(page){
-        var searchVal = $('#search_po').val();
+        var searchVal = $('#search_sales').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;
         }else{
-            pageData = '<?php echo url('search_po') ?>?page=' + page+'&searchVar='+searchVal;
+            pageData = '<?php echo url('search_sales') ?>?page=' + page+'&searchVar='+searchVal;
         }
 
         $.ajax({

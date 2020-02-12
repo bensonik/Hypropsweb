@@ -9,8 +9,8 @@
         <th>Manage</th>
         <th>Customer Preview</th>
         <th>Default Preview</th>
-        <th>Sales Number</th>
         <th>Vendor PO Number</th>
+        <th>Customer Sales Number</th>
         <th>Customer</th>
         <th>Post Date</th>
         <th>Due date</th>
@@ -32,7 +32,7 @@
 
             </td>
             <td>
-                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_sales_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','vendorDisplay','billing_address_edit','curr_rate_edit','convert_po_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editTransactForm('{{$data->id}}','edit_content','<?php echo url('edit_sales_form') ?>','<?php echo csrf_token(); ?>','foreign_amount_edit','<?php echo url('vendor_customer_currency') ?>','customerDisplay','billing_address_edit','curr_rate_edit','convert_po_content','convert_quote_content')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <td>
                 <a style="cursor: pointer;" class="btn btn-info" onclick="fetchHtml2('{{$data->id}}','print_preview','printPreviewModal','<?php echo url('sales_print_preview') ?>','<?php echo csrf_token(); ?>','vendor')"><i class="fa fa-pencil-square-o"></i>Vendor Preview</a>
@@ -54,7 +54,7 @@
             <td>{{$data->user_c->firstname}} &nbsp;{{$data->user_c->lastname}} </td>
             <td>{{$data->user_u->firstname}} &nbsp;{{$data->user_u->lastname}}</td>
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
-            <input type="hidden" id="vendorDisplay" value="{{$data->vendor}}">
+            <input type="hidden" id="customerDisplay" value="{{$data->customer}}">
 
         </tr>
     @endforeach

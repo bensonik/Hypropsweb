@@ -324,7 +324,7 @@
 
                     </div>
 
-                <div class="body table-responsive tbl_scroll" id="reload_data">
+                <div class="body table-responsive " id="reload_data">
                     <table class="table table-bordered table-hover table-striped" id="main_table">
                         <thead>
                         <tr>

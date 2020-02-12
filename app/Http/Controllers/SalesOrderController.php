@@ -49,8 +49,8 @@ class SalesOrderController extends Controller
         $mainData = SalesExtension::specialColumnsPage('created_by',Auth::user()->id);
 
         if ($request->ajax()) {
-            return \Response::json(view::make('sales_order.reload',array('mainData' => $mainData))->render());
-
+            //return \Response::json(view::make('sales_order.reload',array('mainData' => $mainData))->render());
+            return view::make('sales_order.reload')->with('mainData',$mainData);
         }else{
             return view::make('sales_order.main_view')->with('mainData',$mainData);
         }
@@ -83,7 +83,7 @@ class SalesOrderController extends Controller
             $invClass = Utility::jsonUrlDecode($request->input('inv_class')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc'));
             $warehouse = Utility::jsonUrlDecode($request->input('warehouse')); $quantity = Utility::jsonUrlDecode($request->input('quantity'));
             $unitCost = Utility::jsonUrlDecode($request->input('unit_cost')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure'));
-            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received'));
+            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved')); $quantityShipped = Utility::jsonUrlDecode($request->input('quantity_shipped'));
             $planned = Utility::jsonUrlDecode($request->input('planned')); $expected = Utility::jsonUrlDecode($request->input('expected'));
             $promised = Utility::jsonUrlDecode($request->input('promised')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no'));
             $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status'));
@@ -100,19 +100,19 @@ class SalesOrderController extends Controller
             $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total'));
 
             //GENERAL VARIABLES
-            $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
+            $postingDate = $request->input('posting_date'); $prefCustomer = $request->input('pref_customer'); $dueDate = $request->input('due_date');
             $salesStatus = $request->input('sales_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
             $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
             $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
-            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
+            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalCustomerCurr = $request->input('grand_total_vendor_curr');
             $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
             $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount'); $oneTimePerct = $request->input('one_time_perct');
             $oneTimeTaxAmount = $request->input('one_time_tax_amount'); $taxType = $request->input('tax_type');
             $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct');
-            $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
+            $mailCopy = $request->input('mail_copy');
 
-            $vendor = VendorCustomer::firstRow('id',$prefVendor);
-            $curr = Currency::firstRow('id',$vendor->currency_id);
+            $customer = VendorCustomer::firstRow('id',$prefCustomer);
+            $curr = Currency::firstRow('id',$customer->currency_id);
             $files = $request->file('file');
             $attachment = [];
             $mailFiles = [];
@@ -142,11 +142,10 @@ class SalesOrderController extends Controller
                 'assigned_user' => $user,
                 'sales_number' => $SalesOrderNo,
                 'vendor_po_no' => $vendorPoNo,
-                'rfq_no' => $rfqNo,
                 'mails' => $emails,
                 'mail_copy' => $mailCopy,
                 'sum_total' => $grandTotal,
-                'trans_total' => $grandTotalVendorCurr,
+                'trans_total' => $grandTotalCustomerCurr,
                 'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
                 'discount_trans' => $oneTimeDiscount,
                 'discount_perct' => $oneTimePerct,
@@ -159,7 +158,7 @@ class SalesOrderController extends Controller
                 'attachment' => json_encode($attachment,true),
                 'default_curr' => Utility::currencyArrayItem('id'),
                 'trans_curr' => $curr->id,
-                'vendor' => $prefVendor,
+                'customer' => $prefCustomer,
                 'due_date' => Utility::standardDate($dueDate),
                 'post_date' => Utility::standardDate($postingDate),
                 'ship_to_city' => $shipCity,
@@ -239,7 +238,7 @@ class SalesOrderController extends Controller
 
                         $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse,$i,'');
                         $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved,$i,'');
-                        $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived,$i,'');
+                        $poDbData['shipped_quantity'] = Utility::checkEmptyArrayItem($quantityShipped,$i,'');
                         $poDbData['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned,$i,''));
                         $poDbData['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised,$i,''));
                         $poDbData['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected,$i,''));
@@ -339,7 +338,7 @@ class SalesOrderController extends Controller
         $sales = SalesExtension::firstRow('id',$request->input('dataId'));
         $salesData = SalesOrder::specialColumns('sales_id',$sales->id);
         Utility::fetchBOMItems($salesData);  //ADD BOM ITEMS TO INVENTORY ITEM
-        if($type == 'vendor' && !empty($sales)){
+        if($type == 'customer' && !empty($sales)){
             $data = Currency::firstRow('id',$sales->trans_curr);
             $currency = $data->code;
 
@@ -398,7 +397,7 @@ class SalesOrderController extends Controller
             $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
             $warehouse = Utility::jsonUrlDecode($request->input('warehouse_edit')); $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
             $unitCost = Utility::jsonUrlDecode($request->input('unit_cost_edit')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure_edit'));
-            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received_edit'));
+            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityShipped = Utility::jsonUrlDecode($request->input('quantity_shipped_edit'));
             $planned = Utility::jsonUrlDecode($request->input('planned_edit')); $expected = Utility::jsonUrlDecode($request->input('expected_edit'));
             $promised = Utility::jsonUrlDecode($request->input('promised_edit')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no_edit'));
             $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no_edit')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status_edit'));
@@ -415,19 +414,19 @@ class SalesOrderController extends Controller
             $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total_edit'));
 
             //GENERAL VARIABLES
-            $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
+            $postingDate = $request->input('posting_date'); $prefCustomer = $request->input('pref_customer'); $dueDate = $request->input('due_date');
             $salesStatus = $request->input('sales_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
             $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
             $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
-            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
+            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalCustomerCurr = $request->input('grand_total_vendor_curr');
             $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
             $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount_edit'); $oneTimeDiscountPerct = $request->input('one_time_discount_perct_edit');
             $oneTimeTaxAmount = $request->input('one_time_tax_amount_edit'); $taxType = $request->input('tax_type');
             $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct_edit');
-            $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
+            $mailCopy = $request->input('mail_copy');
 
-            $vendor = VendorCustomer::firstRow('id',$prefVendor);
-            $curr = Currency::firstRow('id',$vendor->currency_id);
+            $customer = VendorCustomer::firstRow('id',$prefCustomer);
+            $curr = Currency::firstRow('id',$customer->currency_id);
             $files = $request->file('file');
             $mailFiles = [];
 
@@ -457,16 +456,17 @@ class SalesOrderController extends Controller
 
                 }
             }
+            $uid = Utility::generateUID('sales_extention');
 
             $dbDATA = [
+                'uid' => $uid,
                 'assigned_user' => $user,
                 'sales_number' => $SalesOrderNo,
                 'vendor_po_no' => $vendorPoNo,
                 'mails' => $emails,
                 'mail_copy' => $mailCopy,
-                'rfq_no' => $rfqNo,
                 'sum_total' => $grandTotal,
-                'trans_total' => $grandTotalVendorCurr,
+                'trans_total' => $grandTotalCustomerCurr,
                 'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
                 'discount_trans' => $oneTimeDiscount,
                 'discount_perct' => $oneTimeDiscountPerct,
@@ -479,7 +479,7 @@ class SalesOrderController extends Controller
                 'attachment' => json_encode($attachment,true),
                 'default_curr' => Utility::currencyArrayItem('id'),
                 'trans_curr' => $curr->id,
-                'vendor' => $prefVendor,
+                'customer' => $prefCustomer,
                 'due_date' => Utility::standardDate($dueDate),
                 'post_date' => Utility::standardDate($postingDate),
                 'ship_to_city' => $shipCity,
@@ -527,7 +527,7 @@ class SalesOrderController extends Controller
 
                     $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
                     $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_received' . $i),'');
+                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
                     $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
                     $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
                     $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
@@ -588,7 +588,7 @@ class SalesOrderController extends Controller
                 if (count($accClass) == count($accRate) && count($accSubTotal) == count($accClass)) {
                     for ($i = 0; $i < count($accClass); $i++) {
                         $accDbData['account_id'] = Utility::checkEmptyArrayItem($accClass, $i, 0);
-                        $accDbData['po_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
+                        $accDbData['sales_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
                         $accDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($accRate, $i, 0);
                         $accDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($accRate, $i, 0), $postingDate);
                         $accDbData['tax_id'] = Utility::checkEmptyArrayItem($accTax, $i, 0);
@@ -649,12 +649,12 @@ class SalesOrderController extends Controller
 
                         $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse, $i, '0');
                         $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved, $i, '');
-                        $poDbData['shipped_quantity'] = Utility::checkEmptyArrayItem($quantityReceived, $i, '');
+                        $poDbData['shipped_quantity'] = Utility::checkEmptyArrayItem($quantityShipped, $i, '');
                         $poDbData['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
                         $poDbData['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised, $i, ''));
                         $poDbData['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected, $i, ''));
-                        $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
-                        $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
+                        $poDbData['sales_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
+                        $poDbData['sales_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
                         $poDbData['status_comment_history'] = json_encode($statComHist, true);
                         $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo, $i, '');
                         $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo, $i, '');
@@ -728,7 +728,7 @@ class SalesOrderController extends Controller
             $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
             $warehouse = Utility::jsonUrlDecode($request->input('warehouse_edit')); $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
             $unitCost = Utility::jsonUrlDecode($request->input('unit_cost_edit')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure_edit'));
-            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received_edit'));
+            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityShipped = Utility::jsonUrlDecode($request->input('quantity_shipped_edit'));
             $planned = Utility::jsonUrlDecode($request->input('planned_edit')); $expected = Utility::jsonUrlDecode($request->input('expected_edit'));
             $promised = Utility::jsonUrlDecode($request->input('promised_edit')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no_edit'));
             $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no_edit')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status_edit'));
@@ -745,16 +745,16 @@ class SalesOrderController extends Controller
             $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total_edit'));
 
             //GENERAL VARIABLES
-            $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
-            $poStatus = $request->input('po_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
+            $postingDate = $request->input('posting_date'); $prefCustomer = $request->input('pref_customer'); $dueDate = $request->input('due_date');
+            $poStatus = $request->input('sales_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
             $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
             $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
-            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
+            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalCustomerCurr = $request->input('grand_total_vendor_curr');
             $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
             $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount_edit'); $oneTimeDiscountPerct = $request->input('one_time_discount_perct_edit');
             $oneTimeTaxAmount = $request->input('one_time_tax_amount_edit'); $taxType = $request->input('tax_type');
             $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct_edit');
-            $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
+            $mailCopy = $request->input('mail_copy');
 
 
 
@@ -767,8 +767,8 @@ class SalesOrderController extends Controller
 
             }
 
-            $vendor = VendorCustomer::firstRow('id',$prefVendor);
-            $curr = Currency::firstRow('id',$vendor->currency_id);
+            $customer = VendorCustomer::firstRow('id',$prefCustomer);
+            $curr = Currency::firstRow('id',$customer->currency_id);
             $files = $request->file('file');
             $mailFiles = [];
 
@@ -805,9 +805,8 @@ class SalesOrderController extends Controller
                 'vendor_po_no' => $vendorPoNo,
                 'mails' => $emails,
                 'mail_copy' => $mailCopy,
-                'rfq_no' => $rfqNo,
                 'sum_total' => $grandTotal,
-                'trans_total' => $grandTotalVendorCurr,
+                'trans_total' => $grandTotalCustomerCurr,
                 'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
                 'discount_trans' => $oneTimeDiscount,
                 'discount_perct' => $oneTimeDiscountPerct,
@@ -820,7 +819,7 @@ class SalesOrderController extends Controller
                 'attachment' => json_encode($attachment,true),
                 'default_curr' => Utility::currencyArrayItem('id'),
                 'trans_curr' => $curr->id,
-                'vendor' => $prefVendor,
+                'customer' => $prefCustomer,
                 'due_date' => Utility::standardDate($dueDate),
                 'post_date' => Utility::standardDate($postingDate),
                 'ship_to_city' => $shipCity,
@@ -829,7 +828,7 @@ class SalesOrderController extends Controller
                 'ship_to_contact' => $shipContact,
                 'ship_method' => $shipMethod,
                 'ship_agent' => $shipAgent,
-                'purchase_status' => $poStatus,
+                'sales_status' => $poStatus,
                 'created_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE,
             ];
@@ -851,7 +850,7 @@ class SalesOrderController extends Controller
                     $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
                     $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
                     $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $poDbDataEdit['po_desc'] = $request->input('item_desc' . $i);
+                    $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
                     $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
                     $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
                     $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
@@ -872,12 +871,12 @@ class SalesOrderController extends Controller
 
                     $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
                     $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['received_quantity'] = Utility::checkEmptyItem($request->input('quantity_received' . $i),'');
-                    $poDbDataEdit['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
-                    $poDbDataEdit['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
-                    $poDbDataEdit['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
-                    $poDbDataEdit['po_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
-                    $poDbDataEdit['po_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
+                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
+                    $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
+                    $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
+                    $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
+                    $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
+                    $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
                     $poDbDataEdit['status_comment_history'] = json_encode($statComHist,true);
                     $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i),'');
                     $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
@@ -895,7 +894,7 @@ class SalesOrderController extends Controller
 
                     $accDbDataEdit['uid'] = $uid;
                     $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['po_desc'] = $request->input('item_desc_acc' . $i);
+                    $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
                     $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
                     $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
                     $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
@@ -937,7 +936,7 @@ class SalesOrderController extends Controller
                     for ($i = 0; $i < count($accClass); $i++) {
                         $accDbData['uid'] = $uid;
                         $accDbData['account_id'] = Utility::checkEmptyArrayItem($accClass, $i, 0);
-                        $accDbData['po_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
+                        $accDbData['sales_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
                         $accDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($accRate, $i, 0);
                         $accDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($accRate, $i, 0), $postingDate);
                         $accDbData['tax_id'] = Utility::checkEmptyArrayItem($accTax, $i, 0);
@@ -977,7 +976,7 @@ class SalesOrderController extends Controller
                         $poDbData['bin_stock'] = $binStock->inventory_type;
                         $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure, $i, 0);
                         $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity, $i, 0);
-                        $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
+                        $poDbData['sales_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
                         $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost, $i, 0);
                         $poDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($unitCost, $i, 0), $postingDate);
                         $poDbData['tax_id'] = Utility::checkEmptyArrayItem($tax, $i, 0);
@@ -998,12 +997,12 @@ class SalesOrderController extends Controller
 
                         $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse, $i, '0');
                         $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved, $i, '');
-                        $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived, $i, '');
-                        $poDbData['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
-                        $poDbData['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised, $i, ''));
-                        $poDbData['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected, $i, ''));
-                        $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
-                        $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
+                        $poDbData['shipped_quantity'] = Utility::checkEmptyArrayItem($quantityShipped, $i, '');
+                        $poDbData['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
+                        $poDbData['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised, $i, ''));
+                        $poDbData['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected, $i, ''));
+                        $poDbData['sales_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
+                        $poDbData['sales_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
                         $poDbData['status_comment_history'] = json_encode($statComHist, true);
                         $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo, $i, '');
                         $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo, $i, '');
@@ -1077,7 +1076,7 @@ class SalesOrderController extends Controller
             $invClass = Utility::jsonUrlDecode($request->input('inv_class_edit')); $itemDesc = Utility::jsonUrlDecode($request->input('item_desc_edit'));
             $warehouse = Utility::jsonUrlDecode($request->input('warehouse_edit')); $quantity = Utility::jsonUrlDecode($request->input('quantity_edit'));
             $unitCost = Utility::jsonUrlDecode($request->input('unit_cost_edit')); $unitMeasure = Utility::jsonUrlDecode($request->input('unit_measure_edit'));
-            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityReceived = Utility::jsonUrlDecode($request->input('quantity_received_edit'));
+            $quantityReserved = Utility::jsonUrlDecode($request->input('quantity_reserved_edit')); $quantityShipped = Utility::jsonUrlDecode($request->input('quantity_shipped_edit'));
             $planned = Utility::jsonUrlDecode($request->input('planned_edit')); $expected = Utility::jsonUrlDecode($request->input('expected_edit'));
             $promised = Utility::jsonUrlDecode($request->input('promised_edit')); $bOrderNo = Utility::jsonUrlDecode($request->input('b_order_no_edit'));
             $bOrderLineNo = Utility::jsonUrlDecode($request->input('b_order_line_no_edit')); $shipStatus = Utility::jsonUrlDecode($request->input('ship_status_edit'));
@@ -1094,16 +1093,16 @@ class SalesOrderController extends Controller
             $accSubTotal = Utility::jsonUrlDecode($request->input('acc_sub_total_edit'));
 
             //GENERAL VARIABLES
-            $postingDate = $request->input('posting_date'); $prefVendor = $request->input('pref_vendor'); $dueDate = $request->input('due_date');
-            $poStatus = $request->input('po_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
+            $postingDate = $request->input('posting_date'); $prefCustomer = $request->input('pref_customer'); $dueDate = $request->input('due_date');
+            $poStatus = $request->input('sales_status'); $vendorPoNo = $request->input('vendor_po_no'); $SalesOrderNo = $request->input('sales_number');
             $user = $request->input('user'); $shipCountry = $request->input('ship_country'); $shipCity = $request->input('ship_city');
             $shipContact = $request->input('ship_contact'); $shipAgent = $request->input('ship_agent'); $shipMethod = $request->input('ship_method');
-            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalVendorCurr = $request->input('grand_total_vendor_curr');
+            $shipAddress = $request->input('ship_address'); $grandTotal = $request->input('grand_total'); $grandTotalCustomerCurr = $request->input('grand_total_vendor_curr');
             $mailOption = $request->input('mail_option'); $emails = $request->input('emails'); $file = $request->input('file');
             $message = $request->input('mail_message'); $oneTimeDiscount = $request->input('one_time_discount_amount_edit'); $oneTimeDiscountPerct = $request->input('one_time_discount_perct_edit');
             $oneTimeTaxAmount = $request->input('one_time_tax_amount_edit'); $taxType = $request->input('tax_type');
             $discountType = $request->input('discount_type'); $oneTimeTaxPerct = $request->input('one_time_tax_perct_edit');
-            $rfqNo = $request->input('rfq_no'); $mailCopy = $request->input('mail_copy');
+            $mailCopy = $request->input('mail_copy');
 
 
             if (count($accClass) != count($accRate) && count($invClass) != count($subTotal)) {
@@ -1115,8 +1114,8 @@ class SalesOrderController extends Controller
 
             }
 
-            $vendor = VendorCustomer::firstRow('id',$prefVendor);
-            $curr = Currency::firstRow('id',$vendor->currency_id);
+            $customer = VendorCustomer::firstRow('id',$prefCustomer);
+            $curr = Currency::firstRow('id',$customer->currency_id);
             $files = $request->file('file');
             $mailFiles = [];
 
@@ -1154,9 +1153,8 @@ class SalesOrderController extends Controller
                 'vendor_po_no' => $vendorPoNo,
                 'mails' => $emails,
                 'mail_copy' => $mailCopy,
-                'rfq_no' => $rfqNo,
                 'sum_total' => $grandTotal,
-                'trans_total' => $grandTotalVendorCurr,
+                'trans_total' => $grandTotalCustomerCurr,
                 'discount_total' => Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$oneTimeDiscount,$postingDate),
                 'discount_trans' => $oneTimeDiscount,
                 'discount_perct' => $oneTimeDiscountPerct,
@@ -1169,7 +1167,7 @@ class SalesOrderController extends Controller
                 'attachment' => json_encode($attachment,true),
                 'default_curr' => Utility::currencyArrayItem('id'),
                 'trans_curr' => $curr->id,
-                'vendor' => $prefVendor,
+                'customer' => $prefCustomer,
                 'due_date' => Utility::standardDate($dueDate),
                 'post_date' => Utility::standardDate($postingDate),
                 'ship_to_city' => $shipCity,
@@ -1178,7 +1176,7 @@ class SalesOrderController extends Controller
                 'ship_to_contact' => $shipContact,
                 'ship_method' => $shipMethod,
                 'ship_agent' => $shipAgent,
-                'purchase_status' => $poStatus,
+                'sales_status' => $poStatus,
                 'created_by' => Auth::user()->id,
                 'status' => Utility::STATUS_ACTIVE
             ];
@@ -1200,7 +1198,7 @@ class SalesOrderController extends Controller
                     $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
                     $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
                     $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $poDbDataEdit['po_desc'] = $request->input('item_desc' . $i);
+                    $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
                     $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
                     $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
                     $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
@@ -1221,12 +1219,12 @@ class SalesOrderController extends Controller
 
                     $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
                     $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['received_quantity'] = Utility::checkEmptyItem($request->input('quantity_received' . $i),'');
-                    $poDbDataEdit['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
-                    $poDbDataEdit['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
-                    $poDbDataEdit['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
-                    $poDbDataEdit['po_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
-                    $poDbDataEdit['po_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
+                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
+                    $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
+                    $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
+                    $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
+                    $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
+                    $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
                     $poDbDataEdit['status_comment_history'] = json_encode($statComHist,true);
                     $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i),'');
                     $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
@@ -1244,7 +1242,7 @@ class SalesOrderController extends Controller
 
                     $accDbDataEdit['uid'] = $uid;
                     $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['po_desc'] = $request->input('item_desc_acc' . $i);
+                    $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
                     $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
                     $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
                     $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
@@ -1286,7 +1284,7 @@ class SalesOrderController extends Controller
                     for ($i = 0; $i < count($accClass); $i++) {
                         $accDbData['uid'] = $uid;
                         $accDbData['account_id'] = Utility::checkEmptyArrayItem($accClass, $i, 0);
-                        $accDbData['po_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
+                        $accDbData['sales_desc'] = Utility::checkEmptyArrayItem($accDesc, $i, '');
                         $accDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($accRate, $i, 0);
                         $accDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($accRate, $i, 0), $postingDate);
                         $accDbData['tax_id'] = Utility::checkEmptyArrayItem($accTax, $i, 0);
@@ -1326,7 +1324,7 @@ class SalesOrderController extends Controller
                         $poDbData['bin_stock'] = $binStock->inventory_type;
                         $poDbData['unit_measurement'] = Utility::checkEmptyArrayItem($unitMeasure, $i, 0);
                         $poDbData['quantity'] = Utility::checkEmptyArrayItem($quantity, $i, 0);
-                        $poDbData['po_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
+                        $poDbData['sales_desc'] = Utility::checkEmptyArrayItem($itemDesc, $i, '');
                         $poDbData['unit_cost_trans'] = Utility::checkEmptyArrayItem($unitCost, $i, 0);
                         $poDbData['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyArrayItem($unitCost, $i, 0), $postingDate);
                         $poDbData['tax_id'] = Utility::checkEmptyArrayItem($tax, $i, 0);
@@ -1347,12 +1345,12 @@ class SalesOrderController extends Controller
 
                         $poDbData['ship_to_whse'] = Utility::checkEmptyArrayItem($warehouse, $i, '0');
                         $poDbData['reserved_quantity'] = Utility::checkEmptyArrayItem($quantityReserved, $i, '');
-                        $poDbData['received_quantity'] = Utility::checkEmptyArrayItem($quantityReceived, $i, '');
-                        $poDbData['planned_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
-                        $poDbData['promised_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised, $i, ''));
-                        $poDbData['expected_receipt_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected, $i, ''));
-                        $poDbData['po_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
-                        $poDbData['po_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
+                        $poDbData['shipped_quantity'] = Utility::checkEmptyArrayItem($quantityShipped, $i, '');
+                        $poDbData['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($planned, $i, ''));
+                        $poDbData['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($promised, $i, ''));
+                        $poDbData['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyArrayItem($expected, $i, ''));
+                        $poDbData['sales_status'] = Utility::checkEmptyArrayItem($shipStatus, $i, '');
+                        $poDbData['sales_status_comment'] = Utility::checkEmptyArrayItem($statusComment, $i, '');
                         $poDbData['status_comment_history'] = json_encode($statComHist, true);
                         $poDbData['blanket_order_no'] = Utility::checkEmptyArrayItem($bOrderNo, $i, '');
                         $poDbData['blanket_order_line_no'] = Utility::checkEmptyArrayItem($bOrderLineNo, $i, '');
@@ -1472,9 +1470,7 @@ class SalesOrderController extends Controller
 
             $obtain_array[] = $data->uid;
         }
-        /*for($i=0;$i<count($search);$i++){
-            $obtain_array[] = $search[$i]->id;
-        }*/
+
         //print_r($search); exit();
         $user_ids = array_unique($obtain_array);
         $mainData =  SalesExtension::massDataPaginate('uid', $user_ids);

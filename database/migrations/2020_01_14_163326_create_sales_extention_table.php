@@ -46,9 +46,9 @@ class CreateSalesExtentionTable extends Migration
             $table->string('ship_to_contact',70)->nullable();
             $table->string('ship_method',70)->nullable();
             $table->string('ship_agent')->nullable();
-            $table->integer('sales_status')->nullable();
+            $table->string('sales_status',50)->nullable();
             $table->string('mails')->nullable();
-            $table->string('mails_copy')->nullable();
+            $table->string('mail_copy')->nullable();
             $table->integer('status');
             $table->integer('created_by');
             $table->integer('updated_by');

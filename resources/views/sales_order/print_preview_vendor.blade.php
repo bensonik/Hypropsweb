@@ -6,14 +6,14 @@
         <thead></thead>
         <tbody>
         <tr>
-            <td>Vendor: {{$po->vendorCon->name}}</td>
-            <td>Vendor Invoice No.:{{$po->vendor_invoice_no}}</td>
-            <td>Billing Address: {{$po->vendorCon->address}}</td>
+            <td>Vendor: {{$sales->vendorCon->name}}</td>
+            <td>Vendor Po No.:{{$sales->vendor_po_no}}</td>
+            <td>Billing Address: {{$sales->vendorCon->address}}</td>
         </tr>
         <tr>
-            <td>PO Number: {{$po->po_number}}</td>
-            <td>Ship to city: {{$po->ship_to_city}}</td>
-            <td>Ship to address: {{$po->ship_address}}</td>
+            <td>Sales Number: {{$sales->sales_number}}</td>
+            <td>Ship to city: {{$sales->ship_to_city}}</td>
+            <td>Ship to address: {{$sales->ship_address}}</td>
 
         </tr>
 

@@ -19,7 +19,15 @@
                 <div class="form-group">
                     Sales Number
                     <div class="form-line">
-                        <input type="text" class="form-control" value="" name="po_number" placeholder="Sales Order Number">
+                        <input type="text" class="form-control" value="" name="sales_number" placeholder="Sales Order Number">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    Vendor PO Number
+                    <div class="form-line">
+                        <input type="text" class="form-control" value="" name="vendor_po_no" placeholder="Vendor PO Number">
                     </div>
                 </div>
             </div>
@@ -75,7 +83,7 @@
                         <select class="form-control ship_status" name="sales_status" >
                             <option value="">Select Sales status</option>
                             @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
-                                <option value="{{$key}}">{{$val}}</option>
+                                <option value="{{$val}}">{{$val}}</option>
                             @endforeach
                         </select>
                     </div>

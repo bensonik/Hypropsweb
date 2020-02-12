@@ -515,17 +515,16 @@ class GeneralController extends Controller
             $searchId = $_GET['searchId'];
             $hiddenId = $_GET['hiddenId'];
             $listId = $_GET['listId'];
-
             if($pickedVal != '') {
                 $search = PoExtension::searchPo($pickedVal);
                 $obtain_array = [];
 
                 foreach ($search as $data) {
 
-                    $obtain_array[] = $data->id;
+                    $obtain_array[] = $data->uid;
                 }
                 $dataIds = array_unique($obtain_array);
-                $fetchData = PoExtension::massData('id', $dataIds);
+                $fetchData = PoExtension::massData('uid', $dataIds);
             }else{
 
                 $fetchData = PoExtension::getAllData();

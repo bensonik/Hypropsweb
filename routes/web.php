@@ -1354,7 +1354,7 @@ Route::post('/search_warehouse_inventory', 'WarehouseInventoryController@searchW
 Route::any('/sales_order', 'SalesOrderController@index')->name('sales_order')->middleware('auth');
 Route::post('/edit_sales_form', 'SalesOrderController@editForm')->name('edit_sales_form');
 Route::post('/create_sales', 'SalesOrderController@create')->name('create_sales');
-Route::post('/post_create_receipt', 'SalesOrderController@postCreateReceipt')->name('post_create_receipt');
+Route::post('/post_create_shipment', 'SalesOrderController@postCreateShipment')->name('post_create_shipment');
 Route::post('/edit_sales', 'SalesOrderController@edit')->name('edit_sales');
 Route::post('/sales_print_preview', 'SalesOrderController@printPreview')->name('sales_print_preview');
 Route::post('/convert_quote_sales_form', 'SalesOrderController@convertQuoteForm')->name('convert_quote_sales_form');

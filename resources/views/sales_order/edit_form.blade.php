@@ -22,6 +22,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    Vendor PO Number
+                    <div class="form-line">
+                        <input type="text" class="form-control" value="{{$edit->vendor_po_no}}" name="vendor_po_no" placeholder="Vendor PO Number">
+                    </div>
+                </div>
+            </div>
 
         </div>
 
@@ -830,7 +838,7 @@
 
             <div class="row clearfix">
 
-                <textarea id="mail_message_edit" name="message" class="ckeditor" placeholder="Message">{{$edit->message}}</textarea>
+                <textarea id="mail_message_edit" name="message" class="ckeditor" placeholder="Message">{!! $edit->message!!}</textarea>
                 <script>
                     CKEDITOR.replace('mail_message_edit');
                 </script>
@@ -883,7 +891,7 @@
                         <input type="hidden" name="edit_id" value="{{$edit->id}}" >
                     </form>
 
-                    <button type="button"  onclick="removeMediaForm('removeAttach{{$num}}','removeAttachForm','<?php echo url('po_remove_attachment'); ?>','reload_data',
+                    <button type="button"  onclick="removeMediaForm('removeAttach{{$num}}','removeAttachForm','<?php echo url('sales_remove_attachment'); ?>','reload_data',
                             '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>')"
                             class="btn btn-danger waves-effect">
                         Remove

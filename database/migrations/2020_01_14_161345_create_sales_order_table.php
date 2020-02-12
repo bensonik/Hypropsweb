@@ -16,7 +16,7 @@ class CreateSalesOrderTable extends Migration
         Schema::create('sales_order', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->integer('uid');
-            $table->integer('sale_id')->nullable();
+            $table->integer('sales_id')->nullable();
             $table->integer('item_id')->nullable();
             $table->integer('account_id')->nullable();
             $table->text('sales_desc')->nullable();
