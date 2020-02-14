@@ -7,7 +7,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt(s)</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Shipment(s)</h4>
                 </div>
                 <div class="modal-body" style="height:400px; overflow:scroll;">
 
@@ -31,7 +31,7 @@
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Shipment</h4>
                     <ul>
                         <li class="dropdown pull-right">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -41,12 +41,12 @@
                         </li>
                     </ul>
                 </div>
-                <div class="modal-body" id="edit_content" style=" overflow:scroll;">
+                <div class="modal-body" id="edit_content" style="height:400px; overflow:scroll;">
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_warehouse_receipt'); ?>','reload_data',
-                            '<?php echo url('warehouse_receipt'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
+                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_warehouse_shipment'); ?>','reload_data',
+                            '<?php echo url('warehouse_shipment'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-link waves-effect">
                         SAVE
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
@@ -62,19 +62,19 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Warehouse Receipt(s)
+                        Warehouse Shipment(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
 
                         <li>
-                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
-                                    '<?php echo url('delete_warehouse_receipt'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
+                            <button type="button" onclick="deleteItems('kid_checkbox','reload_data','<?php echo url('warehouse_shipment'); ?>',
+                                    '<?php echo url('delete_warehouse_shipment'); ?>','<?php echo csrf_token(); ?>');" class="btn btn-danger">
                                 <i class="fa fa-trash-o"></i>Delete
                             </button>
                         </li>
                         <li>
-                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('warehouse_receipt'); ?>',
-                                        '<?php echo url('post_receipt'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Receipt</button>
+                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('warehouse_shipment'); ?>',
+                                        '<?php echo url('post_shipment'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_SHIPMENT}}','Post shipment');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post shipment</button>
 
                         </li>
                         <li class="dropdown">
@@ -93,9 +93,9 @@
                         <div class="col-sm-6 ">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="search_receipt" class="form-control"
-                                           onkeyup="searchItem('search_receipt','reload_data','<?php echo url('search_warehouse_receipt') ?>','{{url('warehouse_receipt')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_receipt" placeholder="Search Warehouse Receipts" >
+                                    <input type="text" id="search_shipment" class="form-control"
+                                           onkeyup="searchItem('search_shipment','reload_data','<?php echo url('search_warehouse_shipment') ?>','{{url('warehouse_shipment')}}','<?php echo csrf_token(); ?>')"
+                                           name="search_shipment" placeholder="Search Warehouse shipments" >
                                 </div>
                             </div>
                         </div>
@@ -118,9 +118,9 @@
                             <th>Inventory Item</th>
                             <th>Item Desc</th>
                             <th>Quantity</th>
-                            <th>Quantity to receive</th>
+                            <th>Quantity to ship</th>
                             <th>Quantity to Cross-Dock</th>
-                            <th>Quantity Received</th>
+                            <th>Quantity shipped</th>
                             <th>Quantity Outstanding</th>
                             <th>Unit of Measurement</th>
                             <th>Created by</th>
@@ -137,16 +137,16 @@
 
                             </td>
                             <td>
-                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_shipment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
                             </td>
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->warehouse->name}}</td>
                             <td>{{$data->inventory->item_name}}</td>
-                            <td>{{$data->poItem->po_desc}}</td>
+                            <td>{{$data->salesItem->sales_desc}}</td>
                             <td>{{$data->qty}}</td>
-                            <td>{{$data->qty_to_receive}}</td>
+                            <td>{{$data->qty_to_ship}}</td>
                             <td>{{$data->qty_to_cross_dock}}</td>
-                            <td>{{$data->qty_received}}</td>
+                            <td>{{$data->qty_shipped}}</td>
                             <td>{{$data->qty_outstanding}}</td>
                             <td>{{$data->unit_measurement}}</td>
                             <td>
@@ -269,12 +269,12 @@
 
     function getProducts(page){
 
-        var searchVal = $('#search_receipt').val();
+        var searchVal = $('#search_shipment').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;
         }else{
-            pageData = '<?php echo url('search_warehouse_receipt') ?>?page=' + page+'&searchVar='+searchVal;
+            pageData = '<?php echo url('search_warehouse_shipment') ?>?page=' + page+'&searchVar='+searchVal;
         }
 
         $.ajax({

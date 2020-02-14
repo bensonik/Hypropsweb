@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddToWhsePickPutAwayTable extends Migration
+class AddToStockTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class AddToWhsePickPutAwayTable extends Migration
      */
     public function up()
     {
-        Schema::table('whse_pick_put_away', function (Blueprint $table) {
+        Schema::table('stock', function (Blueprint $table) {
             //
             $table->integer('sales_id')->nullable();
-            $table->integer('sales_ext_id')->nullable();
+            $table->integer('sales_date')->nullable();
         });
     }
 
@@ -27,10 +27,10 @@ class AddToWhsePickPutAwayTable extends Migration
      */
     public function down()
     {
-        Schema::table('whse_pick_put_away', function (Blueprint $table) {
+        Schema::table('stock', function (Blueprint $table) {
             //
             $table->dropColumn('sales_id');
-            $table->dropColumn('sales_ext_id');
+            $table->dropColumn('sales_date');
         });
     }
 }

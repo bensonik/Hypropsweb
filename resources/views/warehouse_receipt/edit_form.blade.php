@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <b>Zone</b>
                             <div class="form-line" id="zone_display_id">
-                                <select class=" " id="zone_id" name="zone" onchange="fillNextInputParamGetVal('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')">
+                                <select class=" " id="zone_id" name="zone" onchange="fillNextInputParamGetValId('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins','warehouse_id')">
                                     <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
                                     @foreach($zones as $z)
                                         <option value="{{$z->id}}">{{$z->zone->name}}</option>

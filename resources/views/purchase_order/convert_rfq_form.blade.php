@@ -319,7 +319,7 @@
 
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}','po_extention')">
+                                    <div style="cursor: pointer;" id="" onclick="tempItemDeleteConvert('itemId{{$po->id}}','<?php echo url('delete_po_item_convert') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}','po_extention')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -641,7 +641,7 @@
                             <td></td>
                             <td class="center-align" id="">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','0.00','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}','po_extention')">
+                                    <div style="cursor: pointer;" id="" onclick="tempItemDeleteConvert('itemId{{$po->id}}','<?php echo url('delete_po_item_convert') ?>','{{$po->id}}','0.00','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('purchase_order')}}','po_extention')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>

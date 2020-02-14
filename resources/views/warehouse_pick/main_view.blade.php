@@ -7,7 +7,7 @@
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Receipt(s)</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Shipment(s)</h4>
                 </div>
                 <div class="modal-body" style="height:400px; overflow:scroll;">
 
@@ -31,7 +31,7 @@
         <div class="modal-dialog modal-xlg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Put-Away</h4>
+                    <h4 class="modal-title" id="defaultModalLabel">Warehouse Pick</h4>
                     <ul>
                         <li class="dropdown pull-right">
                             <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -45,9 +45,9 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_put_away'); ?>','reload_data',
-                            '<?php echo url('put_away'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-success waves-effect">
-                        <i class="fa fa-check"></i>Register Put-Away(s)
+                    <button onclick="submitMediaForm('editModal','editMainForm','<?php echo url('edit_picks'); ?>','reload_data',
+                            '<?php echo url('picks'); ?>','<?php echo csrf_token(); ?>')" type="button" class="btn btn-success waves-effect">
+                        <i class="fa fa-check"></i>Register Pick(s)
                     </button>
                     <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">CLOSE</button>
                 </div>
@@ -62,14 +62,14 @@
             <div class="card">
                 <div class="header">
                     <h2>
-                        Warehouse Put-Away(s)
+                        Warehouse Pick(s)
                     </h2>
                     <ul class="header-dropdown m-r--5">
 
 
                         <!--<li>
-                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('put_away'); ?>',
-                                        '<?php echo url('register_put_away'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Register Put-Away(s)</button>
+                            <button type="button" onclick="warehousePost('kid_checkbox','reload_data','<?php echo url('picks'); ?>',
+                                        '<?php echo url('register_picks'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_RECEIPT}}','Post Receipt');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Register Pick(s)</button>
 
                         </li>-->
                         <li class="dropdown">
@@ -88,9 +88,9 @@
                         <div class="col-sm-6 ">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" id="search_put_away" class="form-control"
-                                           onkeyup="searchItem('search_put_away','reload_data','<?php echo url('search_put_away') ?>','{{url('put_away')}}','<?php echo csrf_token(); ?>')"
-                                           name="search_put_away" placeholder="Search Warehouse Put-Away(s)" >
+                                    <input type="text" id="search_picks" class="form-control"
+                                           onkeyup="searchItem('search_picks','reload_data','<?php echo url('search_picks') ?>','{{url('picks')}}','<?php echo csrf_token(); ?>')"
+                                           name="search_picks" placeholder="Search Warehouse Pick(s)" >
                                 </div>
                             </div>
                         </div>
@@ -129,8 +129,8 @@
                             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>{{$data->warehouse->name}}</td>
                             <td>{{$data->inventory->item_name}}</td>
-                            <td>{{$data->poItem->po_desc}}</td>
-                            <td>{{$data->poExtItem->po_number}}</td>
+                            <td>{{$data->salesItem->sales_desc}}</td>
+                            <td>{{$data->salesExtItem->sales_number}}</td>
                             <td>{{$data->assigned->firstname}} {{$data->assigned->lastname}}</td>
                             <td>
                                 @if($data->created_by != '0')
@@ -148,7 +148,7 @@
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
                             <td>
-                                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_put_away_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Put-Away</a>
+                                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_picks_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Pick</a>
                             </td>
                         </tr>
                         @endforeach
@@ -228,11 +228,6 @@
                 location.reload();
             }
         }
-        //END OF OTHER VALIDATION CONTINUES HERE
-        }else{
-            swal("Warning!","Please, fill in all required fields to continue","warning");
-        }
-
     }
 
 </script>
@@ -245,7 +240,11 @@
         getProducts(page);
     });
 
-    $(document).on('click','.pagination a', function(e){
+    $(document).on('click','.pagination        //END OF OTHER VALIDATION CONTINUES HERE\n' +
+        '        }else{\n' +
+        '            swal("Warning!","Please, fill in all required fields to continue","warning");\n' +
+        '        }\n' +
+        '\n a', function(e){
         e.preventDefault();
         var page = $(this).attr('href').split('page=')[1];
         getProducts(page);
@@ -254,12 +253,12 @@
 
     function getProducts(page){
 
-        var searchVal = $('#search_put_away').val();
+        var searchVal = $('#search_picks').val();
         var pageData = '';
         if(searchVal == ''){
             pageData = '?page=' + page;
         }else{
-            pageData = '<?php echo url('search_put_away') ?>?page=' + page+'&searchVar='+searchVal;
+            pageData = '<?php echo url('search_picks') ?>?page=' + page+'&searchVar='+searchVal;
         }
 
         $.ajax({

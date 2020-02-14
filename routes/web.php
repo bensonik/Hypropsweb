@@ -527,11 +527,11 @@ Route::post('/add_warehouse_zone_form', 'WarehouseZoneController@addForm')->name
 Route::post('/delete_warehouse_zone', 'WarehouseZoneController@Destroy')->name('delete_warehouse_zone');
 
 // -------------PUT-AWAY TEMPLATE MODULE-----------
-Route::any('/put_away_template', 'PutAwayTemplateController@index')->name('bin_type')->middleware('auth');
-Route::post('/create_put_away_template', 'PutAwayTemplateController@create')->name('create_put_away_template');
-Route::post('/edit_put_away_template_form', 'PutAwayTemplateController@editForm')->name('edit_put_away_template_form');
-Route::post('/edit_put_away_template', 'PutAwayTemplateController@edit')->name('edit_put_away_template');
-Route::post('/delete_put_away_template', 'PutAwayTemplateController@destroy')->name('delete_put_away_template');
+Route::any('/picks_template', 'PickTemplateController@index')->name('bin_type')->middleware('auth');
+Route::post('/create_picks_template', 'PickTemplateController@create')->name('create_picks_template');
+Route::post('/edit_picks_template_form', 'PickTemplateController@editForm')->name('edit_picks_template_form');
+Route::post('/edit_picks_template', 'PickTemplateController@edit')->name('edit_picks_template');
+Route::post('/delete_picks_template', 'PickTemplateController@destroy')->name('delete_picks_template');
 
 // -------------PHYSICAL INVENTORY COUNT MODULE-----------
 Route::any('/physical_inv_count', 'PhysicalInvCountController@index')->name('physical_inv_count')->middleware('auth');
@@ -684,6 +684,7 @@ Route::post('/convert_quote', 'PurchaseOrderController@convertQuote')->name('con
 Route::any('/search_po', 'PurchaseOrderController@searchPo')->name('search_po');
 Route::post('/delete_po', 'PurchaseOrderController@destroy')->name('delete_po');
 Route::any('/delete_po_item', 'PurchaseOrderController@permDelete')->name('delete_po_item');
+Route::any('/delete_po_item_convert', 'PurchaseOrderController@permDeleteConvert')->name('delete_po_item_convert');
 Route::post('/change_po_status', 'PurchaseOrderController@changeStatus')->name('change_po_status');
 Route::any('/po_remove_attachment', 'PurchaseOrderController@removeAttachment')->name('po_remove_attachment');
 Route::any('/po_download_attachment', 'PurchaseOrderController@downloadAttachment')->name('po_download_attachment');
@@ -705,12 +706,12 @@ Route::any('/search_warehouse_receipt', 'WarehouseReceiptController@searchWareho
 Route::post('/delete_warehouse_receipt', 'WarehouseReceiptController@destroy')->name('delete_warehouse_receipt');
 
 // -------------WAREHOUSE PUT AWAY  MODULE-----------
-Route::any('/put_away', 'WhsePutAwayController@index')->name('put_away')->middleware('auth');
-Route::any('/register_put_away', 'WhsePutAwayController@putAway')->name('post_put_away');
-Route::post('/edit_put_away_form', 'WhsePutAwayController@editForm')->name('edit_put_away_form');
-Route::post('/edit_put_away', 'WhsePutAwayController@edit')->name('edit_put_away');
-Route::any('/search_put_away', 'WhsePutAwayController@searchWhsePickPutAway')->name('search_put_away');
-Route::post('/delete_put_away', 'WhsePutAwayController@destroy')->name('delete_put_away');
+Route::any('/picks', 'WhsePickController@index')->name('picks')->middleware('auth');
+Route::any('/register_picks', 'WhsePickController@Pick')->name('post_picks');
+Route::post('/edit_picks_form', 'WhsePickController@editForm')->name('edit_picks_form');
+Route::post('/edit_picks', 'WhsePickController@edit')->name('edit_picks');
+Route::any('/search_picks', 'WhsePickController@searchWhsePickPick')->name('search_picks');
+Route::post('/delete_picks', 'WhsePickController@destroy')->name('delete_picks');
 
 // -------------REQUEST FOR QUOTE (RFQ) MODULE-----------
 Route::any('/rfq', 'RFQController@index')->name('rfq')->middleware('auth');
@@ -1364,6 +1365,7 @@ Route::post('/convert_quote_sales', 'SalesOrderController@convertQuote')->name('
 Route::any('/search_sales', 'SalesOrderController@searchSales')->name('search_sales');
 Route::post('/delete_sales', 'SalesOrderController@destroy')->name('delete_sales');
 Route::any('/delete_sales_item', 'SalesOrderController@permDelete')->name('delete_sales_item');
+Route::any('/delete_sales_item_convert', 'SalesOrderController@permDeleteConvert')->name('delete_sales_item_convert');
 Route::post('/change_sales_status', 'SalesOrderController@changeStatus')->name('change_sales_status');
 Route::any('/sales_remove_attachment', 'SalesOrderController@removeAttachment')->name('sales_remove_attachment');
 Route::any('/sales_download_attachment', 'SalesOrderController@downloadAttachment')->name('sales_download_attachment');
@@ -1377,7 +1379,13 @@ Route::post('/edit_warehouse_shipment', 'WarehouseShipmentController@edit')->nam
 Route::any('/search_warehouse_shipment', 'WarehouseShipmentController@searchWarehouseShipment')->name('search_warehouse_shipment');
 Route::post('/delete_warehouse_shipment', 'WarehouseShipmentController@destroy')->name('delete_warehouse_shipment');
 
-
+// -------------WAREHOUSE PICK  MODULE-----------
+Route::any('/picks', 'WhsePickController@index')->name('picks')->middleware('auth');
+Route::any('/register_picks', 'WhsePickController@Pick')->name('post_picks');
+Route::post('/edit_picks_form', 'WhsePickController@editForm')->name('edit_picks_form');
+Route::post('/edit_picks', 'WhsePickController@edit')->name('edit_picks');
+Route::any('/search_picks', 'WhsePickController@searchWhsePick')->name('search_picks');
+Route::post('/delete_picks', 'WhsePickController@destroy')->name('delete_picks');
 
 
 

@@ -59,10 +59,10 @@ class WhsePickController extends Controller
     {
         //
         $mainData = WhsePickPutAway::firstRow('id',$request->input('dataId'));
-        $poItems = WhsePickPutAway::specialColumns('sales_ext_id',$mainData->sales_ext_id);
+        $salesItems = WhsePickPutAway::specialColumns('sales_ext_id',$mainData->sales_ext_id);
         $zone = WarehouseZone::specialColumns('warehouse_id',$mainData->to_whse);
         return view::make('warehouse_pick.edit_form')->with('edit',$mainData)->with('zone',$zone)
-            ->with('salesItems',$poItems);
+            ->with('salesItems',$salesItems);
 
     }
 

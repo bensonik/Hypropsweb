@@ -501,68 +501,75 @@ class SalesOrderController extends Controller
                 for ($i = 1; $i <= $countExtPo; $i++) {
                     $poDbDataEdit = [];
 
-                    $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
-                    $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
-                    $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
-                    $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
-                    $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
-                    $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
-                    $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
-                    $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
-                    $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i),0);
-                    $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i),0);
-                    $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i),0);
-                    $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i),0);
-                    $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i),0);
-                    $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total' . $i),0),$postingDate);
+                    if(!empty($request->input('inv_class' . $i))) {
+                        $binStock = Inventory::firstRow('id', $request->input('inv_class' . $i));
+                        $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
+                        $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
+                        $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
+                        $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
+                        $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
+                        $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
+                        $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('unit_cost' . $i), 0), $postingDate);
+                        $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i), 0);
+                        $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i), 0);
+                        $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i), 0);
+                        $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i), 0);
+                        $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i), 0);
+                        $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i), 0);
+                        $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total' . $i), 0), $postingDate);
 
-                    $statComHist = [];
-                    if(Utility::checkEmptyItem($request->input('ship_status' . $i),0) != 0){
-                        $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i),0)] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
+                        $statComHist = [];
+                        if (Utility::checkEmptyItem($request->input('ship_status' . $i), 0) != 0) {
+                            $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i), 0)] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
 
-                    }
+                        }
 
-                    $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
-                    $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
-                    $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
-                    $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
-                    $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
-                    $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
-                    $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
-                    $poDbDataEdit['status_comment_history'] = json_encode($statComHist,true);
-                    $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i),'');
-                    $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
-                    $poDbDataEdit['updated_by'] = Auth::user()->id;
+                        $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i), '0');
+                        $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i), '');
+                        $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i), '');
+                        $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i), '0000-00-00'));
+                        $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i), '0000-00-00'));
+                        $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i), '0000-00-00'));
+                        $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i), '');
+                        $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
+                        $poDbDataEdit['status_comment_history'] = json_encode($statComHist, true);
+                        $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i), '');
+                        $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i), '');
+                        $poDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    SalesOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
-                }
+                        SalesOrder::defaultUpdate('id', $request->input('poId' . $i), $poDbDataEdit);
+
+                        }
+
+                    }   //
 
             }
 
             if($countExtAcc > 0){
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
+                    if (!empty($request->input('acc_class' . $i))) {
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
+                        $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
+                        $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
+                        $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), $request->input('unit_cost_acc' . $i), $postingDate);
+                        $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
+                        $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
+                        $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
+                        $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0);
+                        $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
+                        $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
+                        $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
-                    $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
-                    $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
-                    $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
-                    $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
-                    $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
-                    $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0);
-                    $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
-                    $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
-                    $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['updated_by'] = Auth::user()->id;
+                        SalesOrder::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
 
-                    SalesOrder::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
+                    }
+
                 }
 
 
@@ -843,47 +850,49 @@ class SalesOrderController extends Controller
             if($countExtPo > 0){
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
+                    if (!empty($request->input('inv_class' . $i))) {
+                        $binStock = Inventory::firstRow('id', $request->input('inv_class' . $i));
+                        $poDbDataEdit['uid'] = $uid;
+                        $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
+                        $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
+                        $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
+                        $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
+                        $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
+                        $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
+                        $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('unit_cost' . $i), 0), $postingDate);
+                        $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i), 0);
+                        $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i), 0);
+                        $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i), 0);
+                        $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i), 0);
+                        $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i), 0);
+                        $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i), 0);
+                        $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total' . $i), 0), $postingDate);
+                        $poDbDataEdit['uid'] = $uid;
+                        $statComHist = [];
+                        if (Utility::checkEmptyItem($request->input('ship_status' . $i), 0) != 0) {
+                            $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i), 0)] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
 
-                    $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
-                    $poDbDataEdit['uid'] = $uid;
-                    $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
-                    $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
-                    $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
-                    $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
-                    $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
-                    $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
-                    $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
-                    $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i),0);
-                    $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i),0);
-                    $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i),0);
-                    $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i),0);
-                    $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i),0);
-                    $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total' . $i),0),$postingDate);
-                    $poDbDataEdit['uid'] = $uid;
-                    $statComHist = [];
-                    if(Utility::checkEmptyItem($request->input('ship_status' . $i),0) != 0){
-                        $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i),0)] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
+                        }
 
+                        $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i), '0');
+                        $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i), '');
+                        $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i), '');
+                        $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i), '0000-00-00'));
+                        $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i), '0000-00-00'));
+                        $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i), '0000-00-00'));
+                        $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i), '');
+                        $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
+                        $poDbDataEdit['status_comment_history'] = json_encode($statComHist, true);
+                        $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i), '');
+                        $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i), '');
+                        $poDbDataEdit['created_by'] = Auth::user()->id;
+                        $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+
+                        SalesOrder::create($poDbDataEdit);
                     }
 
-                    $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
-                    $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
-                    $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
-                    $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
-                    $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
-                    $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
-                    $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
-                    $poDbDataEdit['status_comment_history'] = json_encode($statComHist,true);
-                    $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i),'');
-                    $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
-                    $poDbDataEdit['created_by'] = Auth::user()->id;
-                    $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
-
-                    SalesOrder::create($poDbDataEdit);
                 }
 
             }
@@ -892,26 +901,28 @@ class SalesOrderController extends Controller
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
 
-                    $accDbDataEdit['uid'] = $uid;
-                    $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
-                    $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
-                    $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
-                    $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
-                    $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
-                    $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
-                    $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0);
-                    $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
-                    $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
-                    $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['created_by'] = Auth::user()->id;
-                    $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+                    if (!empty($request->input('acc_class' . $i))) {
+                        $accDbDataEdit['uid'] = $uid;
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
+                        $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
+                        $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
+                        $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), $request->input('unit_cost_acc' . $i), $postingDate);
+                        $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
+                        $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
+                        $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
+                        $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0);
+                        $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
+                        $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
+                        $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['created_by'] = Auth::user()->id;
+                        $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
-                    SalesOrder::create($accDbDataEdit);
+                        SalesOrder::create($accDbDataEdit);
+                    }
+
                 }
-
 
             }
             //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
@@ -1192,46 +1203,49 @@ class SalesOrderController extends Controller
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
 
-                    $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
-                    $poDbDataEdit['uid'] = $uid;
-                    $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
-                    $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
-                    $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
-                    $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
-                    $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
-                    $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
-                    $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
-                    $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i),0);
-                    $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i),0);
-                    $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i),0);
-                    $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount' . $i),0),$postingDate);
-                    $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i),0);
-                    $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i),0);
-                    $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total' . $i),0),$postingDate);
-                    $poDbDataEdit['uid'] = $uid;
-                    $statComHist = [];
-                    if(Utility::checkEmptyItem($request->input('ship_status' . $i),0) != 0){
-                        $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i),0)] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
+                    if (!empty($request->input('inv_class' . $i))) {
+                        $binStock = Inventory::firstRow('id', $request->input('inv_class' . $i));
+                        $poDbDataEdit['uid'] = $uid;
+                        $poDbDataEdit['item_id'] = $request->input('inv_class' . $i);
+                        $poDbDataEdit['bin_stock'] = $binStock->inventory_type;
+                        $poDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
+                        $poDbDataEdit['quantity'] = $request->input('quantity' . $i);
+                        $poDbDataEdit['sales_desc'] = $request->input('item_desc' . $i);
+                        $poDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
+                        $poDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('unit_cost' . $i), 0), $postingDate);
+                        $poDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i), 0);
+                        $poDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i), 0);
+                        $poDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i), 0);
+                        $poDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i), 0);
+                        $poDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount' . $i), 0), $postingDate);
+                        $poDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i), 0);
+                        $poDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i), 0);
+                        $poDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total' . $i), 0), $postingDate);
+                        $poDbDataEdit['uid'] = $uid;
+                        $statComHist = [];
+                        if (Utility::checkEmptyItem($request->input('ship_status' . $i), 0) != 0) {
+                            $statComHist[Utility::checkEmptyItem($request->input('ship_status' . $i), 0)] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
 
+                        }
+
+                        $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i), '0');
+                        $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i), '');
+                        $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i), '');
+                        $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i), '0000-00-00'));
+                        $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i), '0000-00-00'));
+                        $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i), '0000-00-00'));
+                        $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i), '');
+                        $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i), '');
+                        $poDbDataEdit['status_comment_history'] = json_encode($statComHist, true);
+                        $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i), '');
+                        $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i), '');
+                        $poDbDataEdit['created_by'] = Auth::user()->id;
+                        $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+
+                        SalesOrder::create($poDbDataEdit);
                     }
 
-                    $poDbDataEdit['ship_to_whse'] = Utility::checkEmptyItem($request->input('warehouse' . $i),'0');
-                    $poDbDataEdit['reserved_quantity'] = Utility::checkEmptyItem($request->input('quantity_reserved' . $i),'');
-                    $poDbDataEdit['shipped_quantity'] = Utility::checkEmptyItem($request->input('quantity_shipped' . $i),'');
-                    $poDbDataEdit['planned_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('planned' . $i),'0000-00-00'));
-                    $poDbDataEdit['promised_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('promised' . $i),'0000-00-00'));
-                    $poDbDataEdit['expected_ship_date'] = Utility::standardDate(Utility::checkEmptyItem($request->input('expected' . $i),'0000-00-00'));
-                    $poDbDataEdit['sales_status'] = Utility::checkEmptyItem($request->input('ship_status' . $i),'');
-                    $poDbDataEdit['sales_status_comment'] = Utility::checkEmptyItem($request->input('status_comment' . $i),'');
-                    $poDbDataEdit['status_comment_history'] = json_encode($statComHist,true);
-                    $poDbDataEdit['blanket_order_no'] = Utility::checkEmptyItem($request->input('blanket_order_no' . $i),'');
-                    $poDbDataEdit['blanket_order_line_no'] = Utility::checkEmptyItem($request->input('blanket_order_line_no' . $i),'');
-                    $poDbDataEdit['created_by'] = Auth::user()->id;
-                    $poDbDataEdit['status'] = Utility::STATUS_ACTIVE;
-
-                    SalesOrder::create($poDbDataEdit);
                 }
 
             }
@@ -1240,26 +1254,28 @@ class SalesOrderController extends Controller
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
 
-                    $accDbDataEdit['uid'] = $uid;
-                    $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
-                    $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
-                    $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
-                    $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
-                    $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
-                    $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
-                    $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0);
-                    $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
-                    $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
-                    $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['created_by'] = Auth::user()->id;
-                    $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
+                    if (!empty($request->input('acc_class' . $i))) {
+                        $accDbDataEdit['uid'] = $uid;
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
+                        $accDbDataEdit['sales_desc'] = $request->input('item_desc_acc' . $i);
+                        $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
+                        $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), $request->input('unit_cost_acc' . $i), $postingDate);
+                        $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
+                        $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
+                        $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
+                        $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0);
+                        $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
+                        $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
+                        $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['created_by'] = Auth::user()->id;
+                        $accDbDataEdit['status'] = Utility::STATUS_ACTIVE;
 
-                    SalesOrder::create($accDbDataEdit);
+                        SalesOrder::create($accDbDataEdit);
+                    }
+
                 }
-
 
             }
             //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
@@ -1418,6 +1434,18 @@ class SalesOrderController extends Controller
         $id = $request->input('dataId');
 
         $delete = SalesOrder::deleteItem($id);
+
+        return response()->json([
+            'message2' => 'changed successfully',
+            'message' => 'Status change'
+        ]);
+
+    }
+
+    public function permDeleteConvert(Request $request)
+    {
+        //
+        $id = $request->input('dataId');
 
         return response()->json([
             'message2' => 'changed successfully',

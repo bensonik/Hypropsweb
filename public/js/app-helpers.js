@@ -576,6 +576,16 @@
         });
     }
 
+    function fillNextInputParamGetValId(value_id,displayId,page,moduleType,paramId){
+        var pickedVal = $('#'+value_id).val();
+        var param = $('#'+paramId).val();
+        $.ajax({
+            url:  page+'?pickedVal='+pickedVal+'&type='+moduleType+'&param='+param
+        }).done(function(data){
+            $('#'+displayId).html(data);
+        });
+    }
+
     function fillNextInputParam(value,displayId,page,moduleType,param){
 
         $.ajax({
@@ -2816,6 +2826,38 @@
 
 
     }
+
+    function tempItemDeleteConvert(dataId,page,dataIdVal,amtVal,totalValId,currRep,currPage,taxAmountId,discountAmountId,totalTax,totalDiscount,vendorCustId,postDateId,parentDataId,updateSumPage,reloadId,reloadUrl,dbTable){
+    var totalVal = $('#'+totalValId).val();
+    var discountVal = $('#'+discountAmountId).val();
+    var taxVal = $('#'+taxAmountId).val();
+    var totalDiscountGet = $('#'+totalDiscount);
+    var totalTaxGet = $('#'+totalTax);
+
+    $.ajax({
+        url: page+'?dataId='+dataIdVal
+    }).done(function(data){
+        $('#'+dataId).remove();
+        var newTotal = totalVal - amtVal;
+        $('#'+totalValId).val(decPoints(newTotal,2));
+
+        //ALWAYS GET SUM OF ALL TAXES AND ALLOWANCES AND DISPLAY THEIR AMOUNTS IN TOTAL DISCOUNTS AND TAXES
+        var newTotalTax = totalTaxGet.val() - taxVal;
+        var newTotalDiscount = totalDiscountGet.val() - discountVal;
+        totalDiscountGet.val(decPoints(newTotalDiscount,2));
+        totalTaxGet.val(decPoints(newTotalTax,2));
+        exclTax(totalValId,totalTax,'excl_'+totalValId);
+
+        convertToDefaultCurr(currRep,totalValId,currPage,vendorCustId,postDateId);
+        //updateDbSum(parentDataId,updateSumPage,newTotal,totalTaxGet.val(),totalDiscountGet.val(),vendorCustId,postDateId,reloadId,reloadUrl,dbTable);
+        swal("Warning!", 'Item removed successfully', "success");
+
+    });
+
+
+}
+
+
 
     function updateDbSum(dataId,page,totalVal,totalTax,totalDiscount,vendorCustId,postDateId,reloadId,reloadUrl,dbTable){
 

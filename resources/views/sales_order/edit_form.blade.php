@@ -313,7 +313,7 @@
 
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('sales_order')}}','sales_extention')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_sales_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount_acc{{$num}}','discount_amount_acc{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->sales_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('sales_order')}}','sales_extention')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>
@@ -414,7 +414,7 @@
                                 <div class="col-sm-4">
                                     <div class="form-group">
                                         <div class="form-line">
-                                            <textarea class=" " name="item_desc{{$num2}}" id="item_desc{{$num}}" placeholder="Description">{{$po->po_desc}}</textarea>
+                                            <textarea class=" " name="item_desc{{$num2}}" id="item_desc{{$num}}" placeholder="Description">{{$po->sales_desc}}</textarea>
                                         </div>
                                     </div>
                                 </div>
@@ -641,7 +641,7 @@
                             <td></td>
                             <td class="center-align" id="{{$po->unit_cost_trans}}">
                                 <div class="form-group">
-                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_po_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->po_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('sales_order')}}','sales_extention')">
+                                    <div style="cursor: pointer;" id="" onclick="permItemDelete('itemId{{$po->id}}','<?php echo url('delete_sales_item') ?>','{{$po->id}}','{{$po->extended_amount_trans}}','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','tax_amount{{$num}}','discount_amount{{$num}}','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','{{$po->sales_id}}','<?php echo url('update_sum') ?>','reload_data','{{url('sales_order')}}','sales_extention')">
                                         <i style="color:red;" class="fa fa-minus-circle fa-2x pull-right"></i>
                                     </div>
                                 </div>

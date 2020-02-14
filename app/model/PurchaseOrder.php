@@ -60,6 +60,11 @@ class PurchaseOrder extends Model
 
     }
 
+    public function poItem(){
+        return $this->belongsTo('App\model\PoExtension','po_id','id');
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

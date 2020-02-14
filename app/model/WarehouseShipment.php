@@ -47,13 +47,13 @@ class WarehouseShipment extends Model
 
     }
 
-    public function poItem(){
-        return $this->belongsTo('App\model\PurchaseOrder','po_id','id')->withDefault();
+    public function salesItem(){
+        return $this->belongsTo('App\model\SalesOrder','sales_id','id')->withDefault();
 
     }
 
-    public function poExtItem(){
-        return $this->belongsTo('App\model\PoExtention','po_ext_id','id')->withDefault();
+    public function salesExtItem(){
+        return $this->belongsTo('App\model\SalesExtension','sales_ext_id','id')->withDefault();
 
     }
 

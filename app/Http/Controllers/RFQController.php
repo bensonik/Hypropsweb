@@ -354,14 +354,16 @@ class RFQController extends Controller
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
                     $rfqDbDataEdit = [];
+                    if (!empty($request->input('inv_class' . $i))) {
+                        $rfqDbDataEdit['item_id'] = $request->input('inv_class' . $i);
+                        $rfqDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
+                        $rfqDbDataEdit['quantity'] = $request->input('quantity' . $i);
+                        $rfqDbDataEdit['rfq_desc'] = $request->input('item_desc' . $i);
+                        $rfqDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    $rfqDbDataEdit['item_id'] = $request->input('inv_class' . $i);
-                    $rfqDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
-                    $rfqDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $rfqDbDataEdit['rfq_desc'] = $request->input('item_desc' . $i);
-                    $rfqDbDataEdit['updated_by'] = Auth::user()->id;
+                        RFQ::defaultUpdate('id', $request->input('poId' . $i), $rfqDbDataEdit);
+                    }
 
-                    RFQ::defaultUpdate('id', $request->input('poId' . $i), $rfqDbDataEdit);
                 }
 
             }
@@ -370,14 +372,15 @@ class RFQController extends Controller
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
 
+                    if (!empty($request->input('acc_class' . $i))) {
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
+                        $accDbDataEdit['rfq_desc'] = $request->input('item_desc_acc' . $i);
+                        $accDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['rfq_desc'] = $request->input('item_desc_acc' . $i);
-                    $accDbDataEdit['updated_by'] = Auth::user()->id;
+                        RFQ::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
+                    }
 
-                    RFQ::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
                 }
-
 
             }
             //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA

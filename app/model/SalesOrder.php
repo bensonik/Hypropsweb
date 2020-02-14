@@ -61,6 +61,11 @@ class SalesOrder extends Model
 
     }
 
+    public function salesItem(){
+        return $this->belongsTo('App\model\SalesExtension','sales_id','id');
+
+    }
+
     public static function paginateAllData()
     {
         return static::where('status', '=',Utility::STATUS_ACTIVE)->orderBy('id','DESC')->paginate('15');

@@ -58,6 +58,16 @@ class WhsePickPutAway extends Model
 
     }
 
+    public function salesItem(){
+        return $this->belongsTo('App\model\SalesOrder','sales_id','id')->withDefault();
+
+    }
+
+    public function salesExtItem(){
+        return $this->belongsTo('App\model\SalesExtension','sales_ext_id','id')->withDefault();
+
+    }
+
     public function warehouse(){
         return $this->belongsTo('App\model\Warehouse','to_whse','id')->withDefault();
 
@@ -75,6 +85,11 @@ class WhsePickPutAway extends Model
 
     public function receipt(){
         return $this->belongsTo('App\model\WarehouseReceipt','receipt_id','id')->withDefault();
+
+    }
+
+    public function shipment(){
+        return $this->belongsTo('App\model\WarehouseReceipt','shipment_id','id')->withDefault();
 
     }
 
@@ -226,7 +241,7 @@ class WhsePickPutAway extends Model
             ->join('po_extention', 'po_extention.id', '=', 'whse_pick_put_away.po_ext_id')
             ->join('users', 'users.id', '=', 'whse_pick_put_away.assigned_user')
             ->where('whse_pick_put_away.status', '=',Utility::STATUS_ACTIVE)
-            ->where('whse_pick_put_away.pick_put_type', '=',Utility::PUT_AWAY)
+            ->where('whse_pick_put_away.pick_put_type', '=',Utility::PICK)
             ->where('whse_pick_put_away.pick_put_status', '=',Utility::ZERO)
 
             ->where(function ($query) use($value){

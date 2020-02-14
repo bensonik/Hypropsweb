@@ -59,11 +59,11 @@ class WarehouseShipmentController extends Controller
     {
         //
         $mainData = WarehouseShipment::firstRow('id',$request->input('dataId'));
-        $poItems = WarehouseShipment::specialColumns('sales_ext_id',$mainData->sales_ext_id);
+        $salesItems = WarehouseShipment::specialColumns('sales_ext_id',$mainData->sales_ext_id);
         $warehouse = Warehouse::getAllData();
         $zones = WarehouseZone::specialColumns('warehouse_id',$mainData->whse_id);
         return view::make('warehouse_shipment.edit_form')->with('edit',$mainData)->with('warehouse',$warehouse)
-            ->with('salesItems',$poItems)->with('zones',$zones);
+            ->with('salesItems',$salesItems)->with('zones',$zones);
 
     }
 
@@ -91,7 +91,7 @@ class WarehouseShipmentController extends Controller
             if(count($holdEmpty) >0){
                 return response()->json([
                     'message' => 'warning',
-                    'message2' =>  'please ensure that all the items have quantity to receive'  //json_encode($request->all())  //json_encode($arr)
+                    'message2' =>  'please ensure that all the items have quantity to ship'  //json_encode($request->all())  //json_encode($arr)
                 ]);
             }
 
@@ -106,9 +106,9 @@ class WarehouseShipmentController extends Controller
                     'shipment_no' => $request->input('shipment_no'),
                     'post_date' => Utility::standardDate($request->input('posting_date')),
                     'qty' => $request->input('qty' . $i),
-                    'qty_to_ship' => $request->input('qty_to_receive' . $i),
+                    'qty_to_ship' => $request->input('qty_to_ship' . $i),
                     'qty_to_cross_dock' => $request->input('qty_to_cross_dock' . $i),
-                    'qty_shipped' => $request->input('qty_received' . $i),
+                    'qty_shipped' => $request->input('qty_shipped' . $i),
                     'qty_outstanding' => $request->input('qty_outstanding' . $i),
                     'due_date' => Utility::standardDate($request->input('due_date' . $i)),
                     'updated_by' => Auth::user()->id,
@@ -174,7 +174,7 @@ class WarehouseShipmentController extends Controller
             $allArray[] = $a->sales_id;
         }
         $updateData = [
-            'shipment_status' => $status
+            'ship_status' => $status
         ];
         $checkStock = [];
         $noWhse = [];
@@ -184,7 +184,7 @@ class WarehouseShipmentController extends Controller
             $createPost = SalesOrder::massData('id',$allArray);
             foreach ($createPost as $data) {
 
-                $poQty = ($data->received_quantity == '') ? $data->qty : $data->received_quantity;
+                $salesQty = ($data->shipped_quantity == '') ? $data->qty : $data->shipped_quantity;
                 $checkSales = WarehouseShipment::firstRow('sales_id',$data->id); //CHECK IF ITEM EXIST IN WAREHOUSE SHIPMENT
 
 
@@ -201,12 +201,12 @@ class WarehouseShipmentController extends Controller
                         $assignedDate = (empty($checkSales)) ? '0000-00-00' : $checkSales->assigned_date;
                         $dueDate = (empty($checkSales)) ? '0000-00-00' : $checkSales->due_date;
 
-                        $qty = (empty($checkSales)) ? $poQty : $checkSales->qty_to_ship;
+                        $qty = (empty($checkSales)) ? $salesQty : $checkSales->qty_to_ship;
 
                         $dbData = [
                             'item_id' => $data->item_id,
                             'sales_id' => $data->id,
-                            'po_ext_id' => $data->sales_id,
+                            'sales_ext_id' => $data->sales_id,
                             'assigned_user' => $assignedTo,
                             'assigned_date' => $assignedDate,
                             'due_date' => $dueDate,
@@ -256,7 +256,7 @@ class WarehouseShipmentController extends Controller
 
 
                     $emailContent1 = [];
-                    $emailContent1['subject'] = 'Warehouse Put-Away';
+                    $emailContent1['subject'] = 'Warehouse Pick';
 
                     if(!empty($whseEmployee)){
                         foreach($whseEmployee as $user){
@@ -302,7 +302,7 @@ class WarehouseShipmentController extends Controller
 
         $createPost = SalesOrder::massData('id',$all_id);
         $updateData = [
-            'shipment_status' => $status
+            'ship_status' => $status
         ];
         $checkStock = [];
         $noWhse = [];
@@ -311,7 +311,7 @@ class WarehouseShipmentController extends Controller
         if(!empty($createPost)) {
             foreach ($createPost as $data) {
 
-                $poQty = ($data->shipped_quantity == '') ? $data->quantity : $data->shipped_quantity;
+                $salesQty = ($data->shipped_quantity == '') ? $data->quantity : $data->shipped_quantity;
                 $checkSales = WarehouseShipment::firstRow('sales_id',$data->id); //CHECK IF ITEM EXIST IN WAREHOUSE SHIPMENT
 
 
@@ -319,52 +319,59 @@ class WarehouseShipmentController extends Controller
                 if ($status == Utility::POST_SHIPMENT) {
                     //PROCESS IF ITEM IS IN A WAREHOUSE
                     if ($data->inventory->whse_status == 1) {
-                        $shipmentBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['ship_bin_code']);
+                        $checkData = WhsePickPutAway::firstRow('sales_id', $data->id);
 
-                        $realWhse = $data->ship_to_whse;
-                        $realBin = $shipmentBin->ship_bin_code;
+                        if (empty($checkData) && empty($checkSales)) {
+                            if ($data->ship_to_whse != '' && $data->ship_to_whse != 0) {
+                            $shipmentBin = Warehouse::where('id', $data->ship_to_whse)->where('status', Utility::STATUS_ACTIVE)->first(['ship_bin_code']);
 
-                        $dbData = [
-                            'item_id' => $data->item_id,
-                            'sales_id' => $data->id,
-                            'sales_ext_id' => $data->sales_id,
-                            'pick_put_type' => Utility::PICK,
-                            'to_whse' => $realWhse,
-                            'to_bin' => $realBin,
-                            'qty' => $poQty,
-                            'qty_to_handle' => $poQty,
-                            'pick_put_status' => Utility::ZERO,
-                            'status' => Utility::STATUS_ACTIVE,
-                            'created_by' => Auth::user()->id
-                        ];
+                            $realWhse = $data->ship_to_whse;
+                            $realBin = $shipmentBin->ship_bin_code;
 
-                        $dbDataWhseShipment = [
-                            'status' => Utility::STATUS_DELETED
-                        ];
+                            $dbData = [
+                                'item_id' => $data->item_id,
+                                'sales_id' => $data->id,
+                                'sales_ext_id' => $data->sales_id,
+                                'pick_put_type' => Utility::PICK,
+                                'to_whse' => $realWhse,
+                                'to_bin' => $realBin,
+                                'qty' => $salesQty,
+                                'qty_to_handle' => $salesQty,
+                                'pick_put_status' => Utility::ZERO,
+                                'status' => Utility::STATUS_ACTIVE,
+                                'created_by' => Auth::user()->id
+                            ];
 
-                        $checkData = WhsePickPutAway::firstRow('sales_id',$data->id);
-
-                        if(empty($checkData) && empty($checkSales)){
-                            if($data->ship_to_whse != '' && $data->ship_to_whse != 0){
-                                WhsePickPutAway::create($dbData);
-                                SalesOrder::defaultUpdate('id',$data->id,$updateData);
-                                $whseEmp[] = $data->ship_to_whse;
+                            $dbDataWhseShipment = [
+                                'status' => Utility::STATUS_DELETED
+                            ];
 
 
-                            }else{
-                                $noWhse[] = $data->inventory->item_name;
+
+                                    WhsePickPutAway::create($dbData);
+                                    SalesOrder::defaultUpdate('id', $data->id, $updateData);
+                                    $whseEmp[] = $data->ship_to_whse;
+
+
+                                } else {
+                                    $noWhse[] = $data->inventory->item_name;
+                                }
+
                             }
 
-                        }
 
                     }
                     //PROCESS IF ITEM IS NOT IN A WAREHOUSE ITEM BUT A STOCK ITEM
                     if ($data->inventory->whse_status == 0) {
+                        $invData = Inventory::firstRow('id',$data->item_id);
+                        $currQty = $invData->qty;
+                        $qtyRemain = $currQty - $data->quantity;
                         $dbData3 = [
                             'item_id' => $data->item_id,
                             'sales_id' => $data->id,
                             'qty' => $data->quantity,
-                            'sales_date' => $data->poItem->post_date,
+                            'qty_remain' => $qtyRemain,
+                            'sales_date' => $data->salesItem->post_date,
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
                         ];
@@ -391,7 +398,7 @@ class WarehouseShipmentController extends Controller
 
 
                             $emailContent1 = [];
-                            $emailContent1['subject'] = 'Warehouse Put-Away';
+                            $emailContent1['subject'] = 'Warehouse Pick';
 
                             if(!empty($whseEmployee)){
                                 foreach($whseEmployee as $user){
@@ -421,9 +428,9 @@ class WarehouseShipmentController extends Controller
                         'whse_id' => $data->ship_to_whse,
                         'sales_id' => $data->id,
                         'sales_ext_id' => $data->sales_id,
-                        'qty' => $poQty ,
-                        'qty_shipped' => $poQty,
-                        'qty_outstanding' => $poQty,
+                        'qty' => $salesQty ,
+                        'qty_shipped' => $salesQty,
+                        'qty_outstanding' => $salesQty,
                         'work_status' => Utility::STATUS_ACTIVE,
                         'created_by' => Auth::user()->id,
                         'status' => Utility::STATUS_ACTIVE
@@ -481,7 +488,7 @@ class WarehouseShipmentController extends Controller
 
         }
 
-        $displayMessage1 = (count($checkStock) >0) ? 'and '.implode(',',$checkStock).
+        $displayMessage1 = (count($checkStock) >0) ? ' and '.implode(',',$checkStock).
             ' items were stock items and cannot be created for warehouse shipment' : '';
 
         $displayMessage2 = (count($noWhse) >0) ? ' also '.implode(',',$noWhse).

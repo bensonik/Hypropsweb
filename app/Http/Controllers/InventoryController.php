@@ -328,18 +328,20 @@ class InventoryController extends Controller
 
                                 if ($countBom > 0) {
 
-                                for ($i = 1; $i <= $countBom; $i++) {
-                                    $dbDATA2 = [
-                                        'item_id' => $request->input('item_id_edit' . $i),
-                                        'quantity' => $request->input('bom_qty_edit' . $i),
-                                        'extended_amount' => $request->input('bom_amount_edit' . $i),
-                                        'updated_by' => Auth::user()->id,
-                                    ];
+                                    for ($i = 1; $i <= $countBom; $i++) {
+                                        if (!empty($request->input('item_id_edit' . $i))) {
+                                            $dbDATA2 = [
+                                                'item_id' => $request->input('item_id_edit' . $i),
+                                                'quantity' => $request->input('bom_qty_edit' . $i),
+                                                'extended_amount' => $request->input('bom_amount_edit' . $i),
+                                                'updated_by' => Auth::user()->id,
+                                            ];
 
-                                    InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
-                                }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
-                            }
+                                            InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
+                                        }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
+                                    }
 
+                                }
 
                                 for ($i = 0; $i < count($itemId); $i++) {
 
@@ -365,15 +367,18 @@ class InventoryController extends Controller
                         }else{
                             $update = Inventory::defaultUpdate('id',$editId,$dbDATA);
                             for ($i = 1; $i <= $countBom; $i++) {
-                                $dbDATA2 = [
-                                    'item_id' => $request->input('item_id_edit' . $i),
-                                    'quantity' => $request->input('bom_qty_edit' . $i),
-                                    'extended_amount' => $request->input('bom_amount_edit' . $i),
-                                    'updated_by' => Auth::user()->id,
-                                ];
+                                if (!empty($request->input('item_id_edit' . $i))) {
+                                    $dbDATA2 = [
+                                        'item_id' => $request->input('item_id_edit' . $i),
+                                        'quantity' => $request->input('bom_qty_edit' . $i),
+                                        'extended_amount' => $request->input('bom_amount_edit' . $i),
+                                        'updated_by' => Auth::user()->id,
+                                    ];
 
-                                InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
-                            }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
+                                    InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
+                                }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
+
+                            }
 
                             return response()->json([
                                 'message' => 'good',
@@ -413,16 +418,19 @@ class InventoryController extends Controller
                             $update = Inventory::defaultUpdate('id',$editId,$dbDATA);
 
                             for ($i = 0; $i < $countBom; $i++) {
-                                $dbDATA2 = [
-                                    'item_id' => $request->input('item_id_edit' . $i),
-                                    'quantity' => $request->input('quantity_edit' . $i),
-                                    'extended_amount' => $request->input('bom_amount_edit' . $i),
-                                    'updated_by' => Auth::user()->id,
-                                ];
 
-                                InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
-                            }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
+                                if (!empty($request->input('item_id_edit' . $i))) {
+                                    $dbDATA2 = [
+                                        'item_id' => $request->input('item_id_edit' . $i),
+                                        'quantity' => $request->input('quantity_edit' . $i),
+                                        'extended_amount' => $request->input('bom_amount_edit' . $i),
+                                        'updated_by' => Auth::user()->id,
+                                    ];
 
+                                    InventoryBom::defaultUpdate('id', $request->input('bom_id' . $i), $dbDATA2);
+                                }   //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA
+
+                            }
 
                             for ($i = 0; $i < count($itemId); $i++) {
 

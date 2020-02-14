@@ -2258,7 +2258,7 @@
                     <div class="form-line">
                         <input type="text" class="" autocomplete="off" id="select_inv{{$num2}}" onkeyup="searchOptionListInventory('select_inv{{$num2}}','myUL500{{$num2}}','{{url('default_select')}}','search_inventory_transact','inv500{{$num2}}','item_desc{{$num2}}','unit_cost{{$num2}}','unit_measure{{$num2}}','sub_total{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','qty{{$num2}}','vendorCust_edit','posting_date_edit','total_tax_amount_edit','{{\App\Helpers\Utility::PURCHASE_DESC}}');" name="select_user" placeholder="Inventory Item">
 
-                        <input type="hidden" class="inv_class inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
+                        <input type="hidden" class=" inv_class_edit" value="" name="user" id="inv500{{$num2}}" />
                     </div>
                 </div>
                 <ul id="myUL500{{$num2}}" class="myUL"></ul>
@@ -2269,7 +2269,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <textarea class=" item_desc item_desc_edit" name="item_desc" id="item_desc{{$num2}}" placeholder="Description"></textarea>
+                        <textarea class="  item_desc_edit" name="item_desc" id="item_desc{{$num2}}" placeholder="Description"></textarea>
                     </div>
                 </div>
             </div>
@@ -2279,7 +2279,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <select class=" warehouse warehouse_edit" name="warehouse" >
+                        <select class="  warehouse_edit" name="warehouse" >
                             <option value="">Ship From Warehouse</option>
                             @foreach($warehouse as $inv)
                                 <option value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
@@ -2294,7 +2294,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" quantity quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
+                        <input type="number" class="  quantity_edit" name="quantity" id="qty{{$num2}}" placeholder="Quantity"
                                onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','{{url('get_rate')}}','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
                     </div>
                 </div>
@@ -2305,7 +2305,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" unit_cost unit_cost_edit"  name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
+                        <input type="number" class="  unit_cost_edit"  name="unit_cost" id="unit_cost{{$num2}}" placeholder="Unit Cost/Rate"
                                onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
                     </div>
                 </div>
@@ -2316,7 +2316,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" unit_measure unit_measure_edit" readonly name="unit_measure" id="unit_measure{{$num2}}" placeholder="Unit Measure" >
+                        <input type="text" class="  unit_measure_edit" readonly name="unit_measure" id="unit_measure{{$num2}}" placeholder="Unit Measure" >
                     </div>
                 </div>
             </div>
@@ -2326,7 +2326,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" quantity_reserved quantity_reserved_edit" name="quantity_reserved" id="qty_res{{$num2}}" placeholder="Quantity" >
+                        <input type="number" class="  quantity_reserved_edit" name="quantity_reserved" id="qty_res{{$num2}}" placeholder="Quantity" >
                     </div>
                 </div>
             </div>
@@ -2336,7 +2336,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" quantity_shipped" name="quantity_shipped" id="qty_rec" placeholder="Quantity" >
+                        <input type="number" class=" quantity_shipped_edit" name="quantity_shipped" id="qty_rec" placeholder="Quantity" >
                     </div>
                 </div>
             </div>
@@ -2346,7 +2346,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker2 planned planned_edit" name="planned_date" placeholder="Planned Date" >
+                        <input type="text" class=" datepicker2  planned_edit" name="planned_date" placeholder="Planned Date" >
                     </div>
                 </div>
             </div>
@@ -2356,7 +2356,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker2 expected expected_edit" name="expected_date" placeholder="Expected Date" >
+                        <input type="text" class=" datepicker2  expected_edit" name="expected_date" placeholder="Expected Date" >
                     </div>
                 </div>
             </div>
@@ -2366,7 +2366,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" datepicker2 promised promised_edit" name="promised_date" placeholder="Promised Date" required>
+                        <input type="text" class=" datepicker2  promised_edit" name="promised_date" placeholder="Promised Date" required>
                     </div>
                 </div>
             </div>
@@ -2376,7 +2376,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" b_order_no b_order_no_edit" name="blanket_order_no" id="" placeholder="Blanket Order Number" >
+                        <input type="text" class="  b_order_no_edit" name="blanket_order_no" id="" placeholder="Blanket Order Number" >
                     </div>
                 </div>
             </div>
@@ -2386,7 +2386,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" b_order_line_no b_order_line_no_edit" name="blanket_order_line_no" id="" placeholder="Blanket Order Line No" >
+                        <input type="text" class="  b_order_line_no_edit" name="blanket_order_line_no" id="" placeholder="Blanket Order Line No" >
                     </div>
                 </div>
             </div>
@@ -2396,7 +2396,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <select class=" ship_status ship_status_edit" name="ship_status" >
+                        <select class="  ship_status_edit" name="ship_status" >
                             <option value="">Select Ship Status</option>
                             @foreach(\App\Helpers\Utility::SHIP_STATUS as $key => $val)
                                 <option value="{{$key}}">{{$val}}</option>
@@ -2411,7 +2411,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="text" class=" status_comment status_comment_edit" name="status_comment" id="" placeholder="Comment on ship status" >
+                        <input type="text" class="  status_comment_edit" name="status_comment" id="" placeholder="Comment on ship status" >
                     </div>
                 </div>
             </div>
@@ -2421,7 +2421,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <select class=" tax tax_edit" name="tax" id="tax{{$num2}}"
+                        <select class=" tax_edit" name="tax" id="tax{{$num2}}"
                                 onchange="fillNextInputTax('tax{{$num2}}','tax_perct{{$num2}}','{{url('default_select')}}','get_tax','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
                             <option value="">Select Tax</option>
                             @foreach($tax as $inv)
@@ -2437,7 +2437,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" tax_perct tax_perct_edit" name="tax_perct" id="tax_perct{{$num2}}" placeholder="Tax Percentage"
+                        <input type="number" class="  tax_perct_edit" name="tax_perct" id="tax_perct{{$num2}}" placeholder="Tax Percentage"
                                onkeyup="percentToAmount('tax_perct{{$num2}}','tax_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
                     </div>
                 </div>
@@ -2448,7 +2448,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class="tax_amount tax_amount_edit shared_tax_amount shared_tax_amount_edit" name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
+                        <input type="number" class=" tax_amount_edit shared_tax_amount shared_tax_amount_edit" name="tax_amount" id="tax_amount{{$num2}}" placeholder="Tax Amount"
                                onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
                     </div>
                 </div>
@@ -2459,7 +2459,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" discount_perct discount_perct_edit" name="discount_perct" id="discount_perct{{$num2}}" placeholder="Discount Percentage"
+                        <input type="number" class="  discount_perct_edit" name="discount_perct" id="discount_perct{{$num2}}" placeholder="Discount Percentage"
                                onkeyup="percentToAmount('discount_perct{{$num2}}','discount_amount{{$num2}}','sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit')">
                     </div>
                 </div>
@@ -2470,7 +2470,7 @@
             <div class="col-sm-4">
                 <div class="form-group">
                     <div class="form-line">
-                        <input type="number" class=" discount_amount discount_amount_edit shared_discount_amount shared_discount_amount_edit" name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
+                        <input type="number" class="  discount_amount_edit shared_discount_amount shared_discount_amount_edit" name="discount_amount" id="discount_amount{{$num2}}" placeholder="Discount Amount"
                                onkeyup="itemSum('sub_total{{$num2}}','unit_cost{{$num2}}','inv500{{$num2}}','qty{{$num2}}','discount_amount{{$num2}}','tax_amount{{$num2}}','shared_sub_total_edit','overall_sum_edit','foreign_overall_sum_edit','<?php echo url('amount_to_default_curr') ?>','','shared_tax_amount_edit','shared_discount_amount_edit','total_tax_amount_edit','total_discount_amount_edit','vendorCust_edit','posting_date_edit','tax_perct{{$num2}}','discount_perct{{$num2}}')">
                     </div>
                 </div>

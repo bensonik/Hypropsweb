@@ -437,28 +437,30 @@ class QuoteController extends Controller
 
                 for ($i = 1; $i <= $countExtPo; $i++) {
                     $quoteDbDataEdit = [];
+                    if (!empty($request->input('inv_class' . $i))) {
+                        $binStock = Inventory::firstRow('id', $request->input('inv_class' . $i));
+                        $quoteDbDataEdit['item_id'] = $request->input('inv_class' . $i);
+                        $quoteDbDataEdit['bin_stock'] = $binStock->inventory_type;
+                        $quoteDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
+                        $quoteDbDataEdit['quantity'] = $request->input('quantity' . $i);
+                        $quoteDbDataEdit['quote_desc'] = $request->input('item_desc' . $i);
+                        $quoteDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
+                        $quoteDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('unit_cost' . $i), 0), $postingDate);
+                        $quoteDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i), 0);
+                        $quoteDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i), 0);
+                        $quoteDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i), 0);
+                        $quoteDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount' . $i), 0), $postingDate);
+                        $quoteDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i), 0);
+                        $quoteDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount' . $i), 0), $postingDate);
+                        $quoteDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i), 0);
+                        $quoteDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i), 0);
+                        $quoteDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total' . $i), 0), $postingDate);
 
-                    $binStock = Inventory::firstRow('id',$request->input('inv_class' . $i));
-                    $quoteDbDataEdit['item_id'] = $request->input('inv_class' . $i);
-                    $quoteDbDataEdit['bin_stock'] = $binStock->inventory_type;
-                    $quoteDbDataEdit['unit_measurement'] = $request->input('unit_measure' . $i);
-                    $quoteDbDataEdit['quantity'] = $request->input('quantity' . $i);
-                    $quoteDbDataEdit['quote_desc'] = $request->input('item_desc' . $i);
-                    $quoteDbDataEdit['unit_cost_trans'] = $request->input('unit_cost' . $i);
-                    $quoteDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('unit_cost' . $i),0),$postingDate);
-                    $quoteDbDataEdit['tax_id'] = Utility::checkEmptyItem($request->input('tax' . $i),0);
-                    $quoteDbDataEdit['tax_perct'] = Utility::checkEmptyItem($request->input('tax_perct' . $i),0);
-                    $quoteDbDataEdit['tax_amount_trans'] = Utility::checkEmptyItem($request->input('tax_amount' . $i),0);
-                    $quoteDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount' . $i),0),$postingDate);
-                    $quoteDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount' . $i),0);
-                    $quoteDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount' . $i),0),$postingDate);
-                    $quoteDbDataEdit['discount_perct'] = Utility::checkEmptyItem($request->input('discount_perct' . $i),0);
-                    $quoteDbDataEdit['extended_amount_trans'] = Utility::checkEmptyItem($request->input('sub_total' . $i),0);
-                    $quoteDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total' . $i),0),$postingDate);
+                        $poDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    $poDbDataEdit['updated_by'] = Auth::user()->id;
+                        Quote::defaultUpdate('id', $request->input('poId' . $i), $quoteDbDataEdit);
+                    }
 
-                    Quote::defaultUpdate('id', $request->input('poId' . $i), $quoteDbDataEdit);
                 }
 
             }
@@ -467,25 +469,26 @@ class QuoteController extends Controller
 
                 for ($i = 1; $i <= $countExtAcc; $i++) {
 
+                    if (!empty($request->input('acc_class' . $i))) {
+                        $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
+                        $accDbDataEdit['quote_desc'] = $request->input('item_desc_acc' . $i);
+                        $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
+                        $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), $request->input('unit_cost_acc' . $i), $postingDate);
+                        $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
+                        $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
+                        $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
+                        $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('tax_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0);
+                        $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('discount_amount_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
+                        $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
+                        $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code, Utility::currencyArrayItem('code'), Utility::checkEmptyItem($request->input('sub_total_acc' . $i), 0), $postingDate);
+                        $accDbDataEdit['updated_by'] = Auth::user()->id;
 
-                    $accDbDataEdit['account_id'] = $request->input('acc_class' . $i);
-                    $accDbDataEdit['quote_desc'] = $request->input('item_desc_acc' . $i);
-                    $accDbDataEdit['unit_cost_trans'] = $request->input('unit_cost_acc' . $i);
-                    $accDbDataEdit['unit_cost'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),$request->input('unit_cost_acc' . $i),$postingDate);
-                    $accDbDataEdit['tax_id'] = $request->input('tax_acc' . $i);
-                    $accDbDataEdit['tax_perct'] = $request->input('tax_perct_acc' . $i);
-                    $accDbDataEdit['tax_amount_trans'] = $request->input('tax_amount_acc' . $i);
-                    $accDbDataEdit['tax_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('tax_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_amount_trans'] = Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0);
-                    $accDbDataEdit['discount_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('discount_amount_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['discount_perct'] = $request->input('discount_perct_acc' . $i);
-                    $accDbDataEdit['extended_amount_trans'] = $request->input('sub_total_acc' . $i);
-                    $accDbDataEdit['extended_amount'] = Utility::convertAmountToDate($curr->code,Utility::currencyArrayItem('code'),Utility::checkEmptyItem($request->input('sub_total_acc' . $i),0),$postingDate);
-                    $accDbDataEdit['updated_by'] = Auth::user()->id;
+                        Quote::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
+                    }
 
-                    Quote::defaultUpdate('id', $request->input('accId' . $i), $accDbDataEdit);
                 }
-
 
             }
             //END OF FOR LOOP FOR ENTERING EXISTING COLUMN DATA

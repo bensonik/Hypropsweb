@@ -63,7 +63,7 @@
                 </thead>
                 <tbody id="">
                 <?php $num = 0; $count = []; ?>
-                @foreach($poItems as $po)
+                @foreach($salesItems as $po)
                     <?php $num++; $count[] = $num; ?>
                 <tr>
 
@@ -73,7 +73,7 @@
                         </td>
 
                         <td>Take</td>
-                        <td>Purchase Order</td>
+                        <td>Sales Order</td>
                         <td>
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -126,7 +126,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class="" readonly value="{{$po->poItem->quantity}}" name="qty" id="" placeholder="Quantity">
+                                        <input type="text" class="" readonly value="{{$po->salesItem->quantity}}" name="qty" id="" placeholder="Quantity">
                                     </div>
                                 </div>
                             </div>
@@ -166,7 +166,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <div class="form-line">
-                                        <input type="text" class=" " readonly value="{{$po->poItem->unit_measurement}}"  name="unit_measure" id="sub_total_acc" >
+                                        <input type="text" class=" " readonly value="{{$po->salesItem->unit_measurement}}"  name="unit_measure" id="sub_total_acc" >
                                     </div>
                                 </div>
                             </div>
@@ -193,7 +193,7 @@
                     </td>
 
                     <td>Place</td>
-                    <td>Purchase Order</td>
+                    <td>Sales Order</td>
                     <td>
                         <div class="col-sm-4">
                             <div class="form-group">
@@ -248,7 +248,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" readonly value="{{$po->poItem->quantity}}" name="qty{{$num}}" id="unit_cost_acc" placeholder="Quantity">
+                                    <input type="text" class="" readonly value="{{$po->salesItem->quantity}}" name="qty{{$num}}" id="unit_cost_acc" placeholder="Quantity">
                                 </div>
                             </div>
                         </div>
@@ -288,7 +288,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class=" " readonly value="{{$po->poItem->unit_measurement}}"  name="unit_measure{{$num}}" id="sub_total_acc" >
+                                    <input type="text" class=" " readonly value="{{$po->salesItem->unit_measurement}}"  name="unit_measure{{$num}}" id="sub_total_acc" >
                                 </div>
                             </div>
                         </div>

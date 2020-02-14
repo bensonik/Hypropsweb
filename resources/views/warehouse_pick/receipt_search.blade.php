@@ -28,8 +28,8 @@
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->warehouse->name}}</td>
             <td>{{$data->inventory->item_name}}</td>
-            <td>{{$data->poItem->po_desc}}</td>
-            <td>{{$data->poExtItem->po_number}}</td>
+            <td>{{$data->salesItem->sales_desc}}</td>
+            <td>{{$data->salesExtItem->po_number}}</td>
             <td>
                 @if($data->created_by != '0')
                     {{$data->user_c->firstname}} {{$data->user_c->lastname}}
@@ -46,7 +46,7 @@
 
             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>
-                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_put_away_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Put-Away</a>
+                <a class="btn btn-success" style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_picks_form') ?>','<?php echo csrf_token(); ?>')" class><i class="fa fa-check"></i>Pick</a>
             </td>
         </tr>
     @endforeach

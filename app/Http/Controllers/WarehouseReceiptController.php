@@ -319,6 +319,8 @@ class WarehouseReceiptController extends Controller
                 if ($status == Utility::POST_RECEIPT) {
                     //PROCESS IF ITEM IS IN A WAREHOUSE
                     if ($data->inventory->whse_status == 1) {
+                        if(empty($checkData) && empty($checkPo)){
+                            if($data->ship_to_whse != '' && $data->ship_to_whse != 0){
                         $receiptBin = Warehouse::where('id',$data->ship_to_whse)->where('status',Utility::STATUS_ACTIVE)->first(['receipt_bin_code']);
 
                         $realWhse = $data->ship_to_whse;
@@ -344,8 +346,7 @@ class WarehouseReceiptController extends Controller
 
                         $checkData = WhsePickPutAway::firstRow('po_id',$data->id);
 
-                        if(empty($checkData) && empty($checkPo)){
-                            if($data->ship_to_whse != '' && $data->ship_to_whse != 0){
+
                                 WhsePickPutAway::create($dbData);
                                 PurchaseOrder::defaultUpdate('id',$data->id,$updateData);
                                 $whseEmp[] = $data->ship_to_whse;
@@ -359,11 +360,15 @@ class WarehouseReceiptController extends Controller
 
                     }
                     //PROCESS IF ITEM IS NOT IN A WAREHOUSE ITEM BUT A STOCK ITEM
-                    if ($data->inventory->whse_status == 0) {
+                    if ($data->inventory->whse_status == 0)
+                        $invData = Inventory::firstRow('id',$data->item_id);
+                        $currQty = $invData->qty;
+                        $qtyRemain = $currQty - $data->quantity;
                         $dbData3 = [
                             'item_id' => $data->item_id,
                             'po_id' => $data->id,
                             'qty' => $data->quantity,
+                            'qty_remain' => $qtyRemain,
                             'purchase_date' => $data->poItem->post_date,
                             'status' => Utility::STATUS_ACTIVE,
                             'created_by' => Auth::user()->id
@@ -478,8 +483,6 @@ class WarehouseReceiptController extends Controller
 
             }   //END OF FOREACH POST OR CREATE RECEIPT
 
-
-        }
 
         $displayMessage1 = (count($checkStock) >0) ? 'and '.implode(',',$checkStock).
             ' items were stock items and cannot be created for warehouse receipt' : '';

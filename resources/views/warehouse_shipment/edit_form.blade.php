@@ -34,7 +34,7 @@
                             Warehouse
                             <div class="form-line" >
                                 <select class=" warehouse" name="warehouse" id="warehouse_id" onchange="fillNextInput('warehouse_id','zone_display_id','<?php echo url('default_select'); ?>','w_zones')" >
-                                    <option value="">Select Receipt Warehouse</option>
+                                    <option value="">Select Shipment Warehouse</option>
                                     @foreach($warehouse as $inv)
                                         @if($edit->whse_id == $inv->id)
                                             <option selected value="{{$inv->id}}">{{$inv->name}} ({{$inv->code}})</option>
@@ -50,7 +50,7 @@
                         <div class="form-group">
                             <b>Zone</b>
                             <div class="form-line" id="zone_display_id">
-                                <select class=" " id="zone_id" name="zone" onchange="fillNextInputParamGetVal('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins')">
+                                <select class=" " id="zone_id" name="zone" onchange="fillNextInputParamGetValId('zone_id','bin_id','<?php echo url('default_select'); ?>','z_bins','warehouse_id')">
                                     <option value="{{$edit->zone_id}}">{{$edit->zone->name}}</option>
                                     @foreach($zones as $z)
                                         <option value="{{$z->id}}">{{$z->zone->name}}</option>
@@ -62,7 +62,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <b>Receipt Bin</b>
+                            <b>Shipment Bin</b>
                             <div class="form-line" id="bin_id">
                                 <select class=" " name="bin"  >
                                     <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
@@ -127,7 +127,7 @@
 
                     <div class="col-sm-4">
                         <div class="form-group">
-                            <b>Receipt Bin</b>
+                            <b>Shipment Bin</b>
                             <div class="form-line" id="bin_id">
                                 <select class=" " name="bin"  >
                                     <option value="{{$edit->bin_id}}">{{$edit->bin->code}}</option>
@@ -144,18 +144,18 @@
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <b>Receipt No.</b>
+                    <b>Shipment No.</b>
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->receipt_no}}" name="receipt_no" placeholder="Receipt No.">
+                        <input type="text" class="form-control" value="{{$edit->shipment_no}}" name="shipment_no" placeholder="Shipment No.">
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-4">
                 <div class="form-group">
-                    <b>Vendor Shipment No.</b>
+                    <b>Customer Shipment No.</b>
                     <div class="form-line">
-                        <input type="text" class="form-control" value="{{$edit->vendor_ship_no}}" name="vendor_shipment_no" placeholder="Vendor Shipment No.">
+                        <input type="text" class="form-control" value="{{$edit->customer_ship_no}}" name="customer_shipment_no" placeholder="Customer Shipment No.">
                     </div>
                 </div>
             </div>
@@ -184,9 +184,9 @@
                     <th>Item</th>
                     <th>Description</th>
                     <th class="">Quantity</th>
-                    <th>Qty to Receive</th>
+                    <th>Qty to Ship</th>
                     <th>Qty to Cross-Dock</th>
-                    <th class="">Qty Received</th>
+                    <th class="">Qty Shipped</th>
                     <th>Qty Outstanding</th>
                     <th class="">Unit of Measure</th>
                     <th>Due Date</th>
@@ -194,7 +194,7 @@
                 </thead>
                 <tbody id="">
                 <?php $num = 0; $count = []; ?>
-                @foreach($poItems as $po)
+                @foreach($salesItems as $po)
                     <?php $num++; $count[] = $num; ?>
                 <tr>
 
@@ -219,7 +219,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <textarea class="" readonly name="item_desc{{$num}}"  id="item_desc_acc" placeholder="Description">{{$po->poItem->po_desc}}</textarea>
+                                    <textarea class="" readonly name="item_desc{{$num}}"  id="item_desc_acc" placeholder="Description">{{$po->salesItem->po_desc}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -229,7 +229,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class="" readonly value="{{$po->poItem->quantity}}" name="qty{{$num}}" id="unit_cost_acc" placeholder="Quantity">
+                                    <input type="text" class="" readonly value="{{$po->salesItem->quantity}}" name="qty{{$num}}" id="unit_cost_acc" placeholder="Quantity">
                                 </div>
                             </div>
                         </div>
@@ -239,7 +239,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="number" class="" value="{{$po->qty_to_receive}}" name="qty_to_receive{{$num}}" id="tax_perct_acc" placeholder="Quantity to Receive" />
+                                    <input type="number" class="" value="{{$po->qty_to_ship}}" name="qty_to_ship{{$num}}" id="tax_perct_acc" placeholder="Quantity to Ship" />
                                 </div>
                             </div>
                         </div>
@@ -259,8 +259,8 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <?php $idealReceipt = ($po->qty_received == '') ? $po->poItem->received_quantity: $po->qty_received; ?>
-                                    <input type="number" class="" value="{{$idealReceipt}}" name="qty_received{{$num}}" id="" placeholder="Quantity Received" />
+                                    <?php $idealShipment = ($po->qty_shipped == '') ? $po->salesItem->shipped_quantity: $po->qty_shipped; ?>
+                                    <input type="number" class="" value="{{$idealShipment}}" name="qty_shipped{{$num}}" id="" placeholder="Quantity Shipped" />
                                 </div>
                             </div>
                         </div>
@@ -280,7 +280,7 @@
                         <div class="col-sm-4">
                             <div class="form-group">
                                 <div class="form-line">
-                                    <input type="text" class=" " readonly value="{{$po->poItem->unit_measurement}}"  name="unit_measure{{$num}}" id="sub_total_acc" >
+                                    <input type="text" class=" " readonly value="{{$po->salesItem->unit_measurement}}"  name="unit_measure{{$num}}" id="sub_total_acc" >
                                 </div>
                             </div>
                         </div>

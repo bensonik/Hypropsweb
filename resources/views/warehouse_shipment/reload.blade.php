@@ -12,9 +12,9 @@
         <th>Inventory Item</th>
         <th>Item Desc</th>
         <th>Quantity</th>
-        <th>Quantity to receive</th>
+        <th>Quantity to Ship</th>
         <th>Quantity to Cross-Dock</th>
-        <th>Quantity Received</th>
+        <th>Quantity Shipped</th>
         <th>Quantity Outstanding</th>
         <th>Unit of Measurement</th>
         <th>Created by</th>
@@ -31,16 +31,16 @@
 
             </td>
             <td>
-                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_receipt_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
+                <a style="cursor: pointer;" onclick="editForm('{{$data->id}}','edit_content','<?php echo url('edit_warehouse_shipment_form') ?>','<?php echo csrf_token(); ?>')"><i class="fa fa-pencil-square-o fa-2x"></i></a>
             </td>
             <!-- ENTER YOUR DYNAMIC COLUMNS HERE -->
             <td>{{$data->warehouse->name}}</td>
             <td>{{$data->inventory->item_name}}</td>
-            <td>{{$data->poItem->po_desc}}</td>
+            <td>{{$data->salesItem->sales_desc}}</td>
             <td>{{$data->qty}}</td>
-            <td>{{$data->qty_to_receive}}</td>
+            <td>{{$data->qty_to_ship}}</td>
             <td>{{$data->qty_to_cross_dock}}</td>
-            <td>{{$data->qty_received}}</td>
+            <td>{{$data->qty_shipped}}</td>
             <td>{{$data->qty_outstanding}}</td>
             <td>{{$data->unit_measurement}}</td>
             <td>

@@ -271,7 +271,7 @@
                     <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('sales_order'); ?>',
                                 '<?php echo url('post_warehouse_shipment'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::POST_SHIPMENT}}','Post Shipment');" class="btn btn-success waves-effect" ><i class="fa fa-check"></i>Post Shipment</button></div>
 
-                    <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('Sales_order'); ?>',
+                    <div class="pull-right"><button type="button" onclick="warehousePost('kid_checkbox_po_edit','reload_data','<?php echo url('sales_order'); ?>',
                                 '<?php echo url('post_warehouse_shipment'); ?>','<?php echo csrf_token(); ?>','{{\App\Helpers\Utility::CREATE_SHIPMENT}}','Create Warehouse Shipment');" class="btn btn-success waves-effect" ><i class="fa fa-plus"></i>Create Warehouse Shipment</button></div>
 
                 </div>
@@ -282,7 +282,7 @@
                     <button type="button"  onclick="submitMediaFormClass('editModal','editMainForm','<?php echo url('edit_sales'); ?>','reload_data',
                             '<?php echo url('sales_order'); ?>','<?php echo csrf_token(); ?>',[
                                     'inv_class_edit','item_desc_edit','warehouse_edit','quantity_edit','unit_cost_edit','unit_measure_edit',
-                            'quantity_reserved_edit','quantity_shpped_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
+                            'quantity_reserved_edit','quantity_shipped_edit','planned_edit','expected_edit','promised_edit','b_order_no_edit',
                             'b_order_line_no_edit','ship_status_edit','status_comment_edit','tax_edit','tax_perct_edit','tax_amount_edit',
                             'discount_perct_edit','discount_amount_edit','sub_total_edit','acc_class_edit','acc_desc_edit','acc_rate_edit',
                             'acc_tax_edit','acc_tax_perct_edit','acc_tax_amount_edit','acc_discount_perct_edit','acc_discount_amount_edit',
@@ -343,9 +343,9 @@
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <i class="material-icons">more_vert</i>Export
                         </a>
-
-                            @include('includes/print_pdf',[$exportId = 'convertQuoteForm', $exportDocId = 'convertQuoteForm'])
-
+                        <ul class="dropdown-menu pull-right">
+                        @include('includes/print_pdf',[$exportId = 'convertQuoteForm', $exportDocId = 'convertQuoteForm'])
+                        </ul>
                     </li>
 
                 </div>
