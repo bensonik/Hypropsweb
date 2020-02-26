@@ -88,7 +88,7 @@ Route::any('/user', 'UsersController@index')->name('user')->middleware('auth');
 Route::post('/create_user', 'UsersController@create')->name('create_user');
 Route::post('/edit_user_form', 'UsersController@editForm')->name('edit_user_form');
 Route::post('/edit_user', 'UsersController@edit')->name('edit_user');
-Route::get('/user_profile/{uid}', 'UsersController@userProfile')->name('profile');
+Route::get('/user_profile/{uid}', 'UsersController@userProfile')->name('profile')->middleware('auth');
 Route::any('/search_user', 'UsersController@searchUser')->name('user_search');
 Route::post('/delete_user', 'UsersController@destroy')->name('delete_user');
 Route::post('/change_user_status', 'UsersController@changeStatus')->name('change_user_status');
@@ -748,7 +748,7 @@ Route::post('/create_temp_user', 'TempUsersController@create')->name('create_tem
 Route::post('/external_sign_up', 'TempUsersController@createExternalSignup')->name('create_external_signup');
 Route::post('/edit_temp_user_form', 'TempUsersController@editForm')->name('edit_temp_user_form');
 Route::post('/edit_temp_user', 'TempUsersController@edit')->name('edit_temp_user');
-Route::get('/temp_user_profile/{uid}', 'TempUsersController@userProfile')->name('temp_profile');
+Route::get('/temp_user_profile/{uid}', 'TempUsersController@userProfile')->name('temp_profile')->middleware('auth');
 Route::any('/search_temp_user', 'TempUsersController@searchUser')->name('temp_user_search');
 Route::post('/delete_temp_user', 'TempUsersController@destroy')->name('delete_temp_user');
 Route::post('/change_temp_user_status', 'TempUsersController@changeStatus')->name('change_temp_user_status');
