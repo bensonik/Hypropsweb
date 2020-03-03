@@ -314,7 +314,13 @@ class ProjectController extends Controller
         $projHead = Project::specialColumns2('id',$id,'project_head',Auth::user()->id);
             if(!empty($projHead)){
                 $delete = Project::massUpdate('id',$idArray,$dbData);
-
+                if($delete){
+                $deleteTask = Project::massUpdate('project_id',$idArray,$dbData);
+                $deleteTaskList = TaskList::massUpdate('project_id',$idArray,$dbData);
+                $deleteMilestone = Milestone::massUpdate('project_id',$idArray,$dbData);
+                $deleteTimesheet = TimeSheet::massUpdate('project_id',$idArray,$dbData);                
+                $deleteProjectRequests = ProjectMemberRequest::massUpdate('project_id',$idArray,$dbData);
+                }
             }else{
                 $nonController[] = $id;
             }
