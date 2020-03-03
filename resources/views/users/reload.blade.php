@@ -26,6 +26,7 @@
         <th>blood Group</th>
         <th>Next of Kin</th>
         <th>Next of Kin Phone</th>
+        <th>Emergency Contact</th>
         <th>Guarantor</th>
         <th>Guarantor Phone</th>
         <th>Role</th>
@@ -93,6 +94,7 @@
                 <td>{{$data->blood_group}}</td>
                 <td>{{$data->next_kin}}</td>
                 <td>{{$data->next_kin_phone}}</td>
+                <td>{{$data->emergency_contact}}</td>
                 <td>{{$data->guarantor}}</td>
                 <td>{{$data->guarantor_phone}}</td>
                 <td>{{$data->roles->role_name}}</td>

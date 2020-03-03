@@ -351,6 +351,14 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4">
+                <b>Emergency Contact</b>
+                <div class="form-group">
+                    <div class="form-line">
+                        <input type="text" class="form-control" value="{{$edit->emergency_contact}}" name="emergency_contact" placeholder="Emergency Contact" >
+                    </div>
+                </div>
+            </div>
         </div>
 
     </div>
