@@ -542,7 +542,7 @@
                                 No signature yet
                                 @endif
                             </td>
-                            <td><img src="{{ asset('images/'.$data->photo) }}" width="72" height="60" alt="User" /></td>
+                            <td><img src="{{ asset('images/'.$data->photo) }}"  alt="User" /></td>
 
                             <!--END ENTER YOUR DYNAMIC COLUMNS HERE -->
 

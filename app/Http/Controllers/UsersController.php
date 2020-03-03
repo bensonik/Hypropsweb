@@ -76,7 +76,7 @@ class UsersController extends Controller
                     $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
                       $path = Utility::IMG_URL().$filename;
 
-                    Image::make($image->getRealPath())->resize(72,72)->save($path);
+                    Image::make($image->getRealPath())->resize(100,100)->save($path);
                     $photo = $filename;
 
                 }
@@ -194,7 +194,7 @@ class UsersController extends Controller
                 $filename = date('Y-m-d-H-i-s')."_".$image->getClientOriginalName();
                 $path = Utility::IMG_URL().$filename;
 
-                Image::make($image->getRealPath())->resize(72,72)->save($path);
+                Image::make($image->getRealPath())->resize(100,100)->save($path);
                 $photo = $filename;
                 if($request->get('prev_photo') != 'user.png'){
                     if(file_exists(Utility::IMG_URL().$request->get('prev_photo')))

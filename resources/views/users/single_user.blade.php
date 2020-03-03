@@ -29,7 +29,7 @@
                     <div class=" table-responsive" id="reload_data">
 
                         <div class="image pull-right">
-                            <img src="{{ asset('images/'.Auth::user()->photo) }}" class="" width="102" height="90" alt="User" />
+                            <img src="{{ asset('images/'.Auth::user()->photo) }}" class=""  alt="User" />
 
                         </div><br>
                         <form name="" id="editMainForm" onsubmit="false;" class="form form-horizontal" method="post" enctype="multipart/form-data">

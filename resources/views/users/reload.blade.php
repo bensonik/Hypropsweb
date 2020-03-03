@@ -104,7 +104,7 @@
                 <td>{{$data->updated_at}}</td>
                 <td>
                     @if($data->sign != '')
-                        <img src="{{ asset('images/'.$data->sign) }}" width="72" height="60" alt="User" />
+                        <img src="{{ asset('images/'.$data->sign) }}" alt="User" />
                     @else
                         No signature yet
                     @endif
